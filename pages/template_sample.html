@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khung Trang Mẫu - SportStore</title>
+
+  <!-- 1. NHÚNG CSS CHUNG (MỌI TRANG ĐỀU PHẢI NHÚNG DÒNG NÀY ĐẦU TIÊN) -->
+  <link rel="stylesheet" href="../css/common.css">
+
+  <!-- 2. NHÚNG CSS RIÊNG CỦA TỪNG BẠN (Sửa tên file devX tương ứng với bạn) -->
+  <!-- Ví dụ Dev 2: <link rel="stylesheet" href="../css/dev2_products.css"> -->
+</head>
+<body>
+
+  <!-- ======================================================================
+       HEADER CHUNG (DÙNG CHUNG 100% CHO CẢ 6 TRANG)
+       Mỗi bạn copy nguyên khối <header> này đặt vào đầu file HTML của mình.
+       ====================================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- Logo Cửa Hàng -->
+      <a href="../index.html" class="site-logo">
+        <span class="logo-icon">⚡</span>
+        <span>SportStore</span>
+      </a>
+
+      <!-- Menu Điều Hướng (6 trang chính) -->
+      <nav class="nav-menu">
+        <a href="../index.html" class="nav-link">Trang Chủ</a>
+        <a href="dev2_products.html" class="nav-link">Sản Phẩm</a>
+        <a href="dev3_details.html" class="nav-link">Chi Tiết</a>
+        <a href="dev4_checkout.html" class="nav-link">Giỏ Hàng</a>
+        <a href="dev5_user.html" class="nav-link">Tài Khoản</a>
+        <a href="admin.html" class="nav-link nav-admin">⚙️ Quản Trị</a>
+      </nav>
+
+      <!-- Nút Giỏ Hàng & Tài Khoản ở góc phải -->
+      <div class="header-actions">
+        <a href="dev4_checkout.html" class="btn-header-cart">
+          <span>🛒 Giỏ Hàng</span>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </a>
+        <a href="dev5_user.html" class="btn btn-outline btn-sm">
+          <span>👤 Tài Khoản</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       KHU VỰC NỘI DUNG RIÊNG CỦA TỪNG THÀNH VIÊN
+       Mỗi bạn chỉ viết code bên trong thẻ <main> này!
+       Bọc class riêng: .dev1-home-wrapper, .dev2-products-wrapper, v.v.
+       ====================================================================== -->
+  <main class="container" style="padding: 40px 20px; min-height: 500px;">
+    <h2>Tiêu Đề Nội Dung Của Bạn</h2>
+    <p>Viết nội dung giao diện của bạn tại đây...</p>
+    
+    <!-- Ví dụ sử dụng nút bấm dùng chung -->
+    <button class="btn btn-primary" onclick="showToast('Thử nghiệm thông báo thành công!', 'success')">
+      Bấm Thử Nút Primary
+    </button>
+  </main>
+
+  <!-- ======================================================================
+       FOOTER CHUNG (DÙNG CHUNG 100% CHO CẢ 6 TRANG)
+       Copy nguyên khối <footer> này đặt vào cuối file HTML của mình.
+       ====================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>VỀ SPORTSTORE</h4>
+          <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam. Đồng hành cùng mọi vận động viên bứt phá giới hạn.</p>
+        </div>
+        <div class="footer-col">
+          <h4>DANH MỤC</h4>
+          <ul class="footer-links">
+            <li><a href="dev2_products.html">Giày Chạy Bộ Marathon</a></li>
+            <li><a href="dev2_products.html">Trang Phục Bóng Đá</a></li>
+            <li><a href="dev2_products.html">Vợt Cầu Lông & Tennis</a></li>
+            <li><a href="dev2_products.html">Dụng Cụ Gym & Fitness</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>HỖ TRỢ</h4>
+          <ul class="footer-links">
+            <li><a href="dev5_user.html">Chính Sách Bảo Hành</a></li>
+            <li><a href="dev5_user.html">Quy Định Đổi Trả 30 Ngày</a></li>
+            <li><a href="dev5_user.html">Hướng Dẫn Chọn Size Chuẩn</a></li>
+            <li><a href="dev5_user.html">Theo Dõi Đơn Hàng</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>LIÊN HỆ</h4>
+          <p>📍 123 Đường Cầu Giấy, Hà Nội</p>
+          <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
+          <p>✉️ Email: support@sportstore.vn</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 SportStore. Dự án Frontend Kiến Trúc Độc Lập Decoupled Vanilla Architecture.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================================
+       NHÚNG JAVASCRIPT (ĐẶT Ở CUỐI TRANG)
+       ====================================================================== -->
+  <!-- 1. File JS dùng chung (Luôn nhúng đầu tiên) -->
+  <script src="../js/common.js"></script>
+
+  <!-- 2. File JS riêng của từng bạn (Sửa tên file devX tương ứng) -->
+  <!-- Ví dụ Dev 2: <script src="../js/dev2_products.js"></script> -->
+</body>
+</html>
