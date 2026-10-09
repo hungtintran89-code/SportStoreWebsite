@@ -1,0 +1,516 @@
+.dev1-home-wrapper {
+  padding: 30px 0 60px 0;
+  background-color: #f0f7fd;
+  min-height: 100vh;
+}
+
+/* ---------------- 1. HERO BANNER ---------------- */
+.dev1-home-wrapper .hero {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.dev1-home-wrapper .hero-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 380px;
+  padding: 40px 50px;
+  overflow: hidden;
+}
+
+.dev1-home-wrapper .hero-text {
+  flex: 1.2;
+  max-width: 620px;
+}
+
+.dev1-home-wrapper .tag {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.dev1-home-wrapper .hero-text h1 {
+  font-size: 38px;
+  font-weight: 900;
+  line-height: 1.25;
+  color: #0f172a;
+  margin-bottom: 14px;
+}
+
+.dev1-home-wrapper .hero-text p {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.dev1-home-wrapper .hero-btns {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 35px;
+}
+
+.dev1-home-wrapper .btn-outline-gold {
+  background: #fff;
+  color: #ea580c;
+  border: 1.5px solid #fed7aa;
+}
+
+.dev1-home-wrapper .btn-outline-gold:hover {
+  background: #fff7ed;
+  border-color: #ea580c;
+}
+
+.dev1-home-wrapper .dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dev1-home-wrapper .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #bae6fd;
+  cursor: pointer;
+}
+
+.dev1-home-wrapper .dot.active {
+  width: 26px;
+  border-radius: 10px;
+  background: #0284c7;
+}
+
+.dev1-home-wrapper .hero-img {
+  flex: 0.8;
+  display: flex;
+  justify-content: flex-end;
+  height: 290px;
+}
+
+.dev1-home-wrapper .hero-img img {
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.dev1-home-wrapper .arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e0f2fe;
+  color: #0284c7;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 5;
+}
+
+.dev1-home-wrapper .arrow:hover {
+  background: #0284c7;
+  color: #fff;
+}
+
+.dev1-home-wrapper .prev {
+  left: -18px;
+}
+.dev1-home-wrapper .next {
+  right: -18px;
+}
+
+/* ---------------- 2. FLASH SALE ---------------- */
+.dev1-home-wrapper .flash-sale {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06);
+  padding: 30px 35px;
+  margin-bottom: 40px;
+}
+
+.dev1-home-wrapper .sale-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 25px;
+}
+
+.dev1-home-wrapper .sale-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dev1-home-wrapper .bolt-icon {
+  font-size: 32px;
+  color: #ea580c;
+}
+
+.dev1-home-wrapper .sale-title h2 {
+  font-size: 22px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.dev1-home-wrapper .sale-title p {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.dev1-home-wrapper .countdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dev1-home-wrapper .cd-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ea580c;
+}
+
+.dev1-home-wrapper .cd-boxes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dev1-home-wrapper .box {
+  min-width: 38px;
+  height: 36px;
+  background: #fff;
+  border: 1.5px solid #ea580c;
+  color: #ea580c;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+
+.dev1-home-wrapper .colon {
+  font-weight: 800;
+  color: #ea580c;
+}
+
+.dev1-home-wrapper .sale-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.dev1-home-wrapper .sale-card {
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+}
+
+.dev1-home-wrapper .sale-card:hover {
+  transform: translateY(-4px);
+  border-color: #bae6fd;
+  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.1);
+}
+
+.dev1-home-wrapper .card-thumb {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  background: #f8fafc;
+}
+
+.dev1-home-wrapper .card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dev1-home-wrapper .sale-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ea580c;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.dev1-home-wrapper .card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.dev1-home-wrapper .cat {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0284c7;
+  margin-bottom: 6px;
+}
+
+.dev1-home-wrapper .card-body h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.4;
+  height: 40px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.dev1-home-wrapper .price-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.dev1-home-wrapper .price-new {
+  font-size: 16px;
+  font-weight: 900;
+  color: #ea580c;
+}
+
+.dev1-home-wrapper .price-old {
+  font-size: 12px;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+.dev1-home-wrapper .meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+
+.dev1-home-wrapper .star {
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.dev1-home-wrapper .btn-buy {
+  width: 100%;
+  background: #ea580c;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev1-home-wrapper .btn-buy:hover {
+  background: #c2410c;
+}
+
+/* ---------------- 3. DANH MỤC THỂ THAO ---------------- */
+.dev1-home-wrapper .categories {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.dev1-home-wrapper .title-center {
+  margin-bottom: 24px;
+}
+
+.dev1-home-wrapper .tag-blue {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.dev1-home-wrapper .title-center h2 {
+  font-size: 26px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.dev1-home-wrapper .cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.dev1-home-wrapper .cat-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  transition: all 0.25s ease;
+}
+
+.dev1-home-wrapper .cat-card:hover {
+  border-color: #0284c7;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.1);
+}
+
+.dev1-home-wrapper .cat-icon {
+  width: 48px;
+  height: 48px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.dev1-home-wrapper .cat-card h4 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 3px;
+}
+
+.dev1-home-wrapper .cat-card p {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* ---------------- 4. TRANG BỊ XU HƯỚNG ---------------- */
+.dev1-home-wrapper .trending {
+  margin-bottom: 45px;
+}
+
+.dev1-home-wrapper .trending-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.dev1-home-wrapper .tag-orange {
+  display: inline-block;
+  background: #ffedd5;
+  color: #ea580c;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+}
+
+.dev1-home-wrapper .trending-header h2 {
+  font-size: 24px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.dev1-home-wrapper .tabs {
+  display: flex;
+  background: #fff;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  gap: 4px;
+}
+
+.dev1-home-wrapper .tab-btn {
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.dev1-home-wrapper .tab-btn.active {
+  background: #0284c7;
+  color: #fff;
+}
+
+.dev1-home-wrapper .gear-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.dev1-home-wrapper .gear-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+}
+
+.dev1-home-wrapper .gear-card:hover {
+  transform: translateY(-4px);
+  border-color: #0284c7;
+  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.1);
+}
+
+.dev1-home-wrapper .badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.dev1-home-wrapper .badge.dark {
+  background: #0f172a;
+  color: #fff;
+}
+.dev1-home-wrapper .badge.blue {
+  background: #0284c7;
+  color: #fff;
+}
+
+.dev1-home-wrapper .price-blue {
+  font-size: 16px;
+  font-weight: 900;
+  color: #0284c7;
+}
+
+.dev1-home-wrapper .card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
