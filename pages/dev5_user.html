@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tài khoản | SportStore</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/dev5_user.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="site-logo">
+        <span class="logo-icon">⚡</span>
+        <span>SPORTSTORE</span>
+      </a>
+
+      <nav class="nav-menu" aria-label="Điều hướng chính">
+        <a href="../index.html" class="nav-link">Trang chủ</a>
+        <a href="dev2_products.html" class="nav-link">Sản phẩm</a>
+        <a href="dev4_checkout.html" class="nav-link">Giỏ hàng</a>
+        <a href="dev5_user.html" class="nav-link active">Tài khoản</a>
+        <a href="admin.html" class="nav-link nav-admin" data-admin-link>
+          ⚙️ Admin
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="dev5-header-profile dev5-hidden" data-auth-profile>
+          <img data-header-avatar alt="Ảnh đại diện">
+          <span data-header-name></span>
+        </div>
+        <button class="btn btn-outline btn-sm" type="button" data-auth-action="login">
+          Đăng nhập
+        </button>
+        <button class="btn btn-primary btn-sm" type="button" data-auth-action="register">
+          Đăng ký
+        </button>
+        <button class="btn btn-outline btn-sm dev5-hidden" type="button" data-auth-action="logout">
+          Đăng xuất
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dev5-user-wrapper">
+    <div class="container">
+      <section class="dev5-hero">
+        <div>
+          <span class="dev5-eyebrow">MEMBER CENTER</span>
+          <h1>Xin chào, <span data-user-name>khách hàng</span></h1>
+          <p>Quản lý hồ sơ, địa chỉ giao hàng và theo dõi hành trình đơn hàng.</p>
+        </div>
+        <div class="dev5-role-badge" data-user-role>Khách vãng lai</div>
+      </section>
+
+      <div class="dev5-layout">
+        <aside class="dev5-sidebar" aria-label="Menu tài khoản">
+          <button class="dev5-tab is-active" type="button" data-tab="overview">
+            Tổng quan
+          </button>
+          <button class="dev5-tab" type="button" data-tab="orders">
+            Đơn hàng
+          </button>
+          <button class="dev5-tab" type="button" data-tab="addresses">
+            Sổ địa chỉ
+          </button>
+          <button class="dev5-tab" type="button" data-tab="wishlist">
+            Wishlist
+          </button>
+          <button class="dev5-tab" type="button" data-tab="faq">
+            FAQ &amp; Bảo hành
+          </button>
+        </aside>
+
+        <div class="dev5-content">
+          <section class="dev5-panel is-active" data-panel="overview">
+            <div class="dev5-panel-heading">
+              <div>
+                <span class="dev5-eyebrow">PROFILE</span>
+                <h2>Thông tin hội viên</h2>
+              </div>
+              <button class="dev5-link-button" type="button" data-auth-action="login">
+                Đổi tài khoản
+              </button>
+            </div>
+
+            <div class="dev5-profile-card">
+              <div>
+                <h3 data-user-name>Khách vãng lai</h3>
+                <p data-user-email>Đăng nhập để xem thông tin hội viên.</p>
+                <span class="dev5-tier" data-user-tier>Guest</span>
+              </div>
+            </div>
+
+            <div class="dev5-stat-grid">
+              <div>
+                <strong data-order-count>0</strong>
+                <span>Đơn hàng</span>
+              </div>
+              <div>
+                <strong data-address-count>0</strong>
+                <span>Địa chỉ</span>
+              </div>
+              <div>
+                <strong data-wishlist-count>0</strong>
+                <span>Yêu thích</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="dev5-panel" data-panel="orders">
+            <div class="dev5-panel-heading">
+              <div>
+                <span class="dev5-eyebrow">ORDER HISTORY</span>
+                <h2>Lịch sử &amp; theo dõi đơn hàng</h2>
+              </div>
+            </div>
+            <div data-orders></div>
+          </section>
+
+          <section class="dev5-panel" data-panel="addresses">
+            <div class="dev5-panel-heading">
+              <div>
+                <span class="dev5-eyebrow">DELIVERY BOOK</span>
+                <h2>Sổ địa chỉ giao hàng</h2>
+              </div>
+              <button class="dev5-primary-button" type="button" data-add-address>
+                + Thêm địa chỉ
+              </button>
+              <button class="dev5-secondary-button dev5-hidden" type="button" data-edit-address>
+                Chỉnh sửa
+              </button>
+            </div>
+
+            <div data-addresses></div>
+
+            <form class="dev5-address-form dev5-hidden" data-address-form>
+              <div class="dev5-form-grid">
+                <label>
+                  Người nhận
+                  <input name="recipient" required>
+                </label>
+                <label>
+                  Số điện thoại
+                  <input name="phone" required>
+                </label>
+                <label class="dev5-form-wide">
+                  Địa chỉ
+                  <input name="line" required>
+                </label>
+                <label>
+                  Quận/Huyện
+                  <input name="district" required>
+                </label>
+                <label>
+                  Tỉnh/Thành phố
+                  <input name="city" required>
+                </label>
+              </div>
+
+              <div class="dev5-form-actions">
+                <button class="dev5-secondary-button" type="button" data-cancel-address>
+                  Hủy
+                </button>
+                <button class="dev5-primary-button" type="submit">
+                  Lưu địa chỉ
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section class="dev5-panel" data-panel="wishlist">
+            <div class="dev5-panel-heading">
+              <div>
+                <span class="dev5-eyebrow">YOUR PICKS</span>
+                <h2>Sản phẩm yêu thích</h2>
+              </div>
+            </div>
+            <div class="dev5-wishlist-grid" data-wishlist></div>
+          </section>
+
+          <section class="dev5-panel" data-panel="faq">
+            <div class="dev5-panel-heading">
+              <div>
+                <span class="dev5-eyebrow">SUPPORT</span>
+                <h2>FAQ &amp; chính sách bảo hành</h2>
+              </div>
+            </div>
+            <div data-faq></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="site-logo" style="margin-bottom: 14px;">
+          <span class="logo-icon">⚡</span>
+          <span style="color:#fff;">SPORTSTORE</span>
+        </div>
+        <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Điều Hướng Nhanh</h4>
+        <ul class="footer-links">
+          <li><a href="dev1_home.html">Trang Chủ</a></li>
+          <li><a href="dev2_products.html">Sản Phẩm</a></li>
+          <li><a href="dev3_details.html">Chi Tiết &amp; So Sánh</a></li>
+          <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Phân Hệ Module</h4>
+        <ul class="footer-links">
+          <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
+          <li><a href="admin.html">Hệ Thống Quản Trị</a></li>
+          <li><a href="dev5_user.html">Chính Sách Đổi Trả</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Hotline &amp; Hỗ Trợ</h4>
+        <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
+        <p>✉️ Email: contact@sportstore.vn</p>
+        <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>Dự án Frontend.</p>
+    </div>
+  </footer>
+
+  <script src="../js/auth_modal.js"></script>
+  <script src="../js/dev5_user.js"></script>
+</body>
+</html>
