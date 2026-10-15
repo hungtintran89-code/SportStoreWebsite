@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportStore | Chi tiết sản phẩm</title>
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/dev3_details.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="../index.html" class="site-logo">
+          <span class="logo-icon">⚡</span>
+          <span>SPORTSTORE</span>
+        </a>
+        <nav class="nav-menu">
+          <a href="../index.html" class="nav-link">Trang Chủ</a>
+          <a href="dev2_products.html" class="nav-link">Sản Phẩm</a>
+          <a href="dev3_details.html" class="nav-link active">Chi Tiết</a>
+          <a href="dev4_checkout.html" class="nav-link">Giỏ Hàng</a>
+          <a href="dev5_user.html" class="nav-link">Tài Khoản</a>
+          <a href="admin.html" class="nav-link nav-admin">⚙️ Admin</a>
+        </nav>
+        <div class="header-actions">
+          <a href="dev4_checkout.html" class="btn-header-cart"><span>🛒</span><span class="cart-badge">0</span></a>
+          <button class="btn btn-outline btn-sm">🔑 Đăng Nhập</button>
+          <button class="btn btn-primary btn-sm">✨ Đăng Ký</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="dev3-details-wrapper">
+      <div class="container product-layout">
+        <section class="gallery">
+          <img class="main-image" src="" alt="Product" data-main-image />
+          <div class="thumbs" data-gallery></div>
+        </section>
+
+        <aside class="info">
+          <span class="product-tag" data-tag>BESTSELLER</span>
+          <h1 data-title>Loading product...</h1>
+          <div class="rating-row">
+            <span class="stars">★★★★★</span>
+            <span data-rating>4.9 / 5</span>
+            <span data-reviews>328 đánh giá</span>
+          </div>
+          <div class="price" data-price>0 ₫</div>
+
+          <ul class="meta-list">
+            <li>✔ Miễn phí giao hàng từ 500k</li>
+            <li>✔ Bảo hành chính hãng 12 tháng</li>
+            <li>✔ Đổi trả trong 7 ngày</li>
+          </ul>
+
+          <div>
+            <div class="section-label">Màu sắc</div>
+            <div class="swatches">
+              <button class="swatch active" type="button" data-color>Midnight</button>
+              <button class="swatch" type="button" data-color>White</button>
+              <button class="swatch" type="button" data-color>Orange</button>
+              <button class="swatch" type="button" data-color>Black</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-label">Kích cỡ</div>
+            <div class="sizes">
+              <button class="size-btn active" type="button" data-size>39</button>
+              <button class="size-btn" type="button" data-size>40</button>
+              <button class="size-btn" type="button" data-size>41</button>
+              <button class="size-btn" type="button" data-size>42</button>
+              <button class="size-btn" type="button" data-size>43</button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="buy-btn" type="button" data-add-cart>Thêm vào giỏ</button>
+            <button class="ghost-btn" type="button">Yêu thích</button>
+          </div>
+        </aside>
+      </div>
+
+      <div class="container info-grid">
+        <article class="info-card">
+          <h3>Mô tả sản phẩm</h3>
+          <p>Được thiết kế cho các vận động viên chạy bộ tốc độ, sản phẩm mang lại khả năng đệm phản hồi cao, cảm giác nhẹ và độ bám cực tốt trên mọi điều kiện đường chạy.</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Thông số kỹ thuật</h3>
+          <div class="spec-list" data-specs></div>
+        </article>
+      </div>
+
+      <div class="container" style="margin-top: 34px;">
+        <h2 style="margin-bottom: 12px;">So sánh đối thủ</h2>
+        <div class="compare-grid" data-compare></div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-col">
+          <div class="site-logo" style="margin-bottom: 14px">
+            <span class="logo-icon">⚡</span>
+            <span style="color: #fff">SPORTSTORE</span>
+          </div>
+          <p>
+            Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu
+            Việt Nam.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Điều Hướng Nhanh</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html">Trang Chủ</a></li>
+            <li><a href="dev2_products.html">Sản Phẩm</a></li>
+            <li><a href="dev3_details.html">Chi Tiết & So Sánh</a></li>
+            <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Phân Hệ Module</h4>
+          <ul class="footer-links">
+            <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
+            <li><a href="admin.html">Hệ Thống Quản Trị</a></li>
+            <li><a href="dev5_user.html">Chính Sách Đổi Trả</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Hotline & Hỗ Trợ</h4>
+          <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
+          <p>✉️ Email: contact@sportstore.vn</p>
+          <p>📍 Trụ sở: 123 Cầu Giấy, Hà Nội</p>
+        </div>
+      </div>
+
+      <div class="container footer-bottom">
+        <p>© 2026 SportStore. Dự án Frontend Không Xung Đột (Zero-Conflict).</p>
+      </div>
+    </footer>
+
+    <script src="../js/common.js"></script>
+    <script src="../js/dev3_details.js"></script>
+  </body>
+</html>
