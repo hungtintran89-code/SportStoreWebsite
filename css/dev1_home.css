@@ -280,7 +280,9 @@
   color: #1e293b;
   line-height: 1.4;
   height: 40px;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
   margin-bottom: 10px;
 }
 

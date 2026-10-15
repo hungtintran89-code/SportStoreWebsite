@@ -1,0 +1,117 @@
+/* ===================================================
+   GIAO DIỆN TAB BẢNG ĐIỀU KHIỂN (DASHBOARD)
+   =================================================== */
+.admin-section-header {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 10px 20px;
+}
+
+.admin-section-header :nth-child(1) {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.admin-section-header :nth-child(2) {
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px 16px;
+  background-color: #ffffff;
+  border: 1.5px #0284c7 solid;
+  color: #0284c7;
+  cursor: pointer;
+}
+
+/* Lưới hiển thị các thẻ KPI thống kê */
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.admin-kpi-card {
+  background-color: #ffffff;
+  min-height: 140px;
+  border-radius: 14px;
+  padding: 20px;
+  font-size: 13px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+.admin-kpi-card:hover {
+  border-color: #60a5fa;
+
+  /* 2. Hiệu ứng nhấc nhẹ thẻ lên trên 3px */
+  transform: translateY(-3px);
+
+  /* 3. Đổ bóng sâu hơn một chút kèm ánh viền xanh cực nhẹ */
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.12);
+}
+
+.admin-kpi-card > div {
+  margin-bottom: 8px;
+}
+
+.kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #64748b;
+  font-weight: bold;
+}
+
+.kpi-top :last-child {
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border-radius: 8px;
+  background-color: #e0f2fe;
+}
+
+.kpi-value {
+  font-size: 26px;
+  font-weight: bold;
+  color: #1e293b;
+}
+
+.kpi-trend {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.kpi-trend > span {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+/* Responsive cho KPI */
+@media (max-width: 1550px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 1100px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 750px) {
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}

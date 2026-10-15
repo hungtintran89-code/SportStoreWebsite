@@ -1,17 +1,21 @@
-<!DOCTYPE html>
-<html lang="vi">
+<!doctype html>
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SportStore - Cửa Hàng Thể Thao Trực Tuyến</title>
-
-  <!-- CSS dùng chung và CSS riêng của TV1 -->
-  <link rel="stylesheet" href="../css/common.css">
-  <link rel="stylesheet" href="../css/dev1_home.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="../css/admin/tab-product.css" />
+  <link rel="stylesheet" href="../css/admin/sidebar.css" />
+  <link rel="stylesheet" href="../css/admin/header.css" />
+  <link rel="stylesheet" href="../css/admin/tab-dashboard.css" />
+  <link rel="stylesheet" href="../css/admin/modal.css" />
+  <link rel="stylesheet" href="../css/admin/admin.css" />
+  <title>Document</title>
 </head>
-<body>
 
-  <!-- ================= 1. HEADER CHUNG ================= -->
+<body>
+  <!-- HEADER -->
   <header class="site-header">
     <div class="container header-inner">
       <a href="../index.html" class="site-logo">
@@ -20,93 +24,630 @@
       </a>
 
       <nav class="nav-menu">
-        <a href="dev1_home.html" class="nav-link active">Trang Chủ</a>
-        <a href="dev2_products.html" class="nav-link">Sản Phẩm</a>
-        <a href="dev3_details.html" class="nav-link">Chi Tiết & So Sánh</a>
-        <a href="dev4_checkout.html" class="nav-link">Giỏ Hàng</a>
-        <a href="dev5_user.html" class="nav-link">Tài Khoản</a>
-        <a href="admin.html" class="nav-link nav-admin">⚙️ Admin</a>
+        <span class="search-icon">🔍</span>
+        <input class="timkiem" type="text" placeholder="Tìm kiếm đơn hàng , sản phẩm , khách hàng" />
       </nav>
 
-      <div class="header-actions">
-        <a href="dev4_checkout.html" class="btn-header-cart">
-          <span>🛒</span>
-          <span class="cart-badge">0</span>
-        </a>
-        <button class="btn btn-outline btn-sm">🔑 Đăng Nhập</button>
-        <button class="btn btn-primary btn-sm">✨ Đăng Ký</button>
+      <div class="admin-topbar-actions">
+        <div class="admin-notification-btn" title="Thông báo mới">
+          🔔
+          <span class="badge-pill">4</span>
+        </div>
+        <div class="admin-user-profile">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"
+            alt="Admin Avatar" />
+          <div>
+            <div class="admin-name admin-inf">Quản Trị Viên</div>
+            <div class="admin-role admin-inf">Super Admin</div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
 
+  <!-- NỘI DUNG CHÍNH -->
+  <div class="all">
+    <button id="btn-sidebar-toggle" class="sidebar-boundary-toggle" title="Thu gọn / Mở rộng Sidebar">
+      <!-- Icon 1: Tam giác chĩa vào trong (hiện khi sidebar MỞ) -->
+      <svg class="icon-triangle" viewBox="0 0 24 24" width="12" height="12">
+        <path d="M15 19L7 12L15 5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      <!-- Icon 2: 3 thanh ngang (hiện khi sidebar ĐÃ ẨN HẾT) -->
+      <div class="icon-hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </button>
+    <div class="left">
+      <!-- Nhóm 1: TỔNG QUAN -->
+      <div class="menu-group">
+        <div class="menu-title">TỔNG QUAN</div>
+        <button class="nav-item active" data-tab="tab-dashboard">
+          <div class="nav-label">
+            <span class="nav-icon">📊</span>
+            <span>Bảng Điều Khiển</span>
+          </div>
+        </button>
+      </div>
 
-  <!-- ================= TOÀN BỘ PHẦN CỦA DEV 1 ================= -->
-  <div class="dev1-home-wrapper">
-    <div class="container">
-        <section class="hero-carousel-section">
-            <button class="carousel-arrow prev-btn" id="prevSlide">❮</button>
-            <div class="hero-slide-card">
+      <!-- Nhóm 2: QUẢN LÝ CỬA HÀNG -->
+      <div class="menu-group">
+        <div class="menu-title">QUẢN LÝ CỬA HÀNG</div>
+        <button class="nav-item" data-tab="tab-products">
+          <div class="nav-label">
+            <span class="nav-icon">👟</span>
+            <span>Quản Lý Sản Phẩm</span>
+          </div>
+          <span class="nav-badge badge-blue">8</span>
+        </button>
+        <button class="nav-item" data-tab="tab-orders">
+          <div class="nav-label">
+            <span class="nav-icon">📦</span>
+            <span>Quản Lý Đơn Hàng</span>
+          </div>
+          <span class="nav-badge badge-orange">5</span>
+        </button>
+        <button class="nav-item" data-tab="tab-customers">
+          <div class="nav-label">
+            <span class="nav-icon">👥</span>
+            <span>Khách Hàng / Hội Viên</span>
+          </div>
+        </button>
+      </div>
 
-                 <div class="hero-content">
-            <span class="badge-trend">EXCLUSIVE</span>
-            <h1 class="hero-title">CÔNG PHÁ MỌI ĐƯỜNG CẦU</h1>
-            <p class="hero-desc">
-              Vợt trợ lực sợi thủy tinh mật độ cao, độ cân bằng hoàn hảo cho từng cú đập uy lực.
+      <!-- Nhóm 3: HỆ THỐNG & BÁO CÁO -->
+      <div class="menu-group">
+        <div class="menu-title">HỆ THỐNG & BÁO CÁO</div>
+        <button class="nav-item" data-tab="tab-reports">
+          <div class="nav-label">
+            <span class="nav-icon">📈</span>
+            <span>Báo Cáo Doanh Thu</span>
+          </div>
+        </button>
+        <button class="nav-item" data-tab="tab-settings">
+          <div class="nav-label">
+            <span class="nav-icon">⚙️</span>
+            <span>Cấu Hình Cửa Hàng</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="right">
+      <!-- 1. GIAO DIỆN BẢNG ĐIỀU KHIỂN -->
+      <section id="tab-dashboard" class="tab-pane">
+        <div class="admin-section-header">
+          <div>Bảng Điều Khiển Tổng Quan</div>
+          <button>📥 Xuất Báo Cáo</button>
+        </div>
+        <div class="admin-kpi-grid">
+          <div class="admin-kpi-card">
+            <div class="kpi-top">
+              <span>TỔNG DOANH THU THÁNG</span>
+              <span>💰</span>
+            </div>
+            <div class="kpi-value">128.450.000đ</div>
+            <div class="kpi-trend">
+              <span>↑ +18.4%</span> so với tháng trước
+            </div>
+          </div>
+          <div class="admin-kpi-card">
+            <div class="kpi-top">
+              <span>ĐƠN HÀNG THÀNH CÔNG</span>
+              <span>📦</span>
+            </div>
+            <div class="kpi-value">342 Đơn</div>
+            <div class="kpi-trend">
+              <span>↑ +12.6%</span> tỷ lệ hoàn thành 98.2%
+            </div>
+          </div>
+          <div class="admin-kpi-card">
+            <div class="kpi-top">
+              <span>KHÁCH HÀNG MỚI</span>
+              <span>👥</span>
+            </div>
+            <div class="kpi-value">1.250 Khách</div>
+            <div class="kpi-trend">
+              <span>↑ +18.4%</span> 180 hội viên Gold
+            </div>
+          </div>
+          <div class="admin-kpi-card">
+            <div class="kpi-top">
+              <span>SẢN PHẨM TỒN KHO</span>
+              <span>👟</span>
+            </div>
+            <div class="kpi-value">486 Món</div>
+            <div class="kpi-trend">
+              <span>18 món</span> sắp chạm ngưỡng tối thiểu
+            </div>
+          </div>
+        </div>
+        <div class="admin-chart-grid">
+          <div class="admin-card"></div>
+        </div>
+      </section>
+
+      <!-- 2. GIAO DIỆN QUẢN LÝ SẢN PHẨM -->
+      <section id="tab-products" class="tab-pane active">
+        <div class="prod-header">
+          <div class="prod-header-text">
+            <h2>Danh Sách Sản Phẩm & Trang Bị</h2>
+          </div>
+          <!-- Giữ nguyên thẻ button Thêm Mới Sản Phẩm -->
+          <button type="button" class="btn-add-product" id="btn-open-modal">
+            + Thêm Mới Sản Phẩm
+          </button>
+        </div>
+
+        <div class="prod-filter-bar">
+          <input type="text" class="filter-search" placeholder="Tìm kiếm theo tên sản phẩm, thương hiệu..." />
+          <!-- Dropdown 1: Môn thể thao -->
+          <div class="custom-select">
+            <div class="select-selected">Tất cả</div>
+            <ul class="select-items">
+              <li class="active">Tất cả</li>
+              <li>Chạy bộ</li>
+              <li>Bóng đá</li>
+              <li>Cầu lông - Tennis</li>
+            </ul>
+          </div>
+
+          <!-- Dropdown 2: Thương hiệu -->
+          <div class="custom-select">
+            <div class="select-selected">Tất cả</div>
+            <ul class="select-items">
+              <li class="active">Tất cả</li>
+              <li>Nike</li>
+              <li>Adidas</li>
+              <li>Yonex</li>
+              <li>Wilson</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="prod-table-card">
+          <table class="prod-table">
+            <thead>
+              <tr>
+                <th>ẢNH</th>
+                <th>TÊN TRANG BỊ</th>
+                <th>PHÂN LOẠI</th>
+                <th>THƯƠNG HIỆU</th>
+                <th>GIÁ BÁN</th>
+                <th>TỒN KHO</th>
+                <th>TRẠNG THÁI</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+
+            <tbody id="admin-products-tbody">
+              <!-- DÒNG MẪU 1: Giày Nike -->
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=120" class="table-img"
+                    alt="Giày Nike" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Giày Chạy Bộ Nike ZoomX Vaporfly 3 Proto
+                  </div>
+                  <div class="item-id">ID: #201</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CHẠY BỘ</span>
+                </td>
+                <td>Nike</td>
+                <td class="item-price">5.290.000 đ</td>
+                <td>18</td>
+                <td>
+                  <span class="badge-status instock">CÒN HÀNG (18)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=120" class="table-img"
+                    alt="Giày Nike" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Giày Chạy Bộ Nike ZoomX Vaporfly 3 Proto
+                  </div>
+                  <div class="item-id">ID: #201</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CHẠY BỘ</span>
+                </td>
+                <td>Nike</td>
+                <td class="item-price">5.290.000 đ</td>
+                <td>18</td>
+                <td>
+                  <span class="badge-status instock">CÒN HÀNG (18)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=120" class="table-img"
+                    alt="Giày Nike" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Giày Chạy Bộ Nike ZoomX Vaporfly 3 Proto
+                  </div>
+                  <div class="item-id">ID: #201</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CHẠY BỘ</span>
+                </td>
+                <td>Nike</td>
+                <td class="item-price">5.290.000 đ</td>
+                <td>18</td>
+                <td>
+                  <span class="badge-status instock">CÒN HÀNG (18)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=120" class="table-img"
+                    alt="Giày Nike" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Giày Chạy Bộ Nike ZoomX Vaporfly 3 Proto
+                  </div>
+                  <div class="item-id">ID: #201</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CHẠY BỘ</span>
+                </td>
+                <td>Nike</td>
+                <td class="item-price">5.290.000 đ</td>
+                <td>18</td>
+                <td>
+                  <span class="badge-status instock">CÒN HÀNG (18)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=120" class="table-img"
+                    alt="Giày Nike" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Giày Chạy Bộ Nike ZoomX Vaporfly 3 Proto
+                  </div>
+                  <div class="item-id">ID: #201</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CHẠY BỘ</span>
+                </td>
+                <td>Nike</td>
+                <td class="item-price">5.290.000 đ</td>
+                <td>18</td>
+                <td>
+                  <span class="badge-status instock">CÒN HÀNG (18)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+
+              <!-- DÒNG MẪU 2: Vợt Tennis -->
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=120" class="table-img"
+                    alt="Vợt Wilson" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Vợt Tennis Wilson Pro Staff 97 v14
+                  </div>
+                  <div class="item-id">ID: #204</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CẦU LÔNG</span>
+                </td>
+                <td>Wilson</td>
+                <td class="item-price">4.990.000 đ</td>
+                <td>8</td>
+                <td>
+                  <span class="badge-status lowstock">SẮP HẾT (8)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <!-- DÒNG MẪU 2: Vợt Tennis -->
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=120" class="table-img"
+                    alt="Vợt Wilson" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Vợt Tennis Wilson Pro Staff 97 v14
+                  </div>
+                  <div class="item-id">ID: #204</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CẦU LÔNG</span>
+                </td>
+                <td>Wilson</td>
+                <td class="item-price">4.990.000 đ</td>
+                <td>8</td>
+                <td>
+                  <span class="badge-status lowstock">SẮP HẾT (8)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <!-- DÒNG MẪU 2: Vợt Tennis -->
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=120" class="table-img"
+                    alt="Vợt Wilson" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Vợt Tennis Wilson Pro Staff 97 v14
+                  </div>
+                  <div class="item-id">ID: #204</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CẦU LÔNG</span>
+                </td>
+                <td>Wilson</td>
+                <td class="item-price">4.990.000 đ</td>
+                <td>8</td>
+                <td>
+                  <span class="badge-status lowstock">SẮP HẾT (8)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <!-- DÒNG MẪU 2: Vợt Tennis -->
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=120" class="table-img"
+                    alt="Vợt Wilson" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Vợt Tennis Wilson Pro Staff 97 v14
+                  </div>
+                  <div class="item-id">ID: #204</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CẦU LÔNG</span>
+                </td>
+                <td>Wilson</td>
+                <td class="item-price">4.990.000 đ</td>
+                <td>8</td>
+                <td>
+                  <span class="badge-status lowstock">SẮP HẾT (8)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <!-- DÒNG MẪU 2: Vợt Tennis -->
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=120" class="table-img"
+                    alt="Vợt Wilson" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Vợt Tennis Wilson Pro Staff 97 v14
+                  </div>
+                  <div class="item-id">ID: #204</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CẦU LÔNG</span>
+                </td>
+                <td>Wilson</td>
+                <td class="item-price">4.990.000 đ</td>
+                <td>8</td>
+                <td>
+                  <span class="badge-status lowstock">SẮP HẾT (8)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <!-- DÒNG MẪU 2: Vợt Tennis -->
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=120" class="table-img"
+                    alt="Vợt Wilson" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Vợt Tennis Wilson Pro Staff 97 v14
+                  </div>
+                  <div class="item-id">ID: #204</div>
+                </td>
+                <td>
+                  <span class="badge-cat">CẦU LÔNG</span>
+                </td>
+                <td>Wilson</td>
+                <td class="item-price">4.990.000 đ</td>
+                <td>8</td>
+                <td>
+                  <span class="badge-status lowstock">SẮP HẾT (8)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+              <!-- DÒNG MẪU 2: Vợt Tennis -->
+              <tr>
+                <td>
+                  <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=120" class="table-img"
+                    alt="Vợt Wilson" />
+                </td>
+                <td>
+                  <div class="item-name">
+                    Vợt Tennis Wilson Pro Staff 97 v14
+                  </div>
+                  <div class="item-id">ID: #204</div>
+                </td>
+                <td><span class="badge-cat">CẦU LÔNG</span>s</td>
+                <td>Wilson</td>
+                <td class="item-price">4.990.000 đ</td>
+                <td>8</td>
+                <td>
+                  <span class="badge-status lowstock">SẮP HẾT (8)</span>
+                </td>
+                <td class="btn-action">
+                  <button class="edit">Sửa</button>
+                  <button class="delete">Xóa</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3. GIAO DIỆN QUẢN LÝ ĐƠN HÀNG -->
+      <section id="tab-orders" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h2>Quản Lý Đơn Đặt Hàng</h2>
+            <p>
+              Theo dõi đơn hàng từ khách, cập nhật trạng thái vận đơn và thanh
+              toán.
             </p>
-            <div class="hero-btn-group">
-              <a href="dev3_details.html" class="btn btn-primary btn-hero">Xem Chi Tiết</a>
-              <a href="dev2_products.html" class="btn btn-outline-gold btn-hero">QUẦN VỢT & CẦU LÔNG</a>
-            </div>
-            </div>
+          </div>
+          <span class="badge-info">TỔNG 5 ĐƠN HÀNG</span>
+        </div>
+        <div class="table-container"></div>
+      </section>
 
-            <button class="carousel-arrow next-btn" id="nextSlide">❯</button>
-        </section>
+      <!-- 4. GIAO DIỆN KHÁCH HÀNG -->
+      <section id="tab-customers" class="tab-pane">
+        <h2>Danh Sách Khách Hàng</h2>
+      </section>
+
+      <!-- Tab 5: Báo Cáo Doanh Thu (Tạo mới nếu chưa có) -->
+      <section id="tab-reports" class="tab-pane">
+        <h2>Báo Cáo Doanh Thu & Thống Kê</h2>
+      </section>
+      <!-- Tab 6: Cấu Hình Cửa Hàng (Tạo mới nếu chưa có) -->
+      <section id="tab-settings" class="tab-pane">
+        <h2>Cấu Hình Hệ Thống</h2>
+      </section>
+    </div>
   </div>
 
+  <!-- ================= MODAL CHỈNH SỬA SẢN PHẨM ================= -->
+  <!-- Đang để sẵn class "show" để bảng hiện lên cho bạn xem CSS -->
+  <div id="edit-modal" class="modal-overlay sshow">
+    <div class="modal-box">
+      <!-- Tiêu đề & nút đóng (x) -->
+      <div class="modal-header">
+        <h3 id="modal-title">Chỉnh Sửa Sản Phẩm #205</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-modal">
+          &times;
+        </button>
+      </div>
 
-  <!-- ================= 7. FOOTER CHUNG ĐẦY ĐỦ ================= -->
-  <!-- <footer class="site-footer">
-    <div class="container footer-grid">
-      <div class="footer-col">
-        <div class="site-logo" style="margin-bottom: 14px;">
-          <span class="logo-icon">⚡</span>
-          <span style="color:#fff;">SPORTSTORE</span>
+      <!-- Nội dung form nhập thông tin -->
+      <div class="modal-body">
+        <!-- 1. Tên sản phẩm -->
+        <div class="form-group">
+          <label>Tên sản phẩm thể thao: <span class="required">*</span></label>
+          <input type="text" id="edit-name" value="Giày Chạy Bộ Adidas Adizero Adios Pro 3"
+            placeholder="Nhập tên sản phẩm..." />
         </div>
-        <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam.</p>
+
+        <!-- 2. Hàng 2 cột: Môn thể thao & Thương hiệu -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Môn thể thao: <span class="required">*</span></label>
+            <select id="edit-category">
+              <option value="CHẠY BỘ">Chạy Bộ</option>
+              <option value="BÓNG ĐÁ">Bóng Đá</option>
+              <option value="CẦU LÔNG">Cầu Lông</option>
+              <option value="TENNIS">Tennis</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Thương hiệu: <span class="required">*</span></label>
+            <select id="edit-brand">
+              <option value="Adidas">Adidas</option>
+              <option value="Nike">Nike</option>
+              <option value="Yonex">Yonex</option>
+              <option value="Wilson">Wilson</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. Hàng 2 cột: Giá & Số lượng tồn kho -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Giá niêm yết (VNĐ): <span class="required">*</span></label>
+            <input type="number" id="edit-price" value="5490003" placeholder="5290000" />
+          </div>
+          <div class="form-group">
+            <label>Số lượng tồn kho: <span class="required">*</span></label>
+            <input type="number" id="edit-stock" value="15" placeholder="10" />
+          </div>
+        </div>
+
+        <!-- 4. Đường dẫn ảnh -->
+        <div class="form-group">
+          <label>Đường dẫn ảnh (URL hoặc tên ảnh):</label>
+          <input type="text" id="edit-image"
+            value="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=200&auto=f"
+            placeholder="https://images.unsplash.com/..." />
+        </div>
+
+        <!-- 5. Mô tả ngắn -->
+        <div class="form-group">
+          <label>Mô tả ngắn trang bị:</label>
+          <textarea id="edit-desc" rows="3" placeholder="Đặc tính nổi bật, chất liệu đệm..."></textarea>
+        </div>
       </div>
 
-      <div class="footer-col">
-        <h4>Điều Hướng Nhanh</h4>
-        <ul class="footer-links">
-          <li><a href="dev1_home.html">Trang Chủ</a></li>
-          <li><a href="dev2_products.html">Sản Phẩm</a></li>
-          <li><a href="dev3_details.html">Chi Tiết & So Sánh</a></li>
-          <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Phân Hệ Module</h4>
-        <ul class="footer-links">
-          <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
-          <li><a href="admin.html">Hệ Thống Quản Trị</a></li>
-          <li><a href="dev5_user.html">Chính Sách Đổi Trả</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Hotline & Hỗ Trợ</h4>
-        <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
-        <p>✉️ Email: contact@sportstore.vn</p>
-        <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
+      <!-- 2 nút hành động ở cuối (Giữ nguyên thẻ button) -->
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" id="btn-cancel-modal">
+          Hủy Bỏ
+        </button>
+        <button type="button" class="btn-save" id="btn-save-product">
+          Lưu Sản Phẩm
+        </button>
       </div>
     </div>
-
-    <div class="container footer-bottom">
-      <p>Dự án Frontend.</p>
-    </div>
-  </footer> -->
-
-  <script src="../js/dev1_home.js"></script>
+  </div>
 </body>
+<script src="../js/admin.js"></script>
+
 </html>
