@@ -45,6 +45,6 @@ if (savedTabId) {
     `.left .nav-item[data-tab="${savedTabId}"]`,
   );
   if (savedButton) {
-    savedButton.click(); // Giả lập hành vi bấm chuột vào nút đó
+    savedButton.click();
   }
 }
