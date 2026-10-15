@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ hàng & Thanh toán - SportStore</title>
+    <!-- Đường dẫn tương đối: file này nằm trong pages/ nên phải lùi ra 1 cấp (../) -->
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/dev4_checkout.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <!-- Logo Cửa Hàng -->
+        <a href="../index.html" class="site-logo">
+          <span class="logo-icon">⚡</span>
+          <span>SportStore</span>
+        </a>
+
+        <!-- Menu Điều Hướng (6 trang chính) -->
+        <nav class="nav-menu">
+          <a href="../index.html" class="nav-link">Trang Chủ</a>
+          <a href="dev2_products.html" class="nav-link">Sản Phẩm</a>
+          <a href="dev3_details.html" class="nav-link">Chi Tiết</a>
+          <a href="dev4_checkout.html" class="nav-link">Giỏ Hàng</a>
+          <a href="dev5_user.html" class="nav-link">Tài Khoản</a>
+          <a href="admin.html" class="nav-link nav-admin">⚙️ Quản Trị</a>
+        </nav>
+
+        <!-- Nút Giỏ Hàng & Tài Khoản ở góc phải -->
+        <div class="header-actions">
+          <a href="dev4_checkout.html" class="btn-header-cart">
+            <span>🛒 Giỏ Hàng</span>
+            <span class="cart-badge" id="cartBadge">0</span>
+          </a>
+          <a href="dev5_user.html" class="btn btn-outline btn-sm">
+            <span>👤 Tài Khoản</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== NỘI DUNG RIÊNG CỦA DEV 4 ===== -->
+    <main class="dev4-checkout-wrapper">
+      <div class="container d4-main">
+        <nav class="d4-breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">Trang chủ</a> /
+          <strong>Giỏ hàng &amp; thanh toán</strong>
+        </nav>
+        <h1 class="d4-title">Giỏ hàng của bạn</h1>
+
+        <!-- Báo lỗi khi không tải được JSON (fetch .catch) -->
+        <p class="d4-alert" id="d4Alert" role="alert" hidden></p>
+
+        <!-- ============ TRẠNG THÁI GIỎ TRỐNG ============ -->
+        <section
+          class="d4-empty"
+          id="d4Empty"
+          hidden
+          aria-labelledby="d4EmptyTitle"
+        >
+          <div class="d4-empty-icon" aria-hidden="true">🛒</div>
+          <h2 id="d4EmptyTitle">Giỏ hàng đang trống</h2>
+          <p>Chọn thêm vài món đồ thể thao yêu thích rồi quay lại đây nhé.</p>
+          <div class="d4-empty-actions">
+            <a href="dev2_products.html" class="btn btn-primary"
+              >Xem sản phẩm</a
+            >
+          </div>
+        </section>
+
+        <!-- ============ NỘI DUNG GIỎ HÀNG ============ -->
+        <div class="d4-layout" id="d4Layout" hidden>
+          <div class="d4-col-main">
+            <!-- 1. Sản phẩm trong giỏ -->
+            <section class="d4-card" aria-labelledby="d4HItems">
+              <h2 id="d4HItems">
+                Sản phẩm đã chọn
+                <span class="d4-pill" id="d4ItemCount">0 món</span>
+              </h2>
+              <div class="d4-table-wrap">
+                <table class="d4-table">
+                  <caption class="d4-sr">
+                    Danh sách sản phẩm trong giỏ hàng
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Sản phẩm</th>
+                      <th scope="col">Đơn giá</th>
+                      <th scope="col">Số lượng</th>
+                      <th scope="col">Thành tiền</th>
+                      <th scope="col"><span class="d4-sr">Xóa</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="d4Items"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 2. Thông tin giao hàng (novalidate: tự validate bằng JS để báo lỗi đẹp) -->
+            <form
+              class="d4-card"
+              id="d4Form"
+              novalidate
+              aria-labelledby="d4HShip"
+            >
+              <h2 id="d4HShip">Thông tin nhận hàng</h2>
+
+              <!-- Có hồ sơ từ Dev 5 -> hiện thẻ địa chỉ đã lưu -->
+              <div class="d4-saved" id="d4SavedBox" hidden>
+                <p class="d4-saved-text" id="d4SavedText"></p>
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  id="d4EditAddr"
+                >
+                  Đổi địa chỉ
+                </button>
+              </div>
+
+              <div id="d4Fields">
+                <div class="d4-row">
+                  <div class="d4-field">
+                    <label for="fullName"
+                      >Họ và tên người nhận
+                      <abbr title="bắt buộc">*</abbr></label
+                    >
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      autocomplete="name"
+                      placeholder="Ví dụ: Nguyễn Văn A"
+                      aria-describedby="err-fullName"
+                    />
+                    <p
+                      class="d4-error"
+                      aria-live="polite"
+                      id="err-fullName"
+                    ></p>
+                  </div>
+                  <div class="d4-field">
+                    <label for="phone"
+                      >Số điện thoại (10 số)
+                      <abbr title="bắt buộc">*</abbr></label
+                    >
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      inputmode="numeric"
+                      maxlength="10"
+                      autocomplete="tel"
+                      placeholder="Ví dụ: 0912345678"
+                      aria-describedby="err-phone"
+                    />
+                    <p class="d4-error" aria-live="polite" id="err-phone"></p>
+                  </div>
+                </div>
+                <div class="d4-row">
+                  <div class="d4-field">
+                    <label for="email"
+                      >Email <abbr title="bắt buộc">*</abbr></label
+                    >
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      autocomplete="email"
+                      placeholder="Ví dụ: nguyenvana@gmail.com"
+                      aria-describedby="err-email"
+                    />
+                    <p class="d4-error" aria-live="polite" id="err-email"></p>
+                  </div>
+                  <div class="d4-field">
+                    <label for="province"
+                      >Tỉnh / Thành phố <abbr title="bắt buộc">*</abbr></label
+                    >
+                    <select
+                      id="province"
+                      name="province"
+                      aria-describedby="err-province"
+                    ></select>
+                    <p
+                      class="d4-error"
+                      aria-live="polite"
+                      id="err-province"
+                    ></p>
+                  </div>
+                </div>
+                <div class="d4-field">
+                  <label for="address"
+                    >Địa chỉ chi tiết (số nhà, đường, phường/xã)
+                    <abbr title="bắt buộc">*</abbr></label
+                  >
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    autocomplete="street-address"
+                    placeholder="Ví dụ: 123 Nguyễn Huệ, Phường Bến Nghé, Quận 1"
+                    aria-describedby="err-address"
+                  />
+                  <p class="d4-error" aria-live="polite" id="err-address"></p>
+                </div>
+              </div>
+
+              <!-- Ghi chú luôn hiện, kể cả khi dùng địa chỉ đã lưu -->
+              <div class="d4-field">
+                <label for="note">Ghi chú giao hàng (tùy chọn)</label>
+                <input
+                  type="text"
+                  id="note"
+                  name="note"
+                  maxlength="200"
+                  placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi đến"
+                />
+              </div>
+            </form>
+
+            <!-- 3. Phương thức thanh toán (JS vẽ từ JSON) -->
+            <section class="d4-card" aria-labelledby="d4HPay">
+              <h2 id="d4HPay">Phương thức thanh toán</h2>
+              <div
+                class="d4-pay-list"
+                id="d4PayList"
+                role="radiogroup"
+                aria-labelledby="d4HPay"
+              ></div>
+              <div class="d4-qr" id="d4QrBox" hidden>
+                <div class="d4-qr-img" aria-hidden="true">
+                  Mã QR<br />thanh toán
+                </div>
+                <ul class="d4-qr-info" id="d4QrInfo"></ul>
+              </div>
+            </section>
+          </div>
+
+          <!-- ============ TÓM TẮT ĐƠN HÀNG ============ -->
+          <aside class="d4-summary d4-card" aria-labelledby="d4HSum">
+            <h2 id="d4HSum">Tóm tắt đơn hàng</h2>
+
+            <div class="d4-coupon">
+              <label for="d4CouponInput">Mã giảm giá</label>
+              <div class="d4-coupon-row">
+                <input
+                  type="text"
+                  id="d4CouponInput"
+                  placeholder="Nhập mã giảm giá"
+                  autocomplete="off"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline"
+                  id="d4CouponApply"
+                >
+                  Áp dụng
+                </button>
+              </div>
+              <p class="d4-coupon-msg" id="d4CouponMsg" role="status"></p>
+              <div
+                class="d4-chips"
+                id="d4CouponChips"
+                aria-label="Gợi ý mã giảm giá"
+              ></div>
+            </div>
+
+            <dl class="d4-totals">
+              <div>
+                <dt>Tạm tính</dt>
+                <dd id="d4Subtotal">0 ₫</dd>
+              </div>
+              <div>
+                <dt>Giảm giá</dt>
+                <dd id="d4Discount" class="d4-green">-0 ₫</dd>
+              </div>
+              <div>
+                <dt>Phí vận chuyển</dt>
+                <dd id="d4Shipping">0 ₫</dd>
+              </div>
+              <div class="d4-grand">
+                <dt>Tổng thanh toán</dt>
+                <dd id="d4Total">0 ₫</dd>
+              </div>
+            </dl>
+            <p class="d4-hint" id="d4FreeShipHint"></p>
+
+            <!-- form="d4Form": nút nằm ngoài thẻ <form> nhưng vẫn submit được form -->
+            <button
+              type="submit"
+              form="d4Form"
+              class="btn btn-primary d4-btn-block"
+              id="d4Confirm"
+            >
+              Xác nhận đặt hàng
+            </button>
+            <p class="d4-hint">
+              Đã bao gồm VAT • Đổi trả miễn phí trong 30 ngày
+            </p>
+          </aside>
+        </div>
+
+        <!-- ============ ĐẶT HÀNG THÀNH CÔNG ============ -->
+        <section
+          class="d4-success"
+          id="d4Success"
+          hidden
+          aria-labelledby="d4SuccessTitle"
+        >
+          <div class="d4-success-icon" aria-hidden="true">✓</div>
+          <h2 id="d4SuccessTitle">Đặt hàng thành công!</h2>
+          <p>
+            Mã đơn hàng: <strong class="d4-code" id="d4OrderCode">—</strong>
+          </p>
+          <p>Tổng thanh toán: <strong id="d4OrderTotal">—</strong></p>
+          <p id="d4OrderNote"></p>
+          <div class="d4-empty-actions">
+            <a href="dev5_user.html#orders" class="btn btn-outline"
+              >Xem lịch sử đơn hàng</a
+            >
+            <a href="dev2_products.html" class="btn btn-primary"
+              >Tiếp tục mua sắm</a
+            >
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>VỀ SPORTSTORE</h4>
+            <p>
+              Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng
+              đầu Việt Nam. Đồng hành cùng mọi vận động viên bứt phá giới hạn.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>DANH MỤC</h4>
+            <ul class="footer-links">
+              <li><a href="dev2_products.html">Giày Chạy Bộ Marathon</a></li>
+              <li><a href="dev2_products.html">Trang Phục Bóng Đá</a></li>
+              <li><a href="dev2_products.html">Vợt Cầu Lông & Tennis</a></li>
+              <li><a href="dev2_products.html">Dụng Cụ Gym & Fitness</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>HỖ TRỢ</h4>
+            <ul class="footer-links">
+              <li><a href="dev5_user.html">Chính Sách Bảo Hành</a></li>
+              <li><a href="dev5_user.html">Quy Định Đổi Trả 30 Ngày</a></li>
+              <li><a href="dev5_user.html">Hướng Dẫn Chọn Size Chuẩn</a></li>
+              <li><a href="dev5_user.html">Theo Dõi Đơn Hàng</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>LIÊN HỆ</h4>
+            <p>📍 123 Đường Cầu Giấy, Hà Nội</p>
+            <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
+            <p>✉️ Email: support@sportstore.vn</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            © 2026 SportStore. Dự án Frontend Kiến Trúc Độc Lập Decoupled
+            Vanilla Architecture.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../js/common.js"></script>
+    <script src="../js/dev4_checkout.js"></script>
+  </body>
+</html>
