@@ -4,20 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Giỏ hàng & Thanh toán - SportStore</title>
-    <!-- Đường dẫn tương đối: file này nằm trong pages/ nên phải lùi ra 1 cấp (../) -->
     <link rel="stylesheet" href="../css/common.css" />
     <link rel="stylesheet" href="../css/dev4_checkout.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <!-- Logo Cửa Hàng -->
         <a href="../index.html" class="site-logo">
           <span class="logo-icon">⚡</span>
           <span>SportStore</span>
         </a>
 
-        <!-- Menu Điều Hướng (6 trang chính) -->
         <nav class="nav-menu">
           <a href="../index.html" class="nav-link">Trang Chủ</a>
           <a href="dev2_products.html" class="nav-link">Sản Phẩm</a>
@@ -27,7 +24,6 @@
           <a href="admin.html" class="nav-link nav-admin">⚙️ Quản Trị</a>
         </nav>
 
-        <!-- Nút Giỏ Hàng & Tài Khoản ở góc phải -->
         <div class="header-actions">
           <a href="dev4_checkout.html" class="btn-header-cart">
             <span>🛒 Giỏ Hàng</span>
@@ -49,10 +45,32 @@
         </nav>
         <h1 class="d4-title">Giỏ hàng của bạn</h1>
 
-        <!-- Báo lỗi khi không tải được JSON (fetch .catch) -->
-        <p class="d4-alert" id="d4Alert" role="alert" hidden></p>
+        <!-- ============ 1. TRẠNG THÁI CHƯA ĐĂNG NHẬP ============ -->
+        <section
+          class="d4-empty"
+          id="d4Auth"
+          hidden
+          aria-labelledby="d4AuthTitle"
+        >
+          <div class="d4-empty-icon" aria-hidden="true">🔒</div>
+          <h2 id="d4AuthTitle">Vui lòng đăng nhập để sử dụng giỏ hàng</h2>
+          <p>
+            Khách hàng cần đăng ký và đăng nhập tài khoản mới sử dụng được chức
+            năng giỏ hàng và đặt mua sản phẩm.
+          </p>
+          <div class="d4-empty-actions">
+            <a
+              href="dev5_user.html?redirect=dev4_checkout.html"
+              class="btn btn-primary"
+              >🔑 Đăng nhập ngay</a
+            >
+            <a href="dev5_user.html" class="btn btn-outline"
+              >✨ Đăng ký tài khoản</a
+            >
+          </div>
+        </section>
 
-        <!-- ============ TRẠNG THÁI GIỎ TRỐNG ============ -->
+        <!-- ============ 2. TRẠNG THÁI GIỎ HÀNG TRỐNG ============ -->
         <section
           class="d4-empty"
           id="d4Empty"
@@ -69,10 +87,10 @@
           </div>
         </section>
 
-        <!-- ============ NỘI DUNG GIỎ HÀNG ============ -->
+        <!-- ============ 3. NỘI DUNG GIỎ HÀNG & THANH TOÁN ============ -->
         <div class="d4-layout" id="d4Layout" hidden>
           <div class="d4-col-main">
-            <!-- 1. Sản phẩm trong giỏ -->
+            <!-- Bảng sản phẩm trong giỏ -->
             <section class="d4-card" aria-labelledby="d4HItems">
               <h2 id="d4HItems">
                 Sản phẩm đã chọn
@@ -97,7 +115,7 @@
               </div>
             </section>
 
-            <!-- 2. Thông tin giao hàng (novalidate: tự validate bằng JS để báo lỗi đẹp) -->
+            <!-- Form thông tin nhận hàng -->
             <form
               class="d4-card"
               id="d4Form"
@@ -106,7 +124,36 @@
             >
               <h2 id="d4HShip">Thông tin nhận hàng</h2>
 
-              <!-- Có hồ sơ từ Dev 5 -> hiện thẻ địa chỉ đã lưu -->
+              <!-- Chọn địa chỉ từ tài khoản hoặc nhập mới -->
+              <div
+                class="d4-addr-mode"
+                id="d4AddrMode"
+                role="radiogroup"
+                aria-label="Cách chọn địa chỉ nhận hàng"
+                hidden
+              >
+                <label class="d4-addr-radio selected" id="d4LblAddrSaved">
+                  <input
+                    type="radio"
+                    name="addrMode"
+                    value="saved"
+                    id="d4RadioSaved"
+                    checked
+                  />
+                  <span>Chọn địa chỉ nhận hàng từ tài khoản</span>
+                </label>
+                <label class="d4-addr-radio" id="d4LblAddrNew">
+                  <input
+                    type="radio"
+                    name="addrMode"
+                    value="new"
+                    id="d4RadioNew"
+                  />
+                  <span>Nhập địa chỉ giao hàng mới</span>
+                </label>
+              </div>
+
+              <!-- Khung hiển thị địa chỉ đã lưu của tài khoản -->
               <div class="d4-saved" id="d4SavedBox" hidden>
                 <p class="d4-saved-text" id="d4SavedText"></p>
                 <button
@@ -114,10 +161,11 @@
                   class="btn btn-secondary btn-sm"
                   id="d4EditAddr"
                 >
-                  Đổi địa chỉ
+                  Nhập địa chỉ mới
                 </button>
               </div>
 
+              <!-- Các ô nhập địa chỉ giao hàng mới -->
               <div id="d4Fields">
                 <div class="d4-row">
                   <div class="d4-field">
@@ -128,16 +176,9 @@
                     <input
                       type="text"
                       id="fullName"
-                      name="fullName"
-                      autocomplete="name"
                       placeholder="Ví dụ: Nguyễn Văn A"
-                      aria-describedby="err-fullName"
                     />
-                    <p
-                      class="d4-error"
-                      aria-live="polite"
-                      id="err-fullName"
-                    ></p>
+                    <p class="d4-error" id="err-fullName"></p>
                   </div>
                   <div class="d4-field">
                     <label for="phone"
@@ -147,14 +188,10 @@
                     <input
                       type="tel"
                       id="phone"
-                      name="phone"
-                      inputmode="numeric"
                       maxlength="10"
-                      autocomplete="tel"
                       placeholder="Ví dụ: 0912345678"
-                      aria-describedby="err-phone"
                     />
-                    <p class="d4-error" aria-live="polite" id="err-phone"></p>
+                    <p class="d4-error" id="err-phone"></p>
                   </div>
                 </div>
                 <div class="d4-row">
@@ -165,27 +202,26 @@
                     <input
                       type="email"
                       id="email"
-                      name="email"
-                      autocomplete="email"
                       placeholder="Ví dụ: nguyenvana@gmail.com"
-                      aria-describedby="err-email"
                     />
-                    <p class="d4-error" aria-live="polite" id="err-email"></p>
+                    <p class="d4-error" id="err-email"></p>
                   </div>
                   <div class="d4-field">
                     <label for="province"
                       >Tỉnh / Thành phố <abbr title="bắt buộc">*</abbr></label
                     >
-                    <select
-                      id="province"
-                      name="province"
-                      aria-describedby="err-province"
-                    ></select>
-                    <p
-                      class="d4-error"
-                      aria-live="polite"
-                      id="err-province"
-                    ></p>
+                    <select id="province">
+                      <option value="hn">
+                        Hà Nội (Nội thành - Hỏa tốc 2h)
+                      </option>
+                      <option value="hcm">
+                        TP. Hồ Chí Minh (Nội thành - Hỏa tốc 2h)
+                      </option>
+                      <option value="dn">Đà Nẵng (1-2 ngày)</option>
+                      <option value="other">
+                        Tỉnh / thành khác (2-4 ngày)
+                      </option>
+                    </select>
                   </div>
                 </div>
                 <div class="d4-field">
@@ -196,29 +232,24 @@
                   <input
                     type="text"
                     id="address"
-                    name="address"
-                    autocomplete="street-address"
                     placeholder="Ví dụ: 123 Nguyễn Huệ, Phường Bến Nghé, Quận 1"
-                    aria-describedby="err-address"
                   />
-                  <p class="d4-error" aria-live="polite" id="err-address"></p>
+                  <p class="d4-error" id="err-address"></p>
                 </div>
               </div>
 
-              <!-- Ghi chú luôn hiện, kể cả khi dùng địa chỉ đã lưu -->
               <div class="d4-field">
                 <label for="note">Ghi chú giao hàng (tùy chọn)</label>
                 <input
                   type="text"
                   id="note"
-                  name="note"
                   maxlength="200"
                   placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi đến"
                 />
               </div>
             </form>
 
-            <!-- 3. Phương thức thanh toán (JS vẽ từ JSON) -->
+            <!-- Phương thức thanh toán (mặc định chọn COD) -->
             <section class="d4-card" aria-labelledby="d4HPay">
               <h2 id="d4HPay">Phương thức thanh toán</h2>
               <div
@@ -226,44 +257,128 @@
                 id="d4PayList"
                 role="radiogroup"
                 aria-labelledby="d4HPay"
-              ></div>
-              <div class="d4-qr" id="d4QrBox" hidden>
-                <div class="d4-qr-img" aria-hidden="true">
-                  Mã QR<br />thanh toán
+              >
+                <!-- 1. Tiền mặt COD (Mặc định) -->
+                <label class="d4-pay-option selected">
+                  <input type="radio" name="payment" value="COD" checked />
+                  <span>
+                    <strong>Thanh toán tiền mặt khi nhận hàng (COD)</strong>
+                    <em class="d4-tag">Mặc định</em>
+                    <small
+                      >Kiểm tra hàng trước khi trả tiền mặt cho shipper.</small
+                    >
+                  </span>
+                </label>
+
+                <!-- 2. Chuyển khoản QR -->
+                <label class="d4-pay-option">
+                  <input type="radio" name="payment" value="QR" />
+                  <span>
+                    <strong>Chuyển khoản ngân hàng (VietQR)</strong>
+                    <em class="d4-tag">Tiện lợi</em>
+                    <small
+                      >Quét mã QR chuyển khoản ngân hàng nhanh chóng.</small
+                    >
+                  </span>
+                </label>
+                <div class="d4-qr" id="d4QrBox" hidden>
+                  <div class="d4-qr-img" aria-hidden="true">
+                    Mã QR<br />thanh toán
+                  </div>
+                  <ul class="d4-qr-info" id="d4QrInfo">
+                    <li><strong>Ngân hàng:</strong> Vietcombank</li>
+                    <li><strong>Chủ tài khoản:</strong> CTY SPORTSTORE</li>
+                    <li><strong>Số tài khoản:</strong> 0123 456 789</li>
+                    <li><strong>Nội dung:</strong> Mã đơn hàng + SĐT</li>
+                  </ul>
                 </div>
-                <ul class="d4-qr-info" id="d4QrInfo"></ul>
+
+                <!-- 3. Thanh toán trực tuyến (ONLINE) -->
+                <label class="d4-pay-option">
+                  <input type="radio" name="payment" value="ONLINE" />
+                  <span>
+                    <strong
+                      >Thanh toán trực tuyến (Thẻ ATM / Visa /
+                      MasterCard)</strong
+                    >
+                    <em class="d4-tag">Online</em>
+                    <small
+                      >Thanh toán trực tuyến an toàn qua cổng thẻ ngân
+                      hàng.</small
+                    >
+                  </span>
+                </label>
+                <div class="d4-online" id="d4OnlineBox" hidden>
+                  <p class="d4-online-title">
+                    💳 Nhập thông tin thẻ thanh toán trực tuyến
+                  </p>
+                  <div class="d4-row">
+                    <div class="d4-field">
+                      <label for="cardNumber"
+                        >Số thẻ ngân hàng / Visa
+                        <abbr title="bắt buộc">*</abbr></label
+                      >
+                      <input
+                        type="text"
+                        id="cardNumber"
+                        form="d4Form"
+                        maxlength="19"
+                        placeholder="Ví dụ: 9704 1234 5678 9012"
+                      />
+                      <p class="d4-error" id="err-cardNumber"></p>
+                    </div>
+                    <div class="d4-field">
+                      <label for="cardHolder"
+                        >Tên in trên thẻ (không dấu)
+                        <abbr title="bắt buộc">*</abbr></label
+                      >
+                      <input
+                        type="text"
+                        id="cardHolder"
+                        form="d4Form"
+                        placeholder="Ví dụ: NGUYEN VAN A"
+                      />
+                      <p class="d4-error" id="err-cardHolder"></p>
+                    </div>
+                  </div>
+                  <div class="d4-row">
+                    <div class="d4-field">
+                      <label for="cardExpiry"
+                        >Ngày hết hạn (MM/YY)
+                        <abbr title="bắt buộc">*</abbr></label
+                      >
+                      <input
+                        type="text"
+                        id="cardExpiry"
+                        form="d4Form"
+                        maxlength="5"
+                        placeholder="MM/YY (VD: 08/28)"
+                      />
+                      <p class="d4-error" id="err-cardExpiry"></p>
+                    </div>
+                    <div class="d4-field">
+                      <label for="cardCvv"
+                        >Mã bảo mật CVV / OTP
+                        <abbr title="bắt buộc">*</abbr></label
+                      >
+                      <input
+                        type="password"
+                        id="cardCvv"
+                        form="d4Form"
+                        maxlength="6"
+                        placeholder="3-6 chữ số"
+                      />
+                      <p class="d4-error" id="err-cardCvv"></p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
 
-          <!-- ============ TÓM TẮT ĐƠN HÀNG ============ -->
+          <!-- Tóm tắt đơn hàng -->
           <aside class="d4-summary d4-card" aria-labelledby="d4HSum">
             <h2 id="d4HSum">Tóm tắt đơn hàng</h2>
-
-            <div class="d4-coupon">
-              <label for="d4CouponInput">Mã giảm giá</label>
-              <div class="d4-coupon-row">
-                <input
-                  type="text"
-                  id="d4CouponInput"
-                  placeholder="Nhập mã giảm giá"
-                  autocomplete="off"
-                />
-                <button
-                  type="button"
-                  class="btn btn-outline"
-                  id="d4CouponApply"
-                >
-                  Áp dụng
-                </button>
-              </div>
-              <p class="d4-coupon-msg" id="d4CouponMsg" role="status"></p>
-              <div
-                class="d4-chips"
-                id="d4CouponChips"
-                aria-label="Gợi ý mã giảm giá"
-              ></div>
-            </div>
 
             <dl class="d4-totals">
               <div>
@@ -271,21 +386,15 @@
                 <dd id="d4Subtotal">0 ₫</dd>
               </div>
               <div>
-                <dt>Giảm giá</dt>
-                <dd id="d4Discount" class="d4-green">-0 ₫</dd>
-              </div>
-              <div>
                 <dt>Phí vận chuyển</dt>
-                <dd id="d4Shipping">0 ₫</dd>
+                <dd id="d4Shipping" class="d4-green">Miễn phí</dd>
               </div>
               <div class="d4-grand">
                 <dt>Tổng thanh toán</dt>
                 <dd id="d4Total">0 ₫</dd>
               </div>
             </dl>
-            <p class="d4-hint" id="d4FreeShipHint"></p>
 
-            <!-- form="d4Form": nút nằm ngoài thẻ <form> nhưng vẫn submit được form -->
             <button
               type="submit"
               form="d4Form"
@@ -295,12 +404,12 @@
               Xác nhận đặt hàng
             </button>
             <p class="d4-hint">
-              Đã bao gồm VAT • Đổi trả miễn phí trong 30 ngày
+              Miễn phí vận chuyển toàn quốc • Đổi trả trong 30 ngày
             </p>
           </aside>
         </div>
 
-        <!-- ============ ĐẶT HÀNG THÀNH CÔNG ============ -->
+        <!-- ============ 4. ĐẶT HÀNG THÀNH CÔNG & XEM LẠI ĐƠN ============ -->
         <section
           class="d4-success"
           id="d4Success"
@@ -314,6 +423,10 @@
           </p>
           <p>Tổng thanh toán: <strong id="d4OrderTotal">—</strong></p>
           <p id="d4OrderNote"></p>
+
+          <!-- Bảng xem lại chi tiết đơn đặt hàng vừa mua -->
+          <div class="d4-review" id="d4OrderReview"></div>
+
           <div class="d4-empty-actions">
             <a href="dev5_user.html#orders" class="btn btn-outline"
               >Xem lịch sử đơn hàng</a
