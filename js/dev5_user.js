@@ -67,8 +67,12 @@
     var currentSession = getSession();
     var userName = currentSession ? currentSession.name : 'khách hàng';
     var userEmail = document.querySelector('[data-user-email]');
+    var userPhone = document.querySelector('[data-user-phone]');
     var userRole = document.querySelector('[data-user-role]');
     var userTier = document.querySelector('[data-user-tier]');
+    var editProfileBtn = document.querySelector('[data-edit-profile-btn]');
+    var isAdmin = (currentSession && currentSession.role === 'admin') ||
+      localStorage.getItem('admin_logged_in') === 'true';
 
     document.querySelectorAll('[data-user-name]').forEach(function (element) {
       element.textContent = userName;
@@ -80,18 +84,27 @@
         : 'Đăng nhập để xem thông tin hội viên.';
     }
 
+    if (userPhone) {
+      userPhone.textContent = currentSession && currentSession.phone
+        ? '📞 SĐT: ' + currentSession.phone
+        : '';
+    }
+
     if (userRole) {
       userRole.textContent = currentSession
-        ? currentSession.role === 'admin'
+        ? (isAdmin
           ? 'Quản trị viên'
-          : 'Thành viên ' + currentSession.tier
-        : 'Khách vãng lai';
+          : 'Thành viên ' + currentSession.tier)
+        : (isAdmin ? 'Quản trị viên' : 'Khách vãng lai');
     }
 
     if (userTier) {
-      userTier.textContent = currentSession ? currentSession.tier : 'Guest';
+      userTier.textContent = currentSession ? currentSession.tier : (isAdmin ? 'Administrator' : 'Guest');
     }
 
+    if (editProfileBtn) {
+      editProfileBtn.classList.toggle('dev5-hidden', !currentSession);
+    }
   }
 
   function renderOverview() {
@@ -287,10 +300,86 @@
         USER_DATA_PREFIX + getSession().id,
         JSON.stringify(userData)
       );
+      // Đồng bộ sổ địa chỉ dùng chung cho module Checkout (Dev 4)
+      localStorage.setItem('sport_address', JSON.stringify(address));
       addressForm.reset();
       addressForm.classList.add('dev5-hidden');
       renderAddresses();
       renderOverview();
+    });
+  }
+
+  function bindProfileEvents() {
+    var editBtn = document.querySelector('[data-edit-profile-btn]');
+    var cancelBtn = document.querySelector('[data-cancel-profile]');
+    var form = document.querySelector('[data-profile-form]');
+
+    if (!editBtn || !form) return;
+
+    // Ràng buộc số điện thoại: Chỉ cho phép nhập số
+    if (form.elements.profilePhone) {
+      form.elements.profilePhone.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+    }
+
+    editBtn.addEventListener('click', function () {
+      var currentSession = getSession();
+      if (!currentSession) return;
+
+      form.elements.profileName.value = currentSession.name || '';
+      form.elements.profileEmail.value = currentSession.email || '';
+      form.elements.profilePhone.value = currentSession.phone || '0901234567';
+      form.elements.profilePassword.value = '';
+
+      form.classList.remove('dev5-hidden');
+    });
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', function () {
+        form.reset();
+        form.classList.add('dev5-hidden');
+      });
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var currentSession = getSession();
+      if (!currentSession) return;
+
+      var newName = form.elements.profileName.value.trim();
+      var newEmail = form.elements.profileEmail.value.trim();
+      var newPhone = form.elements.profilePhone.value.trim();
+      var newPass = form.elements.profilePassword.value;
+
+      currentSession.name = newName;
+      currentSession.email = newEmail;
+      currentSession.phone = newPhone;
+
+      // Cập nhật session
+      localStorage.setItem('sportstore_auth', JSON.stringify(currentSession));
+
+      // Cập nhật trong danh sách đăng ký nếu có
+      try {
+        var registered = JSON.parse(localStorage.getItem('sportstore_registered_users') || '[]');
+        var foundReg = registered.find(function (u) { return u.id === currentSession.id || u.email === currentSession.email; });
+        if (foundReg) {
+          foundReg.name = newName;
+          foundReg.email = newEmail;
+          foundReg.phone = newPhone;
+          if (newPass) foundReg.password = newPass;
+          localStorage.setItem('sportstore_registered_users', JSON.stringify(registered));
+        }
+      } catch (err) {}
+
+      // Cập nhật giao diện
+      renderUserProfile();
+      if (window.sportStoreAuth && typeof window.sportStoreAuth.updateButtons === 'function') {
+        window.sportStoreAuth.updateButtons();
+      }
+
+      form.classList.add('dev5-hidden');
+      alert('Đã cập nhật thông tin cá nhân thành công!');
     });
   }
 
@@ -326,6 +415,7 @@
     bindFaqEvents();
     bindAddressEvents();
     bindWishlistEvents();
+    bindProfileEvents();
   }
 
   fetch(DATA_URL)

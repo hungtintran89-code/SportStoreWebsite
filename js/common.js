@@ -1,12 +1,3 @@
-/**
- * ==========================================================================
- * SPORTSTORE - CÁC HÀM TIỆN ÍCH DÙNG CHUNG (COMMON.JS)
- * Dành cho toàn bộ 5 thành viên sử dụng chung.
- * Viết bằng JavaScript thuần (Vanilla JS), đơn giản, rõ nghĩa, đọc là hiểu ngay!
- * ==========================================================================
- */
-
-// Tên khóa lưu trữ trong LocalStorage
 const STORAGE_CART_KEY = 'sport_cart';       // Khóa lưu giỏ hàng
 const STORAGE_USER_KEY = 'sport_user';       // Khóa lưu thông tin đăng nhập
 const STORAGE_ADDR_KEY = 'sport_address';    // Khóa lưu sổ địa chỉ nhận hàng
@@ -90,61 +81,6 @@ function addToCart(product, quantityToAdd = 1) {
 }
 
 /**
- * Lưu sản phẩm vào Wishlist của tài khoản đang đăng nhập.
- * Các trang sản phẩm gọi hàm này từ nút "Yêu thích"; trang tài khoản
- * chỉ đọc và hiển thị danh sách đã được lưu.
- */
-function addToWishlist(product) {
-  const session = getSportStoreSession();
-
-  if (!session) {
-    showToast('Vui lòng đăng nhập để thêm sản phẩm yêu thích.', 'danger');
-    return false;
-  }
-
-  const storageKey = `sportstore_user_data_${session.id}`;
-  let userData = {};
-
-  try {
-    userData = JSON.parse(localStorage.getItem(storageKey) || '{}');
-  } catch (error) {
-    console.error('Lỗi khi đọc Wishlist:', error);
-  }
-
-  const wishlist = Array.isArray(userData.wishlist) ? userData.wishlist : [];
-  const alreadySaved = wishlist.some(item => item.id === product.id);
-
-  if (!alreadySaved) {
-    wishlist.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      tag: product.tag || 'Yêu thích'
-    });
-    userData.wishlist = wishlist;
-    localStorage.setItem(storageKey, JSON.stringify(userData));
-    showToast(`Đã thêm "${product.name}" vào Wishlist.`, 'success');
-  } else {
-    showToast('Sản phẩm đã có trong Wishlist.', 'info');
-  }
-
-  return true;
-}
-
-function getSportStoreSession() {
-  if (window.sportStoreAuth && typeof window.sportStoreAuth.session === 'function') {
-    return window.sportStoreAuth.session();
-  }
-
-  try {
-    return JSON.parse(localStorage.getItem('sportstore_auth') || 'null');
-  } catch (error) {
-    console.error('Lỗi khi đọc phiên đăng nhập:', error);
-    return null;
-  }
-}
-
-/**
  * 5. HÀM CẬP NHẬT SỐ LƯỢNG TRÊN ICON GIỎ HÀNG Ở HEADER
  * Tự động đếm tổng số lượng sản phẩm trong giỏ và hiển thị vào thẻ có class .cart-badge
  */
@@ -212,24 +148,6 @@ function showToast(message, type = 'info') {
 document.addEventListener('DOMContentLoaded', function () {
   // 1. Cập nhật số lượng giỏ hàng ngay khi mở bất kỳ trang nào
   updateCartBadge();
-
-  // Trang sản phẩm gọi Wishlist khi khách chủ động bấm nút yêu thích.
-  document.addEventListener('click', function (event) {
-    const button = event.target.closest('[data-wishlist-toggle]');
-    if (!button) return;
-
-    const saved = addToWishlist({
-      id: button.dataset.productId,
-      name: button.dataset.productName,
-      price: Number(button.dataset.productPrice) || 0,
-      tag: button.dataset.productTag
-    });
-
-    if (saved) {
-      button.classList.add('is-liked');
-      button.setAttribute('aria-pressed', 'true');
-    }
-  });
 
   // 2. Tự động kiểm tra URL để sáng đèn menu active
   const currentPath = window.location.pathname;

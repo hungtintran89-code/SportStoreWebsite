@@ -21,7 +21,7 @@
         <a href="dev2_products.html" class="nav-link">Sản phẩm</a>
         <a href="dev4_checkout.html" class="nav-link">Giỏ hàng</a>
         <a href="dev5_user.html" class="nav-link active">Tài khoản</a>
-        <a href="admin.html" class="nav-link nav-admin" data-admin-link>
+        <a href="admin.html" class="nav-link nav-admin dev5-hidden" data-admin-link>
           ⚙️ Admin
         </a>
       </nav>
@@ -81,18 +81,51 @@
                 <span class="dev5-eyebrow">PROFILE</span>
                 <h2>Thông tin hội viên</h2>
               </div>
-              <button class="dev5-link-button" type="button" data-auth-action="login">
-                Đổi tài khoản
-              </button>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="dev5-secondary-button dev5-hidden" type="button" data-edit-profile-btn>
+                  ✏️ Chỉnh sửa hồ sơ
+                </button>
+                <button class="dev5-link-button" type="button" data-auth-action="login">
+                  Đổi tài khoản
+                </button>
+              </div>
             </div>
 
             <div class="dev5-profile-card">
               <div>
                 <h3 data-user-name>Khách vãng lai</h3>
                 <p data-user-email>Đăng nhập để xem thông tin hội viên.</p>
+                <p data-user-phone style="color: #64748b; font-size: 13px; margin: 4px 0;"></p>
                 <span class="dev5-tier" data-user-tier>Guest</span>
               </div>
             </div>
+
+            <!-- FORM CHỈNH SỬA THÔNG TIN CÁ NHÂN (THEO RUBRIC 0.50 ĐIỂM) -->
+            <form class="dev5-address-form dev5-hidden" data-profile-form style="margin-top: 20px;">
+              <h3 style="font-size: 16px; margin-bottom: 12px; color: #0f172a;">✏️ Cập nhật thông tin cá nhân</h3>
+              <div class="dev5-form-grid">
+                <label>
+                  Họ và tên
+                  <input name="profileName" required minlength="2">
+                </label>
+                <label>
+                  Số điện thoại
+                  <input name="profilePhone" required pattern="0[0-9]{9}">
+                </label>
+                <label class="dev5-form-wide">
+                  Email
+                  <input name="profileEmail" type="email" required>
+                </label>
+                <label class="dev5-form-wide">
+                  Đổi mật khẩu mới (bỏ trống nếu không muốn đổi)
+                  <input name="profilePassword" type="password" placeholder="Nhập mật khẩu mới từ 8 ký tự...">
+                </label>
+              </div>
+              <div class="dev5-form-actions">
+                <button class="dev5-secondary-button" type="button" data-cancel-profile>Hủy</button>
+                <button class="dev5-primary-button" type="submit">Lưu thông tin</button>
+              </div>
+            </form>
 
             <div class="dev5-stat-grid">
               <div>
