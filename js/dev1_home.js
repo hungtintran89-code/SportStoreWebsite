@@ -525,17 +525,30 @@
     }
 
     // Gắn sự kiện nút + Giỏ
-    var addButtons = grid.querySelectorAll('.dev1-btn-add-cart');
+    // Gắn sự kiện nút + Giỏ: Lưu sản phẩm đã chọn & chuyển sang trang Chi Tiết để chọn Size
+    var addButtons = grid.querySelectorAll('.dev1-btn-add-cart, .dev1-card-btn-detail');
     for (var k = 0; k < addButtons.length; k++) {
       addButtons[k].addEventListener('click', function (e) {
+        e.preventDefault();
         var id = this.getAttribute('data-id');
         var name = this.getAttribute('data-name');
         var price = Number(this.getAttribute('data-price'));
         var image = this.getAttribute('data-image');
-        addProductToCart({ id: id, name: name, price: price, image: image });
-        showToast('Đã thêm "' + name + '" vào giỏ hàng!', 'success');
+
+        // 1. Lưu tạm thông tin sản phẩm người dùng vừa bấm vào LocalStorage
+        var selectedProduct = {
+          id: id,
+          name: name,
+          price: price,
+          image: image
+        };
+        localStorage.setItem('sport_selected_product', JSON.stringify(selectedProduct));
+
+        // 2. Chuyển hướng ngay sang trang Chi Tiết Sản Phẩm (kèm ID trên URL)
+        window.location.href = getPageUrl('dev3_details.html') + '?id=' + id;
       });
     }
+
   }
 
   /**
