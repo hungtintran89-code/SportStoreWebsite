@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Quản lý Danh Mục Sản Phẩm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <header class="admin-header">
+        <div class="logo"><h2>SPORT MAX ADMIN</h2></div>
+        <div class="admin-info">
+            Xin chào, Quản trị viên |
+            <a href="../products.html" style="margin-right: 10px;">Xem trang khách hàng</a> |
+            <a href="#">Đăng xuất</a>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <ul class="admin-menu">
+                <li><a href="#">Quản lý người dùng</a></li>
+                <li><a href="categories.html">Quản lý loại SP</a></li>
+                <li><a href="products.html" class="active">Quản lý danh mục SP</a></li>
+                <li><a href="#">Quản lý nhập hàng</a></li>
+                <li><a href="#">Quản lý giá bán</a></li>
+                <li><a href="#">Quản lý đơn hàng</a></li>
+                <li><a href="#">Báo cáo tồn kho</a></li>
+            </ul>
+        </aside>
+
+        <main class="admin-content">
+            <!-- Thanh tiêu đề kèm ô tìm nhanh và nút thêm sản phẩm -->
+            <div class="content-header" style="flex-wrap: wrap; gap: 12px;">
+                <h2>Quản lý Danh mục Sản Phẩm</h2>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="adminSearchInput" placeholder="Tìm mã hoặc tên SP..." oninput="renderProducts(this.value)" style="padding: 9px 12px; border: 1px solid #d7e3ec; border-radius: 6px; width: 240px;">
+                    <button id="btnAddProduct" class="btn-primary" style="width: auto;">+ Thêm Sản Phẩm</button>
+                </div>
+            </div>
+
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Mã SP</th>
+                        <th>Tên SP</th>
+                        <th>Loại SP</th>
+                        <th>Giá vốn</th>
+                        <th>Tồn kho</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody"></tbody>
+            </table>
+        </main>
+    </div>
+
+    <!-- Form popup dùng để Thêm hoặc Sửa thông tin sản phẩm -->
+    <div id="productModal" class="modal">
+        <div class="modal-content" style="width: 600px; margin-top: 20px;">
+            <div class="modal-header">
+                <h3 id="modalTitle">Thêm Sản Phẩm Mới</h3>
+                <span class="close-modal" id="btnCloseModal">&times;</span>
+            </div>
+
+            <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+                <div class="form-group">
+                    <label>Mã sản phẩm (VD: SP01):</label>
+                    <input type="text" id="proCodeInput">
+                </div>
+                <div class="form-group">
+                    <label>Tên sản phẩm:</label>
+                    <input type="text" id="proNameInput">
+                </div>
+                <div class="form-group">
+                    <label>Thuộc loại sản phẩm:</label>
+                    <select id="proCategoryInput"></select>
+                </div>
+                <div class="form-group">
+                    <label>Link hình ảnh (URL - Ngăn cách bằng dấu phẩy nếu có nhiều ảnh):</label>
+                    <input type="text" id="proImageInput" placeholder="VD: link1.jpg, link2.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Giá vốn (VNĐ):</label>
+                    <input type="number" id="proPriceInput">
+                </div>
+                <div class="form-group">
+                    <label>Số lượng tồn kho:</label>
+                    <input type="number" id="proStockInput">
+                </div>
+                <div class="form-group">
+                    <label>Mô tả chi tiết:</label>
+                    <textarea id="proDescInput" rows="3" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #e5e7eb;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái:</label>
+                    <select id="proStatusInput">
+                        <option value="false">Hiện</option>
+                        <option value="true">Ẩn</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="btnSaveProduct" class="btn-primary">Lưu Sản Phẩm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/products.js"></script>
+    <script>
+        if (typeof mockProducts === "undefined") {
+            document.write('<script src="js/products.js"><\/script>');
+            document.write('<script src="products.js"><\/script>');
+        }
+    </script>
+    <script src="js/admin-products.js"></script>
+    <script>
+        if (typeof openEditModal === "undefined") {
+            document.write('<script src="admin-products.js"><\/script>');
+        }
+    </script>
+</body>
+</html>

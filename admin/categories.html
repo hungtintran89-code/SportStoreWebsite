@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Quản lý Loại Sản Phẩm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+    <header class="admin-header">
+        <div class="logo"><h2>SPORT MAX ADMIN</h2></div>
+        <div class="admin-info">
+            Xin chào, Quản trị viên |
+            <a href="../products.html" style="margin-right: 10px;">Xem trang khách hàng</a> |
+            <a href="#">Đăng xuất</a>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <ul class="admin-menu">
+                <li><a href="#">Quản lý người dùng</a></li>
+                <li><a href="categories.html" class="active">Quản lý loại SP</a></li>
+                <li><a href="products.html">Quản lý danh mục SP</a></li>
+                <li><a href="#">Quản lý nhập hàng</a></li>
+                <li><a href="#">Quản lý giá bán</a></li>
+                <li><a href="#">Quản lý đơn hàng</a></li>
+                <li><a href="#">Báo cáo tồn kho</a></li>
+            </ul>
+        </aside>
+
+        <main class="admin-content">
+            <div class="content-header">
+                <h2>Quản lý Loại Sản Phẩm</h2>
+                <button id="btnAddCategory" class="btn-primary" style="width: auto;">+ Thêm Loại SP</button>
+            </div>
+
+            <!-- Bảng danh sách các loại sản phẩm -->
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Mã Loại</th>
+                        <th>Tên Loại</th>
+                        <th>% Lợi nhuận mặc định</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryTableBody"></tbody>
+            </table>
+        </main>
+    </div>
+
+    <!-- Form popup dùng chung cho cả Thêm mới và Sửa loại sản phẩm -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Thêm Loại Sản Phẩm Mới</h3>
+                <span class="close-modal" id="btnCloseModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Mã loại SP (VD: CAT01):</label>
+                    <input type="text" id="catCodeInput" placeholder="Nhập mã loại...">
+                </div>
+                <div class="form-group">
+                    <label>Tên loại SP:</label>
+                    <input type="text" id="catNameInput" placeholder="VD: Giày Thể Thao...">
+                </div>
+                <div class="form-group">
+                    <label>% Lợi nhuận mặc định:</label>
+                    <input type="number" id="catProfitInput" placeholder="VD: 20">
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái hiển thị:</label>
+                    <select id="catStatusInput">
+                        <option value="false">Hiện</option>
+                        <option value="true">Ẩn</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSaveCategory" class="btn-primary">Lưu thông tin</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin-categories.js"></script>
+    <script>
+        if (typeof openEditModal === "undefined") {
+            document.write('<script src="admin-categories.js"><\/script>');
+        }
+    </script>
+</body>
+</html>
