@@ -14,7 +14,6 @@
 </head>
 
 <body>
-    <!-- Phần đầu trang: logo, thanh tìm kiếm và giỏ hàng -->
     <header class="main-header">
         <div class="header-top">
             <div class="header-container flex-between">
@@ -31,8 +30,8 @@
                 </div>
 
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Tìm tên sản phẩm, thương hiệu...">
-                    <button id="btnSearch">
+                    <input type="text" id="searchInput" placeholder="Tìm tên sản phẩm, thương hiệu..." onkeyup="if(event.key==='Enter') triggerDirectSearch()">
+                    <button id="btnSearch" onclick="triggerDirectSearch()">
                         <img src="image/magnifying-glass-solid-full.svg" alt="Tìm kiếm" class="custom-icon">
                     </button>
                 </div>
@@ -76,7 +75,6 @@
                     <li class="has-mega-menu">
                         <a href="products.html">SẢN PHẨM <i class="fa-solid fa-chevron-down menu-arrow"></i></a>
 
-<!-- Menu đa cấp xổ xuống khi rê chuột vào mục SẢN PHẨM -->
                         <div class="mega-menu">
                             <div class="mega-column">
                                 <h4><i class="fa-solid fa-shoe-prints"></i> GIÀY THỂ THAO</h4>
@@ -146,7 +144,7 @@
                                 <div class="banner-box">
                                     <p><strong>BST THỂ THAO MÙA MỚI</strong></p>
                                     <span class="discount">ƯU ĐÃI ĐẾN 30%</span>
-                                    <button class="btn-banner" onclick="window.location.href='products.html'">XEM NGAY</button>
+                                    <button class="btn-banner" onclick="window.location.href='#'">XEM NGAY</button>
                                 </div>
                             </div>
 
@@ -177,13 +175,12 @@
     </header>
 
     <main class="container">
-        <!-- Cột lọc tìm kiếm nâng cao bên trái (kết hợp tên + loại + khoảng giá) -->
         <aside class="sidebar">
             <h3>Bộ lọc tìm kiếm</h3>
 
             <div class="filter-group">
                 <h4>Tên sản phẩm</h4>
-                <input type="text" id="advNameInput" placeholder="Nhập tên sản phẩm..." style="width: 100%; padding: 8px 10px; box-sizing: border-box; border: 1px solid var(--gray-border); border-radius: 6px;">
+                <input type="text" id="advNameInput" placeholder="Nhập tên sản phẩm..." onkeyup="if(event.key==='Enter') applyAdvancedFilters()" style="width: 100%; padding: 8px 10px; box-sizing: border-box; border: 1px solid var(--gray-border); border-radius: 6px;">
             </div>
 
             <div class="filter-group">
@@ -197,23 +194,22 @@
                 <input type="number" id="maxPrice" placeholder="Giá đến...">
             </div>
 
-            <button id="btnFilter" class="btn-primary">Áp dụng bộ lọc</button>
+            <button id="btnFilter" class="btn-primary" onclick="applyAdvancedFilters()">Áp dụng bộ lọc</button>
             <button type="button" class="btn-reset-filter" onclick="resetAllFilters()">Đặt lại bộ lọc</button>
         </aside>
 
         <section class="product-section">
-            <div class="toolbar">
-                <select id="sortSelect">
+            <div class="toolbar" style="justify-content: space-between; align-items: center;">
+                <div id="filterResultSummary" style="font-weight: 600; color: #22303f;"></div>
+                <select id="sortSelect" onchange="applyAdvancedFilters()">
                     <option value="default">Sắp xếp mặc định</option>
                     <option value="priceAsc">Giá: Thấp đến Cao</option>
                     <option value="priceDesc">Giá: Cao xuống Thấp</option>
                 </select>
             </div>
 
-            <!-- Khung lưới hiển thị danh sách sản phẩm (đổ từ file products.js qua) -->
             <div class="product-grid" id="productGrid"></div>
 
-            <!-- Các nút phân trang -->
             <div class="pagination" id="pagination"></div>
         </section>
     </main>
@@ -222,7 +218,6 @@
     <script src="gallery-data.js"></script>
     <script src="js/products.js"></script>
     <script>
-        // Tự động nạp lại từ thư mục hiện tại nếu bạn để file products.js nằm chung thư mục với products.html
         if (typeof mockProducts === "undefined") {
             document.write('<script src="products.js"><\/script>');
         }

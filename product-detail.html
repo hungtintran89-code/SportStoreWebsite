@@ -30,8 +30,8 @@
                 </div>
 
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Tìm tên sản phẩm, thương hiệu...">
-                    <button id="btnSearch">
+                    <input type="text" id="searchInput" placeholder="Tìm tên sản phẩm, thương hiệu..." onkeyup="if(event.key==='Enter') triggerDetailSearch()">
+                    <button id="btnSearch" onclick="triggerDetailSearch()">
                         <img src="image/magnifying-glass-solid-full.svg" alt="Tìm kiếm" class="custom-icon">
                     </button>
                 </div>
@@ -142,7 +142,7 @@
                                 <div class="banner-box">
                                     <p><strong>BST THỂ THAO MÙA MỚI</strong></p>
                                     <span class="discount">ƯU ĐÃI ĐẾN 30%</span>
-                                    <button class="btn-banner" onclick="window.location.href='products.html'">XEM NGAY</button>
+                                    <button class="btn-banner" onclick="window.location.href='#'">XEM NGAY</button>
                                 </div>
                             </div>
 
@@ -179,7 +179,6 @@
             <span id="detailBreadcrumbName" class="breadcrumb-current"></span>
         </div>
 
-        <!-- Khung thông tin chi tiết sản phẩm gồm 3 cột: Ảnh - Thông tin mua - Danh mục -->
         <div class="product-detail-wrapper">
             <div class="detail-left">
                 <div class="main-image">
@@ -225,8 +224,8 @@
                         <button type="button" onclick="increaseQty()">+</button>
                     </div>
                     <div class="vnb-action-buttons">
-                        <button class="btn-buy-now-vnb">MUA NGAY</button>
-                        <button class="btn-add-cart-vnb">THÊM VÀO GIỎ</button>
+                        <button class="btn-buy-now-vnb" type="button" onclick="handleBuyNow()">MUA NGAY</button>
+                        <button class="btn-add-cart-vnb" type="button" onclick="handleAddToCart()">THÊM VÀO GIỎ</button>
                     </div>
                 </div>
             </div>
@@ -245,18 +244,17 @@
             </div>
         </div>
 
-        <!-- Phần tab Mô tả sản phẩm & Thông số kỹ thuật -->
         <section class="detail-content-card">
             <div class="detail-content-tabs">
-                <button class="detail-tab active" type="button" data-detail-tab="description">MÔ TẢ SẢN PHẨM</button>
-                <button class="detail-tab" type="button" data-detail-tab="specifications">THÔNG SỐ KỸ THUẬT</button>
+                <button id="tabBtnDesc" class="detail-tab active" type="button" onclick="switchDetailTab('description')">MÔ TẢ SẢN PHẨM</button>
+                <button id="tabBtnSpec" class="detail-tab" type="button" onclick="switchDetailTab('specifications')">THÔNG SỐ KỸ THUẬT</button>
             </div>
-            <div class="detail-tab-panel active" data-detail-panel="description">
+            <div id="tabPanelDesc" class="detail-tab-panel active">
                 <h2>Thông tin chi tiết</h2>
                 <p id="detailDescText">Đang cập nhật mô tả...</p>
                 <p id="detailSource" class="product-source"></p>
             </div>
-            <div class="detail-tab-panel" data-detail-panel="specifications">
+            <div id="tabPanelSpec" class="detail-tab-panel">
                 <div id="detailSpecifications" class="detail-specifications"></div>
             </div>
         </section>

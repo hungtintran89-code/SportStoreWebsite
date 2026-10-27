@@ -36,12 +36,11 @@
         </aside>
 
         <main class="admin-content">
-            <!-- Thanh tiêu đề kèm ô tìm nhanh và nút thêm sản phẩm -->
             <div class="content-header" style="flex-wrap: wrap; gap: 12px;">
                 <h2>Quản lý Danh mục Sản Phẩm</h2>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <input type="text" id="adminSearchInput" placeholder="Tìm mã hoặc tên SP..." oninput="renderProducts(this.value)" style="padding: 9px 12px; border: 1px solid #d7e3ec; border-radius: 6px; width: 240px;">
-                    <button id="btnAddProduct" class="btn-primary" style="width: auto;">+ Thêm Sản Phẩm</button>
+                    <button id="btnAddProduct" class="btn-primary" style="width: auto;" onclick="openAddProductModal()">+ Thêm Sản Phẩm</button>
                 </div>
             </div>
 
@@ -63,12 +62,11 @@
         </main>
     </div>
 
-    <!-- Form popup dùng để Thêm hoặc Sửa thông tin sản phẩm -->
     <div id="productModal" class="modal">
         <div class="modal-content" style="width: 600px; margin-top: 20px;">
             <div class="modal-header">
                 <h3 id="modalTitle">Thêm Sản Phẩm Mới</h3>
-                <span class="close-modal" id="btnCloseModal">&times;</span>
+                <span class="close-modal" id="btnCloseModal" onclick="closeProductModal()">&times;</span>
             </div>
 
             <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
@@ -110,7 +108,7 @@
             </div>
 
             <div class="modal-footer">
-                <button id="btnSaveProduct" class="btn-primary">Lưu Sản Phẩm</button>
+                <button id="btnSaveProduct" class="btn-primary" onclick="saveProduct()">Lưu Sản Phẩm</button>
             </div>
         </div>
     </div>
@@ -130,3 +128,4 @@
     </script>
 </body>
 </html>
+

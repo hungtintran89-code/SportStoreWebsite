@@ -5,14 +5,126 @@ let currentEditCode = "";
 
 // 8 loại sp mặc định ban đầu của shop
 const defaultCategories = [
-    { categoryCode: "CAT01", name: "Vợt & Dụng Cụ", profitMargin: 20, isHidden: false },
-    { categoryCode: "CAT02", name: "Giày Thể Thao", profitMargin: 25, isHidden: false },
-    { categoryCode: "CAT03", name: "Áo Thể Thao", profitMargin: 30, isHidden: false },
-    { categoryCode: "CAT04", name: "Váy Thể Thao", profitMargin: 30, isHidden: false },
-    { categoryCode: "CAT05", name: "Quần Thể Thao", profitMargin: 30, isHidden: false },
-    { categoryCode: "CAT06", name: "Balo Thể Thao", profitMargin: 25, isHidden: false },
-    { categoryCode: "CAT07", name: "Túi Thể Thao", profitMargin: 25, isHidden: false },
-    { categoryCode: "CAT08", name: "Phụ Kiện Thể Thao", profitMargin: 40, isHidden: false }
+    {
+        id: "CAT01",
+        code: "RACKET",
+        categoryCode: "CAT01",
+        icon: "🏸",
+        name: "Vợt & Dụng Cụ",
+        slug: "vot-dung-cu",
+        desc: "Vợt cầu lông, bóng bàn, tennis, pickleball và dụng cụ thi đấu chính hãng",
+        profitPercent: 20,
+        profitMargin: 20,
+        itemCount: 165,
+        status: "active",
+        isHidden: false,
+        banner: "#"
+    },
+    {
+        id: "CAT02",
+        code: "SHOES",
+        categoryCode: "CAT02",
+        icon: "👟",
+        name: "Giày Thể Thao",
+        slug: "giay-the-thao",
+        desc: "Giày chạy bộ, cầu lông, bóng đá, bóng rổ, bóng chuyền bám sân chống trượt",
+        profitPercent: 25,
+        profitMargin: 25,
+        itemCount: 118,
+        status: "active",
+        isHidden: false,
+        banner: "#"
+    },
+    {
+        id: "CAT03",
+        code: "SHIRT",
+        categoryCode: "CAT03",
+        icon: "👕",
+        name: "Áo Thể Thao",
+        slug: "ao-the-thao",
+        desc: "Áo đấu cầu lông, bóng đá, bóng rổ, tập gym chất vải thoáng khí",
+        profitPercent: 30,
+        profitMargin: 30,
+        itemCount: 65,
+        status: "active",
+        isHidden: false,
+        banner: "#"
+    },
+    {
+        id: "CAT04",
+        code: "SKIRT",
+        categoryCode: "CAT04",
+        icon: "👗",
+        name: "Váy Thể Thao",
+        slug: "vay-the-thao",
+        desc: "Váy cầu lông, tennis co giãn 4 chiều kèm quần bảo hộ bên trong",
+        profitPercent: 30,
+        profitMargin: 30,
+        itemCount: 25,
+        status: "active",
+        isHidden: false,
+        banner: "#"
+    },
+    {
+        id: "CAT05",
+        code: "PANTS",
+        categoryCode: "CAT05",
+        icon: "🩳",
+        name: "Quần Thể Thao",
+        slug: "quan-the-thao",
+        desc: "Quần short thể thao, quần dài jogger và trackpant vận động thoải mái",
+        profitPercent: 30,
+        profitMargin: 30,
+        itemCount: 78,
+        status: "active",
+        isHidden: false,
+        banner: "#"
+    },
+    {
+        id: "CAT06",
+        code: "BACKPACK",
+        categoryCode: "CAT06",
+        icon: "🎒",
+        name: "Balo Thể Thao",
+        slug: "balo-the-thao",
+        desc: "Balo đựng vợt và đồ tập nhiều ngăn chống thấm nước",
+        profitPercent: 25,
+        profitMargin: 25,
+        itemCount: 42,
+        status: "active",
+        isHidden: false,
+        banner: "#"
+    },
+    {
+        id: "CAT07",
+        code: "BAG",
+        categoryCode: "CAT07",
+        icon: "👜",
+        name: "Túi Thể Thao",
+        slug: "tui-the-thao",
+        desc: "Túi đựng vợt chuyên dụng và túi trống tập gym sức chứa lớn",
+        profitPercent: 25,
+        profitMargin: 25,
+        itemCount: 47,
+        status: "active",
+        isHidden: false,
+        banner: "#"
+    },
+    {
+        id: "CAT08",
+        code: "ACCESSORY",
+        categoryCode: "CAT08",
+        icon: "🧦",
+        name: "Phụ Kiện Thể Thao",
+        slug: "phu-kien-the-thao",
+        desc: "Vớ chống trượt, băng bảo hộ, cước đan vợt, quấn cán, thảm tập và bình nước",
+        profitPercent: 40,
+        profitMargin: 40,
+        itemCount: 34,
+        status: "active",
+        isHidden: false,
+        banner: "#"
+    }
 ];
 
 // lấy danh sách loại sp từ localStorage lên, nếu chưa có thì nạp mảng mặc định vô
@@ -20,6 +132,9 @@ function loadCategories() {
     let data = localStorage.getItem("categories");
     if (data) {
         categories = JSON.parse(data);
+        for (let i = 0; i < categories.length; i++) {
+            categories[i].banner = "#";
+        }
     } else {
         categories = defaultCategories.slice();
         localStorage.setItem("categories", JSON.stringify(categories));
@@ -34,19 +149,22 @@ function renderCategories() {
 
     for (let i = 0; i < categories.length; i++) {
         let cat = categories[i];
-        let statusText = cat.isHidden ? "Đang ẩn" : "Đang hiện";
-        let statusColor = cat.isHidden ? "red" : "green";
+        let cCode = cat.categoryCode || cat.id;
+        let pMargin = (cat.profitMargin !== undefined) ? cat.profitMargin : cat.profitPercent;
+        let hiddenFlag = (cat.isHidden !== undefined) ? cat.isHidden : (cat.status === "hidden");
+        let statusText = hiddenFlag ? "Đang ẩn" : "Đang hiện";
+        let statusColor = hiddenFlag ? "red" : "green";
 
         let tr = `
             <tr>
-                <td>${cat.categoryCode}</td>
+                <td>${cCode}</td>
                 <td>${cat.name}</td>
-                <td>${cat.profitMargin}%</td>
+                <td>${pMargin}%</td>
                 <td style="color: ${statusColor}; font-weight: bold;">${statusText}</td>
                 <td>
-                    <button class="btn-action btn-edit" onclick="openEditModal('${cat.categoryCode}')">Sửa</button>
-                    <button class="btn-action" style="background-color: #64748b;" onclick="toggleCategoryStatus('${cat.categoryCode}')">${cat.isHidden ? 'Hiện' : 'Ẩn'}</button>
-                    <button class="btn-action btn-delete" onclick="deleteCategory('${cat.categoryCode}')">Xóa</button>
+                    <button class="btn-action btn-edit" onclick="openEditModal('${cCode}')">Sửa</button>
+                    <button class="btn-action" style="background-color: #64748b;" onclick="toggleCategoryStatus('${cCode}')">${hiddenFlag ? 'Hiện' : 'Ẩn'}</button>
+                    <button class="btn-action btn-delete" onclick="deleteCategory('${cCode}')">Xóa</button>
                 </td>
             </tr>
         `;
@@ -55,7 +173,7 @@ function renderCategories() {
 }
 
 // bấm nút Thêm Loại SP thì xoá trắng các ô nhập rồi mở popup lên
-document.getElementById("btnAddCategory").addEventListener("click", function() {
+function openAddCategoryModal() {
     isEditMode = false;
     currentEditCode = "";
     document.getElementById("modalTitle").innerText = "Thêm Loại Sản Phẩm Mới";
@@ -67,15 +185,15 @@ document.getElementById("btnAddCategory").addEventListener("click", function() {
     document.getElementById("catStatusInput").value = "false";
 
     document.getElementById("categoryModal").style.display = "flex";
-});
+}
 
 // bấm dấu X thì đóng popup lại
-document.getElementById("btnCloseModal").addEventListener("click", function() {
+function closeCategoryModal() {
     document.getElementById("categoryModal").style.display = "none";
-});
+}
 
 // xử lý khi bấm nút Lưu thông tin trong popup
-document.getElementById("btnSaveCategory").addEventListener("click", function() {
+function saveCategory() {
     let code = document.getElementById("catCodeInput").value.trim();
     let name = document.getElementById("catNameInput").value.trim();
     let profit = document.getElementById("catProfitInput").value.trim();
@@ -86,13 +204,19 @@ document.getElementById("btnSaveCategory").addEventListener("click", function() 
         return;
     }
 
+    let profitNum = parseInt(profit);
+
     if (isEditMode) {
         // nếu đang sửa thì tìm đúng mã loại đó để cập nhật lại tên, % lợi nhuận, trạng thái
         for (let i = 0; i < categories.length; i++) {
-            if (categories[i].categoryCode === currentEditCode) {
+            let cCode = categories[i].categoryCode || categories[i].id;
+            if (cCode === currentEditCode) {
                 categories[i].name = name;
-                categories[i].profitMargin = parseInt(profit);
+                categories[i].profitMargin = profitNum;
+                categories[i].profitPercent = profitNum;
                 categories[i].isHidden = isHidden;
+                categories[i].status = isHidden ? "hidden" : "active";
+                categories[i].banner = "#";
                 break;
             }
         }
@@ -103,7 +227,7 @@ document.getElementById("btnSaveCategory").addEventListener("click", function() 
             let products = JSON.parse(pData);
             for (let j = 0; j < products.length; j++) {
                 if (products[j].categoryCode === currentEditCode && products[j].importPrice) {
-                    products[j].sellingPrice = Math.round(products[j].importPrice * (1 + parseInt(profit) / 100) / 1000) * 1000;
+                    products[j].sellingPrice = Math.round(products[j].importPrice * (1 + profitNum / 100) / 1000) * 1000;
                 }
             }
             localStorage.setItem("products", JSON.stringify(products));
@@ -111,17 +235,27 @@ document.getElementById("btnSaveCategory").addEventListener("click", function() 
     } else {
         // thêm mới thì phải check xem mã loại này có bị trùng chưa
         for (let i = 0; i < categories.length; i++) {
-            if (categories[i].categoryCode === code) {
+            let cCode = categories[i].categoryCode || categories[i].id;
+            if (cCode === code) {
                 alert("Mã loại sản phẩm đã tồn tại!");
                 return;
             }
         }
 
         let newCat = {
+            id: code,
+            code: code,
             categoryCode: code,
+            icon: "🏅",
             name: name,
-            profitMargin: parseInt(profit),
-            isHidden: isHidden
+            slug: code.toLowerCase(),
+            desc: name,
+            profitPercent: profitNum,
+            profitMargin: profitNum,
+            itemCount: 0,
+            status: isHidden ? "hidden" : "active",
+            isHidden: isHidden,
+            banner: "#"
         };
         categories.push(newCat);
     }
@@ -129,7 +263,7 @@ document.getElementById("btnSaveCategory").addEventListener("click", function() 
     localStorage.setItem("categories", JSON.stringify(categories));
     renderCategories();
     document.getElementById("categoryModal").style.display = "none";
-});
+}
 
 // mở popup sửa lên và điền sẵn thông tin cũ của loại sp đó vô các ô
 window.openEditModal = function(code) {
@@ -139,17 +273,18 @@ window.openEditModal = function(code) {
 
     let cat = null;
     for (let i = 0; i < categories.length; i++) {
-        if (categories[i].categoryCode === code) {
+        let cCode = categories[i].categoryCode || categories[i].id;
+        if (cCode === code) {
             cat = categories[i];
             break;
         }
     }
 
     if (cat) {
-        document.getElementById("catCodeInput").value = cat.categoryCode;
+        document.getElementById("catCodeInput").value = cat.categoryCode || cat.id;
         document.getElementById("catCodeInput").disabled = true; // khoá ô mã loại lại ko cho sửa mã
         document.getElementById("catNameInput").value = cat.name;
-        document.getElementById("catProfitInput").value = cat.profitMargin;
+        document.getElementById("catProfitInput").value = (cat.profitMargin !== undefined) ? cat.profitMargin : cat.profitPercent;
         document.getElementById("catStatusInput").value = cat.isHidden ? "true" : "false";
 
         document.getElementById("categoryModal").style.display = "flex";
@@ -161,7 +296,8 @@ window.deleteCategory = function(code) {
     if (confirm("Bạn có chắc chắn muốn xóa loại sản phẩm này?")) {
         let newList = [];
         for (let i = 0; i < categories.length; i++) {
-            if (categories[i].categoryCode !== code) {
+            let cCode = categories[i].categoryCode || categories[i].id;
+            if (cCode !== code) {
                 newList.push(categories[i]);
             }
         }
@@ -174,8 +310,10 @@ window.deleteCategory = function(code) {
 // bấm nút Ẩn/Hiện để đổi nhanh trạng thái hiển thị
 window.toggleCategoryStatus = function(code) {
     for (let i = 0; i < categories.length; i++) {
-        if (categories[i].categoryCode === code) {
+        let cCode = categories[i].categoryCode || categories[i].id;
+        if (cCode === code) {
             categories[i].isHidden = !categories[i].isHidden;
+            categories[i].status = categories[i].isHidden ? "hidden" : "active";
             break;
         }
     }

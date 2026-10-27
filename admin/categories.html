@@ -39,10 +39,9 @@
         <main class="admin-content">
             <div class="content-header">
                 <h2>Quản lý Loại Sản Phẩm</h2>
-                <button id="btnAddCategory" class="btn-primary" style="width: auto;">+ Thêm Loại SP</button>
+                <button id="btnAddCategory" class="btn-primary" style="width: auto;" onclick="openAddCategoryModal()">+ Thêm Loại SP</button>
             </div>
 
-            <!-- Bảng danh sách các loại sản phẩm -->
             <table class="admin-table">
                 <thead>
                     <tr>
@@ -58,12 +57,11 @@
         </main>
     </div>
 
-    <!-- Form popup dùng chung cho cả Thêm mới và Sửa loại sản phẩm -->
     <div id="categoryModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modalTitle">Thêm Loại Sản Phẩm Mới</h3>
-                <span class="close-modal" id="btnCloseModal">&times;</span>
+                <span class="close-modal" id="btnCloseModal" onclick="closeCategoryModal()">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -87,7 +85,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="btnSaveCategory" class="btn-primary">Lưu thông tin</button>
+                <button id="btnSaveCategory" class="btn-primary" onclick="saveCategory()">Lưu thông tin</button>
             </div>
         </div>
     </div>
