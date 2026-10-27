@@ -46,12 +46,14 @@
           <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
           <span data-header-name>Tài khoản</span>
         </a>
+
+
+
       </div>
     </div>
   </header>
 
-
-  <!-- ===== NỘI DUNG RIÊNG CỦA DEV 4 ===== -->
+    <!-- ===== NỘI DUNG RIÊNG CỦA DEV 4 ===== -->
     <main class="dev4-checkout-wrapper">
       <div class="container d4-main">
         <nav class="d4-breadcrumb" aria-label="Breadcrumb">
@@ -74,14 +76,8 @@
             năng giỏ hàng và đặt mua sản phẩm.
           </p>
           <div class="d4-empty-actions">
-            <a
-              href="dev5_user.html?redirect=dev4_checkout.html"
-              class="btn btn-primary"
-              >🔑 Đăng nhập ngay</a
-            >
-            <a href="dev5_user.html" class="btn btn-outline"
-              >✨ Đăng ký tài khoản</a
-            >
+            <button type="button" class="btn btn-primary" onclick="if(window.SportAuth) window.SportAuth.openModal('login')">🔑 Đăng nhập ngay</button>
+            <button type="button" class="btn btn-outline" onclick="if(window.SportAuth) window.SportAuth.openModal('register')">✨ Đăng ký tài khoản</button>
           </div>
         </section>
 
@@ -507,8 +503,7 @@
   <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP Ở CUỐI TRANG -->
   <script src="../js/auth_modal.js"></script>
 
-
-  <script src="../js/common.js"></script>
+    <script src="../js/common.js"></script>
     <script src="../js/dev4_checkout.js"></script>
   </body>
 </html>

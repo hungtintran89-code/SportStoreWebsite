@@ -55,7 +55,10 @@
 
   /* ---------- 2. ĐỒNG BỘ GIỎ HÀNG RIÊNG THEO TỪNG TÀI KHOẢN ---------- */
   function getCurrentUser() {
-    return readJson(STORAGE_USER_KEY, null);
+    if (window.SportAuth && typeof window.SportAuth.getCurrentUser === 'function') {
+      return window.SportAuth.getCurrentUser();
+    }
+    return readJson('sportstore_auth_user', null);
   }
 
   function getUserKey(u) {
