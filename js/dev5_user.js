@@ -43,7 +43,8 @@
             : []
         };
       }
-    } catch (error) {
+    } catch (error) 
+    {
       localStorage.removeItem(storageKey);
     }
 

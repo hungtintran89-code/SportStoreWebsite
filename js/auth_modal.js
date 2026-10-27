@@ -142,10 +142,9 @@
         '<label>Mật khẩu<input name="password" type="password" placeholder="••••••••" required autocomplete="current-password"></label>' +
         '<div class="dev5-auth-btn-row" style="margin-top: 14px;">' +
         '  <button class="dev5-primary-button" type="submit">Đăng nhập</button>' +
-        '  <button class="dev5-demo-button" type="button" data-auth-demo-toggle>⚡ Đăng Nhập Nhanh 1-Click (Demo)</button>' +
         '</div>' +
         '<div class="dev5-demo-options dev5-hidden" data-demo-options>' +
-        '  <button type="button" class="dev5-demo-choice" data-auth-demo="user">👤 1-Click User </button>' +
+        '  <button type="button" class="dev5-demo-choice" data-auth-demo="user"> Click User </button>' +
         '</div>';
 
       switchHtml = 'Chưa có tài khoản? <button type="button" data-auth-switch-button="register">Đăng ký ngay</button>';
