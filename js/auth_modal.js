@@ -1,594 +1,490 @@
-/**
- * ==========================================================================
- * SPORTSTORE AUTHENTICATION MODULE (CLIENT-SIDE AUTH & MODAL)
- * Quản lý trạng thái Đăng Nhập / Đăng Ký / Khách Hàng (Guest) toàn hệ thống
- * ==========================================================================
- */
-
 (function () {
   'use strict';
 
-  const AUTH_STORAGE_KEY = 'sportstore_auth_user';
+  var SESSION_KEY = 'sportstore_auth';
+  var REGISTERED_KEY = 'sportstore_registered_users';
+  var ADMIN_FLAG_KEY = 'admin_logged_in';
+  var DATA_URL = '../data/dev5_user.json';
+  var usersPromise;
 
-  // Dữ liệu người dùng mẫu mặc định để đăng nhập nhanh demo
-  const DEMO_USER = {
-    name: 'Trần Hùng Tín',
-    email: 'hungtintran89@gmail.com',
-    phone: '0912345678',
-    membershipTier: 'Hội Viên Vàng (Gold Elite)',
-    rewardPoints: 860,
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80'
-  };
-
-  /**
-   * Lấy người dùng hiện tại (nếu null là Khách vãng lai)
-   */
-  function getCurrentUser() {
+  function readRegisteredUsers() {
     try {
-      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {
-      console.warn('Lỗi đọc auth user:', e);
-    }
-    return null;
-  }
-
-  function setCurrentUser(user) {
-    if (user) {
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
-    } else {
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-    }
-    updateNavbars();
-    updateAdminButtonVisibility();
-    updateUserPageIfPresent();
-  }
-
-  /**
-   * Khởi tạo giao diện Modal và lắng nghe sự kiện
-   */
-  document.addEventListener('DOMContentLoaded', () => {
-    injectAuthModalDOM();
-    updateNavbars();
-    updateUserPageIfPresent();
-    setupModalListeners();
-  });
-
-  /**
-   * Tự động tiêm HTML Modal vào cuối <body> nếu chưa có
-   */
-  function injectAuthModalDOM() {
-    if (document.getElementById('sport-auth-modal-overlay')) return;
-
-    const modalHTML = `
-      <div id="sport-auth-modal-overlay" class="sport-auth-modal-overlay">
-        <div class="sport-auth-modal">
-          <button id="sport-auth-close-btn" class="sport-auth-close-btn" title="Đóng">&times;</button>
-          
-          <!-- Header Modal -->
-          <div class="sport-auth-header">
-            <div class="sport-auth-logo">
-              <span class="auth-icon">⚡</span>
-              <span>SPORT<span class="accent">STORE</span></span>
-            </div>
-            <p class="sport-auth-tagline">Trang bị đẳng cấp - Bứt phá giới hạn thể thao</p>
-            
-            <!-- Tab Chuyển đổi Đăng nhập / Đăng ký -->
-            <div class="sport-auth-tab-switch">
-              <button id="sport-tab-btn-login" class="sport-auth-tab-btn active" data-tab="login">Đăng Nhập</button>
-              <button id="sport-tab-btn-register" class="sport-auth-tab-btn" data-tab="register">Đăng Ký Thành Viên</button>
-            </div>
-          </div>
-
-          <!-- Body Modal -->
-          <div class="sport-auth-body">
-            
-            <!-- FORM 1: ĐĂNG NHẬP -->
-            <form id="sport-login-form" class="sport-auth-form-panel active">
-              <div class="sport-auth-form-group">
-                <label for="sport-login-account">Email hoặc Số điện thoại:</label>
-                <input type="text" id="sport-login-account" placeholder="Ví dụ: hungtintran89@gmail.com hoặc admin" required>
-              </div>
-
-              <div class="sport-auth-form-group">
-                <div class="sport-auth-sub-row">
-                  <label for="sport-login-pass">Mật khẩu:</label>
-                  <a href="javascript:void(0)" id="sport-btn-forgot" class="sport-auth-forgot-link">Quên mật khẩu?</a>
-                </div>
-                <div class="sport-pass-wrap">
-                  <input type="password" id="sport-login-pass" placeholder="••••••••" required>
-                  <button type="button" class="sport-toggle-pass-btn" title="Hiện/Ẩn mật khẩu">👁️</button>
-                </div>
-              </div>
-
-              <div class="sport-auth-remember-row">
-                <label class="sport-auth-remember-label">
-                  <input type="checkbox" id="sport-login-remember" checked> Ghi nhớ đăng nhập
-                </label>
-              </div>
-
-              <button type="submit" class="btn-sport btn-primary sport-auth-submit-btn">
-                🚀 Đăng Nhập Ngay
-              </button>
-
-              <!-- Phân cách -->
-              <div class="sport-auth-divider">
-                <span>Hoặc tiếp tục với</span>
-              </div>
-
-              <!-- Đăng nhập mạng xã hội -->
-              <div class="sport-social-row">
-                <button type="button" class="sport-social-btn btn-google" id="sport-social-google">
-                  <span class="social-icon-google">G</span> Google
-                </button>
-                <button type="button" class="sport-social-btn btn-facebook" id="sport-social-fb">
-                  <span class="social-icon-fb">f</span> Facebook
-                </button>
-              </div>
-
-              <!-- Nút tiện ích trải nghiệm demo nhanh cho giảng viên/người chấm -->
-              <div class="sport-quick-demo-box">
-                <button type="button" id="sport-btn-quick-demo" class="sport-btn-quick-demo">
-                  ⚡ Đăng nhập nhanh tài khoản Mẫu (1-Click)
-                </button>
-              </div>
-
-              <div class="sport-auth-footer-text">
-                Chưa có tài khoản? <a href="javascript:void(0)" id="sport-link-to-register">Đăng ký thành viên mới</a>
-              </div>
-            </form>
-
-            <!-- FORM 2: ĐĂNG KÝ -->
-            <form id="sport-register-form" class="sport-auth-form-panel">
-              <div class="sport-register-reward-banner">
-                🎁 Tặng ngay <strong>Voucher giảm 200.000đ</strong> và <strong>100 điểm thưởng</strong> khi đăng ký!
-              </div>
-
-              <div class="sport-auth-form-group">
-                <label for="sport-reg-name">Họ và Tên đầy đủ: <span class="req-star">*</span></label>
-                <input type="text" id="sport-reg-name" placeholder="Ví dụ: Nguyễn Văn A" required>
-              </div>
-
-              <div class="sport-auth-form-row">
-                <div class="sport-auth-form-group">
-                  <label for="sport-reg-phone">Số điện thoại (10 số): <span class="req-star">*</span></label>
-                  <input type="tel" id="sport-reg-phone" placeholder="Ví dụ: 0912345678" required>
-                </div>
-                <div class="sport-auth-form-group">
-                  <label for="sport-reg-email">Email liên hệ: <span class="req-star">*</span></label>
-                  <input type="email" id="sport-reg-email" placeholder="Ví dụ: user@gmail.com" required>
-                </div>
-              </div>
-
-              <div class="sport-auth-form-row">
-                <div class="sport-auth-form-group">
-                  <label for="sport-reg-pass">Mật khẩu (ít nhất 6 ký tự): <span class="req-star">*</span></label>
-                  <div class="sport-pass-wrap">
-                    <input type="password" id="sport-reg-pass" placeholder="••••••••" required>
-                  </div>
-                </div>
-                <div class="sport-auth-form-group">
-                  <label for="sport-reg-repass">Xác nhận mật khẩu: <span class="req-star">*</span></label>
-                  <div class="sport-pass-wrap">
-                    <input type="password" id="sport-reg-repass" placeholder="••••••••" required>
-                  </div>
-                </div>
-              </div>
-
-              <div class="sport-auth-remember-row">
-                <label class="sport-auth-remember-label">
-                  <input type="checkbox" id="sport-reg-agree" checked required> Tôi đồng ý với điều khoản sử dụng & chính sách hội viên SportStore
-                </label>
-              </div>
-
-              <button type="submit" class="btn-sport btn-primary sport-auth-submit-btn">
-                ✨ Hoàn Tất Đăng Ký Tài Khoản
-              </button>
-
-              <div class="sport-auth-footer-text">
-                Đã có tài khoản? <a href="javascript:void(0)" id="sport-link-to-login">Đăng nhập tại đây</a>
-              </div>
-            </form>
-
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-  }
-
-  /**
-   * Cập nhật Navbar trên tất cả các trang
-   */
-  function updateNavbars() {
-    const user = getCurrentUser();
-    const navActions = document.querySelectorAll('.sport-nav-actions');
-
-    navActions.forEach((container) => {
-      // Tìm hoặc tạo vùng auth
-      let authArea = container.querySelector('.sport-auth-nav-area');
-      if (!authArea) {
-        authArea = document.createElement('div');
-        authArea.className = 'sport-auth-nav-area';
-        
-        // Chèn vào vị trí phù hợp (trước giỏ hàng hoặc sau admin)
-        const userBtn = container.querySelector('a[href*="dev5_user.html"]');
-        if (userBtn) {
-          container.replaceChild(authArea, userBtn);
-        } else {
-          container.appendChild(authArea);
-        }
-      }
-
-      // Xác định đường dẫn tương đối đến dev5_user.html
-      const isPagesDir = window.location.pathname.includes('/pages/');
-      const userLink = isPagesDir ? 'dev5_user.html' : 'pages/dev5_user.html';
-
-      if (user) {
-        // ĐÃ ĐĂNG NHẬP
-        authArea.innerHTML = `
-          <div class="sport-user-logged-wrap">
-            <a href="${userLink}" class="sport-user-logged-pill" title="Hồ sơ tài khoản: ${user.name}">
-              <span class="user-pill-avatar">👤</span>
-              <span class="user-pill-name">${user.name.split(' ').pop()}</span>
-            </a>
-            <button class="sport-btn-logout-icon" title="Đăng xuất tài khoản">🚪</button>
-          </div>
-        `;
-
-        const logoutBtn = authArea.querySelector('.sport-btn-logout-icon');
-        if (logoutBtn) {
-          logoutBtn.addEventListener('click', () => {
-            if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi tài khoản?')) {
-              localStorage.removeItem('admin_logged_in');
-              setCurrentUser(null);
-              showToast('Đã đăng xuất tài khoản thành công! Bạn đang duyệt web dưới dạng Khách.', 'info');
-            }
-          });
-        }
-      } else {
-        // LÀ KHÁCH (CHƯA ĐĂNG NHẬP)
-        authArea.innerHTML = `
-          <div class="sport-guest-nav-btns">
-            <button class="btn-sport btn-outline sport-btn-nav-login">
-              🔑 Đăng Nhập
-            </button>
-            <button class="btn-sport btn-primary sport-btn-nav-register">
-              ✨ Đăng Ký
-            </button>
-          </div>
-        `;
-
-        const loginBtn = authArea.querySelector('.sport-btn-nav-login');
-        const regBtn = authArea.querySelector('.sport-btn-nav-register');
-
-        if (loginBtn) {
-          loginBtn.addEventListener('click', () => openModal('login'));
-        }
-        if (regBtn) {
-          regBtn.addEventListener('click', () => openModal('register'));
-        }
-      }
-    });
-
-    // Cập nhật phân quyền nút Admin trên Header
-    updateAdminButtonVisibility();
-  }
-
-  /**
-   * Phân quyền hiển thị nút Admin trên Header:
-   * Mặc định khi vào trang web (Khách) hoặc User thường: ẨN nút Admin.
-   * Khi đăng nhập tài khoản có quyền Admin (admin / 123456): HIỂN THỊ nút Admin.
-   */
-  function updateAdminButtonVisibility() {
-    const adminBtns = document.querySelectorAll('.nav-admin-btn, #header-nav-admin-btn');
-    const user = getCurrentUser();
-    const isAdminLogged = localStorage.getItem('admin_logged_in') === 'true' || 
-                          (user && (user.role === 'admin' || user.account === 'admin' || user.email === 'admin@sportstore.vn'));
-    
-    adminBtns.forEach((btn) => {
-      if (isAdminLogged) {
-        btn.classList.add('is-admin-visible');
-      } else {
-        btn.classList.remove('is-admin-visible');
-      }
-    });
-  }
-
-  /**
-   * Cập nhật giao diện trang Hồ Sơ (dev5_user.html) nếu đang đứng tại trang đó
-   */
-  function updateUserPageIfPresent() {
-    const isUserPage = document.querySelector('.dev5-user-wrapper');
-    if (!isUserPage) return;
-
-    const user = getCurrentUser();
-    const guestBanner = document.getElementById('dev5-guest-notice-banner');
-
-    if (!user) {
-      // Hiển thị banner nhắc nhở đăng nhập ở đầu trang
-      if (!guestBanner) {
-        const portalLayout = document.querySelector('.dev5-portal-layout');
-        if (portalLayout) {
-          const banner = document.createElement('div');
-          banner.id = 'dev5-guest-notice-banner';
-          banner.className = 'dev5-guest-notice-banner';
-          banner.innerHTML = `
-            <div class="guest-notice-inner">
-              <div class="guest-notice-left">
-                <span class="guest-notice-icon">👋</span>
-                <div>
-                  <h4 class="guest-notice-title">BẠN ĐANG XEM TRANG DƯỚI TƯ CÁCH KHÁCH HÀNG (CHƯA ĐĂNG NHẬP)</h4>
-                  <p class="guest-notice-desc">Hãy đăng nhập hoặc tạo tài khoản để đồng bộ đơn hàng, tích lũy điểm thưởng và cấu hình sổ địa chỉ nhận hàng!</p>
-                </div>
-              </div>
-              <div class="guest-notice-actions">
-                <button class="btn-sport btn-primary" onclick="window.SportAuth.openModal('login')">🔑 Đăng Nhập Ngay</button>
-                <button class="btn-sport btn-outline sport-btn-nav-login" onclick="window.SportAuth.quickDemoLogin()">⚡ Dùng Tài Khoản Mẫu</button>
-              </div>
-            </div>
-          `;
-          portalLayout.parentNode.insertBefore(banner, portalLayout);
-        }
-      }
-    } else {
-      if (guestBanner) guestBanner.remove();
+      return JSON.parse(localStorage.getItem(REGISTERED_KEY) || '[]');
+    } catch (error) {
+      return [];
     }
   }
 
-  /**
-   * Thiết lập tương tác cho Modal Đăng Nhập / Đăng Ký
-   */
-  function setupModalListeners() {
-    const overlay = document.getElementById('sport-auth-modal-overlay');
-    const closeBtn = document.getElementById('sport-auth-close-btn');
-    const tabLogin = document.getElementById('sport-tab-btn-login');
-    const tabRegister = document.getElementById('sport-tab-btn-register');
-    const formLogin = document.getElementById('sport-login-form');
-    const formRegister = document.getElementById('sport-register-form');
-    const linkToReg = document.getElementById('sport-link-to-register');
-    const linkToLogin = document.getElementById('sport-link-to-login');
-    const btnQuickDemo = document.getElementById('sport-btn-quick-demo');
-    const btnGoogle = document.getElementById('sport-social-google');
-    const btnFb = document.getElementById('sport-social-fb');
-
-    if (!overlay) return;
-
-    // Đóng khi bấm X hoặc click ngoài modal
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeModal();
-    });
-
-    // Chuyển Tab
-    function switchTab(tab) {
-      if (tab === 'login') {
-        tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-        formLogin.classList.add('active');
-        formRegister.classList.remove('active');
-      } else {
-        tabLogin.classList.remove('active');
-        tabRegister.classList.add('active');
-        formLogin.classList.remove('active');
-        formRegister.classList.add('active');
-      }
-    }
-
-    if (tabLogin) tabLogin.addEventListener('click', () => switchTab('login'));
-    if (tabRegister) tabRegister.addEventListener('click', () => switchTab('register'));
-    if (linkToReg) linkToReg.addEventListener('click', () => switchTab('register'));
-    if (linkToLogin) linkToLogin.addEventListener('click', () => switchTab('login'));
-
-    // Toggle hiển thị mật khẩu
-    document.querySelectorAll('.sport-toggle-pass-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const inp = btn.previousElementSibling;
-        if (inp.type === 'password') {
-          inp.type = 'text';
-          btn.textContent = '🔒';
-        } else {
-          inp.type = 'password';
-          btn.textContent = '👁️';
-        }
-      });
-    });
-
-    // Submit Đăng Nhập
-    if (formLogin) {
-      formLogin.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const account = document.getElementById('sport-login-account').value.trim();
-        const pass = document.getElementById('sport-login-pass').value;
-
-        if (!account || !pass) {
-          showToast('Vui lòng điền đầy đủ tài khoản và mật khẩu!', 'error');
-          return;
-        }
-
-        // Kiểm tra nếu là tài khoản Admin
-        const isAdmin = (account.toLowerCase() === 'admin' && pass === '123456');
-
-        // Tạo user đăng nhập
-        const loggedUser = {
-          account: account,
-          name: isAdmin ? 'Admin Quản Trị' : (account.includes('@') ? account.split('@')[0].toUpperCase() : 'Khách Hàng'),
-          email: isAdmin ? 'admin@sportstore.vn' : (account.includes('@') ? account : 'khachhang@sportstore.vn'),
-          phone: !account.includes('@') ? account : '0912345678',
-          role: isAdmin ? 'admin' : 'customer',
-          membershipTier: isAdmin ? 'Ban Quản Trị Hệ Thống' : 'Hội Viên Thân Thiết (Silver)',
-          rewardPoints: isAdmin ? 9999 : 100
-        };
-
-        if (isAdmin) {
-          localStorage.setItem('admin_logged_in', 'true');
-        }
-
-        setCurrentUser(loggedUser);
-        closeModal();
-        if (isAdmin) {
-          showToast(`Đăng nhập Quản Trị Viên thành công! Đã kích hoạt quyền Admin.`, 'success');
-        } else {
-          showToast(`Đăng nhập thành công! Chào mừng ${loggedUser.name} quay trở lại SportStore.`, 'success');
-        }
+  function loadUsers() {
+    if (!usersPromise) {
+      usersPromise = fetch(DATA_URL).then(function (response) {
+        if (!response.ok) throw new Error('Không thể tải dữ liệu tài khoản.');
+        return response.json();
+      }).then(function (data) {
+        return data.users || [];
+      }).catch(function () {
+        return [
+          {
+            id: 'u-001',
+            name: 'Nguyen Minh Anh',
+            email: 'user@sportstore.vn',
+            password: 'user123',
+            role: 'user',
+            tier: 'Gold',
+            phone: '0901234567'
+          },
+          {
+            id: 'a-001',
+            name: 'SportStore Administrator',
+            email: 'admin@sportstore.vn',
+            password: 'admin123',
+            role: 'admin',
+            tier: 'Administrator',
+            phone: '0909876543'
+          }
+        ];
       });
     }
+    return usersPromise.then(function (users) {
+      return (users || []).concat(readRegisteredUsers());
+    });
+  }
 
-    // Submit Đăng Ký
-    if (formRegister) {
-      formRegister.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('sport-reg-name').value.trim();
-        const phone = document.getElementById('sport-reg-phone').value.trim();
-        const email = document.getElementById('sport-reg-email').value.trim();
-        const pass = document.getElementById('sport-reg-pass').value;
-        const repass = document.getElementById('sport-reg-repass').value;
+  function getSession() {
+    try {
+      return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    } catch (error) {
+      return null;
+    }
+  }
 
-        if (pass.length < 6) {
-          showToast('Mật khẩu phải chứa ít nhất 6 ký tự!', 'error');
-          return;
+  function getPageUrl(fileName) {
+    var pathParts = window.location.pathname.split('/');
+    var isInsidePagesFolder = pathParts.indexOf('pages') !== -1;
+    return isInsidePagesFolder ? fileName : 'pages/' + fileName;
+  }
+
+  function openModal(mode) {
+    var modal = document.querySelector('[data-auth-modal]');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.className = 'dev5-auth-modal';
+      modal.dataset.authModal = '';
+      modal.innerHTML = '<div class="dev5-auth-box" role="dialog" aria-modal="true">' +
+        '<button class="dev5-auth-close" type="button" data-auth-close aria-label="Đóng">×</button>' +
+        '<span class="dev5-eyebrow">SPORTSTORE ACCOUNT</span>' +
+        '<div class="dev5-auth-tabs" role="tablist">' +
+        '  <button type="button" class="dev5-auth-tab" data-auth-tab="login">ĐĂNG NHẬP</button>' +
+        '  <button type="button" class="dev5-auth-tab" data-auth-tab="register">ĐĂNG KÝ THÀNH VIÊN</button>' +
+        '</div>' +
+        '<p class="dev5-auth-message" data-auth-message aria-live="polite"></p>' +
+        '<form data-auth-form novalidate></form>' +
+        '<p class="dev5-auth-switch" data-auth-switch></p>' +
+        '</div>';
+      document.body.appendChild(modal);
+
+      modal.onclick = function (event) {
+        if (event.target === modal || event.target.closest('[data-auth-close]')) {
+          modal.classList.remove('is-open');
         }
-        if (pass !== repass) {
-          showToast('Mật khẩu xác nhận không trùng khớp!', 'error');
-          return;
+        var switchButton = event.target.closest('[data-auth-switch-button]');
+        if (switchButton) renderModal(switchButton.dataset.authSwitchButton);
+
+        var tabButton = event.target.closest('[data-auth-tab]');
+        if (tabButton) renderModal(tabButton.dataset.authTab);
+
+        var demoToggle = event.target.closest('[data-auth-demo-toggle]');
+        if (demoToggle) {
+          var options = modal.querySelector('[data-demo-options]');
+          if (options) options.classList.toggle('dev5-hidden');
         }
 
-        const newUser = {
-          name: name,
-          email: email,
+        var demoChoice = event.target.closest('[data-auth-demo]');
+        if (demoChoice) {
+          loginAsDemo(demoChoice.dataset.authDemo);
+        }
+
+        var submitBtn = event.target.closest('button[type="submit"]');
+        if (submitBtn) {
+          submitForm(event);
+        }
+      };
+    }
+    renderModal(mode);
+    modal.classList.add('is-open');
+    var firstInput = modal.querySelector('input');
+    if (firstInput) firstInput.focus();
+  }
+
+  function renderModal(mode) {
+    var modal = document.querySelector('[data-auth-modal]');
+    var register = mode === 'register';
+    modal.dataset.authMode = mode;
+
+    modal.querySelectorAll('[data-auth-tab]').forEach(function (tab) {
+      tab.classList.toggle('is-active', tab.dataset.authTab === mode);
+    });
+
+    var formHtml = '';
+    var switchHtml = '';
+
+    if (register) {
+      formHtml = '<label>Họ và tên<input name="name" minlength="2" maxlength="80" required autocomplete="name"></label>' +
+        '<label>Email<input name="email" type="email" placeholder="tenban@example.com" required autocomplete="email"></label>' +
+        '<label>Số điện thoại<input name="phone" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" required autocomplete="tel"></label>' +
+        '<label>Mật khẩu<input name="password" type="password" minlength="8" required autocomplete="new-password"></label>' +
+        '<label>Nhập lại mật khẩu<input name="confirmPassword" type="password" minlength="8" required autocomplete="new-password"></label>' +
+        '<button class="dev5-primary-button" type="submit">Đăng ký</button>';
+
+      switchHtml = 'Đã có tài khoản? <button type="button" data-auth-switch-button="login">Đăng nhập</button>';
+    } else {
+      formHtml = '<label>Email / SĐT<input name="email" type="text" placeholder="nguyenvana@gmail.com" required autocomplete="username"></label>' +
+        '<label>Mật khẩu<input name="password" type="password" placeholder="••••••••" required autocomplete="current-password"></label>' +
+        '<div class="dev5-auth-btn-row" style="margin-top: 14px;">' +
+        '  <button class="dev5-primary-button" type="submit">Đăng nhập</button>' +
+        '</div>' +
+        '<div class="dev5-demo-options dev5-hidden" data-demo-options>' +
+        '  <button type="button" class="dev5-demo-choice" data-auth-demo="user"> Click User </button>' +
+        '</div>';
+
+      switchHtml = 'Chưa có tài khoản? <button type="button" data-auth-switch-button="register">Đăng ký ngay</button>';
+    }
+
+    modal.querySelector('[data-auth-form]').innerHTML = formHtml;
+    modal.querySelector('[data-auth-switch]').innerHTML = switchHtml;
+    var msgEl = modal.querySelector('[data-auth-message]');
+    msgEl.textContent = '';
+    msgEl.style.color = '#dc2626';
+  }
+
+  function loginAsDemo(role) {
+    loadUsers().then(function (users) {
+      var targetRole = role === 'admin' ? 'admin' : 'user';
+      var user = users.find(function (item) {
+        return item.role === targetRole;
+      });
+
+      if (!user) {
+        if (targetRole === 'admin') {
+          user = {
+            id: 'a-001',
+            name: 'SportStore Administrator',
+            email: 'admin@sportstore.vn',
+            role: 'admin',
+            tier: 'Administrator',
+            avatar: 'https://i.pravatar.cc/160?img=68'
+          };
+        } else {
+          user = {
+            id: 'u-001',
+            name: 'Nguyen Minh Anh',
+            email: 'user@sportstore.vn',
+            role: 'user',
+            tier: 'Gold',
+            avatar: 'https://i.pravatar.cc/160?img=47'
+          };
+        }
+      }
+
+      var isAdmin = user.role === 'admin';
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone || '0901234567',
+        role: user.role,
+        tier: user.tier,
+        avatar: user.avatar
+      }));
+
+      localStorage.setItem(ADMIN_FLAG_KEY, isAdmin ? 'true' : 'false');
+
+      var modal = document.querySelector('[data-auth-modal]');
+      if (modal) {
+        var message = modal.querySelector('[data-auth-message]');
+        if (message) {
+          message.textContent = 'Đăng nhập demo thành công (' + (isAdmin ? 'Admin' : 'Hội viên') + ').';
+        }
+      }
+
+      updateAuthButtons();
+
+      setTimeout(function () {
+        var destination = isAdmin
+          ? getPageUrl('admin.html')
+          : getPageUrl('dev5_user.html');
+        window.location.href = destination;
+      }, 250);
+    }).catch(function (error) {
+      var modal = document.querySelector('[data-auth-modal]');
+      if (modal) {
+        var message = modal.querySelector('[data-auth-message]');
+        if (message) message.textContent = error.message;
+      }
+    });
+  }
+
+  // So khớp Email hoặc Số điện thoại đơn giản
+  function isMatchAccount(item, input) {
+    if (!item || !input) return false;
+    var userEmail = (item.email || '').toLowerCase().trim();
+    var userPhone = String(item.phone || '').trim();
+    var target = String(input).toLowerCase().trim();
+
+    return userEmail === target || userPhone === target;
+  }
+
+  function validateRegistration(form) {
+    var name = form.name.value.trim();
+    var password = form.password.value;
+    var email = form.email.value.trim().toLowerCase();
+    var phone = form.phone.value.trim();
+
+    if (!name) return 'Vui lòng nhập họ và tên.';
+    if (name.length < 2) return 'Họ tên phải có ít nhất 2 ký tự.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Email không đúng định dạng.';
+    if (!phone) return 'Vui lòng nhập số điện thoại.';
+    if (!/^0[0-9]{9}$/.test(phone)) return 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.';
+    if (password.length < 8) return 'Mật khẩu phải có ít nhất 8 ký tự.';
+    if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) return 'Mật khẩu phải gồm cả chữ và số.';
+    if (password !== form.confirmPassword.value) return 'Mật khẩu xác nhận không trùng khớp.';
+    return '';
+  }
+
+  function validateLogin(form) {
+    var account = form.email.value.trim();
+    var password = form.password.value;
+
+    if (!account) return 'Vui lòng nhập email hoặc số điện thoại.';
+    if (!password) return 'Vui lòng nhập mật khẩu.';
+    return '';
+  }
+
+  function submitForm(event) {
+    event.preventDefault();
+    var modal = document.querySelector('[data-auth-modal]');
+    var form = modal ? modal.querySelector('[data-auth-form]') : document.querySelector('form');
+    var message = modal.querySelector('[data-auth-message]');
+    var mode = modal.dataset.authMode;
+    message.textContent = '';
+    message.style.color = '#dc2626';
+
+    var accountInput = form.email ? form.email.value.trim().toLowerCase() : '';
+    var validationError = mode === 'register'
+      ? validateRegistration(form)
+      : validateLogin(form);
+
+    if (validationError) {
+      message.textContent = validationError;
+      return;
+    }
+
+    if (mode === 'register') {
+      loadUsers().then(function (allUsers) {
+        var phone = form.phone.value.trim();
+
+        if (allUsers.some(function (user) { return isMatchAccount(user, accountInput); })) {
+          throw new Error('Email này đã được đăng ký.');
+        }
+        if (allUsers.some(function (user) { return isMatchAccount(user, phone); })) {
+          throw new Error('Số điện thoại này đã được đăng ký.');
+        }
+
+        var newUser = {
+          id: 'u-' + Date.now(),
+          name: form.name.value.trim(),
+          email: accountInput,
+          password: form.password.value,
           phone: phone,
-          membershipTier: 'Hội Viên Mới (Newbie)',
-          rewardPoints: 100
+          role: 'user',
+          tier: 'Member',
+          avatar: 'https://i.pravatar.cc/160?img=47'
         };
 
-        // Lưu đồng thời địa chỉ mặc định từ thông tin đăng ký
-        const defaultAddress = {
-          name: name,
-          phone: phone,
-          email: email,
-          provinceZone: 'hanoi',
-          provinceName: 'Hà Nội (Nội thành - Hỏa tốc 2h)',
-          shippingFee: 25000,
-          address: 'Chưa cập nhật địa chỉ chi tiết'
-        };
-        try {
-          localStorage.setItem('sportstore_user_address', JSON.stringify(defaultAddress));
-        } catch (err) {}
+        var registered = readRegisteredUsers();
+        registered.push(newUser);
+        localStorage.setItem(REGISTERED_KEY, JSON.stringify(registered));
 
-        setCurrentUser(newUser);
-        closeModal();
-        showToast(`🎉 Đăng ký thành công! Chào mừng bạn gia nhập SportStore với 100 điểm thưởng.`, 'success');
-      });
+        message.style.color = '#16a34a';
+        message.textContent = 'Đăng ký thành công. Bạn có thể đăng nhập ngay.';
+        setTimeout(function () { renderModal('login'); }, 600);
+      }).catch(function (error) { message.textContent = error.message; });
+      return;
     }
 
-    // Đăng nhập nhanh tài khoản mẫu
-    if (btnQuickDemo) {
-      btnQuickDemo.addEventListener('click', () => {
-        setCurrentUser(DEMO_USER);
-        closeModal();
-        showToast(`Đã đăng nhập tài khoản mẫu: ${DEMO_USER.name} (Hội viên VIP)`, 'success');
+    // Đăng nhập
+    loadUsers().then(function (allUsers) {
+      var user = allUsers.find(function (item) {
+        return isMatchAccount(item, accountInput) && item.password === form.password.value;
       });
+
+      if (!user) throw new Error('Email/SĐT hoặc mật khẩu không đúng.');
+
+      var isAdmin = user.role === 'admin';
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone || '0901234567',
+        role: user.role,
+        tier: user.tier,
+        avatar: user.avatar
+      }));
+
+      localStorage.setItem(ADMIN_FLAG_KEY, isAdmin ? 'true' : 'false');
+
+      message.style.color = '#16a34a';
+      message.textContent = 'Đăng nhập thành công.';
+      updateAuthButtons();
+
+      setTimeout(function () {
+        var destination = isAdmin
+          ? getPageUrl('admin.html')
+          : getPageUrl('dev5_user.html');
+        window.location.href = destination;
+      }, 250);
+    }).catch(function (error) { message.textContent = error.message; });
+  }
+
+  function updateAuthButtons() {
+    var currentSession = getSession();
+    var profile = document.querySelector('[data-auth-profile]');
+    var isAdmin = localStorage.getItem(ADMIN_FLAG_KEY) === 'true' ||
+      (currentSession && currentSession.role === 'admin');
+
+    if (currentSession) {
+      localStorage.setItem(ADMIN_FLAG_KEY, currentSession.role === 'admin' ? 'true' : 'false');
     }
 
-    // Đăng nhập Google / Facebook mock
-    if (btnGoogle) {
-      btnGoogle.addEventListener('click', () => {
-        const googleUser = {
-          name: 'Google User',
-          email: 'google.sport@gmail.com',
-          phone: '0988112233',
-          membershipTier: 'Hội Viên Tiêu Chuẩn',
-          rewardPoints: 150
-        };
-        setCurrentUser(googleUser);
-        closeModal();
-        showToast('Đăng nhập Google thành công!', 'success');
-      });
-    }
+    document.querySelectorAll('[data-auth-action="login"], [data-auth-action="register"]').forEach(function (button) {
+      button.classList.toggle('dev5-hidden', Boolean(currentSession));
+    });
+    document.querySelectorAll('[data-auth-action="logout"]').forEach(function (button) {
+      button.classList.toggle('dev5-hidden', !currentSession);
+    });
+    document.querySelectorAll('[data-admin-link]').forEach(function (link) {
+      link.classList.toggle('dev5-hidden', !isAdmin);
+    });
 
-    if (btnFb) {
-      btnFb.addEventListener('click', () => {
-        const fbUser = {
-          name: 'Facebook User',
-          email: 'facebook.sport@gmail.com',
-          phone: '0977223344',
-          membershipTier: 'Hội Viên Tiêu Chuẩn',
-          rewardPoints: 150
-        };
-        setCurrentUser(fbUser);
-        closeModal();
-        showToast('Đăng nhập Facebook thành công!', 'success');
-      });
+    if (profile) {
+      profile.classList.toggle('dev5-hidden', !currentSession);
+
+      if (currentSession) {
+        var nameEl = profile.querySelector('[data-header-name]');
+        var avatarEl = profile.querySelector('[data-header-avatar]');
+        if (nameEl) nameEl.textContent = currentSession.name;
+        if (avatarEl) {
+          avatarEl.src = currentSession.avatar || 'https://i.pravatar.cc/80?img=47';
+        }
+      }
     }
   }
 
-  function openModal(tab = 'login') {
-    const overlay = document.getElementById('sport-auth-modal-overlay');
-    if (!overlay) return;
-    overlay.classList.add('show');
-    
-    const tabLogin = document.getElementById('sport-tab-btn-login');
-    const tabRegister = document.getElementById('sport-tab-btn-register');
-    const formLogin = document.getElementById('sport-login-form');
-    const formRegister = document.getElementById('sport-register-form');
+  document.onclick = function (event) {
+    var adminTarget = event.target.closest('[data-admin-link], a[href*="admin.html"]');
+    if (adminTarget) {
+      if (localStorage.getItem(ADMIN_FLAG_KEY) !== 'true') {
+        event.preventDefault();
+        window.location.href = getPageUrl('admin_login.html');
+        return;
+      }
+    }
 
-    if (tab === 'login') {
-      if (tabLogin) tabLogin.classList.add('active');
-      if (tabRegister) tabRegister.classList.remove('active');
-      if (formLogin) formLogin.classList.add('active');
-      if (formRegister) formRegister.classList.remove('active');
+    var action = event.target.closest('[data-auth-action]');
+    if (!action) return;
+
+    if (action.dataset.authAction === 'logout') {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.setItem(ADMIN_FLAG_KEY, 'false');
+      localStorage.removeItem(ADMIN_FLAG_KEY);
+      updateAuthButtons();
+      window.location.href = 'dev5_user.html';
     } else {
-      if (tabLogin) tabLogin.classList.remove('active');
-      if (tabRegister) tabRegister.classList.add('active');
-      if (formLogin) formLogin.classList.remove('active');
-      if (formRegister) formRegister.classList.add('active');
-    }
-  }
-
-  function closeModal() {
-    const overlay = document.getElementById('sport-auth-modal-overlay');
-    if (overlay) overlay.classList.remove('show');
-  }
-
-  function showToast(message, type = 'success') {
-    const container = document.getElementById('sport-toast-container');
-    if (!container) return;
-
-    const toast = document.createElement('div');
-    toast.className = `sport-toast ${type}`;
-    const icon = type === 'success' ? '✔' : type === 'error' ? '✖' : 'ℹ';
-
-    toast.innerHTML = `
-      <div class="sport-toast-item-inner">
-        <span class="sport-toast-icon">${icon}</span>
-        <div>${message}</div>
-      </div>
-    `;
-
-    container.appendChild(toast);
-    setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(10px)';
-      toast.style.transition = 'all 0.3s ease';
-      setTimeout(() => toast.remove(), 300);
-    }, 3500);
-  }
-
-  // Xuất API công khai lên window để bất kỳ module nào cũng gọi được
-  window.SportAuth = {
-    openModal: openModal,
-    closeModal: closeModal,
-    getCurrentUser: getCurrentUser,
-    setCurrentUser: setCurrentUser,
-    quickDemoLogin: function () {
-      setCurrentUser(DEMO_USER);
-      showToast(`Đã kích hoạt tài khoản mẫu: ${DEMO_USER.name}`, 'success');
-    },
-    logout: function () {
-      setCurrentUser(null);
-      showToast('Đã đăng xuất.', 'info');
+      openModal(action.dataset.authAction);
     }
   };
 
-})();
+  updateAuthButtons();
+  initAdminLoginForm();
+
+  function initAdminLoginForm() {
+    var form = document.getElementById('adminLoginForm');
+    if (!form) return;
+
+    var emailInput = document.getElementById('adminEmail');
+    var passwordInput = document.getElementById('adminPassword');
+    var errorBox = document.getElementById('errorMessage');
+    var btnFillDemo = document.getElementById('btnFillDemo');
+    var submitBtn = document.getElementById('submitBtn') || form.querySelector('button[type="submit"]');
+
+    if (btnFillDemo) {
+      btnFillDemo.onclick = function () {
+        if (emailInput) emailInput.value = 'admin@sportstore.vn';
+        if (passwordInput) passwordInput.value = 'admin123';
+
+        // Bật cờ admin_logged_in = 'true', lưu thông tin Admin và chuyển sang admin.html
+        loginAsDemo('admin');
+      };
+    }
+
+    if (submitBtn) {
+      submitBtn.onclick = function (event) {
+        event.preventDefault();
+        if (errorBox) {
+          errorBox.style.display = 'none';
+          errorBox.textContent = '';
+        }
+
+        var email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+        var password = passwordInput ? passwordInput.value : '';
+
+        if (!email || !password) {
+          if (errorBox) {
+            errorBox.textContent = 'Vui lòng nhập đầy đủ tài khoản và mật khẩu quản trị.';
+            errorBox.style.display = 'block';
+          }
+          return;
+        }
+
+        loadUsers().then(function (allUsers) {
+          var adminUser = allUsers.find(function (u) {
+            return isMatchAccount(u, email) && u.password === password;
+          });
+
+          if (!adminUser) {
+            throw new Error('Tài khoản hoặc mật khẩu quản trị viên không chính xác.');
+          }
+
+          if (adminUser.role !== 'admin') {
+            throw new Error('Từ chối truy cập: Đây là tài khoản khách hàng, không có quyền vào cổng Quản trị.');
+          }
+
+          localStorage.setItem(ADMIN_FLAG_KEY, 'true');
+          localStorage.setItem(SESSION_KEY, JSON.stringify({
+            id: adminUser.id,
+            name: adminUser.name,
+            email: adminUser.email,
+            phone: adminUser.phone || '0909876543',
+            role: 'admin',
+            tier: 'Administrator',
+            avatar: adminUser.avatar || 'https://i.pravatar.cc/160?img=68'
+          }));
+
+          window.location.href = 'admin.html';
+        }).catch(function (err) {
+          if (errorBox) {
+            errorBox.textContent = err.message;
+            errorBox.style.display = 'block';
+          }
+        });
+      };
+    }
+  }
+
+  window.sportStoreAuth = {
+    getSession: getSession,
+    session: getSession,
+    updateButtons: updateAuthButtons,
+    loginAsDemo: loginAsDemo
+  };
+}());

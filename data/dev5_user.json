@@ -1,0 +1,72 @@
+{
+  "users": [
+    {
+      "id": "u-001",
+      "name": "Nguyen Minh Anh",
+      "email": "user@sportstore.vn",
+      "password": "user123",
+      "role": "user",
+      "tier": "Gold",
+      "phone": "0901234567"
+    },
+    {
+      "id": "a-001",
+      "name": "SportStore Administrator",
+      "email": "admin@sportstore.vn",
+      "password": "admin123",
+      "role": "admin",
+      "tier": "Administrator",
+      "phone": "0909876543"
+    }
+  ],
+  "addresses": [
+    {
+      "id": "address-001",
+      "label": "Nhà riêng",
+      "recipient": "Nguyen Minh Anh",
+      "phone": "0901234567",
+      "line": "123 Nguyễn Trãi",
+      "district": "Thanh Xuân",
+      "city": "Hà Nội",
+      "isDefault": true
+    }
+  ],
+  "orders": [
+    {
+      "id": "SS-2026-001",
+      "date": "2026-10-08",
+      "total": 1890000,
+      "status": "Đang giao",
+      "items": "Vợt cầu lông PowerStrike X1",
+      "progress": 3
+    },
+    {
+      "id": "SS-2026-002",
+      "date": "2026-09-21",
+      "total": 790000,
+      "status": "Đã giao",
+      "items": "Áo thi đấu Sport Pro",
+      "progress": 4
+    }
+  ],
+  "wishlist": [
+    {
+      "id": "product-001",
+      "name": "Giày chạy AeroRun",
+      "price": 1290000,
+      "tag": "Chạy bộ"
+    },
+    {
+      "id": "product-002",
+      "name": "Balo thể thao Pro 25L",
+      "price": 590000,
+      "tag": "Phụ kiện"
+    }
+  ],
+  "faq":  [
+    { "q": "Chính sách đổi size giày thể thao ra sao?",
+       "a":"Hỗ trợ đổi sizemiễn phí trong 30 ngày..."},
+   { "q": "Sản phẩmcó camkết chính hãng 100%?",
+   "a": "Đền bù 200% nếu phát hiện hàng giả.."}
+  ]
+}
