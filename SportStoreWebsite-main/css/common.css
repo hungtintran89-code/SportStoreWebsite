@@ -171,11 +171,6 @@ button, input, select, textarea {
   border: 1px dashed var(--color-primary-border);
 }
 
-/* Lớp ẩn tiện ích dùng chung */
-.dev5-hidden {
-  display: none !important;
-}
-
 /* Nhóm nút tiện ích bên phải: Giỏ hàng & Đăng nhập */
 .header-actions {
   display: flex;

@@ -1,3 +1,12 @@
+/**
+ * ==========================================================================
+ * SPORTSTORE - CÁC HÀM TIỆN ÍCH DÙNG CHUNG (COMMON.JS)
+ * Dành cho toàn bộ 5 thành viên sử dụng chung.
+ * Viết bằng JavaScript thuần (Vanilla JS), đơn giản, rõ nghĩa, đọc là hiểu ngay!
+ * ==========================================================================
+ */
+
+// Tên khóa lưu trữ trong LocalStorage
 const STORAGE_CART_KEY = 'sport_cart';       // Khóa lưu giỏ hàng
 const STORAGE_USER_KEY = 'sport_user';       // Khóa lưu thông tin đăng nhập
 const STORAGE_ADDR_KEY = 'sport_address';    // Khóa lưu sổ địa chỉ nhận hàng
