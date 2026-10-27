@@ -7,7 +7,7 @@
   var userData;
 
   function formatMoney(value) {
-    return new Intl.NumberFormat('vi-VN').format(value) + ' đ';
+    return new Intl.NumberFormat('vi-VN').format(value || 0) + ' đ';
   }
 
   function getSession() {
@@ -84,10 +84,12 @@
         : 'Đăng nhập để xem thông tin hội viên.';
     }
 
+    var registeredUsers = [];
+    try { registeredUsers = JSON.parse(localStorage.getItem('sportstore_registered_users') || '[]'); } catch(e){}
+    var regUser = registeredUsers.find(function(u) { return currentSession && (u.id === currentSession.id || u.email === currentSession.email); });
+    var phone = (currentSession && currentSession.phone) || (regUser && regUser.phone) || '';
     if (userPhone) {
-      userPhone.textContent = currentSession && currentSession.phone
-        ? '📞 SĐT: ' + currentSession.phone
-        : '';
+      userPhone.textContent = phone ? ' SĐT: ' + phone : '';
     }
 
     if (userRole) {
@@ -198,10 +200,10 @@
       ? userData.wishlist.map(function (item) {
       return [
         '<article class="dev5-wishlist-item">',
-        '  <div class="dev5-wishlist-icon">🏅</div>',
+        '  <div class="dev5-wishlist-icon"></div>',
         '  <span class="dev5-muted">' + item.tag + '</span>',
         '  <h3>' + item.name + '</h3>',
-        '  <span class="dev5-price">' + formatMoney(item.price) + '</span>',
+        '  <span class="dev5-price">' + item.price + '</span>',
         '  <button class="dev5-secondary-button" type="button" data-wishlist-remove="' + item.id + '">Xóa</button>',
         '</article>'
       ].join('');
@@ -231,7 +233,7 @@
 
   function bindTabEvents() {
     document.querySelectorAll('[data-tab]').forEach(function (button) {
-      button.addEventListener('click', function () {
+      button.onclick = function () {
         document.querySelectorAll('[data-tab], [data-panel]').forEach(function (element) {
           element.classList.remove('is-active');
         });
@@ -239,29 +241,29 @@
         button.classList.add('is-active');
         document.querySelector('[data-panel="' + button.dataset.tab + '"]')
           .classList.add('is-active');
-      });
+      };
     });
   }
 
   function bindFaqEvents() {
-    document.querySelector('[data-faq]').addEventListener('click', function (event) {
+    document.querySelector('[data-faq]').onclick = function (event) {
       var question = event.target.closest('.dev5-faq-question');
 
       if (question) {
         question.parentElement.classList.toggle('is-open');
       }
-    });
+    };
   }
 
   function bindAddressEvents() {
     var addressForm = document.querySelector('[data-address-form]');
     var editButton = document.querySelector('[data-edit-address]');
 
-    document.querySelector('[data-add-address]').addEventListener('click', function () {
+    document.querySelector('[data-add-address]').onclick = function () {
       addressForm.classList.remove('dev5-hidden');
-    });
+    };
 
-    editButton.addEventListener('click', function () {
+    editButton.onclick = function () {
       var address = userData.addresses[0];
       if (!address) return;
 
@@ -271,15 +273,17 @@
         }
       });
       addressForm.classList.remove('dev5-hidden');
-    });
+    };
 
-    document.querySelector('[data-cancel-address]').addEventListener('click', function () {
+    document.querySelector('[data-cancel-address]').onclick = function () {
       addressForm.reset();
       addressForm.classList.add('dev5-hidden');
-    });
+    };
 
-    addressForm.addEventListener('submit', function (event) {
-      event.preventDefault();
+    var saveAddressBtn = addressForm.querySelector('button[type="submit"]');
+    if (saveAddressBtn) {
+      saveAddressBtn.onclick = function (event) {
+        event.preventDefault();
 
       var values = new FormData(addressForm);
       var addresses = userData.addresses;
@@ -306,7 +310,8 @@
       addressForm.classList.add('dev5-hidden');
       renderAddresses();
       renderOverview();
-    });
+      };
+    }
   }
 
   function bindProfileEvents() {
@@ -316,34 +321,36 @@
 
     if (!editBtn || !form) return;
 
-    // Ràng buộc số điện thoại: Chỉ cho phép nhập số
-    if (form.elements.profilePhone) {
-      form.elements.profilePhone.addEventListener('input', function () {
-        this.value = this.value.replace(/[^0-9]/g, '');
-      });
-    }
+// Đã loại bỏ oninput, kiểm tra số khi click
 
-    editBtn.addEventListener('click', function () {
+    editBtn.onclick = function () {
       var currentSession = getSession();
       if (!currentSession) return;
 
+      var registeredUsers = [];
+      try { registeredUsers = JSON.parse(localStorage.getItem('sportstore_registered_users') || '[]'); } catch(e){}
+      var regUser = registeredUsers.find(function(u) { return u.id === currentSession.id || u.email === currentSession.email; });
+      var phone = currentSession.phone || (regUser && regUser.phone) || '';
+
       form.elements.profileName.value = currentSession.name || '';
       form.elements.profileEmail.value = currentSession.email || '';
-      form.elements.profilePhone.value = currentSession.phone || '0901234567';
+      form.elements.profilePhone.value = phone;
       form.elements.profilePassword.value = '';
 
       form.classList.remove('dev5-hidden');
-    });
+    };
 
     if (cancelBtn) {
-      cancelBtn.addEventListener('click', function () {
+      cancelBtn.onclick = function () {
         form.reset();
         form.classList.add('dev5-hidden');
-      });
+      };
     }
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    var saveProfileBtn = form.querySelector('button[type="submit"]');
+    if (saveProfileBtn) {
+      saveProfileBtn.onclick = function (e) {
+        e.preventDefault();
       var currentSession = getSession();
       if (!currentSession) return;
 
@@ -380,11 +387,12 @@
 
       form.classList.add('dev5-hidden');
       alert('Đã cập nhật thông tin cá nhân thành công!');
-    });
+      };
+    }
   }
 
   function bindWishlistEvents() {
-    document.querySelector('[data-wishlist]').addEventListener('click', function (event) {
+    document.querySelector('[data-wishlist]').onclick = function (event) {
       var removeButton = event.target.closest('[data-wishlist-remove]');
       if (!removeButton) return;
 
@@ -397,7 +405,7 @@
       );
       renderWishlist();
       renderOverview();
-    });
+    };
   }
 
   function initializePage(loadedData) {

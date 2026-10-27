@@ -212,15 +212,6 @@
   min-width: 0;
 }
 
-.dev5-private-message {
-  padding: 18px;
-  border: 1px dashed #bae6fd;
-  border-radius: 10px;
-  background: #f0f9ff;
-  color: #0369a1;
-  font-weight: 700;
-}
-
 .dev5-status {
   color: #059669;
   font-size: 13px;
@@ -433,17 +424,6 @@
   font-weight: 700;
 }
 
-.dev5-field-hint {
-  color: #64748b;
-  font-size: 12px;
-  font-weight: 400;
-}
-
-.dev5-field-hint.is-complete {
-  color: #059669;
-  font-weight: 700;
-}
-
 .dev5-auth-box input {
   padding: 11px;
   border: 1px solid #cbd5e1;
@@ -556,14 +536,10 @@
   font-size: 13px;
 }
 
-.dev5-auth-hint,
 .dev5-auth-switch {
   color: #64748b;
   font-size: 12px;
   line-height: 1.7;
-}
-
-.dev5-auth-switch {
   text-align: center;
 }
 
@@ -596,8 +572,8 @@
   .dev5-form-wide {
     grid-column: auto;
   }
-
 }
+
 
 /* ==========================================================================
    DEV 5 - GIAO DIỆN CỔNG ĐĂNG NHẬP ADMIN ĐỒNG BỘ VỚI MÀU KHÁCH HÀNG

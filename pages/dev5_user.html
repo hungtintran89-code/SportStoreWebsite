@@ -9,36 +9,54 @@
 </head>
 
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="../index.html" class="site-logo">
-        <span class="logo-icon">⚡</span>
-        <span>SPORTSTORE</span>
+<!-- ============================================================================== -->
+  <!-- 1. HEADER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->
+  <!-- ============================================================================== -->
+  <header class="sport-navbar site-header">
+    <div class="sport-container sport-navbar-inner header-inner">
+      <!-- Logo Cửa Hàng -->
+      <a href="../index.html" class="sport-brand-logo site-logo">
+        <div class="logo-icon">⚡</div>
+        <div>SPORT<span class="accent">STORE</span></div>
       </a>
 
-      <nav class="nav-menu" aria-label="Điều hướng chính">
-        <a href="../index.html" class="nav-link">Trang chủ</a>
-        <a href="dev2_products.html" class="nav-link">Sản phẩm</a>
-        <a href="dev4_checkout.html" class="nav-link">Giỏ hàng</a>
-        <a href="dev5_user.html" class="nav-link active">Tài khoản</a>
-        <a href="admin.html" class="nav-link nav-admin dev5-hidden" data-admin-link>
+      <!-- Menu Điều Hướng (Mỗi Dev chủ động thêm class 'active' vào trang của mình) -->
+      <ul class="sport-nav-menu nav-menu">
+        <li><a href="../index.html">Trang Chủ</a></li>
+        <li><a href="dev2_products.html">Sản Phẩm</a></li>
+        <li><a href="dev3_details.html">Chi Tiết & So Sánh</a></li>
+        <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
+        <li><a href="dev5_user.html">Tài Khoản</a></li>
+      </ul>
+
+      <!-- Cụm Hành Động Góc Phải -->
+      <div class="sport-nav-actions header-actions">
+        <!-- Nút Admin (Mặc định ẩn với dev5-hidden, chỉ hiện khi đăng nhập tài khoản Admin) -->
+        <a href="admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden" data-admin-link title="Truy cập Bảng Quản Trị Admin">
           ⚙️ Admin
         </a>
-      </nav>
 
-      <div class="header-actions">
-        <div class="dev5-header-profile dev5-hidden" data-auth-profile>
-          <img data-header-avatar alt="Ảnh đại diện">
-          <span data-header-name></span>
-        </div>
-        <button class="btn btn-outline btn-sm" type="button" data-auth-action="login">
-          Đăng nhập
+        <!-- Nút Giỏ Hàng -->
+        <a href="dev4_checkout.html" class="nav-badge-btn" title="Xem giỏ hàng">
+          🛒
+          <span class="badge-pill" id="header-cart-badge-count">0</span>
+        </a>
+
+        <!-- KHỐI TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP (Tự động hiện Avatar + Tên + Nút Đăng Xuất) -->
+        <a href="dev5_user.html" class="sport-user-logged-pill dev5-hidden" data-auth-profile title="Hồ sơ tài khoản">
+          <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+          <span data-header-name>Tài khoản</span>
+        </a>
+        <button type="button" class="sport-btn-logout-icon dev5-hidden" data-auth-action="logout" title="Đăng xuất tài khoản">
+          🚪
         </button>
-        <button class="btn btn-primary btn-sm" type="button" data-auth-action="register">
-          Đăng ký
+
+        <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
+        <button type="button" class="btn-sport btn-outline btn-sm" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
+          🔑 Đăng Nhập
         </button>
-        <button class="btn btn-outline btn-sm dev5-hidden" type="button" data-auth-action="logout">
-          Đăng xuất
+        <button type="button" class="btn-sport btn-primary btn-sm" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
+          ✨ Đăng Ký
         </button>
       </div>
     </div>
@@ -238,38 +256,57 @@
         <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam.</p>
       </div>
 
-      <div class="footer-col">
-        <h4>Điều Hướng Nhanh</h4>
-        <ul class="footer-links">
-          <li><a href="dev1_home.html">Trang Chủ</a></li>
-          <li><a href="dev2_products.html">Sản Phẩm</a></li>
-          <li><a href="dev3_details.html">Chi Tiết &amp; So Sánh</a></li>
-          <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
-        </ul>
+<!-- ============================================================================== -->
+  <!-- 2. FOOTER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->
+  <!-- ============================================================================== -->
+  <footer class="sport-footer site-footer">
+    <div class="sport-container container">
+      <div class="sport-footer-grid footer-grid">
+        <div class="sport-footer-col footer-col">
+          <div class="sport-brand-logo" style="margin-bottom: 14px;">
+            <div class="logo-icon">⚡</div>
+            <div style="color: #ffffff;">SPORT<span class="accent">STORE</span></div>
+          </div>
+          <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam. Đồng hành cùng mọi vận động viên bứt phá giới hạn.</p>
+        </div>
+
+        <div class="sport-footer-col footer-col">
+          <h4>Điều Hướng Nhanh</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html">Trang Chủ</a></li>
+            <li><a href="dev2_products.html">Sản Phẩm Tuyển Chọn</a></li>
+            <li><a href="dev3_details.html">Chi Tiết & Bảng So Sánh</a></li>
+            <li><a href="dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
+            <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
+          </ul>
+        </div>
+
+        <div class="sport-footer-col footer-col">
+          <h4>Hỗ Trợ & Chính Sách</h4>
+          <ul class="footer-links">
+            <li><a href="dev5_user.html">Chính Sách Bảo Hành</a></li>
+            <li><a href="dev5_user.html">Quy Định Đổi Trả 30 Ngày</a></li>
+            <li><a href="dev5_user.html">Hướng Dẫn Chọn Size Chuẩn</a></li>
+            <li><a href="dev5_user.html">Theo Dõi Vận Đơn</a></li>
+          </ul>
+        </div>
+
+        <div class="sport-footer-col footer-col">
+          <h4>Hotline & Liên Hệ</h4>
+          <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
+          <p>✉️ Email: support@sportstore.vn</p>
+          <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
+        </div>
       </div>
 
-      <div class="footer-col">
-        <h4>Phân Hệ Module</h4>
-        <ul class="footer-links">
-          <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
-          <li><a href="admin.html">Hệ Thống Quản Trị</a></li>
-          <li><a href="dev5_user.html">Chính Sách Đổi Trả</a></li>
-        </ul>
+      <div class="sport-footer-bottom footer-bottom">
+        <div>© 2026 SportStore. Thiết kế kiến trúc Decoupled Vanilla Frontend.</div>
+        <div>Chạy mượt mà 100% Client-side & Không phụ thuộc Backend</div>
       </div>
-
-      <div class="footer-col">
-        <h4>Hotline &amp; Hỗ Trợ</h4>
-        <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
-        <p>✉️ Email: contact@sportstore.vn</p>
-        <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
-      </div>
-    </div>
-
-    <div class="container footer-bottom">
-      <p>Dự án Frontend.</p>
     </div>
   </footer>
 
+  <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP Ở CUỐI TRANG -->
   <script src="../js/auth_modal.js"></script>
   <script src="../js/dev5_user.js"></script>
 </body>
