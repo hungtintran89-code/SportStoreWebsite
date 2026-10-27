@@ -1,0 +1,211 @@
+.dev3-details-wrapper {
+  max-width: 1200px;
+  margin: 32px auto 80px;
+  padding: 0 20px;
+  color: #0f172a;
+}
+
+.dev3-details-wrapper .product-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.dev3-details-wrapper .gallery {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+}
+
+.dev3-details-wrapper .main-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+}
+
+.dev3-details-wrapper .thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.dev3-details-wrapper .thumb {
+  border: 1px solid #dfeaf5;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+}
+
+.dev3-details-wrapper .thumb img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+}
+
+.dev3-details-wrapper .info {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+
+.dev3-details-wrapper .product-tag {
+  display: inline-block;
+  background: #f0f9ff;
+  color: #0284c7;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.dev3-details-wrapper h1 {
+  margin-top: 16px;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  line-height: 1.15;
+}
+
+.dev3-details-wrapper .rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+  margin: 16px 0;
+}
+
+.dev3-details-wrapper .stars {
+  color: #f59e0b;
+  letter-spacing: 0.08em;
+}
+
+.dev3-details-wrapper .price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0284c7;
+  margin: 10px 0 18px;
+}
+
+.dev3-details-wrapper .meta-list {
+  color: #475569;
+  margin-bottom: 18px;
+}
+
+.dev3-details-wrapper .meta-list li {
+  margin: 8px 0;
+}
+
+.dev3-details-wrapper .section-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.dev3-details-wrapper .swatches,
+.dev3-details-wrapper .sizes,
+.dev3-details-wrapper .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.dev3-details-wrapper .swatch,
+.dev3-details-wrapper .size-btn,
+.dev3-details-wrapper .buy-btn,
+.dev3-details-wrapper .ghost-btn {
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dev3-details-wrapper .swatch.active,
+.dev3-details-wrapper .size-btn.active {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+  color: #0369a1;
+}
+
+.dev3-details-wrapper .buy-btn {
+  background: #0284c7;
+  color: white;
+  border-color: #0284c7;
+  padding: 14px 20px;
+}
+
+.dev3-details-wrapper .ghost-btn {
+  background: #f8fafc;
+}
+
+.dev3-details-wrapper .info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.dev3-details-wrapper .info-card,
+.dev3-details-wrapper .compare-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.dev3-details-wrapper .info-card h3,
+.dev3-details-wrapper .compare-card h3 {
+  margin-bottom: 12px;
+  font-size: 1.05rem;
+}
+
+.dev3-details-wrapper .spec-list {
+  display: grid;
+  gap: 8px;
+  color: #475569;
+}
+
+.dev3-details-wrapper .spec-list strong {
+  color: #0f172a;
+}
+
+.dev3-details-wrapper .compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.dev3-details-wrapper .compare-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.dev3-details-wrapper .compare-card ul {
+  display: grid;
+  gap: 8px;
+  color: #475569;
+}
+
+@media (max-width: 760px) {
+  .dev3-details-wrapper .product-layout,
+  .dev3-details-wrapper .compare-grid,
+  .dev3-details-wrapper .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
