@@ -110,7 +110,7 @@ function initSportStorage() {
 
   // 6. Cờ đăng nhập admin mặc định
   if (localStorage.getItem(STORAGE_KEYS.ADMIN_LOGGED) === null) {
-    localStorage.setItem(STORAGE_KEYS.ADMIN_LOGGED, "true");
+    localStorage.setItem(STORAGE_KEYS.ADMIN_LOGGED, "false");
   }
 
   // Đánh dấu phiên bản dữ liệu chuẩn

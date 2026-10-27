@@ -44,6 +44,7 @@
     updateUserPageIfPresent();
   }
 
+
   /**
    * Khởi tạo giao diện Modal và lắng nghe sự kiện
    */
