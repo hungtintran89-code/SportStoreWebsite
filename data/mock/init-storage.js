@@ -52,7 +52,7 @@ function setStorage(key, data) {
  * Hàm tự động nạp dữ liệu từ data store hoặc biến MOCK_* sang LocalStorage
  */
 function initSportStorage() {
-  var DATA_VERSION = "sport_data_2026_v2";
+  var DATA_VERSION = "sport_data_2026_v5";
   var currentVersion = localStorage.getItem("sport_data_version");
 
   var existingImports = getStorage(STORAGE_KEYS.IMPORTS, []);
@@ -67,6 +67,9 @@ function initSportStorage() {
     needMigration = true;
   }
   if (existingProducts.length > 0 && existingProducts.length <= 8 && typeof products !== "undefined" && products.length > 8) {
+    needMigration = true;
+  }
+  if (existingProducts.length > 0 && JSON.stringify(existingProducts).includes("photo-1584735935682")) {
     needMigration = true;
   }
 

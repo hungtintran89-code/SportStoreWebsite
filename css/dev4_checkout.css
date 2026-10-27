@@ -1,0 +1,674 @@
+/* =========================================================
+   SportStore - css/dev4_checkout.css (Dev 4: Giỏ hàng & Thanh toán)
+   - Mọi selector đều bắt đầu bằng .dev4-checkout-wrapper => không ảnh hưởng trang khác.
+   - Dùng biến màu của common.css (var(--...)) để đồng bộ với cả nhóm.
+   - Header, footer, nút .btn, toast do common.css đảm nhiệm.
+   ========================================================= */
+
+.dev4-checkout-wrapper {
+  padding: 30px 0 60px;
+  background-color: #f0f7fd;
+  min-height: 70vh;
+}
+
+/* Thuộc tính hidden luôn ưu tiên ẩn */
+.dev4-checkout-wrapper [hidden] {
+  display: none !important;
+}
+
+/* Viền focus hỗ trợ thao tác bàn phím */
+.dev4-checkout-wrapper :focus-visible {
+  outline: 3px solid rgba(2, 132, 199, 0.35);
+  outline-offset: 2px;
+}
+
+/* Ẩn khỏi mắt nhưng trình đọc màn hình vẫn đọc được */
+.dev4-checkout-wrapper .d4-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------- Tiêu đề trang ---------------- */
+.dev4-checkout-wrapper .d4-breadcrumb {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.dev4-checkout-wrapper .d4-breadcrumb a:hover {
+  color: var(--color-primary);
+}
+.dev4-checkout-wrapper .d4-breadcrumb strong {
+  color: var(--text-main);
+}
+.dev4-checkout-wrapper .d4-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 22px;
+}
+
+/* ---------------- Bố cục 2 cột ---------------- */
+.dev4-checkout-wrapper .d4-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 24px;
+  align-items: start;
+}
+.dev4-checkout-wrapper .d4-col-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+.dev4-checkout-wrapper .d4-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06);
+  padding: 26px 28px;
+}
+.dev4-checkout-wrapper .d4-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 18px;
+}
+.dev4-checkout-wrapper .d4-pill {
+  margin-left: auto;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ---------------- Bảng sản phẩm ---------------- */
+.dev4-checkout-wrapper .d4-table-wrap {
+  overflow-x: auto;
+}
+.dev4-checkout-wrapper .d4-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.dev4-checkout-wrapper .d4-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: 10px 8px;
+  border-bottom: 2px solid #f1f5f9;
+}
+.dev4-checkout-wrapper .d4-table td {
+  padding: 16px 8px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  font-size: 14px;
+}
+.dev4-checkout-wrapper .d4-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.dev4-checkout-wrapper .d4-table td:nth-child(2) {
+  white-space: nowrap;
+}
+.dev4-checkout-wrapper .d4-prod {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 220px;
+}
+.dev4-checkout-wrapper .d4-prod img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+.dev4-checkout-wrapper .d4-prod-name {
+  font-weight: 700;
+  line-height: 1.4;
+}
+.dev4-checkout-wrapper .d4-prod-variant {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.dev4-checkout-wrapper .d4-qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-primary-border);
+  border-radius: 999px;
+  background: var(--color-primary-light);
+  overflow: hidden;
+}
+.dev4-checkout-wrapper .d4-qty button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.dev4-checkout-wrapper .d4-qty button:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: #fff;
+}
+.dev4-checkout-wrapper .d4-qty button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.dev4-checkout-wrapper .d4-qty span {
+  min-width: 34px;
+  text-align: center;
+  font-weight: 800;
+}
+.dev4-checkout-wrapper .d4-line-total {
+  font-weight: 800;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+.dev4-checkout-wrapper .d4-remove {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-danger);
+  font-size: 15px;
+  cursor: pointer;
+}
+.dev4-checkout-wrapper .d4-remove:hover {
+  background: #fee2e2;
+}
+
+/* ---------------- Form nhận hàng & Chọn chế độ địa chỉ ---------------- */
+.dev4-checkout-wrapper .d4-addr-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.dev4-checkout-wrapper .d4-addr-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+.dev4-checkout-wrapper .d4-addr-radio:hover {
+  border-color: var(--color-primary-border);
+}
+.dev4-checkout-wrapper .d4-addr-radio.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary-hover);
+}
+.dev4-checkout-wrapper .d4-addr-radio input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+.dev4-checkout-wrapper .d4-saved {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1.5px dashed var(--color-primary-border);
+  background: #f0f9ff;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+}
+.dev4-checkout-wrapper .d4-saved .btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.dev4-checkout-wrapper .d4-saved-text {
+  font-weight: 600;
+  line-height: 1.7;
+}
+.dev4-checkout-wrapper .d4-saved-badge {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--color-success);
+  background: #d1fae5;
+  border-radius: 20px;
+}
+.dev4-checkout-wrapper .d4-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.dev4-checkout-wrapper .d4-field {
+  margin-bottom: 6px;
+  min-width: 0;
+}
+.dev4-checkout-wrapper .d4-field label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.dev4-checkout-wrapper .d4-field abbr {
+  color: var(--color-danger);
+  text-decoration: none;
+}
+.dev4-checkout-wrapper .d4-field input,
+.dev4-checkout-wrapper .d4-field select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: #fff;
+  color: var(--text-main);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.dev4-checkout-wrapper .d4-field input:focus,
+.dev4-checkout-wrapper .d4-field select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+.dev4-checkout-wrapper .d4-field .invalid {
+  border-color: var(--color-danger);
+  background: #fff7f7;
+}
+.dev4-checkout-wrapper .d4-error {
+  min-height: 18px;
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--color-danger);
+}
+
+/* ---------------- Thanh toán ---------------- */
+.dev4-checkout-wrapper .d4-pay-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dev4-checkout-wrapper .d4-pay-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+.dev4-checkout-wrapper .d4-pay-option:hover {
+  border-color: var(--color-primary-border);
+}
+.dev4-checkout-wrapper .d4-pay-option.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+.dev4-checkout-wrapper .d4-pay-option input {
+  margin-top: 4px;
+  width: 17px;
+  height: 17px;
+  accent-color: var(--color-primary);
+}
+.dev4-checkout-wrapper .d4-pay-option strong {
+  color: var(--text-main);
+  font-size: 14.5px;
+}
+.dev4-checkout-wrapper .d4-pay-option small {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.dev4-checkout-wrapper .d4-tag {
+  margin-left: 6px;
+  padding: 2px 8px;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--color-primary);
+  background: #fff;
+  border: 1px solid var(--color-primary-border);
+  border-radius: 20px;
+}
+.dev4-checkout-wrapper .d4-qr {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: -4px;
+  margin-bottom: 4px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+.dev4-checkout-wrapper .d4-qr-img {
+  width: 112px;
+  height: 112px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  border: 1.5px dashed var(--color-primary-border);
+  border-radius: 12px;
+}
+.dev4-checkout-wrapper .d4-qr-info li {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin: 3px 0;
+}
+.dev4-checkout-wrapper .d4-qr-info strong {
+  color: var(--text-main);
+}
+.dev4-checkout-wrapper .d4-online {
+  margin-top: -4px;
+  margin-bottom: 4px;
+  padding: 18px 18px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+.dev4-checkout-wrapper .d4-online-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--color-primary-hover);
+  margin-bottom: 12px;
+}
+
+/* ---------------- Tóm tắt đơn hàng ---------------- */
+.dev4-checkout-wrapper .d4-summary {
+  position: sticky;
+  top: 90px;
+}
+.dev4-checkout-wrapper .d4-totals {
+  margin: 4px 0 6px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+.dev4-checkout-wrapper .d4-totals > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.dev4-checkout-wrapper .d4-totals dd {
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: right;
+}
+.dev4-checkout-wrapper .d4-totals .d4-green {
+  color: var(--color-success);
+}
+.dev4-checkout-wrapper .d4-totals .d4-grand {
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 2px solid #f1f5f9;
+}
+.dev4-checkout-wrapper .d4-grand dt {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+.dev4-checkout-wrapper .d4-totals .d4-grand dd {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--color-primary);
+}
+.dev4-checkout-wrapper .d4-hint {
+  margin: 8px 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  text-align: center;
+}
+.dev4-checkout-wrapper .d4-btn-block {
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px 20px;
+  font-size: 16px;
+}
+
+/* ---------------- Giỏ trống & Đặt hàng thành công + Xem lại đơn ---------------- */
+.dev4-checkout-wrapper .d4-empty,
+.dev4-checkout-wrapper .d4-success {
+  padding: 48px 28px;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06);
+}
+.dev4-checkout-wrapper .d4-success {
+  max-width: 720px;
+  margin: 20px auto;
+}
+.dev4-checkout-wrapper .d4-empty-icon {
+  font-size: 56px;
+  margin-bottom: 12px;
+}
+.dev4-checkout-wrapper .d4-empty h2,
+.dev4-checkout-wrapper .d4-success h2 {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+.dev4-checkout-wrapper .d4-empty p,
+.dev4-checkout-wrapper .d4-success p {
+  margin: 4px 0;
+  color: var(--text-muted);
+}
+.dev4-checkout-wrapper .d4-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+.dev4-checkout-wrapper .d4-success-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--color-success);
+  background: #d1fae5;
+  border-radius: 50%;
+}
+.dev4-checkout-wrapper .d4-code {
+  color: var(--color-primary);
+}
+
+/* Khung Xem lại đơn đặt hàng sau khi mua */
+.dev4-checkout-wrapper .d4-review {
+  margin-top: 22px;
+  padding: 20px;
+  text-align: left;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+.dev4-checkout-wrapper .d4-review h3 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+.dev4-checkout-wrapper .d4-review-info {
+  font-size: 13.5px;
+  color: var(--text-main);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.dev4-checkout-wrapper .d4-review-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.dev4-checkout-wrapper .d4-review-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 13.5px;
+}
+.dev4-checkout-wrapper .d4-review-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dev4-checkout-wrapper .d4-review-item-left img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+.dev4-checkout-wrapper .d4-review-totals {
+  border-top: 1px dashed var(--border-color);
+  padding-top: 10px;
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+.dev4-checkout-wrapper .d4-review-row {
+  display: flex;
+  justify-content: space-between;
+}
+.dev4-checkout-wrapper .d4-review-row.grand {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-top: 4px;
+}
+
+/* ---------------- Responsive: Tablet & Mobile ---------------- */
+@media (max-width: 1024px) {
+  .dev4-checkout-wrapper .d4-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .dev4-checkout-wrapper .d4-summary {
+    position: static;
+  }
+  .dev4-checkout-wrapper .d4-card {
+    padding: 22px 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .dev4-checkout-wrapper {
+    padding: 20px 0 40px;
+  }
+  .dev4-checkout-wrapper .d4-title {
+    font-size: 23px;
+  }
+  .dev4-checkout-wrapper .d4-row,
+  .dev4-checkout-wrapper .d4-addr-mode {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .dev4-checkout-wrapper .d4-saved,
+  .dev4-checkout-wrapper .d4-qr {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dev4-checkout-wrapper .d4-table thead {
+    display: none;
+  }
+  .dev4-checkout-wrapper .d4-table,
+  .dev4-checkout-wrapper .d4-table tbody,
+  .dev4-checkout-wrapper .d4-table tr,
+  .dev4-checkout-wrapper .d4-table td {
+    display: block;
+    width: 100%;
+  }
+  .dev4-checkout-wrapper .d4-table tr {
+    position: relative;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .dev4-checkout-wrapper .d4-table tbody tr:last-child {
+    border-bottom: none;
+  }
+  .dev4-checkout-wrapper .d4-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border: 0;
+  }
+  .dev4-checkout-wrapper .d4-table td[data-label]::before {
+    content: attr(data-label);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .dev4-checkout-wrapper .d4-table td:first-child::before {
+    display: none;
+  }
+  .dev4-checkout-wrapper .d4-table td:last-child {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: auto;
+  }
+  .dev4-checkout-wrapper .d4-prod {
+    min-width: 0;
+    padding-right: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dev4-checkout-wrapper * {
+    transition: none !important;
+  }
+}

@@ -145,7 +145,6 @@ function addToCart(productId) {
 
 /**
  * Lọc sản phẩm theo danh mục khi click vào Card môn thể thao
- * @param {string} categoryName 
  */
 function filterByCategory(categoryName) {
   var products = getStorage(STORAGE_KEYS.PRODUCTS, []);
