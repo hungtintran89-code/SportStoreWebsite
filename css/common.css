@@ -1,466 +1,403 @@
 /* ==========================================================================
-   SPORTSTORE - STYLESHEET DÙNG CHUNG (COMMON.CSS)
-   Dành cho toàn bộ 5 thành viên trong nhóm sử dụng chung.
-   Tông màu chủ đạo: TRẮNG + XANH NHẠT (White & Light Blue)
+   SPORTSTORE - SHARED DESIGN SYSTEM & TOKENS (COMMON.CSS)
+   Phong cách: Trắng Sáng + Xanh Nhạt Thể Thao (Pristine White & Soft Light Blue)
+   Tác giả: Principal Frontend Architect & Tech Lead
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   1. BẢNG MÀU & BIẾN GIAO DIỆN CHUNG (CSS VARIABLES)
-   Mọi thành viên hãy dùng các biến này (var(--...)) để website đồng bộ màu sắc.
-   -------------------------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
+
 :root {
-  /* Tông màu xanh chủ đạo */
-  --color-primary: #0284c7;        /* Xanh dương thể thao chính (Sky Blue) */
-  --color-primary-hover: #0369a1;  /* Xanh đậm hơn khi rê chuột (hover) */
-  --color-primary-light: #e0f2fe;  /* Xanh cực nhạt để làm nền thẻ, tag */
-  --color-primary-border: #bae6fd; /* Xanh viền nhẹ */
+  /* Bảng màu chính: Tông Trắng + Xanh Nhạt Dịu Mắt */
+  --bg-primary: #f0f7ff; /* Nền tổng thể màu trắng ngà ánh xanh băng nhẹ */
+  --bg-secondary: #ffffff; /* Nền trắng tinh khiết cho Card, Section */
+  --bg-card: #ffffff; /* Thẻ giao diện nền trắng */
+  --bg-card-hover: #f8fbff; /* Nền hover ánh xanh nhẹ */
+  --bg-glass: rgba(255, 255, 255, 0.88);
 
-  /* Tông màu nền (Trắng và Xám sáng) */
-  --bg-body: #f8fafc;              /* Nền toàn trang web (trắng ánh xanh rất nhẹ) */
-  --bg-card: #ffffff;              /* Nền thẻ sản phẩm, hộp nội dung (trắng tinh) */
-  --bg-header: #ffffff;            /* Nền thanh điều hướng Header */
-  --bg-footer: #0f172a;            /* Nền chân trang Footer (xanh đen sang trọng) */
+  /* Điểm nhấn xanh biển nhạt & thể thao */
+  --accent-cyan: #0284c7; /* Xanh biển thể thao năng động (Royal Sky Blue) */
+  --accent-cyan-light: #e0f2fe; /* Xanh nhạt pastel làm nền badge / tag */
+  --accent-cyan-border: #bae6fd; /* Viền xanh nhạt trang nhã */
+  --accent-cyan-glow: rgba(2, 132, 199, 0.18);
 
-  /* Màu chữ */
-  --text-main: #1e293b;            /* Chữ chính (xám đen đậm, dễ đọc) */
-  --text-muted: #64748b;           /* Chữ phụ, mô tả ngắn (xám vừa) */
-  --text-white: #ffffff;           /* Chữ trắng */
+  --accent-orange: #ea580c; /* Cam san hô thể thao cho Flash Sale, Giá bán */
+  --accent-orange-light: #ffedd5;
+  --accent-emerald: #059669; /* Xanh lá bảo hành, thành công */
+  --accent-emerald-light: #d1fae5;
+  --accent-purple: #7c3aed;
 
-  /* Màu trạng thái & Nhãn */
-  --color-danger: #ef4444;         /* Đỏ (Flash sale, Giảm giá, Hủy đơn) */
-  --color-success: #10b981;        /* Xanh lá (Còn hàng, Đặt hàng thành công) */
-  --color-warning: #f59e0b;        /* Vàng cam (Đánh giá sao, Cảnh báo) */
+  /* Màu chữ có độ tương phản cao, dịu mắt trên nền sáng */
+  --text-main: #0f172a; /* Chữ chính màu Slate Navy đậm - rõ nét */
+  --text-muted: #475569; /* Chữ phụ, mô tả xám đậm - dễ đọc */
+  --text-dim: #64748b; /* Chữ chú thích, thời gian */
 
-  /* Đường viền và Bo góc */
-  --border-color: #e2e8f0;         /* Màu đường kẻ viền phân cách */
-  --radius-sm: 6px;                /* Bo góc nhỏ (nút bấm nhỏ, tag) */
-  --radius-md: 10px;               /* Bo góc vừa (thẻ sản phẩm, ô nhập liệu) */
-  --radius-lg: 16px;               /* Bo góc lớn (hộp modal, banner) */
+  /* Viền & Đổ bóng tinh tế */
+  --border-subtle: #e2e8f0; /* Viền sáng nhẹ chuẩn hiện đại */
+  --border-light-blue: #bae6fd; /* Viền xanh nhạt tạo điểm nhấn */
+  --border-glow: rgba(2, 132, 199, 0.35);
+  --border-focus: #0284c7;
 
-  /* Đổ bóng nhẹ nhàng (Box Shadow) */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(2, 132, 199, 0.08);
-  --shadow-lg: 0 10px 25px rgba(2, 132, 199, 0.12);
+  /* Typography */
+  --font-main: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", var(--font-main);
 
-  /* Phông chữ chuẩn */
-  --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Hiệu ứng chuyển động mượt */
+  --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+
+  /* Đổ bóng đổ mịn màng trên nền sáng */
+  --shadow-card:
+    0 10px 25px -5px rgba(186, 230, 253, 0.45),
+    0 4px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-hover:
+    0 16px 32px -6px rgba(2, 132, 199, 0.2),
+    0 6px 12px -3px rgba(15, 23, 42, 0.06);
+  --shadow-glow: 0 0 20px rgba(14, 165, 233, 0.25);
 }
 
-/* --------------------------------------------------------------------------
-   2. THIẾT LẬP CƠ BẢN (RESET CSS)
-   Giúp giao diện hiển thị đồng nhất trên mọi trình duyệt (Chrome, Cốc Cốc, Edge).
-   -------------------------------------------------------------------------- */
-* {
+/* Reset căn bản */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Tính cả viền và đệm vào kích thước thẻ */
 }
 
 body {
-  font-family: var(--font-family);
-  background-color: var(--bg-body);
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
   color: var(--text-main);
   line-height: 1.6;
-  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(186, 230, 253, 0.6) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 88% 85%,
+      rgba(224, 242, 254, 0.7) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(240, 249, 255, 0.8) 0%,
+      transparent 70%
+    );
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Scrollbar dịu mắt */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyan);
 }
 
 a {
   color: inherit;
-  text-decoration: none; /* Bỏ gạch chân mặc định của thẻ link */
+  text-decoration: none;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-ul, ol {
-  list-style: none; /* Bỏ dấu chấm đầu dòng mặc định */
-}
-
-button, input, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
-  outline: none;
-}
-
-/* Khung bọc giới hạn độ rộng trang web */
-.container {
+/* Container chuẩn */
+.sport-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
-/* --------------------------------------------------------------------------
-   3. THANH ĐIỀU HƯỚNG TRÊN CÙNG (HEADER & NAVBAR CHUNG)
-   Mọi trang HTML (index, dev2, dev3, dev4, dev5, admin) đều dùng chung khung này.
-   -------------------------------------------------------------------------- */
-.site-header {
-  background-color: var(--bg-header);
-  border-bottom: 1px solid var(--border-color);
+/* ==========================================================================
+   HEADER & NAVBAR CHUNG (WHITE + SOFT BLUE BORDER)
+   ========================================================================== */
+.sport-navbar {
   position: sticky;
   top: 0;
-  z-index: 100;
-  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-light-blue);
+  box-shadow: 0 4px 20px rgba(186, 230, 253, 0.35);
+  padding: 14px 0;
 }
 
-.header-inner {
+.sport-navbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  gap: 20px;
 }
 
-/* Logo Cửa Hàng */
-.site-logo {
+.sport-brand-logo {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 22px;
+  font-family: var(--font-display);
   font-weight: 800;
-  color: var(--color-primary);
+  font-size: 1.35rem;
   letter-spacing: -0.5px;
+  color: #0f172a;
+  transition: var(--transition-fast);
 }
 
-.site-logo .logo-icon {
+.sport-brand-logo .logo-icon {
   width: 38px;
   height: 38px;
-  background: linear-gradient(135deg, var(--color-primary), #38bdf8);
-  color: #ffffff;
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 1.2rem;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
 }
 
-/* Danh sách Menu (6 trang) */
-.nav-menu {
+.sport-brand-logo span.accent {
+  color: var(--accent-cyan);
+}
+
+.sport-nav-menu {
   display: flex;
   align-items: center;
   gap: 8px;
+  list-style: none;
 }
 
-.nav-link {
+.sport-nav-menu li a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 8px 14px;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: #475569;
   border-radius: var(--radius-sm);
-  transition: all 0.2s ease;
-  font-size: 14px;
+  transition: var(--transition-fast);
 }
 
-.nav-link:hover {
-  color: var(--color-primary);
-  background-color: var(--color-primary-light);
+.sport-nav-menu li a:hover {
+  color: var(--accent-cyan);
+  background: #f0f9ff;
 }
 
-/* Khi đang ở trang hiện tại thì menu sáng đèn */
-.nav-link.active {
-  color: var(--color-primary);
-  background-color: var(--color-primary-light);
+.sport-nav-menu li a.active {
+  color: var(--accent-cyan);
+  background: #e0f2fe;
   font-weight: 700;
+  border-bottom: 2px solid var(--accent-cyan);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
-/* Nút Admin đặc biệt */
-.nav-link.nav-admin {
-  color: #0369a1;
-  background-color: #f0f9ff;
-  border: 1px dashed var(--color-primary-border);
-}
-
-/* Nhóm nút tiện ích bên phải: Giỏ hàng & Đăng nhập */
-.header-actions {
+.sport-nav-actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.btn-header-cart {
-  display: inline-flex;
+/* Nút truy cập nhanh Quản trị Admin trên Navbar (Phân quyền: Mặc định ẩn, chỉ hiện khi đã đăng nhập Admin) */
+.nav-admin-btn {
+  display: none !important;
+  font-size: 0.85rem;
+  padding: 7px 12px;
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 700;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
-  border-radius: 20px;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.nav-admin-btn.is-admin-visible {
+  display: inline-flex !important;
+}
+
+/* Badge số lượng thông báo / giỏ hàng */
+.nav-badge-btn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: #f0f9ff;
+  border: 1px solid var(--border-light-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  color: var(--accent-cyan);
+  transition: var(--transition-fast);
+}
+
+.nav-badge-btn:hover {
+  background: #e0f2fe;
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+}
+
+.nav-badge-btn .badge-pill {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--accent-orange);
+  color: #ffffff;
+  font-size: 0.7rem;
   font-weight: 700;
-  font-size: 14px;
-  border: 1px solid var(--color-primary-border);
-  transition: all 0.2s ease;
-}
-
-.btn-header-cart:hover {
-  background-color: var(--color-primary);
-  color: #ffffff;
-}
-
-.btn-header-cart .cart-badge {
-  background-color: var(--color-danger);
-  color: #ffffff;
-  font-size: 12px;
-  padding: 2px 7px;
-  border-radius: 10px;
-  font-weight: 800;
-}
-
-/* --------------------------------------------------------------------------
-   4. CHÂN TRANG DÙNG CHUNG (FOOTER CHUNG)
-   -------------------------------------------------------------------------- */
-.site-footer {
-  background-color: var(--bg-footer);
-  color: #94a3b8;
-  padding: 50px 0 25px 0;
-  margin-top: 60px;
-  font-size: 14px;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
-  gap: 30px;
-  margin-bottom: 40px;
-}
-
-.footer-col h4 {
-  color: #ffffff;
-  font-size: 16px;
-  margin-bottom: 16px;
-  font-weight: 700;
-}
-
-.footer-col p {
-  line-height: 1.7;
-  margin-bottom: 12px;
-}
-
-.footer-links li {
-  margin-bottom: 10px;
-}
-
-.footer-links a:hover {
-  color: #38bdf8;
-  padding-left: 4px;
-  transition: all 0.2s ease;
-}
-
-.footer-bottom {
-  border-top: 1px solid #1e293b;
-  padding-top: 25px;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  min-width: 18px;
   text-align: center;
-  font-size: 13px;
-  color: #64748b;
 }
 
-/* --------------------------------------------------------------------------
-   5. CÁC NÚT BẤM DÙNG CHUNG (BUTTONS)
-   Các thành viên chỉ cần gắn class: class="btn btn-primary" là nút tự đẹp!
-   -------------------------------------------------------------------------- */
-.btn {
+/* ==========================================================================
+   BUTTONS & UI COMPONENTS
+   ========================================================================== */
+.btn-sport {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 10px 22px;
   border-radius: var(--radius-sm);
+  font-size: 0.95rem;
   font-weight: 600;
+  font-family: var(--font-main);
   cursor: pointer;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
-  font-size: 14px;
+  border: none;
+  outline: none;
+  transition: var(--transition-normal);
+  text-decoration: none;
 }
 
-/* Nút chính: Màu xanh thể thao */
 .btn-primary {
-  background-color: var(--color-primary);
+  background: linear-gradient(135deg, #0284c7, #0369a1);
   color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-hover);
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
 }
 
-/* Nút phụ: Nền trắng, viền xanh */
+.btn-accent {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);
+}
+
+.btn-accent:hover {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.45);
+}
+
 .btn-outline {
-  background-color: #ffffff;
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+  background: #ffffff;
+  color: #0284c7;
+  border: 1px solid var(--border-light-blue);
+  box-shadow: 0 2px 6px rgba(186, 230, 253, 0.3);
 }
 
 .btn-outline:hover {
-  background-color: var(--color-primary-light);
+  background: #f0f9ff;
+  border-color: var(--accent-cyan);
+  color: #0369a1;
+  transform: translateY(-1px);
 }
 
-/* Nút xám nhẹ */
-.btn-secondary {
-  background-color: #f1f5f9;
-  color: var(--text-main);
-  border-color: var(--border-color);
-}
-
-.btn-secondary:hover {
-  background-color: #e2e8f0;
-}
-
-/* Nút đỏ (Xóa, Hủy) */
-.btn-danger {
-  background-color: #fee2e2;
-  color: var(--color-danger);
-  border-color: #fecaca;
-}
-
-.btn-danger:hover {
-  background-color: var(--color-danger);
-  color: #ffffff;
-}
-
-/* Nút cỡ nhỏ */
-.btn-sm {
-  padding: 6px 12px;
-  font-size: 13px;
-  border-radius: 4px;
-}
-
-/* --------------------------------------------------------------------------
-   6. THẺ SẢN PHẨM MẪU (PRODUCT CARD UTILITY)
-   Dùng chung cho Dev 1 (Trang chủ), Dev 2 (Danh mục), Dev 3 (Gợi ý).
-   -------------------------------------------------------------------------- */
-.product-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary-border);
-}
-
-.product-thumb {
-  position: relative;
-  width: 100%;
-  height: 220px;
-  background-color: #f8fafc;
-  overflow: hidden;
-}
-
-.product-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.product-card:hover .product-thumb img {
-  transform: scale(1.05);
-}
-
-.product-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: var(--color-danger);
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 4px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-}
-
-.product-body {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.product-brand {
-  font-size: 12px;
+/* Badges */
+.sport-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-primary);
   text-transform: uppercase;
-  margin-bottom: 4px;
+  letter-spacing: 0.5px;
 }
 
-.product-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-main);
-  margin-bottom: 8px;
-  line-height: 1.4;
-  height: 42px;
-  overflow: hidden;
+.badge-cyan {
+  background: var(--accent-cyan-light);
+  color: #0369a1;
+  border: 1px solid var(--border-light-blue);
 }
 
-.product-price-box {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-top: auto;
-  margin-bottom: 12px;
+.badge-orange {
+  background: var(--accent-orange-light);
+  color: #c2410c;
+  border: 1px solid #fed7aa;
 }
 
-.product-price-box .price-current {
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--color-danger);
+.badge-emerald {
+  background: var(--accent-emerald-light);
+  color: #047857;
+  border: 1px solid #a7f3d0;
 }
 
-.product-price-box .price-old {
-  font-size: 13px;
-  color: #94a3b8;
-  text-decoration: line-through;
-}
-
-/* --------------------------------------------------------------------------
-   7. THÔNG BÁO GÓC MÀN HÌNH (TOAST NOTIFICATION)
-   Tự động xuất hiện góc phải màn hình khi bấm 'Thêm vào giỏ', 'Đặt hàng'...
-   -------------------------------------------------------------------------- */
-#toast-container {
+/* Toast Container & Notification */
+.sport-toast-container {
   position: fixed;
-  bottom: 25px;
-  right: 25px;
+  bottom: 24px;
+  right: 24px;
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  pointer-events: none;
 }
 
-.toast-message {
-  min-width: 280px;
-  background-color: #ffffff;
-  color: var(--text-main);
-  padding: 12px 18px;
-  border-radius: var(--radius-md);
-  border-left: 5px solid var(--color-primary);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  font-size: 14px;
-  font-weight: 600;
+.sport-toast {
+  pointer-events: auto;
+  min-width: 320px;
+  max-width: 440px;
+  background: #ffffff;
+  border: 1px solid var(--border-light-blue);
+  border-left: 5px solid var(--accent-cyan);
+  color: #0f172a;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
   display: flex;
   align-items: center;
-  gap: 10px;
-  animation: slideInRight 0.3s ease;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 500;
+  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.toast-message.toast-success {
-  border-left-color: var(--color-success);
+.sport-toast.success {
+  border-left-color: var(--accent-emerald);
+}
+.sport-toast.error {
+  border-left-color: #ef4444;
+}
+.sport-toast.warning {
+  border-left-color: var(--accent-orange);
 }
 
-.toast-message.toast-danger {
-  border-left-color: var(--color-danger);
-}
-
-@keyframes slideInRight {
+@keyframes toastSlideIn {
   from {
     transform: translateX(100%);
     opacity: 0;
@@ -471,31 +408,574 @@ button, input, select, textarea {
   }
 }
 
-/* --------------------------------------------------------------------------
-   8. TƯƠNG THÍCH ĐIỆN THOẠI & TABLET (RESPONSIVE)
-   -------------------------------------------------------------------------- */
-@media (max-width: 900px) {
-  .header-inner {
-    flex-wrap: wrap;
-    height: auto;
-    padding: 12px 0;
-    gap: 12px;
-  }
-  
-  .nav-menu {
-    order: 3;
-    width: 100%;
-    overflow-x: auto;
-    padding-bottom: 6px;
-  }
+/* ==========================================================================
+   FOOTER CHUNG (CLEAN LIGHT BACKGROUND)
+   ========================================================================== */
+.sport-footer {
+  background: #ffffff;
+  border-top: 1px solid var(--border-light-blue);
+  padding: 60px 0 30px;
+  margin-top: 80px;
+  box-shadow: 0 -4px 20px rgba(186, 230, 253, 0.2);
+}
 
-  .footer-grid {
+.sport-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.sport-footer-col h4 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 18px;
+}
+
+.sport-footer-col p {
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.sport-footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sport-footer-col ul li a {
+  color: #475569;
+  font-size: 0.9rem;
+  transition: var(--transition-fast);
+}
+
+.sport-footer-col ul li a:hover {
+  color: var(--accent-cyan);
+  padding-left: 4px;
+}
+
+.sport-footer-bottom {
+  padding-top: 25px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+@media (max-width: 900px) {
+  .sport-footer-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 600px) {
-  .footer-grid {
+  .sport-footer-grid {
     grid-template-columns: 1fr;
   }
+  .sport-nav-menu {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   AUTHENTICATION UI (MODAL & NAVBAR STATES - WHITE + LIGHT BLUE)
+   ========================================================================== */
+.sport-auth-nav-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sport-guest-nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sport-user-logged-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sport-user-logged-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f9ff;
+  border: 1px solid var(--border-light-blue);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  transition: var(--transition-fast);
+}
+
+.sport-user-logged-pill:hover {
+  background: #e0f2fe;
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.sport-btn-logout-icon {
+  background: #f8fafc;
+  border: 1px solid var(--border-light-blue);
+  border-radius: var(--radius-pill);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: var(--transition-fast);
+}
+
+.sport-btn-logout-icon:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  transform: scale(1.1);
+}
+
+/* Auth Modal Overlay */
+.sport-auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.sport-auth-modal-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.sport-auth-modal {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border: 1px solid var(--border-light-blue);
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(2, 132, 199, 0.25);
+  overflow: hidden;
+  animation: authModalZoom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes authModalZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.sport-auth-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  z-index: 10;
+}
+
+.sport-auth-close-btn:hover {
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.sport-auth-header {
+  padding: 24px 24px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+}
+
+.sport-auth-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sport-auth-tagline {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 4px 0 16px;
+}
+
+.sport-auth-tab-switch {
+  display: flex;
+  background: #e0f2fe;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light-blue);
+}
+
+.sport-auth-tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.sport-auth-tab-btn.active {
+  background: #ffffff;
+  color: #0284c7;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
+}
+
+.sport-auth-body {
+  padding: 20px 24px 24px;
+}
+
+.sport-auth-form-panel {
+  display: none;
+}
+
+.sport-auth-form-panel.active {
+  display: block;
+}
+
+.sport-auth-form-group {
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sport-auth-form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.sport-auth-form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid var(--border-light-blue);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: #0f172a;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.sport-auth-form-group input:focus {
+  background: #ffffff;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(2, 132, 199, 0.25);
+}
+
+.sport-pass-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sport-pass-wrap input {
+  padding-right: 40px;
+}
+
+.sport-toggle-pass-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.sport-auth-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.sport-auth-remember-row {
+  margin-bottom: 16px;
+}
+
+.sport-auth-submit-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
+.sport-auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 18px 0;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.sport-auth-divider::before,
+.sport-auth-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sport-auth-divider span {
+  padding: 0 10px;
+}
+
+.sport-social-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sport-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px;
+  background: #f8fafc;
+  border: 1px solid var(--border-light-blue);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.sport-social-btn:hover {
+  background: #f0f9ff;
+  border-color: var(--accent-cyan);
+}
+
+.sport-quick-demo-box {
+  margin-bottom: 16px;
+}
+
+.sport-btn-quick-demo {
+  width: 100%;
+  padding: 9px;
+  background: #f0fdf4;
+  border: 1px dashed #86efac;
+  border-radius: var(--radius-sm);
+  color: #15803d;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.sport-btn-quick-demo:hover {
+  background: #dcfce7;
+  border-color: #22c55e;
+}
+
+.sport-auth-footer-text {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.sport-auth-footer-text a {
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.sport-register-reward-banner {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+/* Guest notice banner on user page */
+.dev5-guest-notice-banner {
+  background: #f0f9ff;
+  border: 2px dashed #7dd3fc;
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  margin-bottom: 24px;
+}
+
+/* Footer brand logo spacing */
+.sport-footer .sport-brand-logo {
+  margin-bottom: 16px;
+}
+
+.site-footer .site-logo {
+  margin-bottom: 14px;
+}
+
+.site-footer .site-logo span:last-child {
+  color: #ffffff;
+}
+
+/* Template & Sample page content */
+.sample-main-content {
+  padding: 40px 20px;
+  min-height: 500px;
+}
+
+.products-empty-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #64748b;
+  padding: 20px;
+}
+
+/* Auth modal & utility classes (Loại bỏ triệt để CSS inline) */
+.sport-auth-sub-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sport-auth-forgot-link {
+  font-size: 0.8rem;
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+
+.sport-auth-forgot-link:hover {
+  text-decoration: underline;
+}
+
+.sport-auth-remember-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #475569;
+  cursor: pointer;
+}
+
+.social-icon-google {
+  font-weight: bold;
+  color: #ea4335;
+}
+
+.social-icon-fb {
+  font-weight: bold;
+  color: #1877f2;
+}
+
+.req-star {
+  color: #ef4444;
+}
+
+.sport-btn-nav-login {
+  font-size: 0.85rem;
+  padding: 7px 12px;
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.sport-btn-nav-register {
+  font-size: 0.85rem;
+  padding: 7px 12px;
+}
+
+.guest-notice-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.guest-notice-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.guest-notice-icon {
+  font-size: 2rem;
+}
+
+.guest-notice-title {
+  color: #0f172a;
+  margin-bottom: 2px;
+  font-weight: 800;
+}
+
+.guest-notice-desc {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.guest-notice-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Toast message structure */
+.sport-toast-item-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sport-toast-icon {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.sport-toast-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+#prod-stock:read-only,
+#prod-stock:disabled {
+  background-color: #f1f3f5;
+  color: #6c757d;
+  cursor: not-allowed;
+  border-color: #dee2e6;
 }

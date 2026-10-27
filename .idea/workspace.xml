@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/css/admin/admin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/admin/header.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/admin/modal.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/admin/modal.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/admin/sidebar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/admin/tab-dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/admin/tab-dashboard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/admin/tab-product.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/common.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/common.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/dev1_home.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/dev1_home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/dev1_home.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/dev1_home.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/admin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/auth_modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/auth_modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev1_home.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev1_home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/dev1_home.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/dev1_home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/template_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/template_sample.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;hungtintran89-code&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/hungtintran89-code/SportStoreWebsite.git&quot;,
+    &quot;accountId&quot;: &quot;d4ce6713-2e77-424a-a282-6bb8bb2dd4d8&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3KzgsC50ywPyLKbu5xSkL2uIQP0" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "TV5",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/TaiLieuHoc/Project/SportStoreWebsite",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="SportStoreWebsite" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="SportStoreWebsite" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="" />
+      <created>1792566016229</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1792566016229</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

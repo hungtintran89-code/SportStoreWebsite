@@ -1,29 +1,11 @@
 /* ===================================================
    GIAO DIỆN TAB BẢNG ĐIỀU KHIỂN (DASHBOARD)
    =================================================== */
-.admin-section-header {
-  min-height: 80px;
+#tab-dashboard .admin-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 10px 20px;
-}
-
-.admin-section-header :nth-child(1) {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.admin-section-header :nth-child(2) {
-  font-size: 15px;
-  font-weight: bold;
-  border-radius: 8px;
-  padding: 10px 16px;
-  background-color: #ffffff;
-  border: 1.5px #0284c7 solid;
-  color: #0284c7;
-  cursor: pointer;
+  margin-bottom: 20px;
 }
 
 /* Lưới hiển thị các thẻ KPI thống kê */
@@ -115,3 +97,85 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Màu viền thẻ KPI */
+.kpi-blue { border-left: 4px solid #0284c7; }
+.kpi-orange { border-left: 4px solid #ea580c; }
+.kpi-green { border-left: 4px solid #16a34a; }
+.kpi-purple { border-left: 4px solid #9333ea; }
+.kpi-red { border-left: 4px solid #dc2626; }
+
+/* Grid 2 cột bảng điều khiển */
+.dashboard-two-col {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dashboard-card {
+  padding: 22px;
+}
+
+.dashboard-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.dashboard-card-title {
+  font-size: 1.1rem;
+  color: #0f172a;
+  margin: 0;
+}
+
+.dashboard-view-all {
+  color: #0284c7;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.dashboard-view-all:hover {
+  text-decoration: underline;
+}
+
+/* Biểu đồ cột thể thao bằng CSS */
+.chart-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 180px;
+  padding-top: 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.chart-col {
+  text-align: center;
+  width: 60px;
+}
+
+.chart-bar {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.3s ease;
+}
+
+.chart-bar-run { height: 140px; }
+.chart-bar-football { height: 110px; }
+.chart-bar-badminton { height: 90px; }
+.chart-bar-tennis { height: 70px; }
+.chart-bar-gym { height: 50px; }
+
+.chart-col-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
