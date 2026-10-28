@@ -3,26 +3,11 @@
  * SPORTSTORE - LOGIC TRANG CHI TIẾT SẢN PHẨM & SO SÁNH (DEV 3 - PRODUCT)
  * File: js/dev3_details.js
  * ==============================================================================
- * ĐẶC ĐIỂM KỸ THUẬT:
- *  - Kiến trúc Decoupled Vanilla JS (IIFE độc lập, an toàn).
- *  - 100% Chạy trực tiếp từ file:/// (Không dùng fetch() để triệt tiêu lỗi CORS).
- *  - Lấy dữ liệu sản phẩm động từ LocalStorage (sport_products) hoặc Database products.
- *  - Lấy chính xác ID truyền từ URL (?id=201, ?id=202...).
- *  - Đa góc nhìn (Gallery views): Bấm thumbnail để soi các góc chụp của sản phẩm.
- *  - Bộ chọn màu thông minh: Tự chuyển gam màu CSS theo tên gọi khi hover / active.
- *  - Bộ chọn số lượng (+ / -) tương tác mượt mà.
- *  - Nút yêu thích (Wishlist) tương tác tức thì.
- *  - Hiệu ứng Fly-to-Cart (ảnh sản phẩm bay vòng cung vào giỏ hàng trên Header).
- *  - BẢNG ĐỐI CHIẾU THÔNG SỐ ĐỐI KHÁNG (Dev 3 Rubric): 3 thẻ đối thủ chuẩn Lead Hover.
- *  - Chuyển đổi sản phẩm tức thì khi chọn đối thủ trong bảng so sánh.
- *  - Tương thích hoàn toàn với hệ thống giỏ hàng addToCart() tại js/common.js.
- * ==============================================================================
  */
 
 (function () {
   'use strict';
 
-  // Bảng từ điển dịch các nhãn thông số kỹ thuật sang tiếng Việt thân thiện
   var SPEC_LABELS = {
     weight: 'Trọng lượng',
     cushion: 'Công nghệ đệm',
@@ -48,9 +33,6 @@
     gender: 'Đối tượng sử dụng'
   };
 
-  /**
-   * Phân tích tên màu để tạo bộ mã màu CSS hiển thị trực quan theo tên gọi
-   */
   function parseColorTheme(colorStr) {
     if (!colorStr) {
       return {
@@ -61,10 +43,7 @@
         textActive: '#0369a1'
       };
     }
-
     var c = colorStr.toLowerCase();
-
-    // 1. Hồng / Pink
     if (c.includes('hồng') || c.includes('pink')) {
       return {
         primary: '#ec4899',
@@ -74,8 +53,6 @@
         textActive: '#be185d'
       };
     }
-
-    // 2. Cam / Đỏ Cam
     if (c.includes('đỏ cam') || c.includes('cam') || c.includes('orange')) {
       return {
         primary: '#ea580c',
@@ -85,8 +62,6 @@
         textActive: '#c2410c'
       };
     }
-
-    // 3. Vàng / Yellow / Gold
     if (c.includes('vàng') || c.includes('yellow') || c.includes('gold')) {
       return {
         primary: '#d97706',
@@ -96,8 +71,6 @@
         textActive: '#b45309'
       };
     }
-
-    // 4. Xanh Neon / Mint / Xanh lá / Chanh
     if (c.includes('neon') || c.includes('solar green') || c.includes('mint') || c.includes('xanh lục') || c.includes('chanh')) {
       return {
         primary: '#10b981',
@@ -107,9 +80,7 @@
         textActive: '#047857'
       };
     }
-
-    // 5. Đỏ / Crimson
-    if (c.includes('đỏ') || c.includes('red') || c.includes('crimson')) {
+    if (c.includes('đỏ') || c.includes('red')) {
       return {
         primary: '#ef4444',
         bgLight: '#fef2f2',
@@ -118,40 +89,33 @@
         textActive: '#b91c1c'
       };
     }
-
-    // 6. Xanh Dương / Cyan / Navy
-    if (c.includes('xanh') || c.includes('blue') || c.includes('cyan') || c.includes('navy')) {
+    if (c.includes('xanh') || c.includes('blue')) {
       return {
         primary: '#0284c7',
         bgLight: '#f0f9ff',
-        ring: 'rgba(2, 132, 199, 0.35)',
+        ring: 'rgba(2, 132, 199, 0.25)',
         dot: '#0284c7',
         textActive: '#0369a1'
       };
     }
-
-    // 7. Đen / Black
-    if (c.includes('đen') || c.includes('black') || c.includes('dark')) {
+    if (c.includes('đen') || c.includes('black')) {
       return {
         primary: '#334155',
         bgLight: '#f8fafc',
-        ring: 'rgba(51, 65, 85, 0.35)',
+        ring: 'rgba(51, 65, 85, 0.25)',
         dot: '#0f172a',
         textActive: '#0f172a'
       };
     }
-
-    // 8. Trắng / White / Bạc / Grey
-    if (c.includes('trắng') || c.includes('white') || c.includes('bạc') || c.includes('xám') || c.includes('grey')) {
+    if (c.includes('trắng') || c.includes('white') || c.includes('bạc') || c.includes('xám')) {
       return {
         primary: '#64748b',
         bgLight: '#f8fafc',
-        ring: 'rgba(100, 116, 139, 0.35)',
+        ring: 'rgba(100, 116, 139, 0.25)',
         dot: '#94a3b8',
         textActive: '#334155'
       };
     }
-
     return {
       primary: '#0284c7',
       bgLight: '#f0f9ff',
@@ -161,9 +125,6 @@
     };
   }
 
-  /**
-   * Định dạng tiền tệ VNĐ chuẩn
-   */
   function formatCurrency(amount) {
     if (typeof amount === 'string') {
       amount = Number(amount.replace(/[^0-9]/g, ''));
@@ -172,18 +133,13 @@
     return num.toLocaleString('vi-VN') + ' đ';
   }
 
-  /**
-   * Lấy danh sách sản phẩm từ LocalStorage hoặc Database products
-   */
   function loadProductsList() {
     var key = typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.PRODUCTS ? STORAGE_KEYS.PRODUCTS : 'sport_products';
     var defaultSource = (typeof products !== 'undefined' && products.length > 0) ? products : ((typeof MOCK_PRODUCTS !== 'undefined' && MOCK_PRODUCTS.length > 0) ? MOCK_PRODUCTS : []);
 
     if (typeof getStorage === 'function') {
       var stored = getStorage(key, null);
-      if (stored && stored.length > 0) {
-        return stored;
-      }
+      if (stored && stored.length > 0) return stored;
     } else {
       try {
         var raw = localStorage.getItem(key);
@@ -196,9 +152,6 @@
     return defaultSource;
   }
 
-  /**
-   * Lấy ID sản phẩm hiện tại từ Query Parameter trên URL (?id=...)
-   */
   function getRequestedProductId() {
     try {
       var params = new URLSearchParams(window.location.search);
@@ -210,31 +163,17 @@
     }
   }
 
-  /**
-   * Tìm sản phẩm theo đúng ID số hoặc mã Code trong cơ sở dữ liệu
-   */
   function findProduct(idOrCode, list) {
     if (!list || list.length === 0) return null;
-
-    // Nếu không truyền ID trên URL -> Hiển thị sản phẩm đầu tiên trong danh sách
-    if (!idOrCode) {
-      return list[0];
-    }
+    if (!idOrCode) return list[0];
 
     var searchStr = String(idOrCode).trim().toLowerCase();
-
-    // Tìm chính xác theo id số hoặc mã code (SP-201, 201...) trong Database
     var found = list.find(function (p) {
       return String(p.id).toLowerCase() === searchStr || (p.code && p.code.toLowerCase() === searchStr);
     });
-
-    // Nếu tìm thấy trả về sản phẩm đó; nếu không tìm thấy (do bên khác truyền sai ID) thì fallback an toàn về list[0]
     return found || list[0];
   }
 
-  /**
-   * HIỆU ỨNG FLY-TO-CART (ẢNH BAY VÒNG CUNG VÀO GIỎ HÀNG TRÊN HEADER)
-   */
   function triggerFlyToCartAnimation(sourceImgEl, callback) {
     var cartBtn = document.getElementById('header-cart-btn') || document.getElementById('header-cart-badge-count');
     if (!sourceImgEl || !cartBtn) {
@@ -245,7 +184,6 @@
     var imgRect = sourceImgEl.getBoundingClientRect();
     var cartRect = cartBtn.getBoundingClientRect();
 
-    // Tạo bản sao hình ảnh bay lơ lửng
     var flyer = document.createElement('img');
     flyer.src = sourceImgEl.src;
     flyer.className = 'fly-to-cart-element';
@@ -256,21 +194,19 @@
     flyer.style.opacity = '0.92';
     document.body.appendChild(flyer);
 
-    // Kích hoạt đường bay vòng cung sang góc trên bên phải
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         var targetX = cartRect.left + cartRect.width / 2 - 16;
         var targetY = cartRect.top + cartRect.height / 2 - 16;
         flyer.style.top = targetY + 'px';
         flyer.style.left = targetX + 'px';
-        flyer.style.width = '32px';
-        flyer.style.height = '32px';
+        flyer.style.width = '30px';
+        flyer.style.height = '30px';
         flyer.style.opacity = '0.15';
         flyer.style.transform = 'scale(0.3) rotate(360deg)';
       });
     });
 
-    // Dọn dẹp flyer và kích hoạt hiệu ứng nảy badge trên header
     setTimeout(function () {
       if (flyer.parentNode) {
         flyer.parentNode.removeChild(flyer);
@@ -279,7 +215,7 @@
       var cartBadge = document.getElementById('header-cart-badge-count');
       if (cartBtn) {
         cartBtn.classList.remove('cart-bounce-active');
-        void cartBtn.offsetWidth; // Reflow
+        void cartBtn.offsetWidth;
         cartBtn.classList.add('cart-bounce-active');
         setTimeout(function () {
           cartBtn.classList.remove('cart-bounce-active');
@@ -287,7 +223,7 @@
       }
       if (cartBadge) {
         cartBadge.classList.remove('badge-pulse-active');
-        void cartBadge.offsetWidth; // Reflow
+        void cartBadge.offsetWidth;
         cartBadge.classList.add('badge-pulse-active');
         setTimeout(function () {
           cartBadge.classList.remove('badge-pulse-active');
@@ -298,62 +234,61 @@
     }, 750);
   }
 
-  /**
-   * Chuyển đổi sang xem sản phẩm khác ngay trong trang mà không reload (In-page Switch)
-   */
   function switchToProduct(newId, allProducts) {
     var target = findProduct(newId, allProducts);
     if (!target) return;
 
-    // 1. Render lại toàn bộ dữ liệu sản phẩm mới
     renderProduct(target, allProducts);
 
-    // 2. Cập nhật URL trên thanh địa chỉ của trình duyệt
     try {
       var newUrl = window.location.pathname + '?id=' + target.id;
       window.history.pushState({ id: target.id }, '', newUrl);
     } catch (err) {}
 
-    // 3. Cuộn mượt mà lên đầu trang để người xem thấy ngay thông số sản phẩm mới
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  /**
-   * Hiển thị chi tiết sản phẩm lên giao diện
-   */
   function renderProduct(data, allProducts) {
     var crumbTitle = document.querySelector('[data-crumb-title]');
-    var gallery = document.querySelector('[data-gallery]');
+    var galleryWrap = document.querySelector('[data-gallery]');
     var mainImage = document.querySelector('[data-main-image]');
+    var counterBadge = document.querySelector('[data-gallery-counter]');
+    var prevBtn = document.querySelector('[data-gallery-prev]');
+    var nextBtn = document.querySelector('[data-gallery-next]');
+
     var title = document.querySelector('[data-title]');
     var tag = document.querySelector('[data-tag]');
-    var priceContainer = document.querySelector('[data-price]');
-    var rating = document.querySelector('[data-rating]');
-    var reviews = document.querySelector('[data-reviews]');
-    var swatchesContainer = document.querySelector('.swatches');
-    var sizesContainer = document.querySelector('.sizes');
+    var stockText = document.querySelector('[data-stock-text]');
+    var priceEl = document.querySelector('[data-price]');
+    var oldPriceEl = document.querySelector('[data-old-price]');
+    var ratingEl = document.querySelector('[data-rating]');
+    var reviewsEl = document.querySelector('[data-reviews]');
+    var soldEl = document.querySelector('[data-sold]');
+
     var currentColorLabel = document.getElementById('current-color-label');
     var currentSizeLabel = document.getElementById('current-size-label');
-    var specList = document.querySelector('[data-specs]');
+    var swatchesWrap = document.querySelector('[data-swatches-wrap]');
+    var sizesWrap = document.querySelector('[data-sizes-wrap]');
+
     var descEl = document.querySelector('[data-desc]');
     var featuresEl = document.querySelector('[data-features]');
+    var specsTable = document.querySelector('[data-specs]');
     var compareGrid = document.querySelector('[data-compare]');
-    var addToCartButton = document.querySelector('[data-add-cart]');
-    var wishButton = document.querySelector('.wishlist-btn');
+
+    var addToCartBtn = document.querySelector('[data-add-cart]');
+    var wishlistBtn = document.querySelector('.btn-wishlist-toggle');
 
     var qtyMinus = document.querySelector('[data-qty-minus]');
     var qtyPlus = document.querySelector('[data-qty-plus]');
     var qtyInput = document.querySelector('[data-qty-input]');
     var currentQuantity = 1;
 
-    if (!title || !priceContainer || !data) return;
+    if (!title || !priceEl || !data) return;
 
-    // 0. Cập nhật Breadcrumb
-    if (crumbTitle) {
-      crumbTitle.textContent = data.name;
-    }
+    // Breadcrumb
+    if (crumbTitle) crumbTitle.textContent = data.name;
 
-    // 1. Tên, Tag & Giá bán
+    // Title & Badges
     title.textContent = data.name;
 
     var badgeText = 'CHÍNH HÃNG';
@@ -365,161 +300,118 @@
       badgeText = 'MỚI VỀ';
     }
     if (tag) tag.textContent = badgeText;
+    if (stockText) stockText.textContent = 'Còn hàng (' + (data.stock || 15) + ' SP)';
 
+    // Giá bán
     var currentPrice = data.salePrice || data.price;
-    if (data.salePrice && data.salePrice < data.price) {
-      priceContainer.innerHTML =
-        formatCurrency(currentPrice) +
-        ' <span style="font-size: 1.1rem; color: #94a3b8; text-decoration: line-through; font-weight: 500; margin-left: 10px;">' +
-        formatCurrency(data.price) +
-        '</span>';
-    } else {
-      priceContainer.textContent = formatCurrency(currentPrice);
-    }
+    priceEl.textContent = formatCurrency(currentPrice);
 
-    // 2. Đánh giá & Số lượt mua
-    if (rating) rating.textContent = (data.rating || 5) + ' / 5';
-    if (reviews) {
-      var reviewText = (data.reviewCount || 0) + ' đánh giá';
-      if (data.sold) {
-        reviewText += ' • Đã bán ' + data.sold;
+    if (oldPriceEl) {
+      if (data.salePrice && data.salePrice < data.price) {
+        oldPriceEl.textContent = formatCurrency(data.price);
+        oldPriceEl.style.display = 'inline';
+      } else {
+        oldPriceEl.style.display = 'none';
       }
-      reviews.textContent = reviewText;
     }
 
-    // 3. Khởi tạo danh sách ảnh Gallery & Sizes & Colors
+    // Ratings
+    if (ratingEl) ratingEl.textContent = (data.rating || 5) + ' / 5';
+    if (reviewsEl) reviewsEl.textContent = (data.reviewCount || 98) + ' đánh giá';
+    if (soldEl) soldEl.textContent = 'Đã bán ' + (data.sold || 142);
+
+    // Danh sách ảnh & sizes & colors
     var imageList = data.gallery && data.gallery.length > 0 ? data.gallery : [data.image];
-    var sizesList = data.sizes && data.sizes.length > 0 ? data.sizes : ['39', '40', '41', '42', '43'];
+    var sizesList = data.sizes && data.sizes.length > 0 ? data.sizes : ['39', '40', '41', '42', '42.5', '43', '44'];
     var colorsList = data.colors && data.colors.length > 0 ? data.colors : ['Tiêu Chuẩn'];
 
-    if (mainImage) {
-      mainImage.src = imageList[0];
-      mainImage.alt = data.name;
-    }
+    // CHỈ HIỂN THỊ NÚT < >, HUY HIỆU 1/X VÀ THUMBNAILS KHI CÓ > 1 ẢNH
+    var hasMultiple = imageList.length > 1;
+    if (prevBtn) prevBtn.style.display = hasMultiple ? 'flex' : 'none';
+    if (nextBtn) nextBtn.style.display = hasMultiple ? 'flex' : 'none';
+    if (counterBadge) counterBadge.style.display = hasMultiple ? 'block' : 'none';
+    if (galleryWrap) galleryWrap.style.display = hasMultiple ? 'flex' : 'none';
 
-    /**
-     * HÀM PHẢN HỒI TRỰC QUAN TỨC THÌ
-     */
-    function updateSelectionFeedback() {
-      var activeColorBtn = swatchesContainer ? swatchesContainer.querySelector('.swatch.active') : null;
-      var activeSizeBtn = sizesContainer ? sizesContainer.querySelector('.size-btn.active') : null;
+    var currentImgIdx = 0;
 
-      var selColor = activeColorBtn ? activeColorBtn.getAttribute('data-color-name') : (colorsList[0] || 'Tiêu Chuẩn');
-      var selSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : (sizesList[0] || 'Mặc định');
+    function showImage(idx) {
+      if (idx < 0) idx = imageList.length - 1;
+      if (idx >= imageList.length) idx = 0;
+      currentImgIdx = idx;
 
-      // 1. Cập nhật nhãn Màu sắc
-      if (currentColorLabel) {
-        currentColorLabel.textContent = selColor;
-        var theme = parseColorTheme(selColor);
-        currentColorLabel.style.color = theme.primary;
+      if (mainImage) {
+        mainImage.style.opacity = '0.35';
+        setTimeout(function () {
+          mainImage.src = imageList[currentImgIdx];
+          mainImage.style.opacity = '1';
+        }, 80);
       }
 
-      // 2. Cập nhật nhãn Kích cỡ
-      if (currentSizeLabel) {
-        currentSizeLabel.innerHTML =
-          '<strong>' + selSize + '</strong> <span style="font-size: 11px; color: #16a34a; font-weight: 700; margin-left: 6px; background: #dcfce7; padding: 2px 8px; border-radius: 999px;">✔ Còn hàng (' + (data.stock || 15) + ' đôi)</span>';
+      if (counterBadge && hasMultiple) {
+        counterBadge.textContent = (currentImgIdx + 1) + '/' + imageList.length;
       }
-    }
 
-    // 3.1 Render Gallery Thumbnails: Xem ảnh đa góc nhìn của sản phẩm
-    if (gallery) {
-      gallery.innerHTML = imageList
-        .map(function (src, index) {
-          return (
-            '<button class="thumb ' +
-            (index === 0 ? 'active' : '') +
-            '" type="button" data-thumb="' +
-            index +
-            '" title="Xem góc chụp ' +
-            (index + 1) +
-            '">' +
-            '<img src="' +
-            src +
-            '" alt="' +
-            data.name +
-            ' góc ' +
-            (index + 1) +
-            '" />' +
-            '</button>'
-          );
-        })
-        .join('');
-
-      var thumbButtons = gallery.querySelectorAll('[data-thumb]');
-      thumbButtons.forEach(function (button, idx) {
-        button.addEventListener('click', function () {
-          // 1. Đổi ảnh lớn sang góc ảnh vừa click
-          if (mainImage) {
-            mainImage.style.opacity = '0.35';
-            setTimeout(function () {
-              mainImage.src = imageList[idx];
-              mainImage.style.opacity = '1';
-            }, 100);
-          }
-
-          // 2. Active thumbnail được chọn
-          thumbButtons.forEach(function (b) {
-            b.classList.remove('active');
-          });
-          button.classList.add('active');
-
-          // 3. ĐỒNG BỘ: Đổi màu theo giày (kích hoạt ô màu tương ứng)
-          if (swatchesContainer) {
-            var allColorBtns = swatchesContainer.querySelectorAll('[data-color]');
-            if (allColorBtns.length > 0) {
-              var targetColorIdx = idx % allColorBtns.length;
-              allColorBtns.forEach(function (el) {
-                el.classList.remove('active');
-              });
-              allColorBtns[targetColorIdx].classList.add('active');
-            }
-          }
-
-          // 4. Cập nhật nhãn màu ngay lập tức
-          updateSelectionFeedback();
+      if (galleryWrap) {
+        var thumbs = galleryWrap.querySelectorAll('.thumb-btn');
+        thumbs.forEach(function (t, i) {
+          t.classList.toggle('active', i === currentImgIdx);
         });
+      }
+
+      // ĐỒNG BỘ: Chọn swatch màu tương ứng & Đổi màu chữ label
+      if (swatchesWrap) {
+        var allSwatches = swatchesWrap.querySelectorAll('.swatch');
+        if (allSwatches.length > 0) {
+          var targetColorIdx = currentImgIdx % allSwatches.length;
+          allSwatches.forEach(function (s, i) {
+            s.classList.toggle('active', i === targetColorIdx);
+          });
+          var activeSwatch = allSwatches[targetColorIdx];
+          if (activeSwatch && currentColorLabel) {
+            var colorName = activeSwatch.getAttribute('data-color-name');
+            currentColorLabel.textContent = colorName;
+            var curTheme = parseColorTheme(colorName);
+            currentColorLabel.style.color = curTheme.primary;
+          }
+        }
+      }
+    }
+
+    // Gắn sự kiện nút < và >
+    if (prevBtn) {
+      prevBtn.onclick = function () { showImage(currentImgIdx - 1); };
+    }
+    if (nextBtn) {
+      nextBtn.onclick = function () { showImage(currentImgIdx + 1); };
+    }
+
+    // Render Thumbnails
+    if (galleryWrap && hasMultiple) {
+      galleryWrap.innerHTML = imageList.map(function (src, idx) {
+        return (
+          '<button type="button" class="thumb-btn ' + (idx === 0 ? 'active' : '') + '" data-thumb="' + idx + '">' +
+            '<img src="' + src + '" alt="' + data.name + ' góc ' + (idx + 1) + '" />' +
+          '</button>'
+        );
+      }).join('');
+
+      var thumbButtons = galleryWrap.querySelectorAll('.thumb-btn');
+      thumbButtons.forEach(function (btn, idx) {
+        btn.onclick = function () { showImage(idx); };
       });
     }
 
-    // 4. Render Kích cỡ (Sizes)
-    if (sizesContainer) {
-      sizesContainer.innerHTML = sizesList
-        .map(function (s, index) {
-          return (
-            '<button class="size-btn ' +
-            (index === 0 ? 'active' : '') +
-            '" type="button" data-size>' +
-            s +
-            '</button>'
-          );
-        })
-        .join('');
-
-      var sizeButtons = sizesContainer.querySelectorAll('[data-size]');
-      sizeButtons.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          sizeButtons.forEach(function (el) {
-            el.classList.remove('active');
-          });
-          btn.classList.add('active');
-          updateSelectionFeedback();
-        });
-      });
-    }
-
-    // 5. Render Màu sắc (Colors)
-    if (swatchesContainer) {
-      swatchesContainer.innerHTML = '';
-      colorsList.forEach(function (c, index) {
+    // Colors - TỰ ĐỘNG GÁN MÀU HOVER / ACTIVE & CHECKMARK
+    if (swatchesWrap) {
+      swatchesWrap.innerHTML = '';
+      colorsList.forEach(function (c, idx) {
         var theme = parseColorTheme(c);
         var btn = document.createElement('button');
-        btn.className = 'swatch ' + (index === 0 ? 'active' : '');
+        btn.className = 'swatch ' + (idx === 0 ? 'active' : '');
         btn.type = 'button';
-        btn.setAttribute('data-color', '');
+        btn.setAttribute('data-swatch', idx);
         btn.setAttribute('data-color-name', c);
-        btn.setAttribute('data-color-index', index);
 
-        // Gán CSS variables
         btn.style.setProperty('--swatch-hover-bg', theme.bgLight);
         btn.style.setProperty('--swatch-hover-border', theme.primary);
         btn.style.setProperty('--swatch-hover-color', theme.textActive);
@@ -530,49 +422,55 @@
         btn.style.setProperty('--swatch-active-ring', theme.ring);
 
         btn.innerHTML =
-          '<span class="swatch-dot" style="display:inline-block; width:10px; height:10px; border-radius:50%; background:' +
-          theme.dot +
-          '; border:1px solid rgba(0,0,0,0.15); flex-shrink:0;"></span>' +
-          c +
-          '<span class="swatch-check" style="color:' +
-          theme.primary +
-          ';">✔</span>';
+          '<span class="swatch-dot" style="background:' + theme.dot + '"></span>' +
+          '<span>' + c + '</span>' +
+          '<span class="swatch-check" style="color:' + theme.primary + '">✔</span>';
 
-        btn.addEventListener('click', function () {
-          var allColorBtns = swatchesContainer.querySelectorAll('[data-color]');
-          allColorBtns.forEach(function (el) {
-            el.classList.remove('active');
-          });
+        btn.onclick = function () {
+          var targetImgIdx = idx % imageList.length;
+          showImage(targetImgIdx);
+        };
+
+        swatchesWrap.appendChild(btn);
+      });
+
+      if (currentColorLabel && colorsList[0]) {
+        currentColorLabel.textContent = colorsList[0];
+        var firstTheme = parseColorTheme(colorsList[0]);
+        currentColorLabel.style.color = firstTheme.primary;
+      }
+    }
+
+    // Khởi tạo hiển thị ảnh đầu tiên
+    showImage(0);
+
+    // Sizes
+    if (sizesWrap) {
+      sizesWrap.innerHTML = sizesList.map(function (s, idx) {
+        return (
+          '<button type="button" class="size-btn ' + (idx === 0 ? 'active' : '') + '" data-size="' + s + '">' +
+            s +
+          '</button>'
+        );
+      }).join('');
+
+      if (currentSizeLabel && sizesList[0]) {
+        currentSizeLabel.textContent = sizesList[0];
+      }
+
+      var sizeButtons = sizesWrap.querySelectorAll('.size-btn');
+      sizeButtons.forEach(function (btn) {
+        btn.onclick = function () {
+          sizeButtons.forEach(function (s) { s.classList.remove('active'); });
           btn.classList.add('active');
-
-          var targetImageIdx = index % imageList.length;
-          if (mainImage) {
-            mainImage.style.opacity = '0.35';
-            setTimeout(function () {
-              mainImage.src = imageList[targetImageIdx];
-              mainImage.style.opacity = '1';
-            }, 100);
+          if (currentSizeLabel) {
+            currentSizeLabel.textContent = btn.getAttribute('data-size');
           }
-
-          if (gallery) {
-            var thumbButtons = gallery.querySelectorAll('[data-thumb]');
-            if (thumbButtons.length > 0) {
-              var targetThumbIdx = index % thumbButtons.length;
-              thumbButtons.forEach(function (b) {
-                b.classList.remove('active');
-              });
-              thumbButtons[targetThumbIdx].classList.add('active');
-            }
-          }
-
-          updateSelectionFeedback();
-        });
-
-        swatchesContainer.appendChild(btn);
+        };
       });
     }
 
-    // Bộ chọn số lượng (+ / -)
+    // Stepper
     if (qtyInput) {
       qtyInput.value = '1';
       currentQuantity = 1;
@@ -594,50 +492,44 @@
       };
     }
 
-    updateSelectionFeedback();
+    // Tabs switching
+    var tabBtns = document.querySelectorAll('.tab-nav-btn');
+    tabBtns.forEach(function (tab) {
+      tab.onclick = function () {
+        tabBtns.forEach(function (t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        var targetId = tab.getAttribute('data-tab-target');
+        var panels = document.querySelectorAll('.tab-panel');
+        panels.forEach(function (p) {
+          p.style.display = p.id === targetId ? 'block' : 'none';
+        });
+      };
+    });
 
-    // 6. Mô tả sản phẩm & Đặc điểm nổi bật
-    if (descEl && data.desc) {
-      descEl.textContent = data.desc;
-    }
+    // Content: Mô tả & Specs
+    if (descEl && data.desc) descEl.textContent = data.desc;
     if (featuresEl) {
       if (data.features && data.features.length > 0) {
-        featuresEl.innerHTML = data.features
-          .map(function (feat) {
-            return '<li>' + feat + '</li>';
-          })
-          .join('');
+        featuresEl.innerHTML = data.features.map(function (f) {
+          return '<li>' + f + '</li>';
+        }).join('');
       } else {
         featuresEl.innerHTML = '<li>Chất liệu cao cấp, độ hoàn thiện tinh xảo đạt tiêu chuẩn quốc tế.</li>';
       }
     }
 
-    // 7. Thông số kỹ thuật (Specs)
-    if (specList) {
-      if (Array.isArray(data.specs)) {
-        specList.innerHTML = data.specs
-          .map(function (pair) {
-            return '<div><strong>' + pair[0] + ':</strong> ' + pair[1] + '</div>';
-          })
-          .join('');
-      } else if (data.specs && typeof data.specs === 'object') {
-        specList.innerHTML = Object.keys(data.specs)
-          .map(function (k) {
-            var label = SPEC_LABELS[k] || k;
-            return '<div><strong>' + label + ':</strong> ' + data.specs[k] + '</div>';
-          })
-          .join('');
-      } else {
-        specList.innerHTML =
-          '<div><strong>Thương hiệu:</strong> ' +
-          (data.brand || 'SportStore') +
-          '</div><div><strong>Danh mục:</strong> ' +
-          (data.category || 'Thể thao') +
-          '</div>';
+    if (specsTable) {
+      var specsHtml = '';
+      if (data.specs && typeof data.specs === 'object') {
+        Object.keys(data.specs).forEach(function (k) {
+          var label = SPEC_LABELS[k] || k;
+          specsHtml += '<div class="spec-row"><div class="spec-key">' + label + '</div><div class="spec-val">' + data.specs[k] + '</div></div>';
+        });
       }
+      specsTable.innerHTML = specsHtml || '<div class="spec-row"><div class="spec-key">Thương hiệu</div><div class="spec-val">' + (data.brand || 'SportStore') + '</div></div>';
     }
 
-    // 8. SO SÁNH ĐỐI THỦ CÙNG PHÂN KHÚC
+    // Compare section (Sản phẩm cùng phân khúc - Chuẩn 3 đối thủ TV3)
     if (compareGrid && allProducts && allProducts.length > 0) {
       var sameCategory = allProducts.filter(function (p) {
         return p.id !== data.id && (p.categoryId === data.categoryId || p.category === data.category);
@@ -654,22 +546,14 @@
       compareGrid.innerHTML = rivals.map(function (p) {
         var pImg = (p.gallery && p.gallery[0]) || p.image;
         var pPrice = p.salePrice || p.price;
-        var pWeight = (p.specs && p.specs.weight) ? p.specs.weight : '210g';
-        var pCushion = (p.specs && p.specs.cushion) ? p.specs.cushion : 'Đệm thể thao';
-        var pSurface = (p.specs && p.specs.surface) ? p.specs.surface : 'Đa năng';
-
         return (
-          '<article class="compare-card">' +
-            '<img src="' + pImg + '" alt="' + p.name + '" />' +
-            '<div style="font-size: 11px; font-weight: 700; color: #0284c7; text-transform: uppercase; margin-bottom: 4px;">' + (p.brand || 'CHÍNH HÃNG') + '</div>' +
-            '<h3 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.4;">' + p.name + '</h3>' +
-            '<div style="font-size: 1.15rem; font-weight: 800; color: #0284c7; margin-bottom: 12px;">' + formatCurrency(pPrice) + '</div>' +
-            '<div class="spec-list" style="margin-bottom: 18px; font-size: 0.88rem;">' +
-              '<div><strong>⚖️ Trọng lượng:</strong> ' + pWeight + '</div>' +
-              '<div><strong>☁️ Đệm:</strong> ' + pCushion + '</div>' +
-              '<div><strong>🏃 Địa hình:</strong> ' + pSurface + '</div>' +
+          '<article class="rival-card-clean">' +
+            '<div class="rival-img-box">' +
+              '<img src="' + pImg + '" alt="' + p.name + '" />' +
             '</div>' +
-            '<button type="button" class="btn-compare-switch" data-switch-id="' + p.id + '" style="margin-top: auto; width: 100%; text-align: center;">Xem chi tiết sản phẩm này</button>' +
+            '<h4 class="rival-title" title="' + p.name + '">' + p.name + '</h4>' +
+            '<div class="rival-price">' + formatCurrency(pPrice) + '</div>' +
+            '<button type="button" class="btn-rival-detail" data-switch-id="' + p.id + '">Xem chi tiết</button>' +
           '</article>'
         );
       }).join('');
@@ -678,20 +562,18 @@
       switchButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
           var targetId = btn.getAttribute('data-switch-id');
-          if (targetId) {
-            switchToProduct(targetId, allProducts);
-          }
+          if (targetId) switchToProduct(targetId, allProducts);
         });
       });
     }
 
-    // 9. Nút "Thêm vào giỏ hàng" VỚI HIỆU ỨNG FLY-TO-CART
-    if (addToCartButton) {
-      addToCartButton.onclick = function () {
-        var activeSizeBtn = document.querySelector('.size-btn.active');
-        var activeColorBtn = document.querySelector('.swatch.active');
-        var selectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'Mặc định';
-        var selectedColor = activeColorBtn ? (activeColorBtn.getAttribute('data-color-name') || activeColorBtn.textContent.replace('✔', '').trim()) : 'Tiêu chuẩn';
+    // Add to cart with Fly-to-cart
+    if (addToCartBtn) {
+      addToCartBtn.onclick = function () {
+        var activeSize = sizesWrap ? sizesWrap.querySelector('.size-btn.active') : null;
+        var activeColor = swatchesWrap ? swatchesWrap.querySelector('.swatch.active') : null;
+        var selSize = activeSize ? activeSize.getAttribute('data-size') : 'Mặc định';
+        var selColor = activeColor ? activeColor.getAttribute('data-color-name') : 'Tiêu chuẩn';
 
         var currentActiveImage = mainImage ? mainImage.src : (data.gallery && data.gallery[0]) || data.image;
 
@@ -700,22 +582,17 @@
           name: data.name,
           price: data.salePrice || data.price,
           image: currentActiveImage,
-          size: selectedSize,
-          color: selectedColor
+          size: selSize,
+          color: selColor
         };
 
-        // KÍCH HOẠT HIỆU ỨNG FLY-TO-CART
         triggerFlyToCartAnimation(mainImage, function () {
           if (typeof addToCart === 'function') {
             addToCart(cartProduct, currentQuantity);
           } else {
             var rawCart = localStorage.getItem('sport_cart');
             var cartArr = [];
-            try {
-              cartArr = rawCart ? JSON.parse(rawCart) : [];
-            } catch (e) {
-              cartArr = [];
-            }
+            try { cartArr = rawCart ? JSON.parse(rawCart) : []; } catch (e) { cartArr = []; }
             var exist = cartArr.find(function (it) {
               return it.id === cartProduct.id && it.size === cartProduct.size && it.color === cartProduct.color;
             });
@@ -729,58 +606,42 @@
 
             var badge = document.getElementById('header-cart-badge-count');
             if (badge) {
-              var totalCount = cartArr.reduce(function (sum, item) {
-                return sum + (item.quantity || 1);
-              }, 0);
+              var totalCount = cartArr.reduce(function (sum, item) { return sum + (item.quantity || 1); }, 0);
               badge.textContent = totalCount;
             }
+          }
 
-            if (typeof showToast === 'function') {
-              showToast('Đã thêm ' + currentQuantity + 'x "' + data.name + '" vào giỏ hàng!', 'success');
-            } else {
-              alert('Đã thêm ' + currentQuantity + 'x "' + data.name + '" vào giỏ hàng!');
-            }
+          if (typeof showToast === 'function') {
+            showToast('Đã thêm ' + currentQuantity + 'x "' + data.name + '" vào giỏ hàng!', 'success');
+          } else {
+            alert('Đã thêm ' + currentQuantity + 'x "' + data.name + '" vào giỏ hàng!');
           }
         });
       };
     }
 
-    // 10. Nút "Yêu thích" (Toggle Heart Effect)
-    if (wishButton) {
+    // Wishlist
+    if (wishlistBtn) {
       var isWished = false;
-      wishButton.onclick = function () {
+      wishlistBtn.onclick = function () {
         isWished = !isWished;
         if (isWished) {
-          wishButton.textContent = '❤️';
-          wishButton.style.borderColor = '#ef4444';
-          wishButton.style.background = '#fef2f2';
-          if (typeof showToast === 'function') {
-            showToast('Đã thêm "' + data.name + '" vào danh sách yêu thích!', 'success');
-          }
+          wishlistBtn.textContent = '❤️';
+          wishlistBtn.style.borderColor = '#ef4444';
+          wishlistBtn.style.background = '#fef2f2';
+          if (typeof showToast === 'function') showToast('Đã thêm vào danh sách yêu thích!', 'success');
         } else {
-          wishButton.textContent = '🤍';
-          wishButton.style.borderColor = '#cbd5e1';
-          wishButton.style.background = '#f8fafc';
-          if (typeof showToast === 'function') {
-            showToast('Đã bỏ yêu thích "' + data.name + '"', 'info');
-          }
+          wishlistBtn.textContent = '🤍';
+          wishlistBtn.style.borderColor = '#cbd5e1';
+          wishlistBtn.style.background = '#f8fafc';
         }
       };
     }
   }
 
-  /**
-   * Khởi chạy chính khi trang được nạp
-   */
   function initProductDetails() {
     var allProducts = loadProductsList();
-    if (!allProducts || allProducts.length === 0) {
-      var titleEl = document.querySelector('[data-title]');
-      if (titleEl) {
-        titleEl.textContent = 'Đang đồng bộ dữ liệu sản phẩm SportStore...';
-      }
-      return;
-    }
+    if (!allProducts || allProducts.length === 0) return;
 
     var targetId = getRequestedProductId();
     var currentProduct = findProduct(targetId, allProducts);
@@ -789,9 +650,7 @@
     window.addEventListener('popstate', function () {
       var currentId = getRequestedProductId();
       var prod = findProduct(currentId, allProducts);
-      if (prod) {
-        renderProduct(prod, allProducts);
-      }
+      if (prod) renderProduct(prod, allProducts);
     });
   }
 
