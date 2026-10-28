@@ -2,170 +2,217 @@
  * ==========================================================================
  * SPORTSTORE - CÁC HÀM TIỆN ÍCH DÙNG CHUNG (COMMON.JS)
  * Dành cho toàn bộ 5 thành viên sử dụng chung.
- * Viết bằng JavaScript thuần (Vanilla JS), đơn giản, rõ nghĩa, đọc là hiểu ngay!
  * ==========================================================================
  */
 
 // Tên khóa lưu trữ trong LocalStorage
-const STORAGE_CART_KEY = 'sport_cart';       // Khóa lưu giỏ hàng
-const STORAGE_USER_KEY = 'sport_user';       // Khóa lưu thông tin đăng nhập
-const STORAGE_ADDR_KEY = 'sport_address';    // Khóa lưu sổ địa chỉ nhận hàng
+const STORAGE_CART_KEY = "sport_cart"; // Lưu mảng: [ { id: user.id, product: [...] } ]
+const STORAGE_USER_KEY = "sport_user"; // Khóa lưu thông tin đăng nhập
+const STORAGE_ADDR_KEY = "sport_address"; // Khóa lưu sổ địa chỉ nhận hàng
 
 /**
- * 1. HÀM ĐỊNH DẠNG TIỀN TỆ (VND)
- * Nhận vào: Một con số (ví dụ: 1500000)
- * Trả về: Chuỗi tiền tệ dễ nhìn (ví dụ: "1.500.000 ₫")
- * Cách dùng: formatMoney(1500000);
+ * 1. HÀM ĐỌC DỮ LIỆU JSON AN TOÀN TỪ LOCALSTORAGE
  */
-function formatMoney(amount) {
-  if (!amount || isNaN(amount)) return '0 ₫';
-  return Number(amount).toLocaleString('vi-VN') + ' ₫';
-}
-
-/**
- * 2. HÀM LẤY DANH SÁCH GIỎ HÀNG TỪ LOCALSTORAGE
- * Trả về: Mảng các sản phẩm trong giỏ hàng (nếu chưa có thì trả về mảng rỗng [])
- * Cách dùng: const cart = getCart();
- */
-function getCart() {
+function readJson(key, fallback = null) {
   try {
-    const data = localStorage.getItem(STORAGE_CART_KEY);
-    return data ? JSON.parse(data) : [];
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
   } catch (error) {
-    console.error('Lỗi khi đọc giỏ hàng:', error);
-    return [];
+    console.error("Lỗi khi đọc LocalStorage:", error);
+    return fallback;
   }
 }
 
 /**
- * 3. HÀM LƯU DANH SÁCH GIỎ HÀNG VÀO LOCALSTORAGE
- * Nhận vào: Mảng giỏ hàng mới
- * Tự động: Lưu vào máy và cập nhật số lượng hiển thị trên Header
- * Cách dùng: saveCart(newCart);
+ * 2. HÀM LẤY THÔNG TIN TÀI KHOẢN ĐANG ĐĂNG NHẬP
+ */
+function getCurrentUser() {
+  if (
+    window.sportStoreAuth &&
+    typeof window.sportStoreAuth.session === "function"
+  ) {
+    return window.sportStoreAuth.session();
+  }
+
+  return readJson("sportstore_auth", null) || readJson(STORAGE_USER_KEY, null);
+}
+/**
+ * 3. HÀM ĐỊNH DẠNG TIỀN TỆ (VND)
+ */
+function formatMoney(amount) {
+  if (!amount || isNaN(amount)) return "0 ₫";
+  return Number(amount).toLocaleString("vi-VN") + " ₫";
+}
+
+/**
+ * 4. HÀM LẤY DANH SÁCH GIỎ HÀNG CỦA TÀI KHOẢN HIỆN TẠI
+ * Đọc từ cấu trúc: [ { id: user.id, product: [ ... ] } ]
+ */
+function getCart() {
+  const user = getCurrentUser();
+
+  if (!user || user.id == null) {
+    return [];
+  }
+
+  const raw = readJson(STORAGE_CART_KEY, []);
+  const allCarts = Array.isArray(raw) ? raw : [];
+
+  const userCart = allCarts.find(
+    (item) =>
+      item &&
+      String(item.id) === String(user.id) &&
+      Array.isArray(item.product),
+  );
+
+  return userCart ? userCart.product : [];
+}
+/**
+ * 5. HÀM LƯU DANH SÁCH GIỎ HÀNG CỦA TÀI KHOẢN HIỆN TẠI
+ * Lưu theo cấu trúc: [ { id: user.id, product: [ ... ] } ]
  */
 function saveCart(cartArray) {
   try {
-    localStorage.setItem(STORAGE_CART_KEY, JSON.stringify(cartArray));
-    updateCartBadge(); // Cập nhật ngay số lượng trên nút giỏ hàng
+    const user = getCurrentUser();
+    if (!user) {
+      updateCartBadge();
+      return;
+    }
+    const raw = readJson(STORAGE_CART_KEY, []);
+    const allCarts = Array.isArray(raw)
+      ? raw.filter((item) => item && Array.isArray(item.product))
+      : [];
+    const safeProducts = Array.isArray(cartArray) ? cartArray : [];
+    const userCart = allCarts.find(
+      (item) => String(item.id) === String(user.id),
+    );
+    if (userCart) {
+      userCart.product = safeProducts;
+    } else {
+      allCarts.push({
+        id: user.id,
+        product: safeProducts,
+      });
+    }
+    localStorage.setItem(STORAGE_CART_KEY, JSON.stringify(allCarts));
+    updateCartBadge();
   } catch (error) {
-    console.error('Lỗi khi lưu giỏ hàng:', error);
+    console.error("Lỗi khi lưu giỏ hàng:", error);
   }
 }
 
 /**
- * 4. HÀM THÊM SẢN PHẨM VÀO GIỎ HÀNG (DÙNG CHO DEV 1, DEV 2, DEV 3)
- * Nhận vào: Đối tượng sản phẩm { id, name, price, image, size, color }
- * Cách dùng:
- * addToCart({ id: 101, name: "Giày Nike Vaporfly", price: 3840000, image: "anh.jpg", size: 42 });
+ * 6. HÀM THÊM SẢN PHẨM VÀO GIỎ HÀNG (DÙNG CHO DEV 1, DEV 2, DEV 3)
+ * Bắt buộc đăng nhập mới cho phép thêm vào giỏ hàng
  */
 function addToCart(product, quantityToAdd = 1) {
-  const cart = getCart();
+  const user = getCurrentUser();
+  if (!user) {
+    showToast("Vui lòng đăng nhập tài khoản để mua sản phẩm!", "danger");
+    return false;
+  }
 
-  // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa (cùng ID và cùng Size)
-  const existingItem = cart.find(item => 
-    item.id === product.id && item.size === product.size
+  const cart = getCart();
+  const size = product.size || "Mặc định";
+  const color = product.color || "Tiêu chuẩn";
+  const addQty = Math.max(1, Number(quantityToAdd) || 1);
+
+  const existingItem = cart.find(
+    (item) =>
+      String(item.id) === String(product.id) &&
+      (item.size || "Mặc định") === size &&
+      (item.color || "Tiêu chuẩn") === color,
   );
 
   if (existingItem) {
-    // Nếu đã có thì tăng số lượng lên
-    existingItem.quantity += quantityToAdd;
+    existingItem.quantity = Math.min(10, existingItem.quantity + addQty);
   } else {
-    // Nếu chưa có thì thêm mới vào mảng
     cart.push({
       id: product.id,
       name: product.name,
-      price: product.price,
-      image: product.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400',
-      size: product.size || 'Mặc định',
-      color: product.color || 'Tiêu chuẩn',
-      quantity: quantityToAdd
+      price: Number(product.price) || 0,
+      image: product.image,
+      size: size,
+      color: color,
+      quantity: Math.min(10, addQty),
+      stock: product.stock,
     });
   }
 
-  // Lưu lại vào LocalStorage
   saveCart(cart);
-
-  // Hiển thị thông báo nhỏ thành công góc màn hình
-  showToast(`Đã thêm "${product.name}" vào giỏ hàng!`, 'success');
+  showToast(`Đã thêm "${product.name}" vào giỏ hàng!`, "success");
+  return true;
 }
 
 /**
- * 5. HÀM CẬP NHẬT SỐ LƯỢNG TRÊN ICON GIỎ HÀNG Ở HEADER
- * Tự động đếm tổng số lượng sản phẩm trong giỏ và hiển thị vào thẻ có class .cart-badge
+ * 7. HÀM CẬP NHẬT SỐ LƯỢNG TRÊN ICON GIỎ HÀNG Ở HEADER
+ * Tương thích cả Header cũ (.cart-badge, #cartBadge) và Header mới (#header-cart-badge-count)
  */
 function updateCartBadge() {
   const cart = getCart();
-  // Tính tổng số lượng tất cả món hàng
   let totalCount = 0;
   for (let i = 0; i < cart.length; i++) {
     totalCount += Number(cart[i].quantity) || 1;
   }
 
-  // Tìm tất cả các thẻ hiển thị số lượng giỏ hàng trên trang
-  const badgeElements = document.querySelectorAll('.cart-badge, #cartBadge');
-  badgeElements.forEach(badge => {
+  const badgeElements = document.querySelectorAll(
+    ".cart-badge, #cartBadge, #header-cart-badge-count, .badge-pill",
+  );
+  badgeElements.forEach((badge) => {
     badge.textContent = totalCount;
-    // Nếu giỏ hàng có đồ thì hiện nổi bật
-    if (totalCount > 0) {
-      badge.style.display = 'inline-block';
-    }
   });
 }
 
 /**
- * 6. HÀM HIỂN THỊ THÔNG BÁO NHẸ GÓC MÀN HÌNH (TOAST NOTIFICATION)
- * Nhận vào: 
- *   - message: Nội dung thông báo (ví dụ: "Áp mã giảm giá thành công!")
- *   - type: Loại thông báo ('success' màu xanh lá, 'danger' màu đỏ, mặc định màu xanh dương)
- * Cách dùng: showToast("Chào mừng bạn!", "success");
+ * 8. HÀM HIỂN THỊ THÔNG BÁO NHẸ GÓC MÀN HÌNH (TOAST NOTIFICATION)
+ * Dùng đúng class .sport-toast-container và .sport-toast của common.css mới
  */
-function showToast(message, type = 'info') {
-  // Tìm hoặc tạo khung chứa thông báo nếu chưa có
-  let container = document.getElementById('toast-container');
+function showToast(message, type = "info") {
+  let container = document.getElementById("toast-container");
   if (!container) {
-    container = document.createElement('div');
-    container.id = 'toast-container';
+    container = document.createElement("div");
+    container.id = "toast-container";
+    container.className = "sport-toast-container";
     document.body.appendChild(container);
   }
 
-  // Tạo thẻ thông báo
-  const toast = document.createElement('div');
-  toast.className = `toast-message toast-${type}`;
+  const toast = document.createElement("div");
+  const statusClass = type === "danger" ? "error" : type;
+  toast.className = `sport-toast toast-message ${statusClass} toast-${type}`;
 
-  // Chọn biểu tượng theo loại
-  let icon = '🔔';
-  if (type === 'success') icon = '✅';
-  if (type === 'danger') icon = '⚠️';
+  let icon = "🔔";
+  if (type === "success") icon = "✅";
+  if (type === "danger" || type === "error") icon = "⚠️";
 
-  toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+  toast.innerHTML = `<div class="sport-toast-item-inner"><span>${icon}</span> <span>${message}</span></div>`;
   container.appendChild(toast);
 
-  // Tự động biến mất sau 3 giây
   setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateX(100%)';
-    toast.style.transition = 'all 0.3s ease';
+    toast.style.opacity = "0";
+    toast.style.transform = "translateX(100%)";
+    toast.style.transition = "all 0.3s ease";
     setTimeout(() => toast.remove(), 300);
   }, 3000);
 }
 
 /**
- * 7. TỰ ĐỘNG CHẠY KHI TRANG WEB VỪA TẢI XONG
- * - Cập nhật số lượng giỏ hàng
- * - Tự động sáng đèn menu trang hiện tại
+ * 9. KHỞI CHẠY NGAY KHI NẠP FILE
  */
-document.addEventListener('DOMContentLoaded', function () {
-  // 1. Cập nhật số lượng giỏ hàng ngay khi mở bất kỳ trang nào
+function initCommon() {
   updateCartBadge();
 
-  // 2. Tự động kiểm tra URL để sáng đèn menu active
   const currentPath = window.location.pathname;
-  const navLinks = document.querySelectorAll('.nav-link');
+  const navLinks = document.querySelectorAll(".nav-link, .sport-nav-menu li a");
 
-  navLinks.forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && currentPath.includes(href.replace('../', '').replace('pages/', ''))) {
-      link.classList.add('active');
+  navLinks.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (
+      href &&
+      currentPath.includes(href.replace("../", "").replace("pages/", ""))
+    ) {
+      link.classList.add("active");
     }
   });
-});
+}
+
+initCommon();

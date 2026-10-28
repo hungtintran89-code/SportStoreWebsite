@@ -27,7 +27,7 @@
       </ul>
       <div class="sport-nav-actions">
         <!-- Nút truy cập Bảng Quản Trị Admin SGU (Phân quyền: Mặc định ẩn, chỉ hiện khi đăng nhập tài khoản Admin) -->
-        <a href="pages/admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn" title="Truy cập Bảng Quản Trị Admin">
+        <a href="pages/admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden" data-admin-link title="Truy cập Bảng Quản Trị Admin">
           ⚙️ Admin
         </a>
         <!-- Nút Giỏ Hàng -->
@@ -36,6 +36,34 @@
           <span class="badge-pill" id="header-cart-badge-count">3</span>
         </a>
 
+        <div class="dev5-header-user-wrapper dev5-hidden" data-auth-profile-wrap>
+          <div class="sport-user-logged-pill dev5-user-pill-btn" data-auth-profile title="Hồ sơ tài khoản">
+            <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+            <span data-header-name>Tài khoản</span>
+            <span class="dev5-caret-down">▾</span>
+          </div>
+          <!-- Menu thả xuống Shopee (Hình 1) -->
+          <div class="dev5-shopee-dropdown">
+            <div class="dev5-shopee-arrow"></div>
+            <a href="pages/dev5_user.html?tab=overview" class="dev5-shopee-item" data-action-tab="overview">
+              Tài Khoản Của Tôi
+            </a>
+            <a href="pages/dev5_user.html?tab=orders" class="dev5-shopee-item" data-action-tab="orders">
+              Đơn Mua
+            </a>
+            <button type="button" class="dev5-shopee-item dev5-shopee-logout" data-auth-action="logout">
+              Đăng Xuất
+            </button>
+          </div>
+        </div>
+
+        <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
+        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
+          🔑 Đăng Nhập
+        </button>
+        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
+          ✨ Đăng Ký
+        </button>
       </div>
     </div>
   </header>

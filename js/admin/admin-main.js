@@ -1,148 +1,122 @@
-/**
- * Kiểm tra trạng thái đăng nhập khi vào trang admin.html
- */
+// 1. Kiểm tra quyền Admin khi vào trang
 function kiemTraDangNhapAdmin() {
-  var logged = localStorage.getItem("admin_logged_in");
 
-  if (logged !== "true") {
+  var daDangNhap = localStorage.getItem("admin_logged_in") ;
+
+  if (daDangNhap !== "true") {
     alert("Vui lòng đăng nhập với quyền Quản Trị Viên để tiếp tục!");
-    window.location.href = "login-admin.html";
+    window.location.href = "../index.html";
   }
 }
+function dangXuatAdmin(){
+  var xacNhan = confirm("Bạn có chắc chắn muỗn đăng xuất không?");
 
-/**
- * Đăng xuất khỏi hệ thống
- */
-function dangXuatAdmin() {
-  if (confirm("Bạn có chắc chắn muốn đăng xuất khỏi trang Quản trị không?")) {
+  if( xacNhan ){
+
     localStorage.removeItem("admin_logged_in");
+    localStorage.removeItem("sport_user");
+
     alert("Đã đăng xuất thành công!");
-    window.location.href = "login-admin.html";
+    window.location.href = "../index.html";
   }
 }
 
-/**
- * Chuyển đổi giữa các Tab quản trị theo chuẩn Bareme SGU
- */
+// 2. Chuyển đổi giữa các Tab (Dashboard, Sản phẩm, Đơn hàng...)
 function switchTab(tabName, btnElement) {
-  // 1. Ẩn tất cả các khung nội dung tab
-  var tabContents = document.querySelectorAll(".admin-tab-content");
-  for (var i = 0; i < tabContents.length; i++) {
-    tabContents[i].classList.remove("active");
+  // A. Ẩn tất cả các nội dung tab đang mở
+  document.querySelectorAll(".admin-tab-content").forEach(function (tab) {
+    tab.classList.remove("active");
+  });
+  var tatCaNoiDungTab = document.querySelectorAll(".admin-tab-content") ;
+  for( let i = 0 ; i < tatCaNoiDungTab.length ;i++){
+    tatCaNoiDungTab[i].classList.remove("active") ;
   }
 
-  // 2. Gỡ class active khỏi tất cả các nút điều hướng sidebar
-  var navItems = document.querySelectorAll(".admin-nav-item");
-  for (var j = 0; j < navItems.length; j++) {
-    navItems[j].classList.remove("active");
+  var tatCaNutMenu = document.querySelectorAll(".admin-nav-item") ;
+  for( let i = 0  ; i < tatCaNutMenu.length ;i++){
+    tatCaNutMenu[i].classList.remove("active") ;
   }
 
-  // 3. Hiển thị tab được chọn
-  var targetTab = document.getElementById("tab-" + tabName);
-  if (targetTab) {
-    targetTab.classList.add("active");
+  var tabCanHien = document.getElementById("tab-" + tabName);
+  if( tabCanHien ){
+    tabCanHien.classList.add("active");
   }
 
-  // 4. Đánh dấu nút sidebar tương ứng active
-  if (btnElement) {
+  if( btnElement ){
     btnElement.classList.add("active");
-  } else {
-    var defaultBtn = document.getElementById("nav-" + tabName);
-    if (defaultBtn) defaultBtn.classList.add("active");
   }
 
-  // 5. Gọi hàm render tương ứng của tab đó (Mỗi tab làm việc độc lập)
-  if (tabName === "dashboard" && typeof renderDashboard === "function") {
-    updateDashboardStats();
-    renderDashboard();
-  } else if (
-    tabName === "customer" &&
-    typeof renderCustomerTable === "function"
-  ) {
-    renderCustomerTable();
-  } else if (
-    tabName === "category" &&
-    typeof renderCategoryTable === "function"
-  ) {
-    renderCategoryTable();
-  } else if (
-    tabName === "product" &&
-    typeof renderProductTable === "function"
-  ) {
-    renderProductTable();
-  } else if (tabName === "import" && typeof renderImportTable === "function") {
-    renderImportTable();
-  } else if (
-    tabName === "pricing" &&
-    typeof renderPricingTable === "function"
-  ) {
-    renderPricingTable();
-  } else if (tabName === "order" && typeof renderOrderTable === "function") {
-    renderOrderTable();
-  } else if (
-    tabName === "inventory" &&
-    typeof renderInventoryTable === "function"
-  ) {
-    renderInventoryTable();
+  if (tabName === "dashboard") {
+    if (typeof updateDashboardStats === "function") updateDashboardStats();
+    if (typeof renderDashboard === "function") renderDashboard();
   }
-
-  // 6. Cập nhật lại số liệu badges trên Sidebar
+  else if (tabName === "customer") {
+    if (typeof renderCustomerTable === "function") renderCustomerTable();
+  }
+  else if (tabName === "category") {
+    if (typeof renderCategoryTable === "function") renderCategoryTable();
+  }
+  else if (tabName === "product") {
+    if (typeof renderProductTable === "function") renderProductTable();
+  }
+  else if (tabName === "import") {
+    if (typeof renderImportTable === "function") renderImportTable();
+  }
+  else if (tabName === "pricing") {
+    if (typeof renderPricingTable === "function") renderPricingTable();
+  }
+  else if (tabName === "order") {
+    if (typeof renderOrderTable === "function") renderOrderTable();
+  }
+  else if (tabName === "inventory") {
+    if (typeof renderInventoryTable === "function") renderInventoryTable();
+  }
   updateSidebarBadges();
 }
 
-/**
- * Cập nhật số lượng đếm trên Sidebar từ LocalStorage
- */
 function updateSidebarBadges() {
-  var cats = getStorage(STORAGE_KEYS.CATEGORIES, []);
-  var prods = getStorage(STORAGE_KEYS.PRODUCTS, []);
-  var imps = getStorage(STORAGE_KEYS.IMPORTS, []);
-  var ords = getStorage(STORAGE_KEYS.ORDERS, []);
-  var custs = getStorage(STORAGE_KEYS.CUSTOMERS, []);
 
-  var elCat = document.getElementById("badge-count-categories");
-  var elProd = document.getElementById("badge-count-products");
-  var elImp = document.getElementById("badge-count-imports");
-  var elOrd = document.getElementById("badge-count-orders");
-  var elCust = document.getElementById("badge-count-customers");
+  var danhSachLoaiSP = typeof getStorage === "function" ? getStorage("sport_categories") : [];
+  var danhSachSP = typeof getStorage === "function" ? getStorage("sport_products") : [];
+  var danhSachPhieuNhap = typeof getStorage === "function" ? getStorage("sport_imports") : [];
+  var danhSachDonHang = typeof getStorage === "function" ? getStorage("sport_orders") : [];
+  var danhSachKhachHang = typeof getStorage === "function" ? getStorage("sport_customers") : [];
 
-  if (elCat) elCat.textContent = cats.length;
-  if (elProd) elProd.textContent = prods.length;
-  if (elImp) elImp.textContent = imps.length;
-  if (elOrd) elOrd.textContent = ords.length;
-  if (elCust) elCust.textContent = custs.length;
+  var badgeLoaiSP = document.getElementById("badge-count-categories");
+  var badgeSP = document.getElementById("badge-count-products");
+  var badgePhieuNhap = document.getElementById("badge-count-imports");
+  var badgeDonHang = document.getElementById("badge-count-orders");
+  var badgeKhachHang = document.getElementById("badge-count-customers");
+
+  if (badgeLoaiSP) badgeLoaiSP.textContent = danhSachLoaiSP.length;
+  if (badgeSP) badgeSP.textContent = danhSachSP.length;
+  if (badgePhieuNhap) badgePhieuNhap.textContent = danhSachPhieuNhap.length;
+  if (badgeDonHang) badgeDonHang.textContent = danhSachDonHang.length;
+  if (badgeKhachHang) badgeKhachHang.textContent = danhSachKhachHang.length;
 }
 
-/**
- * Đóng bất kỳ Modal nào bằng ID
- */
-function closeModal(modalId) {
-  var modal = document.getElementById(modalId);
-  if (modal) {
-    modal.classList.remove("show");
-  }
-}
 
-/**
- * Mở bất kỳ Modal nào bằng ID
- */
+// 3. Mở và Đóng popup modal
 function openModal(modalId) {
-  var modal = document.getElementById(modalId);
-  if (modal) {
-    modal.classList.add("show");
+  var hopThoai = document.getElementById(modalId);
+  if (hopThoai) {
+    hopThoai.classList.add("show");
   }
 }
 
-/**
- * Khởi tạo ứng dụng Admin khi tải xong trang
- */
+function closeModal(modalId) {
+  var hopThoai = document.getElementById(modalId);
+  if (hopThoai) {
+    hopThoai.classList.remove("show");
+  }
+}
+
+
 window.addEventListener("DOMContentLoaded", function () {
-  // 1. Kiểm tra đăng nhập
+  // 1. Kiểm tra quyền Admin
   kiemTraDangNhapAdmin();
-
-  // 2. Cập nhật badges
+  // 2. Cập nhật số đếm thống kê menu
   updateSidebarBadges();
-
-  // 3. Mặc định mở Tab Dashboard hoặc Tab lưu trước đó
+  // 3. Mặc định mở Tab Tổng Quan (Dashboard) đầu tiên
   switchTab("dashboard");
 });

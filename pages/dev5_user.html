@@ -26,10 +26,9 @@
         <li><a href="dev2_products.html">Sản Phẩm</a></li>
         <li><a href="dev3_details.html">Chi Tiết & So Sánh</a></li>
         <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
-        <li><a href="dev5_user.html">Tài Khoản</a></li>
       </ul>
 
-      <!-- Cụm Hành Động Góc Phải -->
+              <!-- Cụm Hành Động Góc Phải -->
       <div class="sport-nav-actions header-actions">
         <!-- Nút Admin (Mặc định ẩn với dev5-hidden, chỉ hiện khi đăng nhập tài khoản Admin) -->
         <a href="admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden" data-admin-link title="Truy cập Bảng Quản Trị Admin">
@@ -42,35 +41,67 @@
           <span class="badge-pill" id="header-cart-badge-count">0</span>
         </a>
 
-        <!-- KHỐI TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP (Tự động hiện Avatar + Tên + Nút Đăng Xuất) -->
-        <a href="dev5_user.html" class="sport-user-logged-pill dev5-hidden" data-auth-profile title="Hồ sơ tài khoản">
-          <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
-          <span data-header-name>Tài khoản</span>
-        </a>
-        <button type="button" class="sport-btn-logout-icon dev5-hidden" data-auth-action="logout" title="Đăng xuất tài khoản">
-          🚪
-        </button>
+        <!-- KHỐI TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP (Dropdown Avatar + Tên theo phong cách Shopee) -->
+        <div class="dev5-header-user-wrapper dev5-hidden" data-auth-profile-wrap>
+          <div class="sport-user-logged-pill dev5-user-pill-btn" data-auth-profile title="Hồ sơ tài khoản">
+            <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+            <span data-header-name>Tài khoản</span>
+            <span class="dev5-caret-down">▾</span>
+          </div>
+          <!-- Menu thả xuống Shopee (Hình 1) -->
+          <div class="dev5-shopee-dropdown">
+            <div class="dev5-shopee-arrow"></div>
+            <a href="dev5_user.html?tab=overview" class="dev5-shopee-item" data-action-tab="overview">
+              Tài Khoản Của Tôi
+            </a>
+            <a href="dev5_user.html?tab=orders" class="dev5-shopee-item" data-action-tab="orders">
+              Đơn Mua
+            </a>
+            <button type="button" class="dev5-shopee-item dev5-shopee-logout" data-auth-action="logout">
+              Đăng Xuất
+            </button>
+          </div>
+        </div>
 
         <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
-        <button type="button" class="btn-sport btn-outline btn-sm" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
+        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
           🔑 Đăng Nhập
         </button>
-        <button type="button" class="btn-sport btn-primary btn-sm" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
+        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
           ✨ Đăng Ký
         </button>
       </div>
     </div>
   </header>
 
-  <main class="dev5-user-wrapper">
+    <main class="dev5-user-wrapper">
     <div class="container">
-      <section class="dev5-hero">
+      <!-- THÔNG BÁO KHI CHƯA ĐĂNG NHẬP (TỰ ĐỘNG BẬT MODAL) -->
+      <section class="dev5-auth-guard dev5-hidden" data-auth-guard>
+        <div style="text-align: center; max-width: 440px; margin: 40px auto; padding: 30px 20px;">
+          <div style="font-size: 40px; margin-bottom: 12px;">🔒</div>
+          <h3 style="font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Vui Lòng Đăng Nhập Tài Khoản</h3>
+          <p style="font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.5;">Vui lòng đăng nhập để xem thông tin hồ sơ, đơn mua và sổ địa chỉ của bạn.</p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn-sport btn-primary btn-sm" data-auth-action="login" style="padding: 10px 20px; font-weight: 600;">
+              🔑 Đăng Nhập
+            </button>
+            <a href="../index.html" class="btn-sport btn-outline btn-sm" style="padding: 10px 20px; font-weight: 600; display: inline-flex; align-items: center;">
+              ← Về Trang Chủ
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- KHỐI GIAO DIỆN HỘI VIÊN KHI ĐÃ ĐĂNG NHẬP -->
+      <div class="dev5-authorized-content" data-authorized-content>
+        <section class="dev5-hero">
         <div>
           <span class="dev5-eyebrow">MEMBER CENTER</span>
-          <h1>Xin chào, <span data-user-name>khách hàng</span></h1>
+          <h1>Xin chào, <span data-user-name>Hội viên</span></h1>
           <p>Quản lý hồ sơ, địa chỉ giao hàng và theo dõi hành trình đơn hàng.</p>
         </div>
-        <div class="dev5-role-badge" data-user-role>Khách vãng lai</div>
+        <div class="dev5-role-badge" data-user-role>Thành viên</div>
       </section>
 
       <div class="dev5-layout">
@@ -111,10 +142,10 @@
 
             <div class="dev5-profile-card">
               <div>
-                <h3 data-user-name>Khách vãng lai</h3>
-                <p data-user-email>Đăng nhập để xem thông tin hội viên.</p>
+                <h3 data-user-name>Hội viên</h3>
+                <p data-user-email></p>
                 <p data-user-phone style="color: #64748b; font-size: 13px; margin: 4px 0;"></p>
-                <span class="dev5-tier" data-user-tier>Guest</span>
+                <span class="dev5-tier" data-user-tier>Member</span>
               </div>
             </div>
 
@@ -243,18 +274,11 @@
           </section>
         </div>
       </div>
+      </div>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div class="footer-col">
-        <div class="site-logo" style="margin-bottom: 14px;">
-          <span class="logo-icon">⚡</span>
-          <span style="color:#fff;">SPORTSTORE</span>
-        </div>
-        <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam.</p>
-      </div>
+
 
 <!-- ============================================================================== -->
   <!-- 2. FOOTER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->
@@ -306,7 +330,13 @@
     </div>
   </footer>
 
-  <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP Ở CUỐI TRANG -->
+  <!-- NẠP DỮ LIỆU STORE & ĐỒNG BỘ LOCALSTORAGE -->
+  <script src="../data/store/customers.js"></script>
+  <script src="../data/store/orders.js"></script>
+  <script src="../data/store/faqs.js"></script>
+  <script src="../data/store/init-storage.js"></script>
+
+  <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP & DEV5 -->
   <script src="../js/auth_modal.js"></script>
   <script src="../js/dev5_user.js"></script>
 </body>

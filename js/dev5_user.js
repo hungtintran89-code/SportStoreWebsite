@@ -1,9 +1,7 @@
 (function () {
   'use strict';
 
-  var DATA_URL = '../data/dev5_user.json';
   var USER_DATA_PREFIX = 'sportstore_user_data_';
-  var data;
   var userData;
 
   function formatMoney(value) {
@@ -14,6 +12,74 @@
     return window.sportStoreAuth
       ? window.sportStoreAuth.session()
       : null;
+  }
+
+  // Nạp danh sách đơn hàng ĐỘNG của khách hàng từ data store hoặc LocalStorage
+  function getCustomerOrdersFromStore(currentSession) {
+    var allOrders = [];
+    try {
+      allOrders = JSON.parse(localStorage.getItem('sport_orders') || '[]');
+    } catch (e) {}
+    if (!allOrders || allOrders.length === 0) {
+      if (typeof orders !== 'undefined' && Array.isArray(orders)) {
+        allOrders = orders;
+      }
+    }
+    return allOrders.filter(function (ord) {
+      return ord.customerId === currentSession.id ||
+             (ord.email && ord.email.toLowerCase() === (currentSession.email || '').toLowerCase()) ||
+             (ord.phone && ord.phone === currentSession.phone);
+    }).map(function (ord) {
+      var itemCount = Array.isArray(ord.items) ? ord.items.length : 1;
+      var firstItem = Array.isArray(ord.items) && ord.items[0];
+      var itemName = firstItem ? (firstItem.name || firstItem.productName || 'Sản phẩm thể thao') : 'Sản phẩm thể thao';
+      var itemsDesc = itemName + (itemCount > 1 ? ' (+' + (itemCount - 1) + ' món khác)' : '');
+      var progress = ord.status === 'Đã giao' ? 4 : (ord.status === 'Đang giao' ? 3 : (ord.status === 'Đã xử lý' ? 2 : 1));
+
+      return {
+        id: ord.orderId || ord.id || ('ORD-' + Date.now()),
+        date: ord.date || new Date().toISOString().split('T')[0],
+        items: itemsDesc,
+        status: ord.status || 'Mới đặt',
+        total: ord.total || 0,
+        progress: progress
+      };
+    });
+  }
+
+  // Nạp địa chỉ nhận hàng ĐỘNG của khách hàng từ data store
+  function getCustomerAddressesFromStore(currentSession) {
+    var addresses = [];
+    var allCustomers = [];
+    try {
+      allCustomers = JSON.parse(localStorage.getItem('sport_customers') || '[]');
+    } catch (e) {}
+    if (!allCustomers || allCustomers.length === 0) {
+      if (typeof customers !== 'undefined' && Array.isArray(customers)) {
+        allCustomers = customers;
+      }
+    }
+    var cust = allCustomers.find(function (c) {
+      return c.id === currentSession.id ||
+             (c.email && c.email.toLowerCase() === (currentSession.email || '').toLowerCase()) ||
+             (c.phone && c.phone === currentSession.phone);
+    });
+
+    var addrText = (cust && cust.address) || currentSession.address;
+    if (addrText && addrText !== 'Chưa cập nhật') {
+      addresses.push({
+        id: 'address-' + (currentSession.id || 'default'),
+        label: 'Địa chỉ mặc định',
+        recipient: (cust && cust.name) || currentSession.name,
+        phone: (cust && cust.phone) || currentSession.phone,
+        line: addrText,
+        district: '',
+        city: '',
+        detail: addrText,
+        isDefault: true
+      });
+    }
+    return addresses;
   }
 
   function getUserData() {
@@ -31,42 +97,33 @@
 
     try {
       var savedData = JSON.parse(localStorage.getItem(storageKey) || 'null');
-
-      if (savedData) {
+      if (savedData && (savedData.orders.length > 0 || savedData.addresses.length > 0)) {
         return {
           orders: Array.isArray(savedData.orders) ? savedData.orders : [],
           addresses: Array.isArray(savedData.addresses) ? savedData.addresses : [],
-          wishlist: Array.isArray(savedData.wishlist)
-            ? savedData.wishlist.filter(function (item) {
-              return item.id !== 'product-demo';
-            })
-            : []
+          wishlist: Array.isArray(savedData.wishlist) ? savedData.wishlist : []
         };
       }
-    } catch (error) 
-    {
+    } catch (error) {
       localStorage.removeItem(storageKey);
     }
 
-    var demoData = currentSession.id === 'u-001'
-      ? {
-        orders: data.orders || [],
-        addresses: data.addresses || [],
-        wishlist: data.wishlist || []
-      }
-      : {
-        orders: [],
-        addresses: [],
-        wishlist: []
-      };
+    // Nạp ĐỘNG theo tài khoản thực tế từ store
+    var initialData = {
+      orders: getCustomerOrdersFromStore(currentSession),
+      addresses: getCustomerAddressesFromStore(currentSession),
+      wishlist: []
+    };
 
-    localStorage.setItem(storageKey, JSON.stringify(demoData));
-    return demoData;
+    localStorage.setItem(storageKey, JSON.stringify(initialData));
+    return initialData;
   }
 
   function renderUserProfile() {
     var currentSession = getSession();
-    var userName = currentSession ? currentSession.name : 'khách hàng';
+    if (!currentSession) return;
+
+    var userName = currentSession.name || 'Hội viên';
     var userEmail = document.querySelector('[data-user-email]');
     var userPhone = document.querySelector('[data-user-phone]');
     var userRole = document.querySelector('[data-user-role]');
@@ -80,9 +137,7 @@
     });
 
     if (userEmail) {
-      userEmail.textContent = currentSession
-        ? currentSession.email
-        : 'Đăng nhập để xem thông tin hội viên.';
+      userEmail.textContent = currentSession.email || '';
     }
 
     var registeredUsers = [];
@@ -90,23 +145,21 @@
     var regUser = registeredUsers.find(function(u) { return currentSession && (u.id === currentSession.id || u.email === currentSession.email); });
     var phone = (currentSession && currentSession.phone) || (regUser && regUser.phone) || '';
     if (userPhone) {
-      userPhone.textContent = phone ? ' SĐT: ' + phone : '';
+      userPhone.textContent = phone ? 'SĐT: ' + phone : '';
     }
 
     if (userRole) {
-      userRole.textContent = currentSession
-        ? (isAdmin
-          ? 'Quản trị viên'
-          : 'Thành viên ' + currentSession.tier)
-        : (isAdmin ? 'Quản trị viên' : 'Khách vãng lai');
+      userRole.textContent = isAdmin
+        ? 'Quản trị viên'
+        : 'Thành viên ' + (currentSession.tier || 'Gold');
     }
 
     if (userTier) {
-      userTier.textContent = currentSession ? currentSession.tier : (isAdmin ? 'Administrator' : 'Guest');
+      userTier.textContent = currentSession.tier || (isAdmin ? 'Administrator' : 'Gold');
     }
 
     if (editProfileBtn) {
-      editProfileBtn.classList.toggle('dev5-hidden', !currentSession);
+      editProfileBtn.classList.remove('dev5-hidden');
     }
   }
 
@@ -156,8 +209,8 @@
 
     if (!currentSession) {
       addressContainer.innerHTML = '<p class="dev5-private-message">Vui lòng đăng nhập để xem sổ địa chỉ.</p>';
-      addButton.classList.add('dev5-hidden');
-      editButton.classList.add('dev5-hidden');
+      if (addButton) addButton.classList.add('dev5-hidden');
+      if (editButton) editButton.classList.add('dev5-hidden');
       return;
     }
 
@@ -171,16 +224,18 @@
     addressContainer.innerHTML = addresses.length
       ? addresses.map(function (address) {
       var defaultLabel = address.isDefault ? ' · Mặc định' : '';
+      var fullAddress = address.detail || [address.line, address.district, address.city].filter(Boolean).join(', ') || 'Chưa cập nhật địa chỉ';
+      var addressLabel = address.label || address.title || 'Địa chỉ nhận hàng';
 
       return [
         '<article class="dev5-address-card">',
         '  <div class="dev5-address-top">',
-        '    <strong>' + address.label + defaultLabel + '</strong>',
+        '    <strong>' + addressLabel + defaultLabel + '</strong>',
         '  </div>',
         '  <div class="dev5-address-line">',
-        '    <span>' + address.recipient + '</span>',
-        '    <span>' + address.phone + '</span>',
-        '    <span>' + address.line + ', ' + address.district + ', ' + address.city + '</span>',
+        '    <span>' + (address.recipient || currentSession.name) + '</span>',
+        '    <span>' + (address.phone || currentSession.phone) + '</span>',
+        '    <span>' + fullAddress + '</span>',
         '  </div>',
         '</article>'
       ].join('');
@@ -214,12 +269,24 @@
 
   function renderFaq() {
     var faqContainer = document.querySelector('[data-faq]');
-    var faqItems = data.faq || data.faqs || [];
+    var faqItems = [];
+
+    // Nạp ĐỘNG từ data/store/faqs.js
+    if (typeof faqs !== 'undefined' && Array.isArray(faqs)) {
+      faqItems = faqs;
+    } else if (typeof MOCK_FAQS !== 'undefined' && Array.isArray(MOCK_FAQS)) {
+      faqItems = MOCK_FAQS;
+    }
+
+    try {
+      var savedFaqs = JSON.parse(localStorage.getItem('sport_faqs') || 'null');
+      if (Array.isArray(savedFaqs) && savedFaqs.length > 0) faqItems = savedFaqs;
+    } catch (e) {}
 
     faqContainer.innerHTML = faqItems.map(function (faq, index) {
       var openClass = index === 0 ? 'is-open' : '';
-      var question = faq.q || faq.question;
-      var answer = faq.a || faq.answer;
+      var question = faq.question || faq.q || '';
+      var answer = faq.answer || faq.a || '';
 
       return [
         '<article class="dev5-faq-item ' + openClass + '">',
@@ -232,18 +299,52 @@
     }).join('');
   }
 
+  function setActiveTab(tabName) {
+    if (!tabName) return;
+    var targetTabBtn = document.querySelector('[data-tab="' + tabName + '"]');
+    var targetPanel = document.querySelector('[data-panel="' + tabName + '"]');
+    if (!targetTabBtn || !targetPanel) return;
+
+    document.querySelectorAll('[data-tab]').forEach(function (btn) {
+      btn.classList.remove('is-active');
+    });
+    document.querySelectorAll('[data-panel]').forEach(function (panel) {
+      panel.classList.remove('is-active');
+    });
+
+    targetTabBtn.classList.add('is-active');
+    targetPanel.classList.add('is-active');
+  }
+
   function bindTabEvents() {
     document.querySelectorAll('[data-tab]').forEach(function (button) {
       button.onclick = function () {
-        document.querySelectorAll('[data-tab], [data-panel]').forEach(function (element) {
-          element.classList.remove('is-active');
-        });
-
-        button.classList.add('is-active');
-        document.querySelector('[data-panel="' + button.dataset.tab + '"]')
-          .classList.add('is-active');
+        setActiveTab(button.dataset.tab);
       };
     });
+
+    // Lắng nghe sự kiện click trên các mục Dropdown Shopee (Tài khoản của tôi, Đơn mua)
+    document.querySelectorAll('[data-action-tab]').forEach(function (link) {
+      link.onclick = function (e) {
+        var tab = this.getAttribute('data-action-tab');
+        if (tab) {
+          e.preventDefault();
+          setActiveTab(tab);
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', 'dev5_user.html?tab=' + tab);
+          }
+        }
+      };
+    });
+
+    // Tự động kích hoạt tab dựa theo tham số ?tab=orders hoặc ?tab=overview trên URL
+    try {
+      var urlParams = new URLSearchParams(window.location.search);
+      var tabFromUrl = urlParams.get('tab');
+      if (tabFromUrl) {
+        setActiveTab(tabFromUrl);
+      }
+    } catch (e) {}
   }
 
   function bindFaqEvents() {
@@ -409,8 +510,28 @@
     };
   }
 
-  function initializePage(loadedData) {
-    data = loadedData;
+  function initializePage() {
+    var currentSession = getSession();
+    var authGuard = document.querySelector('[data-auth-guard]');
+    var authContent = document.querySelector('[data-authorized-content]');
+
+    // KHÓA TRANG NẾU KHÁCH CHƯA ĐĂNG NHẬP
+    if (!currentSession) {
+      if (authGuard) authGuard.classList.remove('dev5-hidden');
+      if (authContent) authContent.classList.add('dev5-hidden');
+
+      setTimeout(function () {
+        if (window.sportStoreAuth && typeof window.sportStoreAuth.openModal === 'function') {
+          window.sportStoreAuth.openModal('login');
+        }
+      }, 100);
+      return;
+    }
+
+    // ĐÃ ĐĂNG NHẬP: Mở khóa và hiển thị toàn bộ giao diện thành viên
+    if (authGuard) authGuard.classList.add('dev5-hidden');
+    if (authContent) authContent.classList.remove('dev5-hidden');
+
     userData = getUserData();
 
     renderUserProfile();
@@ -427,20 +548,6 @@
     bindProfileEvents();
   }
 
-  fetch(DATA_URL)
-    .then(function (response) {
-      if (!response.ok) {
-        throw new Error('Không thể tải dữ liệu Dev 5.');
-      }
-
-      return response.json();
-    })
-    .then(initializePage)
-    .catch(function (error) {
-      var content = document.querySelector('.dev5-content');
-
-      if (content) {
-        content.innerHTML = '<p role="alert">' + error.message + '</p>';
-      }
-    });
+  // Khởi động trang trực tiếp từ dữ liệu động của hệ thống
+  initializePage();
 }());
