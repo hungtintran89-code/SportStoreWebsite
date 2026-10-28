@@ -572,6 +572,19 @@ body.admin-body {
   margin-bottom: 8px;
   position: relative;
 }
+/* 1. Thu nhỏ cột ẢNH vừa khít (chỉ 70px) */
+.admin-table th:first-child,
+.admin-table td:first-child {
+  width: 70px;
+  text-align: center;
+  padding-right: 0px; /* Bỏ khoảng cách đệm bên phải ảnh */
+}
+
+/* 2. Kéo cột TÊN TRANG BỊ áp sát vào ảnh */
+.admin-table th:nth-child(2),
+.admin-table td:nth-child(2) {
+  padding-left: 10px; /* Rút ngắn khoảng cách với ảnh */
+}
 
 /* Tùy chỉnh thanh cuộn đẹp mắt cho admin-table-card và các tab cuộn */
 .admin-table-card::-webkit-scrollbar,

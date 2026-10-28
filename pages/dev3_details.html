@@ -40,11 +40,26 @@
           <span class="badge-pill" id="header-cart-badge-count">0</span>
         </a>
 
-        <!-- KHỐI TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP (Tự động hiện Avatar + Tên + Nút Đăng Xuất) -->
-        <a href="dev5_user.html" class="sport-user-logged-pill dev5-hidden" data-auth-profile title="Hồ sơ tài khoản">
-          <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
-          <span data-header-name>Tài khoản</span>
-        </a>
+        <div class="dev5-header-user-wrapper dev5-hidden" data-auth-profile-wrap>
+          <div class="sport-user-logged-pill dev5-user-pill-btn" data-auth-profile title="Hồ sơ tài khoản">
+            <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+            <span data-header-name>Tài khoản</span>
+            <span class="dev5-caret-down">▾</span>
+          </div>
+          <!-- Menu thả xuống Shopee (Hình 1) -->
+          <div class="dev5-shopee-dropdown">
+            <div class="dev5-shopee-arrow"></div>
+            <a href="dev5_user.html?tab=overview" class="dev5-shopee-item" data-action-tab="overview">
+              Tài Khoản Của Tôi
+            </a>
+            <a href="dev5_user.html?tab=orders" class="dev5-shopee-item" data-action-tab="orders">
+              Đơn Mua
+            </a>
+            <button type="button" class="dev5-shopee-item dev5-shopee-logout" data-auth-action="logout">
+              Đăng Xuất
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
