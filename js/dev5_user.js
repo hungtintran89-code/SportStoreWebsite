@@ -66,7 +66,9 @@
 
   function renderUserProfile() {
     var currentSession = getSession();
-    var userName = currentSession ? currentSession.name : 'khách hàng';
+    if (!currentSession) return;
+
+    var userName = currentSession.name || 'Hội viên';
     var userEmail = document.querySelector('[data-user-email]');
     var userPhone = document.querySelector('[data-user-phone]');
     var userRole = document.querySelector('[data-user-role]');
@@ -80,9 +82,7 @@
     });
 
     if (userEmail) {
-      userEmail.textContent = currentSession
-        ? currentSession.email
-        : 'Đăng nhập để xem thông tin hội viên.';
+      userEmail.textContent = currentSession.email || '';
     }
 
     var registeredUsers = [];
@@ -90,23 +90,21 @@
     var regUser = registeredUsers.find(function(u) { return currentSession && (u.id === currentSession.id || u.email === currentSession.email); });
     var phone = (currentSession && currentSession.phone) || (regUser && regUser.phone) || '';
     if (userPhone) {
-      userPhone.textContent = phone ? ' SĐT: ' + phone : '';
+      userPhone.textContent = phone ? 'SĐT: ' + phone : '';
     }
 
     if (userRole) {
-      userRole.textContent = currentSession
-        ? (isAdmin
-          ? 'Quản trị viên'
-          : 'Thành viên ' + currentSession.tier)
-        : (isAdmin ? 'Quản trị viên' : 'Khách vãng lai');
+      userRole.textContent = isAdmin
+        ? 'Quản trị viên'
+        : 'Thành viên ' + (currentSession.tier || 'Gold');
     }
 
     if (userTier) {
-      userTier.textContent = currentSession ? currentSession.tier : (isAdmin ? 'Administrator' : 'Guest');
+      userTier.textContent = currentSession.tier || (isAdmin ? 'Administrator' : 'Gold');
     }
 
     if (editProfileBtn) {
-      editProfileBtn.classList.toggle('dev5-hidden', !currentSession);
+      editProfileBtn.classList.remove('dev5-hidden');
     }
   }
 
@@ -232,18 +230,52 @@
     }).join('');
   }
 
+  function setActiveTab(tabName) {
+    if (!tabName) return;
+    var targetTabBtn = document.querySelector('[data-tab="' + tabName + '"]');
+    var targetPanel = document.querySelector('[data-panel="' + tabName + '"]');
+    if (!targetTabBtn || !targetPanel) return;
+
+    document.querySelectorAll('[data-tab]').forEach(function (btn) {
+      btn.classList.remove('is-active');
+    });
+    document.querySelectorAll('[data-panel]').forEach(function (panel) {
+      panel.classList.remove('is-active');
+    });
+
+    targetTabBtn.classList.add('is-active');
+    targetPanel.classList.add('is-active');
+  }
+
   function bindTabEvents() {
     document.querySelectorAll('[data-tab]').forEach(function (button) {
       button.onclick = function () {
-        document.querySelectorAll('[data-tab], [data-panel]').forEach(function (element) {
-          element.classList.remove('is-active');
-        });
-
-        button.classList.add('is-active');
-        document.querySelector('[data-panel="' + button.dataset.tab + '"]')
-          .classList.add('is-active');
+        setActiveTab(button.dataset.tab);
       };
     });
+
+    // Lắng nghe sự kiện click trên các mục Dropdown Shopee (Tài khoản của tôi, Đơn mua)
+    document.querySelectorAll('[data-action-tab]').forEach(function (link) {
+      link.onclick = function (e) {
+        var tab = this.getAttribute('data-action-tab');
+        if (tab) {
+          e.preventDefault();
+          setActiveTab(tab);
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', 'dev5_user.html?tab=' + tab);
+          }
+        }
+      };
+    });
+
+    // Tự động kích hoạt tab dựa theo tham số ?tab=orders hoặc ?tab=overview trên URL
+    try {
+      var urlParams = new URLSearchParams(window.location.search);
+      var tabFromUrl = urlParams.get('tab');
+      if (tabFromUrl) {
+        setActiveTab(tabFromUrl);
+      }
+    } catch (e) {}
   }
 
   function bindFaqEvents() {
@@ -411,6 +443,28 @@
 
   function initializePage(loadedData) {
     data = loadedData;
+    var currentSession = getSession();
+    var authGuard = document.querySelector('[data-auth-guard]');
+    var authContent = document.querySelector('[data-authorized-content]');
+
+    // KHÓA TRANG NẾU KHÁCH CHƯA ĐĂNG NHẬP
+    if (!currentSession) {
+      if (authGuard) authGuard.classList.remove('dev5-hidden');
+      if (authContent) authContent.classList.add('dev5-hidden');
+
+      // Tự động bật modal đăng nhập để thông báo khách phải đăng nhập mới xem được
+      setTimeout(function () {
+        if (window.sportStoreAuth && typeof window.sportStoreAuth.openModal === 'function') {
+          window.sportStoreAuth.openModal('login');
+        }
+      }, 100);
+      return;
+    }
+
+    // ĐÃ ĐĂNG NHẬP: Mở khóa và hiển thị toàn bộ giao diện thành viên
+    if (authGuard) authGuard.classList.add('dev5-hidden');
+    if (authContent) authContent.classList.remove('dev5-hidden');
+
     userData = getUserData();
 
     renderUserProfile();
