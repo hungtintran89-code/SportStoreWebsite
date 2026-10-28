@@ -430,13 +430,14 @@ body.admin-body {
 }
 
 .admin-section-header {
-  flex-shrink: 0; /* Cố định 100% trên cùng của tab, không bao giờ bị trôi khi cuộn bảng */
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
   flex-wrap: wrap;
   gap: 14px;
+  padding : 0px ;
 }
 
 .admin-header-actions {

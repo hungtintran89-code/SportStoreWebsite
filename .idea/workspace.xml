@@ -6,12 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/admin/modal.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/admin/modal.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/store/banners.js" beforeDir="false" afterPath="$PROJECT_DIR$/data/store/banners.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/admin/tab-product.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/admin/tab-product.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/dev1_home.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev1_home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/dev3_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/dev3_details.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
