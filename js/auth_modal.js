@@ -153,7 +153,6 @@
         '<label>Mật khẩu<input name="password" type="password" placeholder="••••••••" required autocomplete="current-password"></label>' +
         '<div class="dev5-auth-btn-row" style="margin-top: 14px;">' +
         '  <button class="dev5-primary-button" type="submit">Đăng nhập</button>' +
-        '  <button class="dev5-demo-button" type="button" data-auth-demo="user">⚡ Đăng nhập nhanh User</button>' +
         '</div>';
 
       switchHtml = 'Chưa có tài khoản? <button type="button" data-auth-switch-button="register">Đăng ký ngay</button>';
