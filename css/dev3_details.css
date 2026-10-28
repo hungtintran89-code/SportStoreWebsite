@@ -1,0 +1,596 @@
+/**
+ * ==============================================================================
+ * SPORTSTORE - STYLES TRANG CHI TIẾT SẢN PHẨM & SO SÁNH (DEV 3 - PRODUCT)
+ * File: css/dev3_details.css
+ * ==============================================================================
+ * Thiết kế gọn gàng, tinh tế, thoáng đãng, loại bỏ cảm giác rối mắt.
+ * Hiệu ứng tương tác:
+ *  - Thumbnail click & Swatch click đồng bộ 2 chiều.
+ *  - Hiệu ứng Fly-to-Cart (ảnh sản phẩm bay vòng cung vào giỏ hàng trên Header).
+ *  - Rung nảy Cart Icon & Cart Badge khi thêm thành công.
+ *  - 3 Thẻ so sánh đối thủ chuẩn Lead Hover.
+ * ==============================================================================
+ */
+
+.dev3-details-wrapper {
+  max-width: 1200px;
+  margin: 18px auto 70px;
+  padding: 0 20px;
+  color: #0f172a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* 1. BREADCRUMB ĐIỀU HƯỚNG GỌN GÀNG */
+.dev3-details-wrapper .breadcrumb-trail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 18px;
+}
+
+.dev3-details-wrapper .breadcrumb-trail a {
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.dev3-details-wrapper .breadcrumb-trail a:hover {
+  color: #0284c7;
+}
+
+.dev3-details-wrapper .breadcrumb-trail .sep {
+  color: #cbd5e1;
+}
+
+.dev3-details-wrapper .breadcrumb-trail .current {
+  color: #0284c7;
+  font-weight: 600;
+  max-width: 380px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 2. BỐ CỤC CHÍNH (PRODUCT LAYOUT) - CÂN ĐỐI 50% / 50% */
+.dev3-details-wrapper .product-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* 3. KHỐI THƯ VIỆN ẢNH (GALLERY) */
+.dev3-details-wrapper .gallery {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+.dev3-details-wrapper .main-image-wrap {
+  width: 100%;
+  height: 400px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.dev3-details-wrapper .main-image {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  transition: opacity 0.2s ease, transform 0.3s ease;
+  cursor: zoom-in;
+}
+
+.dev3-details-wrapper .main-image:hover {
+  transform: scale(1.04);
+}
+
+.dev3-details-wrapper .thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.dev3-details-wrapper .thumb {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 4px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dev3-details-wrapper .thumb:hover {
+  border-color: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+}
+
+.dev3-details-wrapper .thumb.active {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.25);
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+.dev3-details-wrapper .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+  display: block;
+}
+
+/* 4. KHỐI THÔNG TIN SẢN PHẨM (.INFO) */
+.dev3-details-wrapper .info {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+.dev3-details-wrapper .meta-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.dev3-details-wrapper .product-tag {
+  display: inline-block;
+  background: #f0f9ff;
+  color: #0284c7;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  border: 1px solid #bae6fd;
+}
+
+.dev3-details-wrapper .stock-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.dev3-details-wrapper h1 {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 6px 0 10px;
+  line-height: 1.35;
+}
+
+.dev3-details-wrapper .rating-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.dev3-details-wrapper .stars {
+  color: #f59e0b;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.dev3-details-wrapper .dot-sep {
+  color: #cbd5e1;
+}
+
+.dev3-details-wrapper .price-row {
+  margin-bottom: 16px;
+}
+
+.dev3-details-wrapper .price {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0284c7;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+}
+
+/* 3 TRUST PILLS GỌN GÀNG */
+.dev3-details-wrapper .trust-pills {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.dev3-details-wrapper .trust-pill-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #475569;
+  font-weight: 600;
+  flex: 1;
+}
+
+.dev3-details-wrapper .trust-icon {
+  font-size: 15px;
+}
+
+/* SELECTORS: COLOR & SIZE */
+.dev3-details-wrapper .selector-group {
+  margin-bottom: 18px;
+}
+
+.dev3-details-wrapper .section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.dev3-details-wrapper .color-value-label,
+.dev3-details-wrapper .size-value-label {
+  font-weight: 800;
+  margin-left: 4px;
+}
+
+.dev3-details-wrapper .swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dev3-details-wrapper .swatch {
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  padding: 7px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dev3-details-wrapper .swatch:hover {
+  background: var(--swatch-hover-bg, #f8fafc);
+  border-color: var(--swatch-hover-border, #0284c7);
+  color: var(--swatch-hover-color, #0284c7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px var(--swatch-hover-shadow, rgba(2, 132, 199, 0.15));
+}
+
+.dev3-details-wrapper .swatch.active {
+  background: var(--swatch-active-bg, #f0f9ff);
+  border: 2px solid var(--swatch-active-border, #0284c7);
+  color: var(--swatch-active-color, #0284c7);
+  box-shadow: 0 0 0 3px var(--swatch-active-ring, rgba(2, 132, 199, 0.25));
+  font-weight: 700;
+}
+
+.dev3-details-wrapper .sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dev3-details-wrapper .size-btn {
+  width: 44px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  font-weight: 700;
+  font-size: 13px;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dev3-details-wrapper .size-btn:hover {
+  background: #f8fafc;
+  border-color: #0284c7;
+  color: #0284c7;
+  transform: translateY(-2px);
+}
+
+.dev3-details-wrapper .size-btn.active {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+/* ACTIONS: SỐ LƯỢNG + MUA + YÊU THÍCH */
+.dev3-details-wrapper .actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.dev3-details-wrapper .quantity-box {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 46px;
+  background: #ffffff;
+}
+
+.dev3-details-wrapper .qty-btn {
+  width: 36px;
+  height: 100%;
+  background: #f8fafc;
+  border: none;
+  font-weight: 800;
+  font-size: 16px;
+  color: #475569;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  user-select: none;
+}
+
+.dev3-details-wrapper .qty-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.dev3-details-wrapper .qty-val {
+  width: 42px;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #0f172a;
+  background: transparent;
+  outline: none;
+  pointer-events: none;
+}
+
+.dev3-details-wrapper .buy-btn {
+  flex: 1;
+  height: 46px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+}
+
+.dev3-details-wrapper .buy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(2, 132, 199, 0.38);
+}
+
+.dev3-details-wrapper .buy-btn:active {
+  transform: translateY(0);
+}
+
+.dev3-details-wrapper .wishlist-btn {
+  width: 46px;
+  height: 46px;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.dev3-details-wrapper .wishlist-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #ef4444;
+  transform: translateY(-2px);
+}
+
+/* 5. KHỐI THÔNG TIN (MÔ TẢ & SPECS) */
+.dev3-details-wrapper .info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.dev3-details-wrapper .info-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+}
+
+.dev3-details-wrapper .info-card h3 {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.dev3-details-wrapper .spec-list {
+  display: grid;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #475569;
+}
+
+.dev3-details-wrapper .spec-list strong {
+  color: #0f172a;
+}
+
+/* 6. KHỐI SO SÁNH 3 ĐỐI THỦ CHUẨN LEAD HOVER */
+.dev3-details-wrapper .compare-section {
+  margin-top: 36px;
+}
+
+.dev3-details-wrapper .compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.dev3-details-wrapper .compare-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.dev3-details-wrapper .compare-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+  border-color: #7dd3fc;
+}
+
+.dev3-details-wrapper .compare-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  padding: 8px;
+  transition: transform 0.3s ease;
+}
+
+.dev3-details-wrapper .compare-card:hover img {
+  transform: scale(1.03);
+}
+
+.dev3-details-wrapper .btn-compare-switch {
+  display: inline-block;
+  padding: 10px 14px;
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.dev3-details-wrapper .btn-compare-switch:hover {
+  background: #0369a1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+/* ============================================================================== */
+/* 7. HIỆU ỨNG FLY-TO-CART (ẢNH SẢN PHẨM BAY VÀO GIỎ HÀNG HEADER) */
+/* ============================================================================== */
+.fly-to-cart-element {
+  position: fixed;
+  z-index: 999999;
+  pointer-events: none;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.45);
+  border: 2px solid #ffffff;
+  transition: all 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes cartBounce {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.4) rotate(-10deg); color: #0284c7; }
+  50% { transform: scale(0.9) rotate(5deg); }
+  75% { transform: scale(1.15) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.cart-bounce-active {
+  animation: cartBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+}
+
+@keyframes badgePulse {
+  0% { transform: scale(1); background: #ef4444; }
+  50% { transform: scale(1.7); background: #0284c7; }
+  100% { transform: scale(1); background: #ef4444; }
+}
+
+.badge-pulse-active {
+  animation: badgePulse 0.6s ease forwards !important;
+}
+
+/* ============================================================================== */
+/* 8. RESPONSIVE MEDIA QUERIES */
+/* ============================================================================== */
+@media (max-width: 900px) {
+  .dev3-details-wrapper .product-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .dev3-details-wrapper .compare-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .dev3-details-wrapper .info-grid,
+  .dev3-details-wrapper .compare-grid {
+    grid-template-columns: 1fr;
+  }
+  .dev3-details-wrapper .trust-pills {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .dev3-details-wrapper .main-image-wrap {
+    height: 300px;
+  }
+  .dev3-details-wrapper .actions {
+    flex-wrap: wrap;
+  }
+  .dev3-details-wrapper .buy-btn {
+    min-width: 200px;
+  }
+}
