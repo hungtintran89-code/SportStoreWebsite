@@ -15,207 +15,6 @@
   var trendingData = [];
   var activeTabId = 'bestseller';
 
-  // Dữ liệu Mock trang chủ tĩnh chuẩn SGU (Hoạt động 100% offline trên file:///)
-  var FALLBACK_HOME_DATA = {
-    banners: [
-      {
-        id: 1,
-        tag: "SIÊU PHẨM MÙA HÈ 2026",
-        title: "BỨT PHÁ MỌI GIỚI HẠN TỐC ĐỘ",
-        subtitle: "Bộ sưu tập giày marathon công nghệ đệm sợi Carbon mới nhất từ Nike & Adidas. Giảm ngay 30% cho hội viên.",
-        btnText: "Khám Phá Bộ Sưu Tập",
-        link: "pages/dev2_products.html",
-        badge: "NEW RELEASE",
-        bg: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1600&auto=format&fit=crop&q=80"
-      },
-      {
-        id: 2,
-        tag: "CHINH PHỤC SÂN CỎ",
-        title: "ĐỈNH CAO BÓNG ĐÁ CHUYÊN NGHIỆP",
-        subtitle: "Trang bị thi đấu đẳng cấp thế giới: Giày đinh FG thế hệ mới, bóng chuẩn FIFA Quality Pro.",
-        btnText: "Mua Sắm Ngay",
-        link: "pages/dev2_products.html",
-        badge: "HOT TREND",
-        bg: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=1600&auto=format&fit=crop&q=80"
-      },
-      {
-        id: 3,
-        tag: "QUẦN VỢT & CẦU LÔNG",
-        title: "CÔNG PHÁ MỌI ĐƯỜNG CẦU",
-        subtitle: "Vợt trợ lực sợi thủy tinh mật độ cao, độ cân bằng hoàn hảo cho từng cú đập uy lực.",
-        btnText: "Xem Chi Tiết",
-        link: "pages/dev2_products.html",
-        badge: "EXCLUSIVE",
-        bg: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1600&auto=format&fit=crop&q=80"
-      }
-    ],
-    flashSale: {
-      title: "⚡ FLASH SALE GIỜ VÀNG THỂ THAO",
-      items: [
-        {
-          id: 101,
-          name: "Giày Chạy Bộ Nike ZoomX Vaporfly 3",
-          category: "Chạy Bộ",
-          price: 5490000,
-          salePrice: 3840000,
-          discount: "-30%",
-          rating: 4.9,
-          sold: 68,
-          stock: 100,
-          image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"
-        },
-        {
-          id: 102,
-          name: "Vợt Tennis Wilson Pro Staff v14",
-          category: "Tennis",
-          price: 5890000,
-          salePrice: 4410000,
-          discount: "-25%",
-          rating: 4.8,
-          sold: 32,
-          stock: 50,
-          image: "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=600&auto=format&fit=crop&q=80"
-        },
-        {
-          id: 103,
-          name: "Áo Đá Bóng Dri-FIT ADV Pro Match",
-          category: "Bóng Đá",
-          price: 1250000,
-          salePrice: 750000,
-          discount: "-40%",
-          rating: 4.7,
-          sold: 115,
-          stock: 150,
-          image: "https://images.unsplash.com/photo-1577210897949-1f56f943502f?w=600&auto=format&fit=crop&q=80"
-        },
-        {
-          id: 104,
-          name: "Quả Bóng Đá FIFA Quality Pro Match",
-          category: "Bóng Đá",
-          price: 950000,
-          salePrice: 665000,
-          discount: "-30%",
-          rating: 4.9,
-          sold: 89,
-          stock: 120,
-          image: "https://images.unsplash.com/photo-1614632537423-1e6c2e7e0aab?w=600&auto=format&fit=crop&q=80"
-        }
-      ]
-    },
-    trendingCategories: [
-      {
-        id: "running",
-        name: "Chạy Bộ Marathon",
-        count: "140+ Sản phẩm",
-        icon: "🏃‍♂️"
-      },
-      {
-        id: "football",
-        name: "Bóng Đá Sân Cỏ",
-        count: "95+ Sản phẩm",
-        icon: "⚽"
-      },
-      {
-        id: "racket",
-        name: "Cầu Lông & Tennis",
-        count: "80+ Sản phẩm",
-        icon: "🏸"
-      },
-      {
-        id: "gym",
-        name: "Gym & Thể Hình",
-        count: "110+ Sản phẩm",
-        icon: "🏋️‍♂️"
-      }
-    ],
-    trendingTabs: [
-      {
-        tabId: "bestseller",
-        title: "Bán Chạy Nhất",
-        products: [
-          {
-            id: 111,
-            name: "Giày Adidas Adizero Adios Pro 3",
-            category: "Chạy Bộ",
-            price: 5500000,
-            rating: 4.9,
-            image: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600&auto=format&fit=crop&q=80",
-            badge: "BEST SELLER"
-          },
-          {
-            id: 112,
-            name: "Giày Đá Bóng Adidas Predator Elite FG",
-            category: "Bóng Đá",
-            price: 3200000,
-            rating: 4.8,
-            image: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=600&auto=format&fit=crop&q=80",
-            badge: "POPULAR"
-          },
-          {
-            id: 113,
-            name: "Vợt Cầu Lông Yonex Astrox 100ZZ",
-            category: "Cầu Lông",
-            price: 4350000,
-            rating: 5.0,
-            image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600&auto=format&fit=crop&q=80",
-            badge: "CHAMPION"
-          },
-          {
-            id: 114,
-            name: "Túi Trống Thể Thao Chống Nước Gym Pro",
-            category: "Phụ Kiện",
-            price: 680000,
-            rating: 4.7,
-            image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&auto=format&fit=crop&q=80",
-            badge: "TRENDING"
-          }
-        ]
-      },
-      {
-        tabId: "newarrival",
-        title: "Hàng Mới Về 2026",
-        products: [
-          {
-            id: 115,
-            name: "Đồng Hồ Đo Nhịp Tim Thể Thao Garmin Forerunner",
-            category: "Công Nghệ",
-            price: 8900000,
-            rating: 4.9,
-            image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80",
-            badge: "NEW TECH"
-          },
-          {
-            id: 116,
-            name: "Bình Nước Giữ Nhiệt Thể Thao Titan 1000ml",
-            category: "Phụ Kiện",
-            price: 420000,
-            rating: 4.8,
-            image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&auto=format&fit=crop&q=80",
-            badge: "NEW"
-          },
-          {
-            id: 117,
-            name: "Băng Cổ Chân Bảo Vệ Khớp Cao Cấp",
-            category: "Bảo Hộ",
-            price: 290000,
-            rating: 4.6,
-            image: "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=600&auto=format&fit=crop&q=80",
-            badge: "NEW"
-          },
-          {
-            id: 118,
-            name: "Áo Khoác Gió Chạy Bộ Siêu Nhẹ Kháng Nước",
-            category: "Thời Trang",
-            price: 1490000,
-            rating: 4.8,
-            image: "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80",
-            badge: "NEW"
-          }
-        ]
-      }
-    ]
-  };
-
   // Khởi tạo khi DOM sẵn sàng
   document.addEventListener('DOMContentLoaded', function () {
     initHomeModule();
@@ -236,34 +35,102 @@
   /**
    * Nạp dữ liệu trang chủ không gây lỗi CORS
    */
+  /**
+   * Nạp dữ liệu trang chủ tự động từ data/store và LocalStorage
+   * (Cú pháp cơ bản, dễ hiểu, dễ giải thích khi báo cáo)
+   */
   function loadHomeData() {
-    function applyHomeData(data) {
-      renderHeroCarousel(data.banners || []);
-      renderFlashSale(data.flashSale ? data.flashSale.items : []);
-      renderCategories(data.trendingCategories || []);
-      initTrendingTabs(data.trendingTabs || []);
+
+    var homeBanners = [];
+    if (typeof banners !== 'undefined') {
+      homeBanners = banners;
     }
 
-    // Nếu chạy local file:///, áp dụng ngay dữ liệu tĩnh để tránh CORS
-    if (window.location.protocol === 'file:') {
-      applyHomeData(FALLBACK_HOME_DATA);
-      return;
+    var flashSaleList = [];
+    if (typeof flashSale !== 'undefined' && flashSale.items) {
+      flashSaleList = flashSale.items;
     }
 
-    // Nếu chạy qua HTTP web server
-    var jsonPath = window.location.pathname.includes('/pages/') ? '../data/dev1_home.json' : 'data/dev1_home.json';
-    fetch(jsonPath)
-      .then(function (res) {
-        if (!res.ok) throw new Error('Không thể nạp dữ liệu dev1_home.json');
-        return res.json();
-      })
-      .then(function (data) {
-        applyHomeData(data);
-      })
-      .catch(function () {
-        applyHomeData(FALLBACK_HOME_DATA);
-      });
+    var homeCategories = [];
+    if (typeof categories !== 'undefined') {
+      for (var i = 0; i < categories.length && i < 4; i++) {
+        var cat = categories[i];
+        homeCategories.push({
+          id: cat.id,
+          name: cat.name,
+          count: (cat.itemCount || 10) + "+ Sản phẩm",
+          icon: cat.icon || "🏅"
+        });
+      }
+    }
+
+    var allProducts = [];
+
+    if (typeof getStorage === 'function') {
+      allProducts = getStorage('sport_products', []);
+    }
+
+    if (allProducts.length === 0 && typeof products !== 'undefined') {
+      allProducts = products;
+    }
+
+    var bestSellerList = [];
+    for (var j = 0; j < allProducts.length; j++) {
+      var sp = allProducts[j];
+      if (sp.isHot === true) {
+        bestSellerList.push({
+          id: sp.id,
+          name: sp.name,
+          category: sp.category,
+          price: sp.salePrice || sp.price,
+          rating: sp.rating || 4.9,
+          image: sp.image,
+          badge: "HOT"
+        });
+      }
+      if (bestSellerList.length >= 6) {
+        break;
+      }
+    }
+
+    var newArrivalList = [];
+    for (var k = 0; k < allProducts.length; k++) {
+      var spMoi = allProducts[k];
+      if (spMoi.isNew === true) {
+        newArrivalList.push({
+          id: spMoi.id,
+          name: spMoi.name,
+          category: spMoi.category,
+          price: spMoi.salePrice || spMoi.price,
+          rating: spMoi.rating || 4.8,
+          image: spMoi.image,
+          badge: "NEW"
+        });
+      }
+      if (newArrivalList.length >= 6) {
+        break;
+      }
+    }
+
+    var homeTrendingTabs = [
+      {
+        tabId: "bestseller",
+        title: "Bán Chạy Nhất",
+        products: bestSellerList
+      },
+      {
+        tabId: "newarrival",
+        title: "Hàng Mới Về 2026",
+        products: newArrivalList
+      }
+    ];
+
+    renderHeroCarousel(homeBanners);
+    renderFlashSale(flashSaleList);
+    renderCategories(homeCategories);
+    initTrendingTabs(homeTrendingTabs);
   }
+
 
   /**
    * 1. Render Hero Banner Carousel & Auto Slide
@@ -418,9 +285,8 @@
             <span>Đã bán: ${item.sold}</span>
             <span>⭐ ${item.rating}</span>
           </div>
-          <button type="button" class="btn-sport btn-accent dev1-btn-flash-buy dev1-btn-flash-buy-btn" data-id="${item.id}" data-name="${item.name}" data-price="${item.salePrice}" data-image="${item.image}">
-            Săn Sale Ngay
-          </button>
+          <a href="${getPageUrl('dev3_details.html')}?id=${item.id}" class="btn-sport btn-accent dev1-btn-flash-buy dev1-btn-flash-buy-btn">Săn sale ngay</a>
+
         </div>
       `;
       grid.appendChild(card);
