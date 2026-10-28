@@ -27,7 +27,14 @@ function readJson(key, fallback = null) {
  * 2. HÀM LẤY THÔNG TIN TÀI KHOẢN ĐANG ĐĂNG NHẬP
  */
 function getCurrentUser() {
-  return readJson(STORAGE_USER_KEY, null);
+  if (
+    window.sportStoreAuth &&
+    typeof window.sportStoreAuth.session === "function"
+  ) {
+    return window.sportStoreAuth.session();
+  }
+
+  return readJson("sportstore_auth", null) || readJson(STORAGE_USER_KEY, null);
 }
 /**
  * 3. HÀM ĐỊNH DẠNG TIỀN TỆ (VND)
@@ -43,14 +50,23 @@ function formatMoney(amount) {
  */
 function getCart() {
   const user = getCurrentUser();
-  if (!user) return [];
-  const allCarts = readJson(STORAGE_CART_KEY, []);
-  const userCart = allCarts.find(
-    (item) => item && String(item.id) === String(user.id),
-  );
-  return userCart.product || [];
-}
 
+  if (!user || user.id == null) {
+    return [];
+  }
+
+  const raw = readJson(STORAGE_CART_KEY, []);
+  const allCarts = Array.isArray(raw) ? raw : [];
+
+  const userCart = allCarts.find(
+    (item) =>
+      item &&
+      String(item.id) === String(user.id) &&
+      Array.isArray(item.product),
+  );
+
+  return userCart ? userCart.product : [];
+}
 /**
  * 5. HÀM LƯU DANH SÁCH GIỎ HÀNG CỦA TÀI KHOẢN HIỆN TẠI
  * Lưu theo cấu trúc: [ { id: user.id, product: [ ... ] } ]
