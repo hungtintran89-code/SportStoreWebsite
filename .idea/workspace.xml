@@ -6,11 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/admin/admin-common.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/admin/admin-common.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/css/common.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/common.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/dev5_user.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/dev5_user.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sportstore_data.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/auth_modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/auth_modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev4_checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev4_checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev5_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev5_user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/admin_login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/dev1_home.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/dev3_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/dev3_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/dev4_checkout.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/dev4_checkout.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/dev5_user.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/dev5_user.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login-admin.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/template_sample.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

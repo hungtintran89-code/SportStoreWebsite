@@ -25,7 +25,6 @@
         <li><a href="dev2_products.html">Sản Phẩm</a></li>
         <li><a href="dev3_details.html">Chi Tiết & So Sánh</a></li>
         <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
-        <li><a href="dev5_user.html">Tài Khoản</a></li>
       </ul>
 
       <!-- Cụm Hành Động Góc Phải -->
@@ -62,8 +61,13 @@
           </div>
         </div>
 
-
-
+        <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
+        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
+          🔑 Đăng Nhập
+        </button>
+        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
+          ✨ Đăng Ký
+        </button>
       </div>
     </div>
   </header>
@@ -515,10 +519,14 @@
     </div>
   </footer>
 
+  <!-- NẠP DỮ LIỆU STORE & ĐỒNG BỘ LOCALSTORAGE -->
+  <script src="../data/store/customers.js"></script>
+  <script src="../data/store/orders.js"></script>
+  <script src="../data/store/init-storage.js"></script>
+
   <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP Ở CUỐI TRANG -->
   <script src="../js/auth_modal.js"></script>
-
-    <script src="../js/common.js"></script>
-    <script src="../js/dev4_checkout.js"></script>
-  </body>
+  <script src="../js/common.js"></script>
+  <script src="../js/dev4_checkout.js"></script>
+</body>
 </html>

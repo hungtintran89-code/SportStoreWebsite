@@ -58,7 +58,7 @@
     if (window.SportAuth && typeof window.SportAuth.getCurrentUser === 'function') {
       return window.SportAuth.getCurrentUser();
     }
-    return readJson('sportstore_auth_user', null);
+    return readJson('sport_user', null);
   }
 
   function getUserKey(u) {

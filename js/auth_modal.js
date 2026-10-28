@@ -1,11 +1,9 @@
 (function () {
   'use strict';
 
-  var SESSION_KEY = 'sportstore_auth';
+  var SESSION_KEY = 'sport_user';
   var REGISTERED_KEY = 'sportstore_registered_users';
   var ADMIN_FLAG_KEY = 'admin_logged_in';
-  var DATA_URL = '../data/dev5_user.json';
-  var usersPromise;
 
   function readRegisteredUsers() {
     try {
@@ -15,39 +13,52 @@
     }
   }
 
-  function loadUsers() {
-    if (!usersPromise) {
-      usersPromise = fetch(DATA_URL).then(function (response) {
-        if (!response.ok) throw new Error('Không thể tải dữ liệu tài khoản.');
-        return response.json();
-      }).then(function (data) {
-        return data.users || [];
-      }).catch(function () {
-        return [
-          {
-            id: 'u-001',
-            name: 'Nguyen Minh Anh',
-            email: 'user@sportstore.vn',
-            password: 'user123',
-            role: 'user',
-            tier: 'Gold',
-            phone: '0901234567'
-          },
-          {
-            id: 'a-001',
-            name: 'SportStore Administrator',
-            email: 'admin@sportstore.vn',
-            password: 'admin123',
-            role: 'admin',
-            tier: 'Administrator',
-            phone: '0909876543'
-          }
-        ];
-      });
+  function readStoreCustomers() {
+    var list = [];
+    try {
+      list = JSON.parse(localStorage.getItem('sport_customers') || '[]');
+    } catch (e) {}
+    if (!list || list.length === 0) {
+      if (typeof customers !== 'undefined' && Array.isArray(customers)) {
+        list = customers;
+      }
     }
-    return usersPromise.then(function (users) {
-      return (users || []).concat(readRegisteredUsers());
+    return (list || []).map(function (c) {
+      return {
+        id: c.id,
+        name: c.name,
+        email: c.email,
+        phone: c.phone,
+        password: c.password || '123456',
+        role: 'user',
+        tier: c.tier || 'Standard',
+        avatar: c.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+        address: c.address || '',
+        points: c.points || 0,
+        spent: c.spent || 0
+      };
     });
+  }
+
+  function loadUsers() {
+    var storeCustomers = readStoreCustomers();
+    var registered = readRegisteredUsers();
+
+    // Tài khoản Admin hệ thống chuẩn
+    var adminAccount = {
+      id: 'ADMIN-001',
+      name: 'Quản Trị Viên SportStore',
+      email: 'admin@sportstore.vn',
+      phone: '0909876543',
+      password: 'admin',
+      role: 'admin',
+      tier: 'Administrator',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+      address: ''
+    };
+
+    var allUsers = [adminAccount].concat(storeCustomers).concat(registered);
+    return Promise.resolve(allUsers);
   }
 
   function getSession() {
@@ -162,37 +173,18 @@
         return item.role === targetRole;
       });
 
-      if (!user) {
-        if (targetRole === 'admin') {
-          user = {
-            id: 'a-001',
-            name: 'SportStore Administrator',
-            email: 'admin@sportstore.vn',
-            role: 'admin',
-            tier: 'Administrator',
-            avatar: 'https://i.pravatar.cc/160?img=68'
-          };
-        } else {
-          user = {
-            id: 'u-001',
-            name: 'Nguyen Minh Anh',
-            email: 'user@sportstore.vn',
-            role: 'user',
-            tier: 'Gold',
-            avatar: 'https://i.pravatar.cc/160?img=47'
-          };
-        }
-      }
+      if (!user) return;
 
       var isAdmin = user.role === 'admin';
       localStorage.setItem(SESSION_KEY, JSON.stringify({
         id: user.id,
         name: user.name,
         email: user.email,
-        phone: user.phone || '0901234567',
+        phone: user.phone || '',
         role: user.role,
-        tier: user.tier,
-        avatar: user.avatar
+        tier: user.tier || (isAdmin ? 'Administrator' : 'Standard'),
+        avatar: user.avatar || '',
+        address: user.address || ''
       }));
 
       localStorage.setItem(ADMIN_FLAG_KEY, isAdmin ? 'true' : 'false');
@@ -201,7 +193,7 @@
       if (modal) {
         var message = modal.querySelector('[data-auth-message]');
         if (message) {
-          message.textContent = 'Đăng nhập demo thành công (' + (isAdmin ? 'Admin' : 'Hội viên') + ').';
+          message.textContent = 'Đăng nhập thành công (' + user.name + ').';
         }
       }
 
@@ -303,6 +295,27 @@
         registered.push(newUser);
         localStorage.setItem(REGISTERED_KEY, JSON.stringify(registered));
 
+        try {
+          var storeCusts = JSON.parse(localStorage.getItem('sport_customers') || '[]');
+          if (Array.isArray(storeCusts)) {
+            storeCusts.push({
+              id: 'KH-' + String(Date.now()).slice(-4),
+              name: newUser.name,
+              phone: newUser.phone,
+              email: newUser.email,
+              password: newUser.password,
+              tier: 'Standard',
+              points: 0,
+              spent: 0,
+              joinDate: new Date().toISOString().split('T')[0],
+              status: 'active',
+              avatar: newUser.avatar,
+              address: 'Chưa cập nhật'
+            });
+            localStorage.setItem('sport_customers', JSON.stringify(storeCusts));
+          }
+        } catch (e) {}
+
         message.style.color = '#16a34a';
         message.textContent = 'Đăng ký thành công. Bạn có thể đăng nhập ngay.';
         setTimeout(function () { renderModal('login'); }, 600);
@@ -323,10 +336,11 @@
         id: user.id,
         name: user.name,
         email: user.email,
-        phone: user.phone || '0901234567',
+        phone: user.phone || '',
         role: user.role,
-        tier: user.tier,
-        avatar: user.avatar
+        tier: user.tier || (isAdmin ? 'Administrator' : 'Standard'),
+        avatar: user.avatar || '',
+        address: user.address || ''
       }));
 
       localStorage.setItem(ADMIN_FLAG_KEY, isAdmin ? 'true' : 'false');
@@ -381,6 +395,38 @@
         }
       }
     }
+
+    // =========================================================================
+    // XỬ LÝ MENU DROPDOWN DÀNH RIÊNG CHO ADMIN
+    // =========================================================================
+    var overviewLink = document.querySelector('[data-action-tab="overview"], [data-admin-menu-link]');
+    var ordersLink = document.querySelector('[data-action-tab="orders"]');
+
+    if (isAdmin) {
+      // 1. Nếu là Admin: đổi thành "Quản Lý Cài Đặt" và trỏ thẳng vào admin.html
+      if (overviewLink) {
+        overviewLink.textContent = '⚙️ Quản Lý Cài Đặt';
+        overviewLink.href = getPageUrl('admin.html');
+        overviewLink.setAttribute('data-admin-menu-link', '');
+        overviewLink.removeAttribute('data-action-tab'); // Tránh bị chặn sự kiện chuyển trang
+      }
+      // 2. Ẩn mục "Đơn Mua" của khách hàng vì Admin không cần dùng
+      if (ordersLink) {
+        ordersLink.classList.add('dev5-hidden');
+      }
+    } else {
+      // Nếu là Khách hàng bình thường: giữ nguyên menu Shopee chuẩn
+      if (overviewLink) {
+        overviewLink.textContent = 'Tài Khoản Của Tôi';
+        overviewLink.href = getPageUrl('dev5_user.html?tab=overview');
+        overviewLink.setAttribute('data-action-tab', 'overview');
+        overviewLink.removeAttribute('data-admin-menu-link');
+      }
+      if (ordersLink) {
+        ordersLink.classList.remove('dev5-hidden');
+      }
+    }
+
   }
 
   document.onclick = function (event) {
@@ -404,10 +450,21 @@
 
     if (action.dataset.authAction === 'logout') {
       localStorage.removeItem(SESSION_KEY);
-      localStorage.setItem(ADMIN_FLAG_KEY, 'false');
+      localStorage.removeItem('sport_user');
       localStorage.removeItem(ADMIN_FLAG_KEY);
+
       updateAuthButtons();
-      window.location.href = 'dev5_user.html';
+
+      // 2. Kiểm tra trang hiện tại:
+      var isUserPage = window.location.pathname.includes('dev5_user.html');
+      if (isUserPage) {
+
+        var isInsidePages = window.location.pathname.includes('/pages/');
+        window.location.href = isInsidePages ? '../index.html' : 'index.html';
+      } else {
+
+        window.location.reload();
+      }
     } else {
       openModal(action.dataset.authAction);
     }

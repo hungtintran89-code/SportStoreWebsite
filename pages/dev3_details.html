@@ -60,6 +60,14 @@
             </button>
           </div>
         </div>
+
+        <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
+        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
+          🔑 Đăng Nhập
+        </button>
+        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
+          ✨ Đăng Ký
+        </button>
       </div>
     </div>
   </header>
@@ -189,6 +197,7 @@
   <!-- NẠP MOCK DATA & KHỞI TẠO LOCALSTORAGE (TRÁNH LỖI CORS FILE:///) -->
   <script src="../data/store/mock-product.js"></script>
   <script src="../data/store/products.js"></script>
+  <script src="../data/store/customers.js"></script>
   <script src="../data/store/init-storage.js"></script>
 
   <!-- SCRIPTS CHỨC NĂNG DÙNG CHUNG, AUTH MODAL & CHI TIẾT SẢN PHẨM -->

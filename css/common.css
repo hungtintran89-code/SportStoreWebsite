@@ -1261,3 +1261,218 @@ a {
   color: #0284c7;
   text-decoration: underline;
 }
+
+/* ============================================================================== */
+/* UTILITY CLASS ẨN HIỆN & NÚT NHỎ DÙNG CHUNG AUTH                                 */
+/* ============================================================================== */
+.dev5-hidden {
+  display: none !important;
+}
+
+.btn-sm {
+  padding: 6px 14px !important;
+  font-size: 0.85rem !important;
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+}
+
+/* ============================================================================== */
+/* MODAL ĐĂNG NHẬP / ĐĂNG KÝ DÙNG CHUNG (SPORTSTORE AUTH MODAL)                    */
+/* ============================================================================== */
+.dev5-auth-modal {
+  display: none;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.dev5-auth-modal.is-open {
+  display: grid;
+}
+
+.dev5-auth-box {
+  position: relative;
+  width: min(100%, 420px);
+  padding: 30px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35);
+}
+
+.dev5-auth-box h2 {
+  margin: 5px 0 18px;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.dev5-auth-box label {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.dev5-auth-box input {
+  padding: 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.dev5-auth-box input:focus {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.dev5-auth-tabs {
+  display: flex;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.dev5-auth-tab {
+  flex: 1;
+  padding: 10px 8px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev5-auth-tab.is-active {
+  color: #0284c7;
+  border-bottom-color: #0284c7;
+}
+
+.dev5-auth-btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.dev5-auth-btn-row .dev5-primary-button {
+  flex: 1;
+  margin-top: 0;
+}
+
+.dev5-demo-button {
+  flex: 1.2;
+  padding: 10px 10px;
+  background: #f8fafc;
+  color: #0369a1;
+  border: 1px dashed #0284c7;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.dev5-demo-button:hover {
+  background: #f0f9ff;
+  border-color: #0369a1;
+}
+
+.dev5-demo-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.dev5-demo-choice {
+  padding: 8px 12px;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev5-demo-choice:hover {
+  background: #f0f9ff;
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+.dev5-auth-box .dev5-primary-button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.dev5-auth-box .dev5-primary-button:hover {
+  opacity: 0.92;
+}
+
+.dev5-auth-close {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dev5-auth-close:hover {
+  color: #0f172a;
+}
+
+.dev5-auth-message {
+  min-height: 20px;
+  color: #dc2626;
+  font-size: 13px;
+  margin: 6px 0;
+}
+
+.dev5-auth-switch {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: center;
+  margin-top: 14px;
+}
+
+.dev5-auth-switch button {
+  border: 0;
+  background: none;
+  color: #0284c7;
+  font-weight: 800;
+  cursor: pointer;
+}
+

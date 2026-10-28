@@ -64,10 +64,10 @@
         </div>
 
         <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
-        <button type="button" class="btn-sport btn-outline btn-sm" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
+        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
           🔑 Đăng Nhập
         </button>
-        <button type="button" class="btn-sport btn-primary btn-sm" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
+        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
           ✨ Đăng Ký
         </button>
       </div>
@@ -330,7 +330,13 @@
     </div>
   </footer>
 
-  <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP Ở CUỐI TRANG -->
+  <!-- NẠP DỮ LIỆU STORE & ĐỒNG BỘ LOCALSTORAGE -->
+  <script src="../data/store/customers.js"></script>
+  <script src="../data/store/orders.js"></script>
+  <script src="../data/store/faqs.js"></script>
+  <script src="../data/store/init-storage.js"></script>
+
+  <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP & DEV5 -->
   <script src="../js/auth_modal.js"></script>
   <script src="../js/dev5_user.js"></script>
 </body>
