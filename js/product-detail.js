@@ -458,16 +458,10 @@ function getBrandName(product) {
     return "";
 }
 
-// gom mấy sp cùng mẫu nhưng khác màu lại để làm ô chọn màu/phiên bản
+// lấy 4 chữ đầu của tên sp để gom mấy mẫu cùng dòng nhưng khác màu
 function getProductGroupKey(product) {
-    return String(product.name)
-        .toLowerCase()
-        .replace(/giày cầu lông|vợt cầu lông|áo cầu lông|váy cầu lông|quần cầu lông|balo cầu lông|túi vợt cầu lông|phụ kiện cầu lông|giày thể thao|áo thể thao|quần thể thao|bóng rổ|bóng đá|bóng chuyền/gi, "")
-        .replace(/chính hãng|women|slim|wide|men|unisex|nam|nữ|trẻ em/gi, "")
-        .replace(/[-/,().]/g, " ")
-        .replace(/\b(trắng|đen|đỏ|xanh|navy|tím|hồng|cam|vàng|bạc|silver|blue|gray|grey|grayish|beige|green|white|black)\b/gi, "")
-        .replace(/\s+/g, " ")
-        .trim();
+    let words = String(product.name || "").trim().split(" ");
+    return words.slice(0, 4).join(" ").toLowerCase();
 }
 
 function findProductVariants(product) {
@@ -485,8 +479,9 @@ function findProductVariants(product) {
     return list;
 }
 
+// lấy tên hiển thị trong ô chọn phiên bản
 function getVariantLabel(product) {
-    let label = String(product.name).replace(/\s+Chính Hãng$/i, "").trim();
+    let label = String(product.name || "").replace("Chính Hãng", "").trim();
     return label || product.name;
 }
 

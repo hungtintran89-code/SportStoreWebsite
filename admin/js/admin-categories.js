@@ -1,7 +1,9 @@
+// biến lưu ds loại sp và kiểm tra trạng thái đang thêm hay sửa
 let categories = [];
 let isEditMode = false;
 let currentEditCode = "";
 
+// 8 loại sp mặc định của shop
 const defaultCategories = [
     {
         id: "CAT01",
@@ -125,6 +127,7 @@ const defaultCategories = [
     }
 ];
 
+// quay về trang cửa hàng khách mua
 function goToStorePage() {
     let path = window.location.pathname;
     if (path.indexOf("/admin/") !== -1) {
@@ -134,6 +137,7 @@ function goToStorePage() {
     }
 }
 
+// lấy ds loại sp từ localStorage lên, nếu chưa có thì nạp mảng mặc định
 function loadCategories() {
     let data = localStorage.getItem("categories");
     if (data) {
@@ -154,6 +158,7 @@ function loadCategories() {
     }
 }
 
+// vẽ bảng danh sách loại sp ra màn hình
 function renderCategories() {
     let tbody = document.getElementById("categoryTableBody");
     if (!tbody) return;
@@ -173,6 +178,7 @@ function renderCategories() {
         let codeStr = String(cat.categoryCode || "").toLowerCase();
         let nameStr = String(cat.name || "").toLowerCase();
 
+        // lọc theo từ khoá và trạng thái
         if (kw !== "" && codeStr.indexOf(kw) === -1 && nameStr.indexOf(kw) === -1) {
             continue;
         }
@@ -204,6 +210,7 @@ function renderCategories() {
     tbody.innerHTML = rowsHtml;
 }
 
+// bấm nút thêm mới thì xoá trắng các ô nhập rồi mở popup
 function openAddCategoryModal() {
     isEditMode = false;
     currentEditCode = "";
@@ -218,10 +225,12 @@ function openAddCategoryModal() {
     document.getElementById("categoryModal").style.display = "flex";
 }
 
+// đóng popup loại sp
 function closeCategoryModal() {
     document.getElementById("categoryModal").style.display = "none";
 }
 
+// lưu thông tin khi bấm nút Lưu trong popup
 function saveCategory() {
     let code = document.getElementById("catCodeInput").value.trim();
     let name = document.getElementById("catNameInput").value.trim();
@@ -234,6 +243,7 @@ function saveCategory() {
     }
 
     if (isEditMode) {
+        // đang ở chế độ sửa thì tìm đúng mã loại đó để cập nhật
         for (let i = 0; i < categories.length; i++) {
             if (categories[i].categoryCode === currentEditCode) {
                 categories[i].name = name;
@@ -245,6 +255,7 @@ function saveCategory() {
             }
         }
 
+        // tính lại giá bán bên ds sp theo % lợi nhuận mới
         let pData = localStorage.getItem("products");
         if (pData) {
             let products = JSON.parse(pData);
@@ -256,6 +267,7 @@ function saveCategory() {
             localStorage.setItem("products", JSON.stringify(products));
         }
     } else {
+        // thêm mới thì kiểm tra xem mã loại đã có chưa
         for (let i = 0; i < categories.length; i++) {
             if (categories[i].categoryCode === code) {
                 alert("Mã loại sản phẩm đã tồn tại!");
@@ -286,6 +298,7 @@ function saveCategory() {
     document.getElementById("categoryModal").style.display = "none";
 }
 
+// bấm nút Sửa thì đổ thông tin cũ của loại sp đó lên popup
 window.openEditModal = function(code) {
     isEditMode = true;
     currentEditCode = code;
@@ -301,7 +314,7 @@ window.openEditModal = function(code) {
 
     if (cat) {
         document.getElementById("catCodeInput").value = cat.categoryCode;
-        document.getElementById("catCodeInput").disabled = true;
+        document.getElementById("catCodeInput").disabled = true; // khoá ô mã ko cho sửa
         document.getElementById("catNameInput").value = cat.name;
         document.getElementById("catProfitInput").value = cat.profitMargin;
         document.getElementById("catStatusInput").value = cat.isHidden ? "true" : "false";
@@ -310,6 +323,7 @@ window.openEditModal = function(code) {
     }
 };
 
+// xoá loại sp
 window.deleteCategory = function(code) {
     if (confirm("Bạn có chắc chắn muốn xóa loại sản phẩm này?")) {
         let newList = [];
@@ -324,6 +338,7 @@ window.deleteCategory = function(code) {
     }
 };
 
+// đổi nhanh trạng thái ẩn / hiện của loại sp
 window.toggleCategoryStatus = function(code) {
     for (let i = 0; i < categories.length; i++) {
         if (categories[i].categoryCode === code) {

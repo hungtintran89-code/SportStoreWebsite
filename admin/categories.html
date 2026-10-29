@@ -9,8 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-body">
+    <!-- thanh header trang admin -->
     <header class="admin-header">
         <div class="admin-header-left">
             <a href="../products.html" class="sport-brand-logo" onclick="goToStorePage(); return false;">
@@ -37,7 +39,8 @@
         </div>
     </header>
 
-    <div class="admin-container" onwheel="var w=document.getElementById('adminTableScrollWrap'); if(w && !w.contains(event.target) && window.innerWidth > 992) { w.scrollTop += event.deltaY; event.preventDefault(); }">
+    <div class="admin-container">
+        <!-- menu quản trị bên trái -->
         <aside class="admin-sidebar">
             <div class="admin-nav-group">
                 <div class="admin-nav-label">TỔNG QUAN</div>
@@ -105,12 +108,14 @@
             </div>
         </aside>
 
+        <!-- khung nội dung bên phải -->
         <main class="admin-content">
             <div class="content-header">
                 <h2>Quản Lý Loại Sản Phẩm</h2>
                 <button id="btnAddCategory" class="btn-primary btn-admin-add" onclick="openAddCategoryModal()">+ Thêm Mới Loại SP</button>
             </div>
 
+            <!-- thanh tìm nhanh và lọc trạng thái -->
             <div class="admin-filter-bar">
                 <input type="text" id="adminCatSearchInput" placeholder="Tìm theo tên loại sản phẩm, mã loại..." oninput="renderCategories()">
                 <select id="adminCatStatusFilter" onchange="renderCategories()">
@@ -120,6 +125,7 @@
                 </select>
             </div>
 
+            <!-- bảng danh sách loại sp -->
             <div class="admin-table-wrap" id="adminTableScrollWrap">
                 <table class="admin-table">
                     <thead>
@@ -137,6 +143,7 @@
         </main>
     </div>
 
+    <!-- popup thêm / sửa loại sp -->
     <div id="categoryModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -171,10 +178,6 @@
     </div>
 
     <script src="js/admin-categories.js"></script>
-    <script>
-        if (typeof openEditModal === "undefined") {
-            document.write('<script src="admin-categories.js"><\/script>');
-        }
-    </script>
+    <script src="admin-categories.js"></script>
 </body>
 </html>

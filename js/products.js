@@ -1,4 +1,4 @@
-// danh sách 8 loại sp chính của shop (có đủ thuộc tính chuẩn của nhóm id, code, icon, slug, desc, profitPercent, status, banner)
+// ds 8 loại sp chính của shop
 const mockCategories = [
     {
         id: "CAT01",
@@ -700,33 +700,29 @@ const mockProducts = [
     {"productCode": "SP832", "name": "Bình Nước Giữ Nhiệt Thể Thao VNB & Khăn Lau Mồ Hôi Gosen Chính Hãng", "categoryCode": "CAT08", "image": "https://shopvnb.com//uploads/gallery/binh-nuoc-giu-nhiet-vnb_1708141894.webp", "importPrice": 245000, "salePrice": 245000, "originalPrice": 299000, "stock": 75, "isHidden": false, "description": "Bình nước giữ nhiệt thể thao inox 304 dung tích 650ml giữ lạnh lên tới 12 giờ, kết hợp khăn thể thao cotton Gosen siêu thấm hút mồ hôi khi tập luyện cường độ cao.", "specifications": "Loại phụ kiện: Bình nước & Khăn thể thao | Chất liệu bình: Inox 304 an toàn | Chất liệu khăn: 100% Cotton kháng khuẩn", "sourceUrl": "https://shopvnb.com/binh-nuoc-giu-nhiet-vnb.html", "images": ["https://shopvnb.com//uploads/gallery/binh-nuoc-giu-nhiet-vnb_1708141894.webp", "https://cdn.shopvnb.com/img/300x300/uploads/gallery/khan-cau-long-gosen-towel-k2602-14-chinh-hang_1780861561.webp", "https://shopvnb.com//uploads/gallery/binh-nuoc-giu-nhiet-vnb_1708141894.webp", "https://cdn.shopvnb.com/img/300x300/uploads/gallery/khan-cau-long-gosen-towel-k2602-14-chinh-hang_1780861561.webp"]}
 ];
 
-// hàm đọc/ghi localStorage an toàn (tránh bị đứng hình khi trình duyệt đầy bộ nhớ hoặc lỗi dữ liệu cũ)
+// đọc dữ liệu từ localStorage ra
 function readStorage(key, defaultVal) {
-    try {
-        let raw = localStorage.getItem(key);
-        if (!raw) return defaultVal;
-        let parsed = JSON.parse(raw);
-        return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultVal;
-    } catch (e) {
-        return defaultVal;
+    let raw = localStorage.getItem(key);
+    if (!raw) return defaultVal;
+    let parsed = JSON.parse(raw);
+    if (parsed && parsed.length > 0) {
+        return parsed;
     }
+    return defaultVal;
 }
 
+// lưu dữ liệu vô localStorage
 function saveStorage(key, val) {
-    try {
-        localStorage.setItem(key, JSON.stringify(val));
-    } catch (e) {
-        console.warn("Bộ nhớ trình duyệt đã đầy, dùng trực tiếp dữ liệu trên trang.");
-    }
+    localStorage.setItem(key, JSON.stringify(val));
 }
 
-// khúc này check nếu localStorage chưa có data thì nạp bộ mẫu ở trên vô
+// nếu mở web lần đầu chưa có data trong localStorage thì nạp ds mẫu vô
 function initMockData() {
     let savedCats = readStorage("categories", []);
     if (savedCats.length === 0) {
         saveStorage("categories", mockCategories);
     } else {
-        // đồng bộ thuộc tính của nhóm (id, profitPercent, status) và thuộc tính trang sản phẩm (categoryCode, profitMargin, isHidden)
+        // gán thêm mấy biến cho khớp với data chung của nhóm
         for (let i = 0; i < savedCats.length; i++) {
             let c = savedCats[i];
             if (!c.categoryCode && c.id) c.categoryCode = c.id;
@@ -741,7 +737,7 @@ function initMockData() {
 
     let currentProducts = readStorage("products", []);
     if (currentProducts.length < mockProducts.length) {
-        // giữ lại mấy sp do mình tự thêm bên trang admin (nếu có)
+        // giữ lại mấy sp do mình tự thêm bên trang admin
         let customAdminProducts = [];
         for (let i = 0; i < currentProducts.length; i++) {
             let code = String(currentProducts[i].productCode || "");
@@ -755,11 +751,11 @@ function initMockData() {
 }
 initMockData();
 
-// lấy danh sách từ localStorage ra chuẩn bị đổ lên giao diện (nếu trống thì lấy luôn mockProducts)
+// lấy ds sp và loại sp ra để chuẩn bị hiện lên web
 let allProducts = readStorage("products", mockProducts);
 let allCategories = readStorage("categories", mockCategories);
 
-// lọc lấy mấy sp đang hiện thôi, sp nào bấm ẩn bên admin thì bỏ qua
+// chỉ lấy mấy sp đang hiện, sp nào bấm ẩn bên admin thì bỏ qua
 let filteredList = [];
 for (let i = 0; i < allProducts.length; i++) {
     if (!allProducts[i].isHidden) {
@@ -768,16 +764,17 @@ for (let i = 0; i < allProducts.length; i++) {
 }
 
 let currentPage = 1;
-const productsPerPage = 15; // mỗi trang cho hiện 15 sản phẩm
+const productsPerPage = 15; // mỗi trang hiện 15 sp
 let toastTimer = null;
+let ignoreUrlSale = false;
 
-// lấy giá để hiện lên web (ưu tiên giá sale trước, ko có mới lấy giá gốc)
+// lấy giá bán của sp
 function getProductDisplayPrice(product) {
     let price = product.salePrice || product.price || product.sellingPrice || product.importPrice || 0;
     return Number(price);
 }
 
-// đếm tổng số lượng sp trong giỏ hàng
+// tính tổng sl sp đang có trong giỏ hàng
 function getCartTotalCount() {
     let cart = readStorage("cart", []);
     let total = 0;
@@ -787,7 +784,7 @@ function getCartTotalCount() {
     return total;
 }
 
-// chuyển trang thông minh (tự nhận diện tên file hiện tại là products.html hay dev2_products.html)
+// chuyển qua lại giữa các trang sp
 function goToPage(defaultFile, teamFile) {
     let path = window.location.pathname;
     if (path.indexOf("dev2_") !== -1 || path.indexOf("dev3_") !== -1 || path.indexOf("dev4_") !== -1 || path.indexOf("dev5_") !== -1) {
@@ -797,35 +794,16 @@ function goToPage(defaultFile, teamFile) {
     }
 }
 
-// cập nhật số lượng giỏ hàng trỏ thẳng vào nút #header-cart-badge-count trên Header chung của nhóm
+// cập nhật số lượng trên icon giỏ hàng ở header
 function updateCartHeaderBadge() {
     let totalCount = getCartTotalCount();
-
-    // trỏ vào id="header-cart-badge-count" của Header SPORTSTORE dùng chung
     let sportBadge = document.getElementById("header-cart-badge-count");
     if (sportBadge) {
         sportBadge.innerText = totalCount;
     }
-
-    // giữ tương thích dự phòng nếu mở trên header cũ
-    let iconItems = document.querySelectorAll(".header-icons .icon-item");
-    for (let i = 0; i < iconItems.length; i++) {
-        let item = iconItems[i];
-        if (item.textContent.indexOf("GIỎ HÀNG") !== -1) {
-            let badge = item.querySelector(".cart-count-badge");
-            if (!badge) {
-                badge = document.createElement("span");
-                badge.className = "cart-count-badge";
-                item.style.position = "relative";
-                item.appendChild(badge);
-            }
-            badge.textContent = totalCount;
-            badge.style.display = totalCount > 0 ? "inline-flex" : "none";
-        }
-    }
 }
 
-// hiện thông báo nhỏ ở góc dưới màn hình mỗi khi bấm thêm vào giỏ
+// hiện thông báo nhỏ góc dưới khi bấm thêm giỏ hàng
 function showSportMaxToast(message) {
     let toast = document.getElementById("sportmax-toast");
     if (!toast) {
@@ -845,7 +823,7 @@ function showSportMaxToast(message) {
     }, 2800);
 }
 
-// đổ danh sách các loại sp ra cột lọc bên trái
+// đổ ds loại sp ra cột lọc bên trái
 function renderCategories() {
     let categoryBox = document.getElementById("category-filter");
     if (!categoryBox) return;
@@ -855,7 +833,7 @@ function renderCategories() {
         let cat = allCategories[i];
         if (cat.isHidden) continue;
 
-        // đếm thử xem loại này có bao nhiêu sp
+        // đếm số sp của từng loại
         let count = 0;
         for (let j = 0; j < allProducts.length; j++) {
             if (allProducts[j].categoryCode === cat.categoryCode && !allProducts[j].isHidden) {
@@ -877,63 +855,25 @@ function renderCategories() {
             `;
         }
     }
-
-
 }
 
-// đổ danh mục vô menu nếu có xài id dynamicMegaMenu
-function renderDynamicMenus() {
-    let megaMenu = document.getElementById("dynamicMegaMenu");
-    if (!megaMenu) return;
-
-    let html = "";
-    for (let i = 0; i < allCategories.length; i++) {
-        let cat = allCategories[i];
-        if (!cat.isHidden) {
-            html += `
-                <div class="mega-column">
-                    <h4>${cat.name}</h4>
-                    <ul>
-                        <li><a href="products.html?cat=${cat.categoryCode}">Tất cả ${cat.name}</a></li>
-                    </ul>
-                </div>
-            `;
-        }
-    }
-    if (html !== "") {
-        megaMenu.innerHTML = html;
-    }
-}
-
-// hiện dòng báo tìm thấy bao nhiêu sp ở ngay trên đầu lưới
+// hiện dòng báo tìm thấy bao nhiêu sp trên thanh lọc
 function updateFilterStatusSummary() {
     let summaryEl = document.getElementById("filterResultSummary");
-    let toolbar = document.querySelector(".toolbar");
+    if (!summaryEl) return;
 
-    if (!summaryEl && toolbar) {
-        summaryEl = document.createElement("div");
-        summaryEl.id = "filterResultSummary";
-        summaryEl.style.fontWeight = "600";
-        summaryEl.style.color = "#0f172a";
-        toolbar.style.justifyContent = "space-between";
-        toolbar.style.alignItems = "center";
-        toolbar.insertBefore(summaryEl, toolbar.firstChild);
-    }
+    let headerKw = document.getElementById("searchInput") ? document.getElementById("searchInput").value.trim() : "";
+    let advKw = document.getElementById("advNameInput") ? document.getElementById("advNameInput").value.trim() : "";
+    let kw = advKw || headerKw;
 
-    if (summaryEl) {
-        let headerKw = document.getElementById("searchInput") ? document.getElementById("searchInput").value.trim() : "";
-        let advKw = document.getElementById("advNameInput") ? document.getElementById("advNameInput").value.trim() : "";
-        let kw = advKw || headerKw;
-
-        if (kw !== "") {
-            summaryEl.innerHTML = 'Tìm thấy <strong style="color: #0284c7;">' + filteredList.length + '</strong> sản phẩm cho từ khóa <em>"' + kw + '"</em>';
-        } else {
-            summaryEl.innerHTML = 'Hiển thị <strong style="color: #0284c7;">' + filteredList.length + '</strong> sản phẩm thể thao chính hãng';
-        }
+    if (kw !== "") {
+        summaryEl.innerHTML = 'Tìm thấy <strong style="color: #0284c7;">' + filteredList.length + '</strong> sản phẩm cho từ khóa <em>"' + kw + '"</em>';
+    } else {
+        summaryEl.innerHTML = 'Hiển thị <strong style="color: #0284c7;">' + filteredList.length + '</strong> sản phẩm thể thao chính hãng';
     }
 }
 
-// hàm vẽ danh sách sp ra màn hình chính
+// vẽ danh sách sp ra lưới
 function renderProducts() {
     let grid = document.getElementById("productGrid");
     if (!grid) return;
@@ -941,7 +881,7 @@ function renderProducts() {
 
     updateFilterStatusSummary();
 
-    // nếu lọc ko ra món nào thì hiện khung báo ko tìm thấy + nút xoá lọc
+    // nếu ko tìm thấy sp nào thì báo trống
     if (filteredList.length === 0) {
         grid.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #fff; border-radius: 10px; border: 1px solid #e2e8f0;">
@@ -954,7 +894,7 @@ function renderProducts() {
         return;
     }
 
-    // cắt mảng sp theo số trang hiện tại (mỗi trang 15 món)
+    // cắt lấy 15 sp của trang hiện tại
     let startIndex = (currentPage - 1) * productsPerPage;
     let endIndex = startIndex + productsPerPage;
     let productsToDisplay = filteredList.slice(startIndex, endIndex);
@@ -963,8 +903,8 @@ function renderProducts() {
         let product = productsToDisplay[i];
         if (product.isHidden) continue;
 
-        // lấy hình từ bên gallery-data.js qua, nếu ko có thì xài hình mặc định của sp
-        let cardImage = product.image || "https://via.placeholder.com/200?text=SportMax";
+        // lấy hình đầu tiên trong gallery-data.js, ko có thì lấy hình mặc định của sp
+        let cardImage = product.image || "https://via.placeholder.com/200?text=SportStore";
         if (window.SPORTMAX_GALLERIES && product.sourceUrl && window.SPORTMAX_GALLERIES[product.sourceUrl]) {
             let galleryArr = window.SPORTMAX_GALLERIES[product.sourceUrl];
             if (galleryArr.length > 0) {
@@ -1002,7 +942,7 @@ function renderProducts() {
     renderPagination();
 }
 
-// bấm nút đặt lại bộ lọc thì xoá trắng các ô nhập rồi load lại từ đầu
+// bấm nút đặt lại bộ lọc thì xoá trắng các ô rồi load lại tất cả sp
 function resetAllFilters() {
     if (document.getElementById("searchInput")) document.getElementById("searchInput").value = "";
     if (document.getElementById("advNameInput")) document.getElementById("advNameInput").value = "";
@@ -1016,13 +956,11 @@ function resetAllFilters() {
         checkedBoxes[i].checked = false;
     }
 
-    if (window.history && window.history.replaceState) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
+    ignoreUrlSale = true;
     applyAdvancedFilters();
 }
 
-// bấm nút giỏ hàng nhỏ ở từng ô sp là thêm nhanh 1 món vô giỏ luôn
+// bấm icon giỏ hàng trên từng thẻ sp để thêm nhanh 1 món vô giỏ
 function quickAddToCart(productCode) {
     let product = null;
     for (let i = 0; i < allProducts.length; i++) {
@@ -1062,13 +1000,13 @@ function quickAddToCart(productCode) {
     showSportMaxToast('Đã thêm "' + product.name + '" vào giỏ hàng!');
 }
 
-// lỡ link hình bị lỗi thì đổi qua hình placeholder cho đỡ bể giao diện
+// nếu ảnh bị lỗi link thì đổi qua ảnh mặc định
 function handleProductImageError(productCode, imageElement) {
     imageElement.onerror = null;
-    imageElement.src = "https://via.placeholder.com/200?text=SportMax";
+    imageElement.src = "https://via.placeholder.com/200?text=SportStore";
 }
 
-// vẽ mấy cái nút bấm phân trang 1, 2, 3... ở dưới cùng
+// vẽ các nút phân trang 1, 2, 3... ở dưới lưới sp
 function renderPagination() {
     let paginationBox = document.getElementById("pagination");
     if (!paginationBox) return;
@@ -1079,12 +1017,12 @@ function renderPagination() {
 
     let html = "";
 
-    // nút lùi lại 1 trang
+    // nút lùi trang
     if (currentPage > 1) {
         html += `<button class="page-btn page-nav" onclick="changePage(${currentPage - 1})"><i class="fa-solid fa-chevron-left"></i></button>`;
     }
 
-    // chỉ hiện trang đầu, trang cuối với mấy trang sát bên cho thanh phân trang gọn
+    // hiện trang đầu, trang cuối và các trang kế bên
     let previousPage = 0;
     for (let page = 1; page <= totalPages; page++) {
         if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
@@ -1097,7 +1035,7 @@ function renderPagination() {
         }
     }
 
-    // nút qua trang tiếp theo
+    // nút qua trang kế
     if (currentPage < totalPages) {
         html += `<button class="page-btn page-nav" onclick="changePage(${currentPage + 1})"><i class="fa-solid fa-chevron-right"></i></button>`;
     }
@@ -1105,7 +1043,7 @@ function renderPagination() {
     paginationBox.innerHTML = html;
 }
 
-// bấm đổi trang xong thì cuộn nhẹ lên đầu danh sách sp
+// đổi trang và cuộn lên đầu danh sách
 function changePage(pageNumber) {
     let totalPages = Math.ceil(filteredList.length / productsPerPage);
     if (totalPages < 1) totalPages = 1;
@@ -1115,14 +1053,10 @@ function changePage(pageNumber) {
 
     currentPage = pageNumber;
     renderProducts();
-
-    let scrollArea = document.getElementById("productScrollArea");
-    if (scrollArea) {
-        scrollArea.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// hàm xoá dấu tiếng Việt để gõ ko dấu vẫn tìm ra sp bình thường
+// bỏ dấu tiếng Việt để gõ ko dấu vẫn tìm đc sp
 function removeVietnameseTones(str) {
     str = String(str || "").toLowerCase();
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -1137,65 +1071,44 @@ function removeVietnameseTones(str) {
     return str;
 }
 
-// kiểm tra xem tên sp có khớp với từ khoá khách gõ ko (xử lý luôn dấu | ở mega menu)
+// kiểm tra tên sp có khớp với từ khoá tìm kiếm ko
 function matchProductSearch(productText, rawQuery) {
     let queryStr = String(rawQuery || "").trim();
     if (queryStr === "") return true;
 
-    // tách mấy từ khoá nối nhau bằng dấu | trên link mega menu
-    let groups = queryStr.split("|");
-    let textLower = String(productText || "").toLowerCase().replace(/[-/,()._—]/g, " ").replace(/\s+/g, " ");
+    let textLower = String(productText || "").toLowerCase();
     let textNoTone = removeVietnameseTones(productText);
+    let groups = queryStr.split("|");
 
     for (let i = 0; i < groups.length; i++) {
-        let g = groups[i].trim();
-        if (g === "") continue;
+        let partLow = groups[i].trim().toLowerCase();
+        let kwNoTone = removeVietnameseTones(groups[i]);
+        if (kwNoTone === "") continue;
 
-        let gLower = g.toLowerCase().replace(/[-/,()._—]/g, " ").replace(/\s+/g, " ").trim();
-        let gNoTone = removeVietnameseTones(g);
+        let hasTone = (partLow !== kwNoTone);
+        let targetStr = hasTone ? textLower : textNoTone;
+        let checkWords = hasTone ? partLow.split(" ") : kwNoTone.split(" ");
 
-        // nếu khách gõ có dấu thì ưu tiên tìm khớp chữ có dấu trước
-        let hasAccent = (gLower !== gNoTone);
-        if (hasAccent) {
-            if (textLower.indexOf(gLower) !== -1) return true;
-        } else {
-            if (textNoTone.indexOf(gNoTone) !== -1) return true;
-        }
-
-        // tách từng chữ ra để kiểm tra
-        let words = (hasAccent ? gLower : gNoTone).split(" ");
-        let targetWords = (hasAccent ? textLower : textNoTone).split(" ");
-        let allWordsMatched = true;
-
-        for (let w = 0; w < words.length; w++) {
-            let word = words[w];
-            if (word === "") continue;
-            let foundWord = false;
-            for (let t = 0; t < targetWords.length; t++) {
-                if (targetWords[t] === word || (word.length >= 4 && targetWords[t].indexOf(word) === 0)) {
-                    foundWord = true;
-                    break;
-                }
-            }
-            if (!foundWord) {
-                allWordsMatched = false;
+        let allMatched = true;
+        for (let w = 0; w < checkWords.length; w++) {
+            if (checkWords[w] !== "" && targetStr.indexOf(checkWords[w]) === -1) {
+                allMatched = false;
                 break;
             }
         }
-
-        if (allWordsMatched) return true;
+        if (allMatched) return true;
     }
 
     return false;
 }
 
-// hàm lọc nâng cao: kết hợp tìm theo Tên + Loại sp + Khoảng giá (từ... đến...)
+// lọc nâng cao kết hợp: Tên + Loại sp + Hãng + Khoảng giá
 function applyAdvancedFilters() {
     let headerKeyword = document.getElementById("searchInput") ? document.getElementById("searchInput").value.trim() : "";
     let advKeyword = document.getElementById("advNameInput") ? document.getElementById("advNameInput").value.trim() : "";
     let brandKeyword = document.getElementById("brandFilterSelect") ? document.getElementById("brandFilterSelect").value.trim() : "";
 
-    // gom các mã loại sp đang được tích chọn bên cột trái
+    // lấy các loại sp đang đc tích chọn bên cột trái
     let checkboxes = document.querySelectorAll(".cat-checkbox:checked");
     let selectedCategories = [];
     for (let i = 0; i < checkboxes.length; i++) {
@@ -1206,7 +1119,7 @@ function applyAdvancedFilters() {
     let maxPrice = document.getElementById("maxPrice") ? document.getElementById("maxPrice").value : "";
 
     let params = new URLSearchParams(window.location.search);
-    let promoOnly = params.get("sale") === "true";
+    let promoOnly = (!ignoreUrlSale) && (params.get("sale") === "true");
 
     filteredList = [];
     for (let i = 0; i < allProducts.length; i++) {
@@ -1217,10 +1130,9 @@ function applyAdvancedFilters() {
         let hasDiscount = product.originalPrice && Number(product.originalPrice) > displayPrice;
         if (promoOnly && !hasDiscount) continue;
 
-        // ghép chung tên + thông số + mô tả để tìm cho nhạy
+        // gộp tên + thông số + mô tả để tìm
         let searchTarget = (product.name || "") + " " + (product.specifications || "") + " " + (product.description || "");
 
-        // kiểm tra khớp tên (cả ô trên header lẫn ô tên ở cột lọc bên trái)
         let matchHeader = matchProductSearch(searchTarget, headerKeyword);
         let matchAdvName = matchProductSearch(searchTarget, advKeyword);
         let matchBrand = (brandKeyword === "") ? true : matchProductSearch(searchTarget, brandKeyword);
@@ -1239,7 +1151,7 @@ function applyAdvancedFilters() {
     renderProducts();
 }
 
-// bấm tìm trên thanh header thì bỏ tích mấy cái checkbox cũ đi để tìm toàn shop
+// bấm tìm trên header thì bỏ tích checkbox cũ để tìm toàn bộ shop
 function triggerDirectSearch() {
     let checkedBoxes = document.querySelectorAll(".cat-checkbox:checked");
     for (let i = 0; i < checkedBoxes.length; i++) {
@@ -1248,7 +1160,7 @@ function triggerDirectSearch() {
     applyAdvancedFilters();
 }
 
-// sắp xếp sp theo giá tăng/giảm hoặc mặc định theo mã sp
+// sắp xếp danh sách sp theo giá tăng hoặc giảm
 function applySortLogic() {
     let sortEl = document.getElementById("sortSelect");
     let sortValue = sortEl ? sortEl.value : "default";
@@ -1261,21 +1173,16 @@ function applySortLogic() {
         filteredList.sort(function(a, b) {
             return getProductDisplayPrice(b) - getProductDisplayPrice(a);
         });
-    } else {
-        filteredList.sort(function(a, b) {
-            return String(a.productCode).localeCompare(String(b.productCode), undefined, { numeric: true });
-        });
     }
 }
 
-// chạy lần đầu khi mở trang danh sách sp
+// chạy lần đầu khi mở trang ds sp
 if (document.getElementById("productGrid")) {
     renderCategories();
-    renderDynamicMenus();
     renderProducts();
 }
 
-// đọc tham số trên thanh địa chỉ url (vd khi bấm từ mega menu hoặc trang chi tiết qua)
+// đọc tham số trên url nếu khách bấm từ menu xổ xuống qua
 function initPageFromUrl() {
     updateCartHeaderBadge();
 

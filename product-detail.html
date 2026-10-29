@@ -10,9 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <!-- thanh header dùng chung của nhóm -->
   <header class="sport-navbar site-header">
     <div class="sport-container sport-navbar-inner header-inner">
       <a href="../index.html" class="sport-brand-logo site-logo">
@@ -20,6 +22,7 @@
         <div>SPORT<span class="accent">STORE</span></div>
       </a>
 
+      <!-- menu chính + bảng chọn nhanh các loại sp -->
       <ul class="sport-nav-menu nav-menu">
         <li><a href="../index.html">Trang Chủ</a></li>
         <li class="has-mega-menu">
@@ -120,6 +123,7 @@
         <li><a href="dev5_user.html">Tài Khoản</a></li>
       </ul>
 
+      <!-- ô tìm nhanh trên header -->
       <div class="search-box sport-header-search">
         <input type="text" id="searchInput" placeholder="Tìm sản phẩm, thương hiệu..." onkeyup="if(event.key==='Enter') triggerDetailSearch()">
         <button type="button" id="btnSearch" onclick="triggerDetailSearch()" title="Tìm kiếm">
@@ -127,6 +131,7 @@
         </button>
       </div>
 
+      <!-- cụm nút giỏ hàng + đăng nhập góc phải -->
       <div class="sport-nav-actions header-actions">
         <a href="admin/products_admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden" data-admin-link title="Bảng Quản Trị Admin">
           ⚙️ Admin
@@ -156,12 +161,14 @@
   </header>
 
     <main class="container product-detail-page">
+        <!-- đường dẫn trang -->
         <div class="breadcrumb" style="width: 100%; margin-bottom: 20px;">
             <a href="products.html" style="color: var(--dark-slate); text-decoration: none;">Sản phẩm</a>
             <span style="color: var(--neon-orange);"> / Chi tiết sản phẩm</span>
             <span id="detailBreadcrumbName" class="breadcrumb-current"></span>
         </div>
 
+        <!-- khung thông tin chi tiết sp: cột ảnh - cột thông tin mua - cột danh mục -->
         <div class="product-detail-wrapper">
             <div class="detail-left">
                 <div class="main-image">
@@ -198,6 +205,7 @@
                     </div>
                 </div>
 
+                <!-- chỗ chọn màu với chọn size -->
                 <div class="product-options" id="productOptions"></div>
 
                 <div class="add-to-cart-action">
@@ -227,6 +235,7 @@
             </div>
         </div>
 
+        <!-- 2 tab mô tả sp và thông số kỹ thuật -->
         <section class="detail-content-card">
             <div class="detail-content-tabs">
                 <button class="detail-tab active" type="button" data-detail-tab="description" onclick="switchDetailTab('description', this)">MÔ TẢ SẢN PHẨM</button>
@@ -243,6 +252,7 @@
         </section>
     </main>
 
+  <!-- phần chân trang dùng chung -->
   <footer class="sport-footer site-footer">
     <div class="sport-container container">
       <div class="sport-footer-grid footer-grid">
@@ -290,25 +300,12 @@
     </div>
   </footer>
 
-    <script src="../js/auth_modal.js"></script>
-    <script src="../js/gallery-data.js"></script>
-    <script src="../js/products.js"></script>
-    <script src="../js/product-detail.js"></script>
-
     <script src="js/gallery-data.js"></script>
     <script src="gallery-data.js"></script>
     <script src="js/products.js"></script>
-    <script>
-        if (typeof mockProducts === "undefined") {
-            document.write('<script src="products.js"><\/script>');
-        }
-    </script>
+    <script src="products.js"></script>
     <script src="js/product-detail.js"></script>
-    <script>
-        if (typeof changeImage === "undefined") {
-            document.write('<script src="product-detail.js"><\/script>');
-        }
-    </script>
+    <script src="product-detail.js"></script>
 </body>
 
 </html>

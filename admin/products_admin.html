@@ -9,8 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-body">
+    <!-- thanh header trang admin -->
     <header class="admin-header">
         <div class="admin-header-left">
             <a href="../products.html" class="sport-brand-logo" onclick="goToStorePage(); return false;">
@@ -37,7 +39,8 @@
         </div>
     </header>
 
-    <div class="admin-container" onwheel="var w=document.getElementById('adminTableScrollWrap'); if(w && !w.contains(event.target) && window.innerWidth > 992) { w.scrollTop += event.deltaY; event.preventDefault(); }">
+    <div class="admin-container">
+        <!-- menu quản trị bên trái -->
         <aside class="admin-sidebar">
             <div class="admin-nav-group">
                 <div class="admin-nav-label">TỔNG QUAN</div>
@@ -105,12 +108,14 @@
             </div>
         </aside>
 
+        <!-- khung nội dung quản lý sp bên phải -->
         <main class="admin-content">
             <div class="content-header">
                 <h2>Quản Lý Sản Phẩm & Trang Bị Thể Thao</h2>
                 <button id="btnAddProduct" class="btn-primary btn-admin-add" onclick="openAddProductModal()">+ Thêm Mới Sản Phẩm</button>
             </div>
 
+            <!-- thanh công cụ tìm kiếm + lọc loại sp + lọc hãng -->
             <div class="admin-filter-bar">
                 <input type="text" id="adminSearchInput" placeholder="Tìm theo tên sản phẩm, mã..." oninput="renderProducts()">
                 <select id="adminFilterCategory" onchange="renderProducts()">
@@ -130,6 +135,7 @@
                 </select>
             </div>
 
+            <!-- bảng danh sách sp (chỉ cuộn nội dung trong bảng này) -->
             <div class="admin-table-wrap" id="adminTableScrollWrap">
                 <table class="admin-table">
                     <thead>
@@ -150,6 +156,7 @@
         </main>
     </div>
 
+    <!-- popup thêm / sửa thông tin sp -->
     <div id="productModal" class="modal">
         <div class="modal-content" style="width: 600px;">
             <div class="modal-header">
@@ -202,17 +209,8 @@
     </div>
 
     <script src="../js/products.js"></script>
-    <script>
-        if (typeof mockProducts === "undefined") {
-            document.write('<script src="js/products.js"><\/script>');
-            document.write('<script src="products.js"><\/script>');
-        }
-    </script>
+    <script src="products.js"></script>
     <script src="js/admin-products.js"></script>
-    <script>
-        if (typeof openEditModal === "undefined") {
-            document.write('<script src="admin-products.js"><\/script>');
-        }
-    </script>
+    <script src="admin-products.js"></script>
 </body>
 </html>

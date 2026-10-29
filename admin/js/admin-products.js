@@ -1,8 +1,10 @@
+// biến lưu ds sp, loại sp và trạng thái thêm mới hay sửa
 let products = [];
 let categories = [];
 let isEditMode = false;
 let currentEditCode = "";
 
+// 8 loại sp mặc định của shop
 const defaultCategories = [
     {
         id: "CAT01",
@@ -126,6 +128,7 @@ const defaultCategories = [
     }
 ];
 
+// chuyển về trang cửa hàng khách mua
 function goToStorePage() {
     let path = window.location.pathname;
     if (path.indexOf("/admin/") !== -1) {
@@ -135,6 +138,7 @@ function goToStorePage() {
     }
 }
 
+// lấy dữ liệu sp và loại sp từ localStorage lên
 function loadData() {
     let pData = localStorage.getItem("products");
     let cData = localStorage.getItem("categories");
@@ -155,6 +159,7 @@ function loadData() {
     }
 }
 
+// đổ ds loại sp vô ô select trong popup và trên thanh lọc
 function populateCategorySelect() {
     let select = document.getElementById("proCategoryInput");
     if (select) {
@@ -173,6 +178,7 @@ function populateCategorySelect() {
     }
 }
 
+// tìm tên loại sp theo mã loại (vd CAT01 -> Vợt & Dụng Cụ)
 function getCategoryName(code) {
     for (let i = 0; i < categories.length; i++) {
         if (categories[i].categoryCode === code) {
@@ -182,6 +188,7 @@ function getCategoryName(code) {
     return "Trang bị thể thao";
 }
 
+// dò tên hãng trong tên sp để hiện ra cột Hãng
 function detectBrandName(product) {
     if (product.brand) return product.brand;
     let text = String((product.name || "") + " " + (product.specifications || "")).toLowerCase();
@@ -209,6 +216,7 @@ function detectBrandName(product) {
     return "SportStore";
 }
 
+// vẽ bảng danh sách sp bên trang admin
 function renderProducts(filterKeyword) {
     let tbody = document.getElementById("productTableBody");
     if (!tbody) return;
@@ -220,12 +228,19 @@ function renderProducts(filterKeyword) {
     if (navProdCount) navProdCount.innerText = products.length;
 
     let searchBox = document.getElementById("adminSearchInput");
-    let kw = String(filterKeyword !== undefined ? filterKeyword : (searchBox ? searchBox.value : "")).trim().toLowerCase();
+    let kw = "";
+    if (filterKeyword !== undefined) {
+        kw = String(filterKeyword).trim().toLowerCase();
+    } else if (searchBox) {
+        kw = searchBox.value.trim().toLowerCase();
+    }
+
     let catFilterEl = document.getElementById("adminFilterCategory");
     let brandFilterEl = document.getElementById("adminFilterBrand");
     let selectedCat = catFilterEl ? catFilterEl.value : "";
     let selectedBrand = brandFilterEl ? brandFilterEl.value.toLowerCase() : "";
 
+    // lọc sp theo ô tìm kiếm, loại sp và thương hiệu
     let list = [];
     for (let i = 0; i < products.length; i++) {
         let p = products[i];
@@ -282,6 +297,7 @@ function renderProducts(filterKeyword) {
     tbody.innerHTML = rowsHtml;
 }
 
+// bấm nút thêm mới thì xoá trắng form rồi mở popup
 function openAddProductModal() {
     isEditMode = false;
     currentEditCode = "";
@@ -299,10 +315,12 @@ function openAddProductModal() {
     document.getElementById("productModal").style.display = "flex";
 }
 
+// đóng popup sp
 function closeProductModal() {
     document.getElementById("productModal").style.display = "none";
 }
 
+// lưu thông tin sp khi bấm nút Lưu
 function saveProduct() {
     let code = document.getElementById("proCodeInput").value.trim();
     let name = document.getElementById("proNameInput").value.trim();
@@ -321,6 +339,7 @@ function saveProduct() {
     let priceNum = parseInt(price);
     let stockNum = parseInt(stock);
 
+    // lấy % lợi nhuận của loại sp để tính giá bán
     let margin = 0;
     for (let i = 0; i < categories.length; i++) {
         if (categories[i].categoryCode === catCode) {
@@ -330,6 +349,7 @@ function saveProduct() {
     }
     let computedSellingPrice = Math.round(priceNum * (1 + margin / 100) / 1000) * 1000;
 
+    // tách các link ảnh nếu nhập nhiều link cách nhau bằng dấu phẩy
     let imgArray = [];
     if (image !== "") {
         let parts = image.split(",");
@@ -341,6 +361,7 @@ function saveProduct() {
     let firstImage = imgArray.length > 0 ? imgArray[0] : "https://via.placeholder.com/200?text=SportStore";
 
     if (isEditMode) {
+        // đang sửa thì cập nhật lại thông tin cho sp đó
         for (let i = 0; i < products.length; i++) {
             if (products[i].productCode === currentEditCode) {
                 products[i].name = name;
@@ -357,6 +378,7 @@ function saveProduct() {
             }
         }
     } else {
+        // thêm mới thì kiểm tra trùng mã sp
         for (let i = 0; i < products.length; i++) {
             if (products[i].productCode === code) {
                 alert("Mã sản phẩm đã tồn tại trong hệ thống!");
@@ -379,7 +401,7 @@ function saveProduct() {
             profitMarginOverride: 0,
             isHidden: isHidden
         };
-        products.unshift(newPro);
+        products.unshift(newPro); // đưa sp mới lên đầu bảng
     }
 
     localStorage.setItem("products", JSON.stringify(products));
@@ -387,6 +409,7 @@ function saveProduct() {
     document.getElementById("productModal").style.display = "none";
 }
 
+// bấm nút Sửa thì đổ lại thông tin cũ của sp lên popup
 window.openEditModal = function(code) {
     isEditMode = true;
     currentEditCode = code;
@@ -415,6 +438,7 @@ window.openEditModal = function(code) {
     }
 };
 
+// bấm nút Ẩn / Hiện để đổi nhanh trạng thái sp
 window.toggleProductStatus = function(code) {
     for (let i = 0; i < products.length; i++) {
         if (products[i].productCode === code) {
@@ -426,6 +450,7 @@ window.toggleProductStatus = function(code) {
     renderProducts();
 };
 
+// xoá sp khỏi danh sách
 window.deleteProduct = function(code) {
     if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
         let newList = [];
