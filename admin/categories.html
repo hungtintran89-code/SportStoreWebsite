@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportStore | Quản Lý Loại Sản Phẩm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <!-- thanh header trang admin -->
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <a href="../products.html" class="sport-brand-logo" onclick="goToStorePage(); return false;">
+                <div class="logo-icon">⚡</div>
+                <div>SPORT<span class="accent">STORE</span></div>
+            </a>
+            <span class="admin-badge-pill">ADMIN</span>
+        </div>
+
+        <div class="admin-header-right">
+            <a href="../products.html" class="btn-admin-store" onclick="goToStorePage(); return false;">
+                🏪 Về Cửa Hàng
+            </a>
+            <div class="admin-user-box">
+                <div class="admin-avatar-circle">👤</div>
+                <div class="admin-user-text">
+                    <strong>Quản Trị Viên</strong>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+            <a href="../products.html" class="btn-admin-logout-top" onclick="goToStorePage(); return false;">
+                🚪 Đăng Xuất
+            </a>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <!-- menu quản trị bên trái -->
+        <aside class="admin-sidebar">
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">TỔNG QUAN</div>
+                <ul class="admin-menu">
+                    <li><a href="#"><span class="nav-ico">📊</span> Bảng Điều Khiển</a></li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">QUẢN LÝ KHO & SẢN PHẨM</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="categories.html" class="active">
+                            <span><span class="nav-ico">🏷️</span> Quản Lý Loại SP</span>
+                            <span class="nav-count-badge" id="navCatCount">8</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products_admin.html">
+                            <span><span class="nav-ico">👟</span> Quản Lý Sản Phẩm</span>
+                            <span class="nav-count-badge" id="navProdCount">501</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">📥</span> Quản Lý Nhập Hàng</span>
+                            <span class="nav-count-badge badge-green">30</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">💲</span> Quản Lý Giá Bán</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁN HÀNG & KHÁCH HÀNG</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">📦</span> Quản Lý Đơn Hàng</span>
+                            <span class="nav-count-badge badge-amber">31</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">👥</span> Quản Lý Khách Hàng</span>
+                            <span class="nav-count-badge">32</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁO CÁO & THỐNG KÊ</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">📈</span> Báo Cáo Tồn Kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- khung nội dung bên phải -->
+        <main class="admin-content">
+            <div class="content-header">
+                <h2>Quản Lý Loại Sản Phẩm</h2>
+                <button id="btnAddCategory" class="btn-primary btn-admin-add" onclick="openAddCategoryModal()">+ Thêm Mới Loại SP</button>
+            </div>
+
+            <!-- thanh tìm nhanh và lọc trạng thái -->
+            <div class="admin-filter-bar">
+                <input type="text" id="adminCatSearchInput" placeholder="Tìm theo tên loại sản phẩm, mã loại..." oninput="renderCategories()">
+                <select id="adminCatStatusFilter" onchange="renderCategories()">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active">Đang bán</option>
+                    <option value="hidden">Đang ẩn</option>
+                </select>
+            </div>
+
+            <!-- bảng danh sách loại sp -->
+            <div class="admin-table-wrap" id="adminTableScrollWrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>MÃ LOẠI</th>
+                            <th>TÊN LOẠI SẢN PHẨM</th>
+                            <th>% LỢI NHUẬN MẶC ĐỊNH</th>
+                            <th>TRẠNG THÁI</th>
+                            <th>THAO TÁC</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoryTableBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- popup thêm / sửa loại sp -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Thêm Loại Sản Phẩm Mới</h3>
+                <span class="close-modal" id="btnCloseModal" onclick="closeCategoryModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Mã loại SP (VD: CAT01):</label>
+                    <input type="text" id="catCodeInput" placeholder="Nhập mã loại...">
+                </div>
+                <div class="form-group">
+                    <label>Tên loại SP:</label>
+                    <input type="text" id="catNameInput" placeholder="VD: Giày Thể Thao...">
+                </div>
+                <div class="form-group">
+                    <label>% Lợi nhuận mặc định:</label>
+                    <input type="number" id="catProfitInput" placeholder="VD: 20">
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái hiển thị:</label>
+                    <select id="catStatusInput">
+                        <option value="false">Đang bán</option>
+                        <option value="true">Đang ẩn</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSaveCategory" class="btn-primary" onclick="saveCategory()">Lưu thông tin</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin-categories.js"></script>
+    <script src="admin-categories.js"></script>
+</body>
+</html>
