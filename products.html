@@ -4,183 +4,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sản phẩm - SportMax</title>
+    <title>Sản Phẩm - SportStore</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-    <header class="main-header">
-        <div class="header-top">
-            <div class="header-container flex-between">
-                <div class="logo">
-                    <a href="index.html" style="text-decoration: none; color: inherit;">
-                        <h2>SPORT MAX</h2>
-                    </a>
-                </div>
+<body class="catalog-body">
+  <header class="sport-navbar site-header">
+    <div class="sport-container sport-navbar-inner header-inner">
+      <a href="../index.html" class="sport-brand-logo site-logo">
+        <div class="logo-icon">⚡</div>
+        <div>SPORT<span class="accent">STORE</span></div>
+      </a>
 
-                <div class="contact-info">
-                    <img src="image/phone-solid-full.svg" alt="HOTLINE" class="custom-icon">
-                    <span>HOTLINE: <strong>0977 508 430</strong></span>
-                    <span class="store"><i class="fa-solid fa-location-dot"></i> HỆ THỐNG CỬA HÀNG</span>
-                </div>
+      <ul class="sport-nav-menu nav-menu">
+        <li><a href="../index.html">Trang Chủ</a></li>
+        <li class="has-mega-menu">
+          <a href="products.html" class="active" onclick="goToPage('products.html', 'dev2_products.html'); return false;">Sản Phẩm <i class="fa-solid fa-chevron-down menu-arrow"></i></a>
 
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Tìm tên sản phẩm, thương hiệu..." onkeyup="if(event.key==='Enter') triggerDirectSearch()">
-                    <button id="btnSearch" onclick="triggerDirectSearch()">
-                        <img src="image/magnifying-glass-solid-full.svg" alt="Tìm kiếm" class="custom-icon">
-                    </button>
-                </div>
-
-                <div class="header-icons">
-                    <div class="icon-item has-dropdown">
-                        <img src="image/searchengin-brands-solid-full.svg" alt="Tra cứu" class="custom-icon">
-                        <span>TRA CỨU</span>
-                        <div class="icon-dropdown">
-                            <ul>
-                                <li><a href="#">Kiểm tra đơn hàng</a></li>
-                                <li><a href="#">Kiểm tra bảo hành</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="icon-item has-dropdown">
-                        <img src="image/user-solid-full.svg" alt="Tài khoản" class="custom-icon">
-                        <span>TÀI KHOẢN</span>
-                        <div class="icon-dropdown">
-                            <ul>
-                                <li><a href="login.html">Đăng nhập</a></li>
-                                <li><a href="login.html">Đăng ký</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="icon-item" onclick="window.location.href='cart.html'">
-                        <img src="image/cart-shopping-solid-full.svg" alt="Giỏ hàng" class="custom-icon">
-                        <span>GIỎ HÀNG</span>
-                    </div>
-                </div>
+          <div class="mega-menu">
+            <div class="mega-column">
+              <h4><i class="fa-solid fa-shoe-prints"></i> GIÀY THỂ THAO</h4>
+              <ul>
+                <li><a href="products.html?cat=CAT02&search=Chạy bộ | Running">Giày Chạy bộ (Running) <span class="badge hot">HOT</span></a></li>
+                <li><a href="products.html?cat=CAT02&search=Bóng đá | Futsal">Giày Bóng đá (Sân cỏ/Futsal)</a></li>
+                <li><a href="products.html?cat=CAT02&search=Giày cầu lông">Giày Cầu lông chuyên dụng</a></li>
+                <li><a href="products.html?cat=CAT02&search=Bóng chuyền">Giày Bóng chuyền <span class="badge new">NEW</span></a></li>
+                <li><a href="products.html?cat=CAT02&search=Bóng rổ">Giày Bóng rổ</a></li>
+                <li><a href="products.html?cat=CAT02&search=Bóng bàn">Giày Bóng bàn</a></li>
+                <li><a href="products.html?cat=CAT02&search=Tập Gym | Training">Giày Tập Gym / Training</a></li>
+              </ul>
+              <a href="products.html?cat=CAT02" class="mega-see-more">
+                Xem tất cả giày <i class="fa-solid fa-arrow-right"></i>
+              </a>
             </div>
-        </div>
 
-        <div class="header-bottom">
-            <div class="header-container">
-                <ul class="main-menu">
-                    <li><a href="index.html">TRANG CHỦ</a></li>
-
-                    <li class="has-mega-menu">
-                        <a href="products.html">SẢN PHẨM <i class="fa-solid fa-chevron-down menu-arrow"></i></a>
-
-                        <div class="mega-menu">
-                            <div class="mega-column">
-                                <h4><i class="fa-solid fa-shoe-prints"></i> GIÀY THỂ THAO</h4>
-                                <ul>
-                                    <li><a href="products.html?cat=CAT02&search=Chạy bộ | Running">Giày Chạy bộ (Running) <span class="badge hot">HOT</span></a></li>
-                                    <li><a href="products.html?cat=CAT02&search=Bóng đá | Futsal">Giày Bóng đá (Sân cỏ/Futsal)</a></li>
-                                    <li><a href="products.html?cat=CAT02&search=Giày cầu lông">Giày Cầu lông chuyên dụng</a></li>
-                                    <li><a href="products.html?cat=CAT02&search=Bóng chuyền">Giày Bóng chuyền <span class="badge new">NEW</span></a></li>
-                                    <li><a href="products.html?cat=CAT02&search=Bóng rổ">Giày Bóng rổ</a></li>
-                                    <li><a href="products.html?cat=CAT02&search=Bóng bàn">Giày Bóng bàn</a></li>
-                                    <li><a href="products.html?cat=CAT02&search=Tập Gym | Training">Giày Tập Gym / Training</a></li>
-                                </ul>
-                                <a href="products.html?cat=CAT02" class="mega-see-more">
-                                    Xem tất cả giày <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-                            </div>
-
-                            <div class="mega-column">
-                                <h4><i class="fa-solid fa-shirt"></i> QUẦN ÁO THỂ THAO</h4>
-                                <ul>
-                                    <li><a href="products.html?cat=CAT03&search=Áo cầu lông">Áo thun Cầu lông</a></li>
-                                    <li><a href="products.html?cat=CAT03&search=Bóng đá | Bóng chuyền">Áo đấu Bóng đá / Bóng chuyền</a></li>
-                                    <li><a href="products.html?cat=CAT03&search=Bóng rổ | Bóng bàn">Áo đấu Bóng rổ / Bóng bàn</a></li>
-                                    <li><a href="products.html?cat=CAT05&search=Quần cầu lông | Quần short">Quần Short thể thao</a></li>
-                                    <li><a href="products.html?cat=CAT05&search=Jogger | Trackpant | Quần cầu lông SFD dài">Quần dài Jogger / Trackpant</a></li>
-                                    <li><a href="products.html?cat=CAT04">Váy thể thao (Cầu lông/Tennis)</a></li>
-                                    <li><a href="products.html?cat=CAT03&search=Tập Gym | Yoga">Đồ tập Gym / Yoga</a></li>
-                                </ul>
-                                <a href="products.html?cat=CAT03" class="mega-see-more">
-                                    Xem tất cả quần áo <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-                            </div>
-
-                            <div class="mega-column">
-                                <h4><i class="fa-solid fa-table-tennis-paddle-ball"></i> DỤNG CỤ & VỢT</h4>
-                                <ul>
-                                    <li><a href="products.html?cat=CAT01&search=Vợt cầu lông">Vợt Cầu lông <span class="badge best">BEST</span></a></li>
-                                    <li><a href="products.html?cat=CAT01&search=Vợt bóng bàn">Vợt Bóng bàn chuyên nghiệp</a></li>
-                                    <li><a href="products.html?cat=CAT01&search=Tennis | Pickleball">Vợt Tennis & Pickleball <span class="badge hot">HOT</span></a></li>
-                                    <li><a href="products.html?cat=CAT01&search=Quả bóng">Bóng đá / Bóng chuyền / Bóng rổ</a></li>
-                                    <li><a href="products.html?cat=CAT08&search=Cước | Quấn cán | Mặt vợt">Phụ kiện vợt (Cước, Quấn cán)</a></li>
-                                    <li><a href="products.html?cat=CAT08&search=Thể lực | Power Ball">Dụng cụ tập thể lực tại nhà</a></li>
-                                    <li><a href="products.html?cat=CAT08&search=Lưới | Thảm tập">Lưới & Thảm tập chuyên dụng</a></li>
-                                </ul>
-                                <a href="products.html?cat=CAT01" class="mega-see-more">
-                                    Xem tất cả dụng cụ <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-                            </div>
-
-                            <div class="mega-column">
-                                <h4><i class="fa-solid fa-bag-shopping"></i> BALO & PHỤ KIỆN</h4>
-                                <ul>
-                                    <li><a href="products.html?cat=CAT06">Balo thể thao đa năng</a></li>
-                                    <li><a href="products.html?cat=CAT07&search=Túi cầu lông | Túi vợt | Túi đựng vợt">Túi đựng vợt chuyên dụng</a></li>
-                                    <li><a href="products.html?cat=CAT07&search=Túi trống">Túi trống tập Gym / Bóng đá</a></li>
-                                    <li><a href="products.html?cat=CAT08&search=Vớ">Tất (Vớ) thể thao chống trượt</a></li>
-                                    <li><a href="products.html?cat=CAT08&search=Băng">Băng bảo hộ (Gối, Cổ chân, Tay)</a></li>
-                                    <li><a href="products.html?cat=CAT08&search=Bình nước | Khăn">Bình nước & Khăn thể thao</a></li>
-                                </ul>
-                                <a href="products.html?cat=CAT06" class="mega-see-more">
-                                    Xem tất cả phụ kiện <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-                            </div>
-
-                            <div class="mega-column mega-banner">
-                                <h4>TÂM ĐIỂM MUA SẮM</h4>
-                                <div class="banner-box">
-                                    <p><strong>BST THỂ THAO MÙA MỚI</strong></p>
-                                    <span class="discount">ƯU ĐÃI ĐẾN 30%</span>
-                                    <button class="btn-banner" onclick="window.location.href='#'">XEM NGAY</button>
-                                </div>
-                            </div>
-
-                            <div class="mega-footer-row">
-                                <span class="footer-label">THƯƠNG HIỆU NỔI BẬT</span>
-                                <div class="brand-list">
-                                    <a href="products.html?search=Mizuno">MIZUNO</a>
-                                    <a href="products.html?search=Yonex">YONEX</a>
-                                    <a href="products.html?search=Lining">LI-NING</a>
-                                    <a href="products.html?search=Asics">ASICS</a>
-                                    <a href="products.html?search=Victor">VICTOR</a>
-                                    <a href="products.html?search=Nike">NIKE</a>
-                                </div>
-                                <div class="mega-tags">
-                                    <span><i class="fa-solid fa-fire-flame-curved"></i> Hàng mới về</span>
-                                    <span><i class="fa-solid fa-award"></i> Bán chạy nhất</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li><a href="products.html?sale=true">KHUYẾN MÃI</a></li>
-                    <li><a href="#">TIN TỨC</a></li>
-                    <li><a href="#">LIÊN HỆ</a></li>
-                </ul>
+            <div class="mega-column">
+              <h4><i class="fa-solid fa-shirt"></i> QUẦN ÁO THỂ THAO</h4>
+              <ul>
+                <li><a href="products.html?cat=CAT03&search=Áo cầu lông">Áo thun Cầu lông</a></li>
+                <li><a href="products.html?cat=CAT03&search=Bóng đá | Bóng chuyền">Áo đấu Bóng đá / Bóng chuyền</a></li>
+                <li><a href="products.html?cat=CAT03&search=Bóng rổ | Bóng bàn">Áo đấu Bóng rổ / Bóng bàn</a></li>
+                <li><a href="products.html?cat=CAT05&search=Quần cầu lông | Quần short">Quần Short thể thao</a></li>
+                <li><a href="products.html?cat=CAT05&search=Jogger | Trackpant | Quần cầu lông SFD dài">Quần dài Jogger / Trackpant</a></li>
+                <li><a href="products.html?cat=CAT04">Váy thể thao (Cầu lông/Tennis)</a></li>
+                <li><a href="products.html?cat=CAT03&search=Tập Gym | Yoga">Đồ tập Gym / Yoga</a></li>
+              </ul>
+              <a href="products.html?cat=CAT03" class="mega-see-more">
+                Xem tất cả quần áo <i class="fa-solid fa-arrow-right"></i>
+              </a>
             </div>
-        </div>
-    </header>
 
-    <main class="container">
+            <div class="mega-column">
+              <h4><i class="fa-solid fa-table-tennis-paddle-ball"></i> DỤNG CỤ & VỢT</h4>
+              <ul>
+                <li><a href="products.html?cat=CAT01&search=Vợt cầu lông">Vợt Cầu lông <span class="badge best">BEST</span></a></li>
+                <li><a href="products.html?cat=CAT01&search=Vợt bóng bàn">Vợt Bóng bàn chuyên nghiệp</a></li>
+                <li><a href="products.html?cat=CAT01&search=Tennis | Pickleball">Vợt Tennis & Pickleball <span class="badge hot">HOT</span></a></li>
+                <li><a href="products.html?cat=CAT01&search=Quả bóng">Bóng đá / Bóng chuyền / Bóng rổ</a></li>
+                <li><a href="products.html?cat=CAT08&search=Cước | Quấn cán | Mặt vợt">Phụ kiện vợt (Cước, Quấn cán)</a></li>
+                <li><a href="products.html?cat=CAT08&search=Thể lực | Power Ball">Dụng cụ tập thể lực tại nhà</a></li>
+                <li><a href="products.html?cat=CAT08&search=Lưới | Thảm tập">Lưới & Thảm tập chuyên dụng</a></li>
+              </ul>
+              <a href="products.html?cat=CAT01" class="mega-see-more">
+                Xem tất cả dụng cụ <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+
+            <div class="mega-column">
+              <h4><i class="fa-solid fa-bag-shopping"></i> BALO & PHỤ KIỆN</h4>
+              <ul>
+                <li><a href="products.html?cat=CAT06">Balo thể thao đa năng</a></li>
+                <li><a href="products.html?cat=CAT07&search=Túi cầu lông | Túi vợt | Túi đựng vợt">Túi đựng vợt chuyên dụng</a></li>
+                <li><a href="products.html?cat=CAT07&search=Túi trống">Túi trống tập Gym / Bóng đá</a></li>
+                <li><a href="products.html?cat=CAT08&search=Vớ">Tất (Vớ) thể thao chống trượt</a></li>
+                <li><a href="products.html?cat=CAT08&search=Băng">Băng bảo hộ (Gối, Cổ chân, Tay)</a></li>
+                <li><a href="products.html?cat=CAT08&search=Bình nước | Khăn">Bình nước & Khăn thể thao</a></li>
+              </ul>
+              <a href="products.html?cat=CAT06" class="mega-see-more">
+                Xem tất cả phụ kiện <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+
+            <div class="mega-column mega-banner">
+              <h4>TÂM ĐIỂM MUA SẮM</h4>
+              <div class="banner-box">
+                <p><strong>BST THỂ THAO MÙA MỚI</strong></p>
+                <span class="discount">ƯU ĐÃI ĐẾN 30%</span>
+                <button type="button" class="btn-banner" onclick="window.location.href='products.html'">XEM NGAY</button>
+              </div>
+            </div>
+
+            <div class="mega-footer-row">
+              <span class="footer-label">THƯƠNG HIỆU NỔI BẬT</span>
+              <div class="brand-list">
+                <a href="products.html?search=Mizuno">MIZUNO</a>
+                <a href="products.html?search=Yonex">YONEX</a>
+                <a href="products.html?search=Lining">LI-NING</a>
+                <a href="products.html?search=Asics">ASICS</a>
+                <a href="products.html?search=Victor">VICTOR</a>
+                <a href="products.html?search=Nike">NIKE</a>
+              </div>
+              <div class="mega-tags">
+                <a href="products.html?sale=true" class="mega-tag-hot"><i class="fa-solid fa-fire-flame-curved"></i> Hàng mới về</a>
+                <a href="products.html" class="mega-tag-best"><i class="fa-solid fa-award"></i> Bán chạy nhất</a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="product-detail.html" onclick="goToPage('product-detail.html', 'dev3_details.html'); return false;">Chi Tiết & So Sánh</a></li>
+        <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
+        <li><a href="dev5_user.html">Tài Khoản</a></li>
+      </ul>
+
+      <div class="search-box sport-header-search">
+        <input type="text" id="searchInput" placeholder="Tìm sản phẩm, thương hiệu..." onkeyup="if(event.key==='Enter') triggerDirectSearch()">
+        <button type="button" id="btnSearch" onclick="triggerDirectSearch()" title="Tìm kiếm">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+
+      <div class="sport-nav-actions header-actions">
+        <a href="admin/products_admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden" data-admin-link title="Bảng Quản Trị Admin">
+          ⚙️ Admin
+        </a>
+
+        <a href="dev4_checkout.html" class="nav-badge-btn" title="Xem giỏ hàng">
+          🛒
+          <span class="badge-pill" id="header-cart-badge-count">0</span>
+        </a>
+
+        <a href="dev5_user.html" class="sport-user-logged-pill dev5-hidden" data-auth-profile title="Hồ sơ tài khoản">
+          <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+          <span data-header-name>Tài khoản</span>
+        </a>
+        <button type="button" class="sport-btn-logout-icon dev5-hidden" data-auth-action="logout" title="Đăng xuất tài khoản">
+          🚪
+        </button>
+
+        <button type="button" class="btn-sport btn-outline btn-sm" data-auth-action="login" id="sport-btn-open-login">
+          🔑 Đăng Nhập
+        </button>
+        <button type="button" class="btn-sport btn-primary btn-sm" data-auth-action="register" id="sport-btn-open-register">
+          ✨ Đăng Ký
+        </button>
+      </div>
+    </div>
+  </header>
+
+    <main class="container catalog-layout">
         <aside class="sidebar">
             <h3>Bộ lọc tìm kiếm</h3>
 
             <div class="filter-group">
                 <h4>Tên sản phẩm</h4>
-                <input type="text" id="advNameInput" placeholder="Nhập tên sản phẩm..." onkeyup="if(event.key==='Enter') applyAdvancedFilters()" style="width: 100%; padding: 8px 10px; box-sizing: border-box; border: 1px solid var(--gray-border); border-radius: 6px;">
+                <input type="text" id="advNameInput" placeholder="Nhập tên sản phẩm..." oninput="applyAdvancedFilters()" onkeyup="if(event.key==='Enter') applyAdvancedFilters()">
             </div>
 
             <div class="filter-group">
@@ -190,76 +171,100 @@
 
             <div class="filter-group">
                 <h4>Khoảng giá (VNĐ)</h4>
-                <input type="number" id="minPrice" placeholder="Giá từ...">
-                <input type="number" id="maxPrice" placeholder="Giá đến...">
+                <div class="price-range-inputs">
+                    <input type="number" id="minPrice" placeholder="Giá từ...">
+                    <input type="number" id="maxPrice" placeholder="Giá đến...">
+                </div>
             </div>
 
-            <button id="btnFilter" class="btn-primary" onclick="applyAdvancedFilters()">Áp dụng bộ lọc</button>
-            <button type="button" class="btn-reset-filter" onclick="resetAllFilters()">Đặt lại bộ lọc</button>
+            <div class="sidebar-btn-group">
+                <button id="btnFilter" class="btn-primary" onclick="applyAdvancedFilters()">Áp dụng bộ lọc</button>
+                <button type="button" class="btn-reset-filter" onclick="resetAllFilters()">Đặt lại bộ lọc</button>
+            </div>
         </aside>
 
         <section class="product-section">
-            <div class="toolbar" style="justify-content: space-between; align-items: center;">
-                <div id="filterResultSummary" style="font-weight: 600; color: #22303f;"></div>
-                <select id="sortSelect" onchange="applyAdvancedFilters()">
-                    <option value="default">Sắp xếp mặc định</option>
-                    <option value="priceAsc">Giá: Thấp đến Cao</option>
-                    <option value="priceDesc">Giá: Cao xuống Thấp</option>
-                </select>
+            <div class="toolbar">
+                <div id="filterResultSummary" class="toolbar-summary">Hiển thị sản phẩm thể thao chính hãng</div>
+                <div class="toolbar-controls">
+                    <select id="brandFilterSelect" onchange="applyAdvancedFilters()">
+                        <option value="">Tất cả thương hiệu</option>
+                        <option value="Yonex">Yonex</option>
+                        <option value="Mizuno">Mizuno</option>
+                        <option value="Lining">Li-Ning</option>
+                        <option value="Victor">Victor</option>
+                        <option value="Asics">Asics</option>
+                        <option value="Nike">Nike</option>
+                        <option value="Adidas">Adidas</option>
+                        <option value="Kamito">Kamito</option>
+                        <option value="Kumpoo">Kumpoo</option>
+                    </select>
+                    <select id="sortSelect" onchange="applyAdvancedFilters()">
+                        <option value="default">Sắp xếp mặc định</option>
+                        <option value="priceAsc">Giá: Thấp đến Cao</option>
+                        <option value="priceDesc">Giá: Cao xuống Thấp</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="product-grid" id="productGrid"></div>
+            <div class="product-scroll-area" id="productScrollArea">
+                <div class="product-grid" id="productGrid"></div>
+                <div class="pagination" id="pagination"></div>
 
-            <div class="pagination" id="pagination"></div>
+            </div>
         </section>
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <div class="logo" style="margin-bottom: 12px;">
-                        <a href="index.html" style="text-decoration: none; color: inherit;">
-                            <h2>SPORT MAX</h2>
-                        </a>
-                    </div>
-                    <p>Cửa hàng chuyên cung cấp vợt cầu lông, giày, quần áo và phụ kiện thể thao chính hãng. Cam kết uy tín, chất lượng với mức giá tốt nhất cho người chơi phong trào lẫn chuyên nghiệp.</p>
-                </div>
-
-                <div class="footer-col">
-                    <h4>DANH MỤC MUA SẮM</h4>
-                    <ul class="footer-links">
-                        <li><a href="index.html">Trang chủ</a></li>
-                        <li><a href="products.html">Tất cả sản phẩm</a></li>
-                        <li><a href="products.html?sale=true">Sản phẩm khuyến mãi</a></li>
-                        <li><a href="cart.html">Giỏ hàng của bạn</a></li>
-                        <li><a href="login.html">Tài khoản thành viên</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h4>HỖ TRỢ KHÁCH HÀNG</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Chính sách bảo hành chính hãng</a></li>
-                        <li><a href="#">Chính sách đổi trả trong 7 ngày</a></li>
-                        <li><a href="#">Hướng dẫn chọn size giày & quần áo</a></li>
-                        <li><a href="#">Hướng dẫn đặt hàng & thanh toán</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h4>THÔNG TIN LIÊN HỆ</h4>
-                    <p><i class="fa-solid fa-phone"></i> Hotline: <strong>0977 508 430</strong></p>
-                    <p><i class="fa-solid fa-envelope"></i> Email: support@sportmax.vn</p>
-                    <p><i class="fa-solid fa-location-dot"></i> Địa chỉ: Hệ thống cửa hàng SportMax toàn quốc</p>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>© 2026 SportMax - Cửa hàng dụng cụ và trang phục thể thao chính hãng.</p>
-            </div>
+  <footer class="sport-footer site-footer">
+    <div class="sport-container container">
+      <div class="sport-footer-grid footer-grid">
+        <div class="sport-footer-col footer-col">
+          <div class="sport-brand-logo" style="margin-bottom: 14px;">
+            <div class="logo-icon">⚡</div>
+            <div style="color: #ffffff;">SPORT<span class="accent">STORE</span></div>
+          </div>
+          <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam. Đồng hành cùng mọi vận động viên bứt phá giới hạn.</p>
         </div>
-    </footer>
+
+        <div class="sport-footer-col footer-col">
+          <h4>Điều Hướng Nhanh</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html">Trang Chủ</a></li>
+            <li><a href="products.html">Sản Phẩm Tuyển Chọn</a></li>
+            <li><a href="product-detail.html">Chi Tiết & Bảng So Sánh</a></li>
+            <li><a href="dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
+            <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
+          </ul>
+        </div>
+
+        <div class="sport-footer-col footer-col">
+          <h4>Hỗ Trợ & Chính Sách</h4>
+          <ul class="footer-links">
+            <li><a href="dev5_user.html">Chính Sách Bảo Hành</a></li>
+            <li><a href="dev5_user.html">Quy Định Đổi Trả 30 Ngày</a></li>
+            <li><a href="dev5_user.html">Hướng Dẫn Chọn Size Chuẩn</a></li>
+            <li><a href="dev5_user.html">Theo Dõi Vận Đơn</a></li>
+          </ul>
+        </div>
+
+        <div class="sport-footer-col footer-col">
+          <h4>Hotline & Liên Hệ</h4>
+          <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
+          <p>✉️ Email: support@sportstore.vn</p>
+          <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
+        </div>
+      </div>
+
+      <div class="sport-footer-bottom footer-bottom">
+        <div>© 2026 SportStore - Cửa hàng dụng cụ và trang phục thể thao chính hãng.</div>
+        <div>Hỗ trợ đổi trả 30 ngày & Giao hàng toàn quốc</div>
+      </div>
+    </div>
+  </footer>
+
+    <script src="../js/auth_modal.js"></script>
+    <script src="../js/gallery-data.js"></script>
+    <script src="../js/products.js"></script>
 
     <script src="js/gallery-data.js"></script>
     <script src="gallery-data.js"></script>

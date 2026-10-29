@@ -29,10 +29,10 @@ function getProductDisplayPrice(product) {
 function buildFourGalleryImages(product) {
     let mainImg = (product.image || "").trim();
     let staticGallery = [];
-    if (product.sourceUrl && staticGalleries[product.sourceUrl] && staticGalleries[product.sourceUrl].length > 0) {
+    if (product.sourceUrl && Array.isArray(staticGalleries[product.sourceUrl])) {
         staticGallery = staticGalleries[product.sourceUrl];
     }
-    let storedGallery = (product.images && product.images.length > 0) ? product.images : [];
+    let storedGallery = Array.isArray(product.images) ? product.images : [];
 
     // gom hết hình lại rồi lọc bỏ mấy tấm bị trùng link
     let rawList = storedGallery.concat(staticGallery);
@@ -131,7 +131,7 @@ if (currentProduct) {
     for (let i = 0; i < rawSpecs.length; i++) {
         let s = rawSpecs[i].trim();
         if (s !== "") {
-            specHtml += '<li><i class="fa-solid fa-check" style="color: #3e93d4; margin-right: 8px;"></i>' + s + '</li>';
+            specHtml += '<li><i class="fa-solid fa-check" style="color: #0284c7; margin-right: 8px;"></i>' + s + '</li>';
         }
     }
 
@@ -180,22 +180,21 @@ function renderGallery() {
 }
 
 // bấm chuyển qua lại giữa 2 tab Mô tả và Thông số kỹ thuật
-function switchDetailTab(tabName) {
-    let btnDesc = document.getElementById("tabBtnDesc");
-    let btnSpec = document.getElementById("tabBtnSpec");
-    let panelDesc = document.getElementById("tabPanelDesc");
-    let panelSpec = document.getElementById("tabPanelSpec");
-
-    if (tabName === "specifications") {
-        if (btnDesc) btnDesc.classList.remove("active");
-        if (btnSpec) btnSpec.classList.add("active");
-        if (panelDesc) panelDesc.classList.remove("active");
-        if (panelSpec) panelSpec.classList.add("active");
-    } else {
-        if (btnSpec) btnSpec.classList.remove("active");
-        if (btnDesc) btnDesc.classList.add("active");
-        if (panelSpec) panelSpec.classList.remove("active");
-        if (panelDesc) panelDesc.classList.add("active");
+function switchDetailTab(tabName, btnElement) {
+    let tabButtons = document.querySelectorAll("[data-detail-tab]");
+    for (let j = 0; j < tabButtons.length; j++) {
+        tabButtons[j].classList.remove("active");
+    }
+    let panels = document.querySelectorAll("[data-detail-panel]");
+    for (let k = 0; k < panels.length; k++) {
+        panels[k].classList.remove("active");
+    }
+    if (btnElement) {
+        btnElement.classList.add("active");
+    }
+    let targetPanel = document.querySelector('[data-detail-panel="' + tabName + '"]');
+    if (targetPanel) {
+        targetPanel.classList.add("active");
     }
 }
 
@@ -232,7 +231,7 @@ function renderProductOptions(product) {
     let html = `
         <div class="option-group">
             <label>Màu sắc / Phiên bản</label>
-            <select style="background: #ffffff; color: #22303f;" id="productVariantSelect" onchange="changeVariant(this.value)">
+            <select style="background: #ffffff; color: #0f172a;" id="productVariantSelect" onchange="changeVariant(this.value)">
                 ${variantOptionsHtml}
             </select>
         </div>
@@ -244,18 +243,18 @@ function renderProductOptions(product) {
         html += `
             <div class="option-group">
                 <label>Kích cỡ bóng (Size)</label>
-                <select id="selectSize" style="background: #ffffff; color: #22303f;">
+                <select id="selectSize" style="background: #ffffff; color: #0f172a;">
                     ${isBasketball
                         ? `<option value="Size 7 (Nam tiêu chuẩn)" selected>Size 7 (Tiêu chuẩn Nam)</option>
-                           <option value="Size 6 (Nữ / Thiếu niên)">Size 6 (Tiêu chuẩn Nữ)</option>`
+                            <option value="Size 6 (Nữ / Thiếu niên)">Size 6 (Tiêu chuẩn Nữ)</option>`
                         : `<option value="Size 5 (Tiêu chuẩn thi đấu)" selected>Size 5 (Tiêu chuẩn thi đấu)</option>
-                           <option value="Size 4 (Tập luyện / Sân nhỏ)">Size 4 (Tập luyện / Sân nhỏ)</option>`
+                            <option value="Size 4 (Tập luyện / Sân nhỏ)">Size 4 (Tập luyện / Sân nhỏ)</option>`
                     }
                 </select>
             </div>
             <div class="option-group">
                 <label>Mặt sân phù hợp</label>
-                <select id="selectSpec" style="background: #ffffff; color: #22303f;">
+                <select id="selectSpec" style="background: #ffffff; color: #0f172a;">
                     <option value="Indoor & Outdoor (Đa năng)" selected>Indoor & Outdoor (Đa năng)</option>
                     <option value="Chuyên sàn thi đấu (Indoor)">Chuyên sàn thi đấu (Indoor)</option>
                 </select>
@@ -265,14 +264,14 @@ function renderProductOptions(product) {
         html += `
             <div class="option-group">
                 <label>Kiểu cán cầm (Handle)</label>
-                <select id="selectSize" style="background: #ffffff; color: #22303f;">
+                <select id="selectSize" style="background: #ffffff; color: #0f172a;">
                     <option value="Cán FL (Cán loe phổ biến)" selected>Cán FL (Cán loe phổ biến)</option>
                     <option value="Cán ST (Cán thẳng)">Cán ST (Cán thẳng)</option>
                 </select>
             </div>
             <div class="option-group">
                 <label>Tùy chọn dán mặt vợt</label>
-                <select id="selectSpec" style="background: #ffffff; color: #22303f;">
+                <select id="selectSpec" style="background: #ffffff; color: #0f172a;">
                     <option value="Tiêu chuẩn nhà sản xuất" selected>Tiêu chuẩn nhà sản xuất</option>
                     <option value="Cắt dán sẵn viền bảo vệ">Cắt dán sẵn kèm viền bảo vệ</option>
                 </select>
@@ -282,14 +281,14 @@ function renderProductOptions(product) {
         html += `
             <div class="option-group">
                 <label>Độ dày lõi vợt (Core)</label>
-                <select id="selectSize" style="background: #ffffff; color: #22303f;">
+                <select id="selectSize" style="background: #ffffff; color: #0f172a;">
                     <option value="16mm (Control - Kiểm soát)" selected>16mm (Control - Kiểm soát)</option>
                     <option value="14mm (Power - Tấn công)">14mm (Power - Tấn công)</option>
                 </select>
             </div>
             <div class="option-group">
                 <label>Phụ kiện tặng kèm</label>
-                <select id="selectSpec" style="background: #ffffff; color: #22303f;">
+                <select id="selectSpec" style="background: #ffffff; color: #0f172a;">
                     <option value="Tặng quấn cán + Dán viền" selected>Tặng quấn cán + Dán viền</option>
                     <option value="Nguyên bản chính hãng">Nguyên bản chính hãng</option>
                 </select>
@@ -299,14 +298,14 @@ function renderProductOptions(product) {
         html += `
             <div class="option-group">
                 <label>Kích cỡ cán vợt (Grip Size)</label>
-                <select id="selectSize" style="background: #ffffff; color: #22303f;">
+                <select id="selectSize" style="background: #ffffff; color: #0f172a;">
                     <option value="Grip L2 (4 1/4 inch)" selected>Grip L2 (4 1/4 inch - Chuẩn Châu Á)</option>
                     <option value="Grip L3 (4 3/8 inch)">Grip L3 (4 3/8 inch)</option>
                 </select>
             </div>
             <div class="option-group">
                 <label>Mức căng dây (LBS)</label>
-                <select id="selectSpec" style="background: #ffffff; color: #22303f;">
+                <select id="selectSpec" style="background: #ffffff; color: #0f172a;">
                     <option value="Căng 50 LBS (22.5kg)" selected>Căng 50 LBS (22.5kg)</option>
                     <option value="Căng 52 LBS (23.5kg)">Căng 52 LBS (23.5kg)</option>
                     <option value="Khung chưa đan dây">Khung chưa đan dây</option>
@@ -317,7 +316,7 @@ function renderProductOptions(product) {
         html += `
             <div class="option-group">
                 <label>Kích cỡ giày (Size)</label>
-                <select id="selectSize" style="background: #ffffff; color: #22303f;">
+                <select id="selectSize" style="background: #ffffff; color: #0f172a;">
                     <option value="Size 38">Size 38</option>
                     <option value="Size 39">Size 39</option>
                     <option value="Size 40" selected>Size 40</option>
@@ -329,7 +328,7 @@ function renderProductOptions(product) {
             </div>
             <div class="option-group">
                 <label>Form giày</label>
-                <select id="selectSpec" style="background: #ffffff; color: #22303f;">
+                <select id="selectSpec" style="background: #ffffff; color: #0f172a;">
                     <option value="Tiêu chuẩn (Standard)" selected>Tiêu chuẩn (Standard)</option>
                     <option value="Form Wide (Chân bè)">Form Wide (Chân bè)</option>
                 </select>
@@ -339,7 +338,7 @@ function renderProductOptions(product) {
         html += `
             <div class="option-group">
                 <label>Kích cỡ quần áo (Size)</label>
-                <select id="selectSize" style="background: #ffffff; color: #22303f;">
+                <select id="selectSize" style="background: #ffffff; color: #0f172a;">
                     <option value="Size S">Size S (45 - 53kg)</option>
                     <option value="Size M" selected>Size M (54 - 62kg)</option>
                     <option value="Size L">Size L (63 - 70kg)</option>
@@ -349,7 +348,7 @@ function renderProductOptions(product) {
             </div>
             <div class="option-group">
                 <label>Kiểu dáng</label>
-                <select id="selectSpec" style="background: #ffffff; color: #22303f;">
+                <select id="selectSpec" style="background: #ffffff; color: #0f172a;">
                     <option value="Regular Fit (Tiêu chuẩn)" selected>Regular Fit (Tiêu chuẩn)</option>
                     <option value="Slim-Fit (Ôm nhẹ)">Slim-Fit (Ôm nhẹ)</option>
                 </select>
@@ -359,7 +358,7 @@ function renderProductOptions(product) {
         html += `
             <div class="option-group">
                 <label>Trọng lượng (U)</label>
-                <select id="selectSize" style="background: #ffffff; color: #22303f;">
+                <select id="selectSize" style="background: #ffffff; color: #0f172a;">
                     <option value="3U (85-89g)">3U (85 - 89g)</option>
                     <option value="4U (80-84g)" selected>4U (80 - 84g)</option>
                     <option value="5U (<80g)">5U (Siêu nhẹ)</option>
@@ -367,7 +366,7 @@ function renderProductOptions(product) {
             </div>
             <div class="option-group">
                 <label>Chu vi cán & Mức căng</label>
-                <select id="selectSpec" style="background: #ffffff; color: #22303f;">
+                <select id="selectSpec" style="background: #ffffff; color: #0f172a;">
                     <option value="Cán G5 - Căng 10.5kg" selected>Cán G5 - Căng 10.5kg</option>
                     <option value="Cán G5 - Căng 11kg">Cán G5 - Căng 11kg</option>
                     <option value="Cán G6 - Khung chưa đan">Cán G6 - Khung chưa đan</option>
@@ -378,7 +377,7 @@ function renderProductOptions(product) {
         html += `
             <div class="option-group">
                 <label>Quy cách đóng gói</label>
-                <select id="selectSize" style="background: #ffffff; color: #22303f;">
+                <select id="selectSize" style="background: #ffffff; color: #0f172a;">
                     <option value="Tiêu chuẩn chính hãng" selected>Tiêu chuẩn chính hãng</option>
                 </select>
             </div>
@@ -431,7 +430,7 @@ function renderRelatedProducts(product) {
     section.className = "detail-content-card";
     section.style.marginTop = "24px";
     section.innerHTML = `
-        <h3 style="margin-top: 0; margin-bottom: 18px; color: #22303f; border-bottom: 2px solid #3e93d4; display: inline-block; padding-bottom: 6px;">
+        <h3 style="margin-top: 0; margin-bottom: 18px; color: #0f172a; border-bottom: 2px solid #0284c7; display: inline-block; padding-bottom: 6px;">
             SẢN PHẨM CÙNG DANH MỤC
         </h3>
         <div class="product-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
@@ -588,9 +587,17 @@ function addToLocalStorageCart(redirect) {
     if (typeof updateCartHeaderBadge === "function") {
         updateCartHeaderBadge();
     }
+    let sportBadge = document.getElementById("header-cart-badge-count");
+    if (sportBadge) {
+        let totalQty = 0;
+        for (let cIdx = 0; cIdx < cart.length; cIdx++) {
+            totalQty += Number(cart[cIdx].quantity || cart[cIdx].qty || 1);
+        }
+        sportBadge.innerText = totalQty;
+    }
 
     if (redirect) {
-        window.location.href = "cart.html";
+        window.location.href = "dev4_checkout.html";
     } else if (typeof showSportMaxToast === "function") {
         let optLabel = selectedOptionText ? " [" + selectedOptionText + "]" : "";
         showSportMaxToast('Đã thêm ' + qtyVal + ' "' + currentProduct.name + '"' + optLabel + ' vào giỏ hàng!');
@@ -613,7 +620,7 @@ function handleAddToCart() {
 function triggerDetailSearch() {
     let searchInput = document.getElementById("searchInput");
     let kw = searchInput ? searchInput.value.trim() : "";
-    window.location.href = "products.html?search=" + kw;
+    window.location.href = "products.html?search=" + encodeURIComponent(kw);
 }
 
 // cập nhật lại số lượng giỏ hàng trên header với cột danh mục bên phải
@@ -648,4 +655,3 @@ function initDetailSidebar() {
 }
 
 initDetailSidebar();
-

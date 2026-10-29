@@ -1,88 +1,88 @@
-// danh sách 8 loại sp chính của shop
+// danh sách 8 loại sp chính của shop (có đủ thuộc tính chuẩn của nhóm id, code, icon, slug, desc, profitPercent, status, banner)
 const mockCategories = [
     {
         id: "CAT01",
-        code: "RACKET",
         categoryCode: "CAT01",
+        code: "RACKET",
         icon: "🏸",
         name: "Vợt & Dụng Cụ",
         slug: "vot-dung-cu",
-        desc: "Vợt cầu lông, bóng bàn, tennis, pickleball và dụng cụ thi đấu chính hãng",
+        desc: "Vợt cầu lông, bóng bàn, tennis, pickleball và bóng thi đấu tiêu chuẩn quốc tế",
         profitPercent: 20,
         profitMargin: 20,
-        itemCount: 165,
+        itemCount: 215,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT02",
-        code: "SHOES",
         categoryCode: "CAT02",
+        code: "SHOES",
         icon: "👟",
         name: "Giày Thể Thao",
         slug: "giay-the-thao",
-        desc: "Giày chạy bộ, cầu lông, bóng đá, bóng rổ, bóng chuyền bám sân chống trượt",
+        desc: "Giày chạy bộ, cầu lông, bóng đá, bóng chuyền, bóng rổ bám sân chống lật cổ chân",
         profitPercent: 25,
         profitMargin: 25,
-        itemCount: 118,
+        itemCount: 110,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT03",
-        code: "SHIRT",
         categoryCode: "CAT03",
+        code: "SHIRT",
         icon: "👕",
         name: "Áo Thể Thao",
         slug: "ao-the-thao",
-        desc: "Áo đấu cầu lông, bóng đá, bóng rổ, tập gym chất vải thoáng khí",
+        desc: "Áo đấu cầu lông, bóng đá, bóng rổ và đồ tập Gym thoáng khí thoát mồ hôi nhanh",
         profitPercent: 30,
         profitMargin: 30,
-        itemCount: 65,
+        itemCount: 82,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT04",
-        code: "SKIRT",
         categoryCode: "CAT04",
+        code: "SKIRT",
         icon: "👗",
         name: "Váy Thể Thao",
         slug: "vay-the-thao",
-        desc: "Váy cầu lông, tennis co giãn 4 chiều kèm quần bảo hộ bên trong",
+        desc: "Chân váy thể thao cầu lông, tennis, pickleball co giãn 4 chiều kèm quần bảo hộ",
         profitPercent: 30,
         profitMargin: 30,
-        itemCount: 25,
+        itemCount: 30,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT05",
-        code: "PANTS",
         categoryCode: "CAT05",
+        code: "PANTS",
         icon: "🩳",
         name: "Quần Thể Thao",
         slug: "quan-the-thao",
-        desc: "Quần short thể thao, quần dài jogger và trackpant vận động thoải mái",
+        desc: "Quần short thi đấu và quần dài Jogger / Trackpant co giãn thoải mái",
         profitPercent: 30,
         profitMargin: 30,
-        itemCount: 78,
+        itemCount: 41,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT06",
-        code: "BACKPACK",
         categoryCode: "CAT06",
+        code: "BACKPACK",
         icon: "🎒",
         name: "Balo Thể Thao",
         slug: "balo-the-thao",
-        desc: "Balo đựng vợt và đồ tập nhiều ngăn chống thấm nước",
+        desc: "Balo đựng vợt và trang bị thể thao đa năng có ngăn chứa giày riêng biệt",
         profitPercent: 25,
         profitMargin: 25,
         itemCount: 42,
@@ -92,12 +92,12 @@ const mockCategories = [
     },
     {
         id: "CAT07",
-        code: "BAG",
         categoryCode: "CAT07",
+        code: "BAG",
         icon: "👜",
         name: "Túi Thể Thao",
         slug: "tui-the-thao",
-        desc: "Túi đựng vợt chuyên dụng và túi trống tập gym sức chứa lớn",
+        desc: "Túi đựng vợt chuyên dụng lót cách nhiệt chống sốc và túi trống tập Gym",
         profitPercent: 25,
         profitMargin: 25,
         itemCount: 47,
@@ -107,12 +107,12 @@ const mockCategories = [
     },
     {
         id: "CAT08",
-        code: "ACCESSORY",
         categoryCode: "CAT08",
+        code: "ACCESSORY",
         icon: "🧦",
         name: "Phụ Kiện Thể Thao",
         slug: "phu-kien-the-thao",
-        desc: "Vớ chống trượt, băng bảo hộ, cước đan vợt, quấn cán, thảm tập và bình nước",
+        desc: "Vớ chống trượt, băng chặn mồ hôi, cước đan vợt, quấn cán, bóng tập cổ tay và bình nước",
         profitPercent: 40,
         profitMargin: 40,
         itemCount: 34,
@@ -122,6 +122,7 @@ const mockCategories = [
     }
 ];
 
+// mảng chứa toàn bộ sp mẫu ban đầu (lần đầu mở web sẽ lưu vô localStorage)
 const mockProducts = [
     {"productCode": "SP01", "name": "Vợt cầu lông Yonex Astrox 10", "categoryCode": "CAT01", "image": "https://cdn.shopvnb.com/img/300x300/uploads/san_pham/vot-cau-long-yonex-astrox-10_1782097544.webp", "importPrice": 880000, "salePrice": 880000, "originalPrice": 939000, "stock": 50, "isHidden": false, "description": "Vợt thiên công, nặng đầu, thân cứng vừa; phù hợp người chơi trình độ trung bình trở lên và yêu thích các pha smash mạnh.", "specifications": "Độ cứng: Trung bình | Điểm cân bằng: 305 ± 3mm | Chiều dài: 675mm | Trọng lượng: 4U (82 ± 2g) | Sức căng tối đa: 36 LBS", "sourceUrl": "https://shopvnb.com/vot-cau-long-yonex-astrox-10.html"},
     {"productCode": "SP02", "name": "Vợt cầu lông Yonex Astrox 77 Play Limited - Light Beige chính hãng", "categoryCode": "CAT01", "image": "https://cdn.shopvnb.com/img/300x300/uploads/gallery/vot-cau-long-yonex-astrox-77-play-limited-light-beige-chinh-hang_1773945577.webp", "importPrice": 1078000, "salePrice": 1078000, "originalPrice": 1189000, "stock": 50, "isHidden": false, "description": "Vợt thiên công, nặng đầu, phù hợp người chơi trình độ trung bình trở lên; bản 3U cần lực cổ tay tốt hơn bản 4U.", "specifications": "Độ cứng: Cứng (4U), rất cứng (3U) | Điểm cân bằng: khoảng 298mm | Trọng lượng: 3U, 4U | Chiều dài: 675mm | Sức căng: 3U tối đa 30 LBS, 4U tối đa 29 LBS", "sourceUrl": "https://shopvnb.com/vot-cau-long-yonex-astrox-77-play-limited-light-beige-chinh-hang.html"},
@@ -699,16 +700,13 @@ const mockProducts = [
     {"productCode": "SP832", "name": "Bình Nước Giữ Nhiệt Thể Thao VNB & Khăn Lau Mồ Hôi Gosen Chính Hãng", "categoryCode": "CAT08", "image": "https://shopvnb.com//uploads/gallery/binh-nuoc-giu-nhiet-vnb_1708141894.webp", "importPrice": 245000, "salePrice": 245000, "originalPrice": 299000, "stock": 75, "isHidden": false, "description": "Bình nước giữ nhiệt thể thao inox 304 dung tích 650ml giữ lạnh lên tới 12 giờ, kết hợp khăn thể thao cotton Gosen siêu thấm hút mồ hôi khi tập luyện cường độ cao.", "specifications": "Loại phụ kiện: Bình nước & Khăn thể thao | Chất liệu bình: Inox 304 an toàn | Chất liệu khăn: 100% Cotton kháng khuẩn", "sourceUrl": "https://shopvnb.com/binh-nuoc-giu-nhiet-vnb.html", "images": ["https://shopvnb.com//uploads/gallery/binh-nuoc-giu-nhiet-vnb_1708141894.webp", "https://cdn.shopvnb.com/img/300x300/uploads/gallery/khan-cau-long-gosen-towel-k2602-14-chinh-hang_1780861561.webp", "https://shopvnb.com//uploads/gallery/binh-nuoc-giu-nhiet-vnb_1708141894.webp", "https://cdn.shopvnb.com/img/300x300/uploads/gallery/khan-cau-long-gosen-towel-k2602-14-chinh-hang_1780861561.webp"]}
 ];
 
-// đọc dữ liệu từ localStorage (nếu trống hoặc lỗi thì lấy mảng mặc định)
+// hàm đọc/ghi localStorage an toàn (tránh bị đứng hình khi trình duyệt đầy bộ nhớ hoặc lỗi dữ liệu cũ)
 function readStorage(key, defaultVal) {
     try {
         let raw = localStorage.getItem(key);
         if (!raw) return defaultVal;
         let parsed = JSON.parse(raw);
-        if (parsed && parsed.length > 0) {
-            return parsed;
-        }
-        return defaultVal;
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultVal;
     } catch (e) {
         return defaultVal;
     }
@@ -718,18 +716,25 @@ function saveStorage(key, val) {
     try {
         localStorage.setItem(key, JSON.stringify(val));
     } catch (e) {
-        console.log("Bộ nhớ trình duyệt đã đầy");
+        console.warn("Bộ nhớ trình duyệt đã đầy, dùng trực tiếp dữ liệu trên trang.");
     }
 }
 
-// lần đầu mở web nếu localStorage chưa có gì thì lưu bộ dữ liệu mẫu vô
+// khúc này check nếu localStorage chưa có data thì nạp bộ mẫu ở trên vô
 function initMockData() {
     let savedCats = readStorage("categories", []);
     if (savedCats.length === 0) {
         saveStorage("categories", mockCategories);
     } else {
+        // đồng bộ thuộc tính của nhóm (id, profitPercent, status) và thuộc tính trang sản phẩm (categoryCode, profitMargin, isHidden)
         for (let i = 0; i < savedCats.length; i++) {
-            savedCats[i].banner = "#";
+            let c = savedCats[i];
+            if (!c.categoryCode && c.id) c.categoryCode = c.id;
+            if (!c.id && c.categoryCode) c.id = c.categoryCode;
+            if (c.profitMargin === undefined && c.profitPercent !== undefined) c.profitMargin = c.profitPercent;
+            if (c.profitPercent === undefined && c.profitMargin !== undefined) c.profitPercent = c.profitMargin;
+            if (c.isHidden === undefined && c.status !== undefined) c.isHidden = (c.status === "hidden" || c.status === "inactive");
+            if (c.status === undefined) c.status = c.isHidden ? "hidden" : "active";
         }
         saveStorage("categories", savedCats);
     }
@@ -750,11 +755,11 @@ function initMockData() {
 }
 initMockData();
 
-// lấy danh sách từ localStorage ra để hiện lên web
+// lấy danh sách từ localStorage ra chuẩn bị đổ lên giao diện (nếu trống thì lấy luôn mockProducts)
 let allProducts = readStorage("products", mockProducts);
 let allCategories = readStorage("categories", mockCategories);
 
-// chỉ lấy những sp đang hiện (sp nào bấm ẩn bên admin thì bỏ qua)
+// lọc lấy mấy sp đang hiện thôi, sp nào bấm ẩn bên admin thì bỏ qua
 let filteredList = [];
 for (let i = 0; i < allProducts.length; i++) {
     if (!allProducts[i].isHidden) {
@@ -763,17 +768,16 @@ for (let i = 0; i < allProducts.length; i++) {
 }
 
 let currentPage = 1;
-const productsPerPage = 15; // mỗi trang hiện 15 sản phẩm
+const productsPerPage = 15; // mỗi trang cho hiện 15 sản phẩm
 let toastTimer = null;
-let isSaleMode = false; // biến đánh dấu khi khách bấm vào mục Khuyến mãi
 
-// lấy giá hiển thị của sp
+// lấy giá để hiện lên web (ưu tiên giá sale trước, ko có mới lấy giá gốc)
 function getProductDisplayPrice(product) {
     let price = product.salePrice || product.price || product.sellingPrice || product.importPrice || 0;
     return Number(price);
 }
 
-// đếm tổng số món đang có trong giỏ hàng
+// đếm tổng số lượng sp trong giỏ hàng
 function getCartTotalCount() {
     let cart = readStorage("cart", []);
     let total = 0;
@@ -783,11 +787,28 @@ function getCartTotalCount() {
     return total;
 }
 
-// cập nhật số lượng màu đỏ trên icon giỏ hàng ở góc phải header
+// chuyển trang thông minh (tự nhận diện tên file hiện tại là products.html hay dev2_products.html)
+function goToPage(defaultFile, teamFile) {
+    let path = window.location.pathname;
+    if (path.indexOf("dev2_") !== -1 || path.indexOf("dev3_") !== -1 || path.indexOf("dev4_") !== -1 || path.indexOf("dev5_") !== -1) {
+        window.location.href = teamFile;
+    } else {
+        window.location.href = defaultFile;
+    }
+}
+
+// cập nhật số lượng giỏ hàng trỏ thẳng vào nút #header-cart-badge-count trên Header chung của nhóm
 function updateCartHeaderBadge() {
     let totalCount = getCartTotalCount();
-    let iconItems = document.querySelectorAll(".header-icons .icon-item");
 
+    // trỏ vào id="header-cart-badge-count" của Header SPORTSTORE dùng chung
+    let sportBadge = document.getElementById("header-cart-badge-count");
+    if (sportBadge) {
+        sportBadge.innerText = totalCount;
+    }
+
+    // giữ tương thích dự phòng nếu mở trên header cũ
+    let iconItems = document.querySelectorAll(".header-icons .icon-item");
     for (let i = 0; i < iconItems.length; i++) {
         let item = iconItems[i];
         if (item.textContent.indexOf("GIỎ HÀNG") !== -1) {
@@ -804,7 +825,7 @@ function updateCartHeaderBadge() {
     }
 }
 
-// hiện thông báo nhỏ ở góc dưới khi bấm thêm vào giỏ
+// hiện thông báo nhỏ ở góc dưới màn hình mỗi khi bấm thêm vào giỏ
 function showSportMaxToast(message) {
     let toast = document.getElementById("sportmax-toast");
     if (!toast) {
@@ -824,7 +845,7 @@ function showSportMaxToast(message) {
     }, 2800);
 }
 
-// đổ danh sách loại sp ra cột lọc bên trái
+// đổ danh sách các loại sp ra cột lọc bên trái
 function renderCategories() {
     let categoryBox = document.getElementById("category-filter");
     if (!categoryBox) return;
@@ -832,9 +853,9 @@ function renderCategories() {
 
     for (let i = 0; i < allCategories.length; i++) {
         let cat = allCategories[i];
-        if (cat.isHidden || cat.status === "hidden") continue;
+        if (cat.isHidden) continue;
 
-        // đếm xem loại này có bao nhiêu sp
+        // đếm thử xem loại này có bao nhiêu sp
         let count = 0;
         for (let j = 0; j < allProducts.length; j++) {
             if (allProducts[j].categoryCode === cat.categoryCode && !allProducts[j].isHidden) {
@@ -844,10 +865,10 @@ function renderCategories() {
 
         if (count > 0) {
             categoryBox.innerHTML += `
-                <div style="margin-bottom: 8px;">
-                    <label style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-                        <span>
-                            <input type="checkbox" class="cat-checkbox" value="${cat.categoryCode}" onchange="applyAdvancedFilters()">
+                <div style="margin-bottom: 4px;">
+                    <label style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 2px 0;">
+                        <span style="display: inline-flex; align-items: center; gap: 6px;">
+                            <input type="checkbox" class="cat-checkbox" value="${cat.categoryCode}" onchange="applyAdvancedFilters()" style="margin: 0;">
                             ${cat.name}
                         </span>
                         <span style="color: #64748b; font-size: 12px;">(${count})</span>
@@ -856,6 +877,8 @@ function renderCategories() {
             `;
         }
     }
+
+
 }
 
 // đổ danh mục vô menu nếu có xài id dynamicMegaMenu
@@ -866,7 +889,7 @@ function renderDynamicMenus() {
     let html = "";
     for (let i = 0; i < allCategories.length; i++) {
         let cat = allCategories[i];
-        if (!cat.isHidden && cat.status !== "hidden") {
+        if (!cat.isHidden) {
             html += `
                 <div class="mega-column">
                     <h4>${cat.name}</h4>
@@ -882,23 +905,35 @@ function renderDynamicMenus() {
     }
 }
 
-// hiện dòng báo tìm thấy bao nhiêu sp ở thanh công cụ phía trên lưới
+// hiện dòng báo tìm thấy bao nhiêu sp ở ngay trên đầu lưới
 function updateFilterStatusSummary() {
     let summaryEl = document.getElementById("filterResultSummary");
-    if (!summaryEl) return;
+    let toolbar = document.querySelector(".toolbar");
 
-    let headerKw = document.getElementById("searchInput") ? document.getElementById("searchInput").value.trim() : "";
-    let advKw = document.getElementById("advNameInput") ? document.getElementById("advNameInput").value.trim() : "";
-    let kw = advKw || headerKw;
+    if (!summaryEl && toolbar) {
+        summaryEl = document.createElement("div");
+        summaryEl.id = "filterResultSummary";
+        summaryEl.style.fontWeight = "600";
+        summaryEl.style.color = "#0f172a";
+        toolbar.style.justifyContent = "space-between";
+        toolbar.style.alignItems = "center";
+        toolbar.insertBefore(summaryEl, toolbar.firstChild);
+    }
 
-    if (kw !== "") {
-        summaryEl.innerHTML = 'Tìm thấy <strong style="color: #3e93d4;">' + filteredList.length + '</strong> sản phẩm cho từ khóa <em>"' + kw + '"</em>';
-    } else {
-        summaryEl.innerHTML = 'Hiển thị <strong style="color: #3e93d4;">' + filteredList.length + '</strong> sản phẩm thể thao chính hãng';
+    if (summaryEl) {
+        let headerKw = document.getElementById("searchInput") ? document.getElementById("searchInput").value.trim() : "";
+        let advKw = document.getElementById("advNameInput") ? document.getElementById("advNameInput").value.trim() : "";
+        let kw = advKw || headerKw;
+
+        if (kw !== "") {
+            summaryEl.innerHTML = 'Tìm thấy <strong style="color: #0284c7;">' + filteredList.length + '</strong> sản phẩm cho từ khóa <em>"' + kw + '"</em>';
+        } else {
+            summaryEl.innerHTML = 'Hiển thị <strong style="color: #0284c7;">' + filteredList.length + '</strong> sản phẩm thể thao chính hãng';
+        }
     }
 }
 
-// vẽ danh sách sp ra màn hình chính
+// hàm vẽ danh sách sp ra màn hình chính
 function renderProducts() {
     let grid = document.getElementById("productGrid");
     if (!grid) return;
@@ -906,11 +941,11 @@ function renderProducts() {
 
     updateFilterStatusSummary();
 
-    // nếu lọc ko ra món nào thì hiện thông báo + nút xóa bộ lọc
+    // nếu lọc ko ra món nào thì hiện khung báo ko tìm thấy + nút xoá lọc
     if (filteredList.length === 0) {
         grid.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #fff; border-radius: 10px; border: 1px solid #d7e3ec;">
-                <i class="fa-solid fa-box-open" style="font-size: 40px; color: #3e93d4; margin-bottom: 12px;"></i>
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #fff; border-radius: 10px; border: 1px solid #e2e8f0;">
+                <i class="fa-solid fa-box-open" style="font-size: 40px; color: #0284c7; margin-bottom: 12px;"></i>
                 <p style="margin: 0 0 15px; font-size: 16px; font-weight: 600;">Không tìm thấy sản phẩm nào phù hợp với bộ lọc hiện tại.</p>
                 <button class="btn-primary" style="width: auto; padding: 10px 24px;" onclick="resetAllFilters()">Xóa bộ lọc & Xem tất cả</button>
             </div>
@@ -919,7 +954,7 @@ function renderProducts() {
         return;
     }
 
-    // cắt mảng lấy 15 sp của trang hiện tại
+    // cắt mảng sp theo số trang hiện tại (mỗi trang 15 món)
     let startIndex = (currentPage - 1) * productsPerPage;
     let endIndex = startIndex + productsPerPage;
     let productsToDisplay = filteredList.slice(startIndex, endIndex);
@@ -928,7 +963,7 @@ function renderProducts() {
         let product = productsToDisplay[i];
         if (product.isHidden) continue;
 
-        // lấy hình bên gallery-data.js, nếu ko có thì lấy hình mặc định của sp
+        // lấy hình từ bên gallery-data.js qua, nếu ko có thì xài hình mặc định của sp
         let cardImage = product.image || "https://via.placeholder.com/200?text=SportMax";
         if (window.SPORTMAX_GALLERIES && product.sourceUrl && window.SPORTMAX_GALLERIES[product.sourceUrl]) {
             let galleryArr = window.SPORTMAX_GALLERIES[product.sourceUrl];
@@ -955,7 +990,7 @@ function renderProducts() {
                 <div class="product-price">${formattedPrice} ₫ ${originalPriceHtml}</div>
                 <div style="display: flex; gap: 8px; margin-top: auto;">
                     <button class="btn-primary" style="flex: 1;" onclick="window.location.href='product-detail.html?id=${product.productCode}'">Xem chi tiết</button>
-                    <button class="btn-primary" style="width: 42px; padding: 10px 0; background-color: #22303f;" onclick="quickAddToCart('${product.productCode}')" title="Thêm vào giỏ hàng">
+                    <button class="btn-primary" style="width: 42px; padding: 10px 0; background-color: #0f172a;" onclick="quickAddToCart('${product.productCode}')" title="Thêm vào giỏ hàng">
                         <i class="fa-solid fa-cart-plus"></i>
                     </button>
                 </div>
@@ -967,24 +1002,27 @@ function renderProducts() {
     renderPagination();
 }
 
-// bấm nút đặt lại bộ lọc thì xóa trắng các ô nhập rồi lọc lại từ đầu
+// bấm nút đặt lại bộ lọc thì xoá trắng các ô nhập rồi load lại từ đầu
 function resetAllFilters() {
     if (document.getElementById("searchInput")) document.getElementById("searchInput").value = "";
     if (document.getElementById("advNameInput")) document.getElementById("advNameInput").value = "";
     if (document.getElementById("minPrice")) document.getElementById("minPrice").value = "";
     if (document.getElementById("maxPrice")) document.getElementById("maxPrice").value = "";
     if (document.getElementById("sortSelect")) document.getElementById("sortSelect").value = "default";
+    if (document.getElementById("brandFilterSelect")) document.getElementById("brandFilterSelect").value = "";
 
     let checkedBoxes = document.querySelectorAll(".cat-checkbox:checked");
     for (let i = 0; i < checkedBoxes.length; i++) {
         checkedBoxes[i].checked = false;
     }
 
-    isSaleMode = false;
+    if (window.history && window.history.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
     applyAdvancedFilters();
 }
 
-// bấm nút giỏ hàng nhỏ ở từng thẻ sp để thêm nhanh 1 món vô giỏ
+// bấm nút giỏ hàng nhỏ ở từng ô sp là thêm nhanh 1 món vô giỏ luôn
 function quickAddToCart(productCode) {
     let product = null;
     for (let i = 0; i < allProducts.length; i++) {
@@ -1024,13 +1062,13 @@ function quickAddToCart(productCode) {
     showSportMaxToast('Đã thêm "' + product.name + '" vào giỏ hàng!');
 }
 
-// nếu link hình bị lỗi thì đổi sang ảnh mặc định
+// lỡ link hình bị lỗi thì đổi qua hình placeholder cho đỡ bể giao diện
 function handleProductImageError(productCode, imageElement) {
     imageElement.onerror = null;
     imageElement.src = "https://via.placeholder.com/200?text=SportMax";
 }
 
-// vẽ các nút phân trang 1, 2, 3... ở dưới cùng
+// vẽ mấy cái nút bấm phân trang 1, 2, 3... ở dưới cùng
 function renderPagination() {
     let paginationBox = document.getElementById("pagination");
     if (!paginationBox) return;
@@ -1046,7 +1084,7 @@ function renderPagination() {
         html += `<button class="page-btn page-nav" onclick="changePage(${currentPage - 1})"><i class="fa-solid fa-chevron-left"></i></button>`;
     }
 
-    // chỉ hiện trang đầu, trang cuối với các trang lân cận
+    // chỉ hiện trang đầu, trang cuối với mấy trang sát bên cho thanh phân trang gọn
     let previousPage = 0;
     for (let page = 1; page <= totalPages; page++) {
         if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
@@ -1059,7 +1097,7 @@ function renderPagination() {
         }
     }
 
-    // nút qua trang kế tiếp
+    // nút qua trang tiếp theo
     if (currentPage < totalPages) {
         html += `<button class="page-btn page-nav" onclick="changePage(${currentPage + 1})"><i class="fa-solid fa-chevron-right"></i></button>`;
     }
@@ -1067,7 +1105,7 @@ function renderPagination() {
     paginationBox.innerHTML = html;
 }
 
-// chuyển trang và cuộn lên đầu lưới sản phẩm
+// bấm đổi trang xong thì cuộn nhẹ lên đầu danh sách sp
 function changePage(pageNumber) {
     let totalPages = Math.ceil(filteredList.length / productsPerPage);
     if (totalPages < 1) totalPages = 1;
@@ -1078,13 +1116,13 @@ function changePage(pageNumber) {
     currentPage = pageNumber;
     renderProducts();
 
-    let grid = document.getElementById("productGrid");
-    if (grid) {
-        grid.scrollIntoView({ behavior: "smooth", block: "start" });
+    let scrollArea = document.getElementById("productScrollArea");
+    if (scrollArea) {
+        scrollArea.scrollTo({ top: 0, behavior: "smooth" });
     }
 }
 
-// bỏ dấu tiếng Việt để gõ không dấu vẫn tìm ra sp
+// hàm xoá dấu tiếng Việt để gõ ko dấu vẫn tìm ra sp bình thường
 function removeVietnameseTones(str) {
     str = String(str || "").toLowerCase();
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -1099,11 +1137,12 @@ function removeVietnameseTones(str) {
     return str;
 }
 
-// kiểm tra tên sp có khớp với từ khóa tìm kiếm không
+// kiểm tra xem tên sp có khớp với từ khoá khách gõ ko (xử lý luôn dấu | ở mega menu)
 function matchProductSearch(productText, rawQuery) {
     let queryStr = String(rawQuery || "").trim();
     if (queryStr === "") return true;
 
+    // tách mấy từ khoá nối nhau bằng dấu | trên link mega menu
     let groups = queryStr.split("|");
     let textLower = String(productText || "").toLowerCase().replace(/[-/,()._—]/g, " ").replace(/\s+/g, " ");
     let textNoTone = removeVietnameseTones(productText);
@@ -1115,6 +1154,7 @@ function matchProductSearch(productText, rawQuery) {
         let gLower = g.toLowerCase().replace(/[-/,()._—]/g, " ").replace(/\s+/g, " ").trim();
         let gNoTone = removeVietnameseTones(g);
 
+        // nếu khách gõ có dấu thì ưu tiên tìm khớp chữ có dấu trước
         let hasAccent = (gLower !== gNoTone);
         if (hasAccent) {
             if (textLower.indexOf(gLower) !== -1) return true;
@@ -1122,6 +1162,7 @@ function matchProductSearch(productText, rawQuery) {
             if (textNoTone.indexOf(gNoTone) !== -1) return true;
         }
 
+        // tách từng chữ ra để kiểm tra
         let words = (hasAccent ? gLower : gNoTone).split(" ");
         let targetWords = (hasAccent ? textLower : textNoTone).split(" ");
         let allWordsMatched = true;
@@ -1148,11 +1189,13 @@ function matchProductSearch(productText, rawQuery) {
     return false;
 }
 
-// lọc sản phẩm nâng cao: kết hợp tìm theo Tên + Loại sp + Khoảng giá
+// hàm lọc nâng cao: kết hợp tìm theo Tên + Loại sp + Khoảng giá (từ... đến...)
 function applyAdvancedFilters() {
     let headerKeyword = document.getElementById("searchInput") ? document.getElementById("searchInput").value.trim() : "";
     let advKeyword = document.getElementById("advNameInput") ? document.getElementById("advNameInput").value.trim() : "";
+    let brandKeyword = document.getElementById("brandFilterSelect") ? document.getElementById("brandFilterSelect").value.trim() : "";
 
+    // gom các mã loại sp đang được tích chọn bên cột trái
     let checkboxes = document.querySelectorAll(".cat-checkbox:checked");
     let selectedCategories = [];
     for (let i = 0; i < checkboxes.length; i++) {
@@ -1162,6 +1205,9 @@ function applyAdvancedFilters() {
     let minPrice = document.getElementById("minPrice") ? document.getElementById("minPrice").value : "";
     let maxPrice = document.getElementById("maxPrice") ? document.getElementById("maxPrice").value : "";
 
+    let params = new URLSearchParams(window.location.search);
+    let promoOnly = params.get("sale") === "true";
+
     filteredList = [];
     for (let i = 0; i < allProducts.length; i++) {
         let product = allProducts[i];
@@ -1169,18 +1215,21 @@ function applyAdvancedFilters() {
 
         let displayPrice = getProductDisplayPrice(product);
         let hasDiscount = product.originalPrice && Number(product.originalPrice) > displayPrice;
-        if (isSaleMode && !hasDiscount) continue;
+        if (promoOnly && !hasDiscount) continue;
 
+        // ghép chung tên + thông số + mô tả để tìm cho nhạy
         let searchTarget = (product.name || "") + " " + (product.specifications || "") + " " + (product.description || "");
 
+        // kiểm tra khớp tên (cả ô trên header lẫn ô tên ở cột lọc bên trái)
         let matchHeader = matchProductSearch(searchTarget, headerKeyword);
         let matchAdvName = matchProductSearch(searchTarget, advKeyword);
+        let matchBrand = (brandKeyword === "") ? true : matchProductSearch(searchTarget, brandKeyword);
 
         let matchCategory = (selectedCategories.length === 0) || (selectedCategories.indexOf(product.categoryCode) !== -1);
         let matchMin = (minPrice === "") ? true : (displayPrice >= parseInt(minPrice));
         let matchMax = (maxPrice === "") ? true : (displayPrice <= parseInt(maxPrice));
 
-        if (matchHeader && matchAdvName && matchCategory && matchMin && matchMax) {
+        if (matchHeader && matchAdvName && matchBrand && matchCategory && matchMin && matchMax) {
             filteredList.push(product);
         }
     }
@@ -1190,17 +1239,16 @@ function applyAdvancedFilters() {
     renderProducts();
 }
 
-// bấm tìm trên thanh header thì bỏ chọn các checkbox cũ để tìm toàn bộ shop
+// bấm tìm trên thanh header thì bỏ tích mấy cái checkbox cũ đi để tìm toàn shop
 function triggerDirectSearch() {
     let checkedBoxes = document.querySelectorAll(".cat-checkbox:checked");
     for (let i = 0; i < checkedBoxes.length; i++) {
         checkedBoxes[i].checked = false;
     }
-    isSaleMode = false;
     applyAdvancedFilters();
 }
 
-// sắp xếp danh sách sản phẩm theo giá hoặc mặc định theo mã SP
+// sắp xếp sp theo giá tăng/giảm hoặc mặc định theo mã sp
 function applySortLogic() {
     let sortEl = document.getElementById("sortSelect");
     let sortValue = sortEl ? sortEl.value : "default";
@@ -1215,21 +1263,19 @@ function applySortLogic() {
         });
     } else {
         filteredList.sort(function(a, b) {
-            let numA = parseInt(String(a.productCode || "").replace("SP", "")) || 0;
-            let numB = parseInt(String(b.productCode || "").replace("SP", "")) || 0;
-            return numA - numB;
+            return String(a.productCode).localeCompare(String(b.productCode), undefined, { numeric: true });
         });
     }
 }
 
-// chạy lần đầu khi mở trang danh sách sản phẩm
+// chạy lần đầu khi mở trang danh sách sp
 if (document.getElementById("productGrid")) {
     renderCategories();
     renderDynamicMenus();
     renderProducts();
 }
 
-// đọc tham số trên url (khi bấm từ mega menu hoặc thanh tìm kiếm trang khác qua)
+// đọc tham số trên thanh địa chỉ url (vd khi bấm từ mega menu hoặc trang chi tiết qua)
 function initPageFromUrl() {
     updateCartHeaderBadge();
 
@@ -1238,17 +1284,9 @@ function initPageFromUrl() {
     let catCode = params.get("cat");
     let saleFlag = params.get("sale");
 
-    if (saleFlag === "true") {
-        isSaleMode = true;
-    }
-
     if (catCode) {
-        let checkboxes = document.querySelectorAll(".cat-checkbox");
-        for (let i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].value === catCode) {
-                checkboxes[i].checked = true;
-            }
-        }
+        let targetCheckbox = document.querySelector('.cat-checkbox[value="' + catCode + '"]');
+        if (targetCheckbox) targetCheckbox.checked = true;
     }
 
     if (searchKeyword) {

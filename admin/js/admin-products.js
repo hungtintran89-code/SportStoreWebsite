@@ -1,4 +1,3 @@
-// biến lưu danh sách sp, loại sp và trạng thái đang thêm mới hay đang sửa
 let products = [];
 let categories = [];
 let isEditMode = false;
@@ -7,87 +6,87 @@ let currentEditCode = "";
 const defaultCategories = [
     {
         id: "CAT01",
-        code: "RACKET",
         categoryCode: "CAT01",
+        code: "RACKET",
         icon: "🏸",
         name: "Vợt & Dụng Cụ",
         slug: "vot-dung-cu",
-        desc: "Vợt cầu lông, bóng bàn, tennis, pickleball và dụng cụ thi đấu chính hãng",
+        desc: "Vợt cầu lông, bóng bàn, tennis, pickleball và bóng thi đấu tiêu chuẩn quốc tế",
         profitPercent: 20,
         profitMargin: 20,
-        itemCount: 165,
+        itemCount: 215,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT02",
-        code: "SHOES",
         categoryCode: "CAT02",
+        code: "SHOES",
         icon: "👟",
         name: "Giày Thể Thao",
         slug: "giay-the-thao",
-        desc: "Giày chạy bộ, cầu lông, bóng đá, bóng rổ, bóng chuyền bám sân chống trượt",
+        desc: "Giày chạy bộ, cầu lông, bóng đá, bóng chuyền, bóng rổ bám sân chống lật cổ chân",
         profitPercent: 25,
         profitMargin: 25,
-        itemCount: 118,
+        itemCount: 110,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT03",
-        code: "SHIRT",
         categoryCode: "CAT03",
+        code: "SHIRT",
         icon: "👕",
         name: "Áo Thể Thao",
         slug: "ao-the-thao",
-        desc: "Áo đấu cầu lông, bóng đá, bóng rổ, tập gym chất vải thoáng khí",
+        desc: "Áo đấu cầu lông, bóng đá, bóng rổ và đồ tập Gym thoáng khí thoát mồ hôi nhanh",
         profitPercent: 30,
         profitMargin: 30,
-        itemCount: 65,
+        itemCount: 82,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT04",
-        code: "SKIRT",
         categoryCode: "CAT04",
+        code: "SKIRT",
         icon: "👗",
         name: "Váy Thể Thao",
         slug: "vay-the-thao",
-        desc: "Váy cầu lông, tennis co giãn 4 chiều kèm quần bảo hộ bên trong",
+        desc: "Chân váy thể thao cầu lông, tennis, pickleball co giãn 4 chiều kèm quần bảo hộ",
         profitPercent: 30,
         profitMargin: 30,
-        itemCount: 25,
+        itemCount: 30,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT05",
-        code: "PANTS",
         categoryCode: "CAT05",
+        code: "PANTS",
         icon: "🩳",
         name: "Quần Thể Thao",
         slug: "quan-the-thao",
-        desc: "Quần short thể thao, quần dài jogger và trackpant vận động thoải mái",
+        desc: "Quần short thi đấu và quần dài Jogger / Trackpant co giãn thoải mái",
         profitPercent: 30,
         profitMargin: 30,
-        itemCount: 78,
+        itemCount: 41,
         status: "active",
         isHidden: false,
         banner: "#"
     },
     {
         id: "CAT06",
-        code: "BACKPACK",
         categoryCode: "CAT06",
+        code: "BACKPACK",
         icon: "🎒",
         name: "Balo Thể Thao",
         slug: "balo-the-thao",
-        desc: "Balo đựng vợt và đồ tập nhiều ngăn chống thấm nước",
+        desc: "Balo đựng vợt và trang bị thể thao đa năng có ngăn chứa giày riêng biệt",
         profitPercent: 25,
         profitMargin: 25,
         itemCount: 42,
@@ -97,12 +96,12 @@ const defaultCategories = [
     },
     {
         id: "CAT07",
-        code: "BAG",
         categoryCode: "CAT07",
+        code: "BAG",
         icon: "👜",
         name: "Túi Thể Thao",
         slug: "tui-the-thao",
-        desc: "Túi đựng vợt chuyên dụng và túi trống tập gym sức chứa lớn",
+        desc: "Túi đựng vợt chuyên dụng lót cách nhiệt chống sốc và túi trống tập Gym",
         profitPercent: 25,
         profitMargin: 25,
         itemCount: 47,
@@ -112,12 +111,12 @@ const defaultCategories = [
     },
     {
         id: "CAT08",
-        code: "ACCESSORY",
         categoryCode: "CAT08",
+        code: "ACCESSORY",
         icon: "🧦",
         name: "Phụ Kiện Thể Thao",
         slug: "phu-kien-the-thao",
-        desc: "Vớ chống trượt, băng bảo hộ, cước đan vợt, quấn cán, thảm tập và bình nước",
+        desc: "Vớ chống trượt, băng chặn mồ hôi, cước đan vợt, quấn cán, bóng tập cổ tay và bình nước",
         profitPercent: 40,
         profitMargin: 40,
         itemCount: 34,
@@ -127,7 +126,15 @@ const defaultCategories = [
     }
 ];
 
-// lấy dữ liệu sp và loại sp từ dưới localStorage lên
+function goToStorePage() {
+    let path = window.location.pathname;
+    if (path.indexOf("/admin/") !== -1) {
+        window.location.href = "../products.html";
+    } else {
+        window.location.href = "products.html";
+    }
+}
+
 function loadData() {
     let pData = localStorage.getItem("products");
     let cData = localStorage.getItem("categories");
@@ -135,78 +142,138 @@ function loadData() {
     products = pData ? JSON.parse(pData) : (typeof mockProducts !== "undefined" ? mockProducts.slice() : []);
     if (cData) {
         categories = JSON.parse(cData);
+        for (let i = 0; i < categories.length; i++) {
+            let c = categories[i];
+            if (!c.categoryCode && c.id) c.categoryCode = c.id;
+            if (c.profitMargin === undefined && c.profitPercent !== undefined) c.profitMargin = c.profitPercent;
+            if (c.isHidden === undefined && c.status !== undefined) c.isHidden = (c.status === "hidden" || c.status === "inactive");
+            c.banner = "#";
+        }
     } else {
         categories = defaultCategories.slice();
         localStorage.setItem("categories", JSON.stringify(categories));
     }
 }
 
-// đổ các loại sp vô ô select trong popup thêm/sửa sp
 function populateCategorySelect() {
     let select = document.getElementById("proCategoryInput");
-    if (!select) return;
-    select.innerHTML = "";
-    for (let i = 0; i < categories.length; i++) {
-        select.innerHTML += `<option value="${categories[i].categoryCode}">${categories[i].name}</option>`;
+    if (select) {
+        select.innerHTML = "";
+        for (let i = 0; i < categories.length; i++) {
+            select.innerHTML += `<option value="${categories[i].categoryCode}">${categories[i].name}</option>`;
+        }
+    }
+
+    let filterSelect = document.getElementById("adminFilterCategory");
+    if (filterSelect) {
+        filterSelect.innerHTML = `<option value="">Tất cả môn thể thao</option>`;
+        for (let i = 0; i < categories.length; i++) {
+            filterSelect.innerHTML += `<option value="${categories[i].categoryCode}">${categories[i].name}</option>`;
+        }
     }
 }
 
-// tìm tên loại sp dựa theo mã loại (vd CAT01 -> Vợt & Dụng Cụ)
 function getCategoryName(code) {
     for (let i = 0; i < categories.length; i++) {
         if (categories[i].categoryCode === code) {
             return categories[i].name;
         }
     }
-    return "Không xác định";
+    return "Trang bị thể thao";
 }
 
-// vẽ bảng danh sách sp (có hỗ trợ gõ tìm nhanh theo mã hoặc tên)
+function detectBrandName(product) {
+    if (product.brand) return product.brand;
+    let text = String((product.name || "") + " " + (product.specifications || "")).toLowerCase();
+    let brands = [
+        { key: "yonex", label: "Yonex" },
+        { key: "mizuno", label: "Mizuno" },
+        { key: "lining", label: "Li-Ning" },
+        { key: "li-ning", label: "Li-Ning" },
+        { key: "victor", label: "Victor" },
+        { key: "asics", label: "Asics" },
+        { key: "nike", label: "Nike" },
+        { key: "adidas", label: "Adidas" },
+        { key: "kamito", label: "Kamito" },
+        { key: "kumpoo", label: "Kumpoo" },
+        { key: "molten", label: "Molten" },
+        { key: "wilson", label: "Wilson" },
+        { key: "joola", label: "Joola" },
+        { key: "butterfly", label: "Butterfly" }
+    ];
+    for (let i = 0; i < brands.length; i++) {
+        if (text.indexOf(brands[i].key) !== -1) {
+            return brands[i].label;
+        }
+    }
+    return "SportStore";
+}
+
 function renderProducts(filterKeyword) {
     let tbody = document.getElementById("productTableBody");
     if (!tbody) return;
     tbody.innerHTML = "";
 
-    let kw = String(filterKeyword || "").trim().toLowerCase();
+    let navCatCount = document.getElementById("navCatCount");
+    if (navCatCount) navCatCount.innerText = categories.length;
+    let navProdCount = document.getElementById("navProdCount");
+    if (navProdCount) navProdCount.innerText = products.length;
+
+    let searchBox = document.getElementById("adminSearchInput");
+    let kw = String(filterKeyword !== undefined ? filterKeyword : (searchBox ? searchBox.value : "")).trim().toLowerCase();
+    let catFilterEl = document.getElementById("adminFilterCategory");
+    let brandFilterEl = document.getElementById("adminFilterBrand");
+    let selectedCat = catFilterEl ? catFilterEl.value : "";
+    let selectedBrand = brandFilterEl ? brandFilterEl.value.toLowerCase() : "";
+
     let list = [];
+    for (let i = 0; i < products.length; i++) {
+        let p = products[i];
+        let pCode = String(p.productCode || "").toLowerCase();
+        let pName = String(p.name || "").toLowerCase();
+        let cName = getCategoryName(p.categoryCode).toLowerCase();
+        let bName = detectBrandName(p).toLowerCase();
 
-    if (kw !== "") {
-        for (let i = 0; i < products.length; i++) {
-            let p = products[i];
-            let pCode = String(p.productCode || "").toLowerCase();
-            let pName = String(p.name || "").toLowerCase();
-            let cName = getCategoryName(p.categoryCode).toLowerCase();
-
-            if (pCode.indexOf(kw) !== -1 || pName.indexOf(kw) !== -1 || cName.indexOf(kw) !== -1) {
-                list.push(p);
-            }
+        if (kw !== "" && pCode.indexOf(kw) === -1 && pName.indexOf(kw) === -1 && cName.indexOf(kw) === -1 && bName.indexOf(kw) === -1) {
+            continue;
         }
-    } else {
-        list = products;
+        if (selectedCat !== "" && p.categoryCode !== selectedCat) {
+            continue;
+        }
+        if (selectedBrand !== "" && bName.indexOf(selectedBrand) === -1 && pName.indexOf(selectedBrand) === -1) {
+            continue;
+        }
+        list.push(p);
     }
 
     let rowsHtml = "";
     for (let i = 0; i < list.length; i++) {
         let p = list[i];
-        let statusText = p.isHidden ? "Đang ẩn" : "Đang hiện";
-        let statusColor = p.isHidden ? "#e0685f" : "#2e7d32";
+        let statusText = p.isHidden ? "Đang ẩn" : "Đang bán";
+        let statusClass = p.isHidden ? "hidden" : "active";
         let displayPrice = Number(p.salePrice || p.price || p.sellingPrice || p.importPrice || 0);
         let formattedPrice = displayPrice.toLocaleString("vi-VN");
         let thumbUrl = p.image || "https://via.placeholder.com/50?text=SP";
         let stockCount = (p.stock !== undefined && p.stock !== null) ? p.stock : 50;
+        let brandLabel = detectBrandName(p);
 
         rowsHtml += `
             <tr>
-                <td><img src="${thumbUrl}" alt="img" style="width: 50px; height: 50px; object-fit: contain; border-radius: 4px;" onerror="this.src='https://via.placeholder.com/50?text=SP'"></td>
-                <td><strong>${p.productCode}</strong></td>
-                <td>${p.name}</td>
-                <td>${getCategoryName(p.categoryCode)}</td>
-                <td style="color: #e0685f; font-weight: 600;">${formattedPrice} đ</td>
-                <td>${stockCount}</td>
-                <td style="color: ${statusColor}; font-weight: bold;">${statusText}</td>
+                <td><img src="${thumbUrl}" alt="${p.name}" class="admin-thumb" onerror="this.src='https://via.placeholder.com/50?text=SP'"></td>
+                <td>
+                    <div class="admin-prod-info">
+                        <strong>${p.name}</strong>
+                        <span>Mã: ${p.productCode}</span>
+                    </div>
+                </td>
+                <td><span class="badge-category-pill">${getCategoryName(p.categoryCode)}</span></td>
+                <td><strong>${brandLabel}</strong></td>
+                <td><span class="admin-price-col">${formattedPrice} ₫</span></td>
+                <td><strong>${stockCount}</strong></td>
+                <td><span class="status-badge-pill ${statusClass}">${statusText}</span></td>
                 <td style="white-space: nowrap;">
                     <button class="btn-action btn-edit" onclick="openEditModal('${p.productCode}')">Sửa</button>
-                    <button class="btn-action" style="background-color: #64748b;" onclick="toggleProductStatus('${p.productCode}')">${p.isHidden ? 'Hiện' : 'Ẩn'}</button>
+                    <button class="btn-action btn-toggle-status" onclick="toggleProductStatus('${p.productCode}')">${p.isHidden ? 'Hiện' : 'Ẩn'}</button>
                     <button class="btn-action btn-delete" onclick="deleteProduct('${p.productCode}')">Xóa</button>
                 </td>
             </tr>
@@ -215,7 +282,6 @@ function renderProducts(filterKeyword) {
     tbody.innerHTML = rowsHtml;
 }
 
-// bấm nút + Thêm Sản Phẩm thì làm trống form rồi mở popup lên
 function openAddProductModal() {
     isEditMode = false;
     currentEditCode = "";
@@ -233,12 +299,10 @@ function openAddProductModal() {
     document.getElementById("productModal").style.display = "flex";
 }
 
-// bấm nút X để tắt popup
 function closeProductModal() {
     document.getElementById("productModal").style.display = "none";
 }
 
-// xử lý khi bấm nút Lưu Sản Phẩm trong form
 function saveProduct() {
     let code = document.getElementById("proCodeInput").value.trim();
     let name = document.getElementById("proNameInput").value.trim();
@@ -257,7 +321,6 @@ function saveProduct() {
     let priceNum = parseInt(price);
     let stockNum = parseInt(stock);
 
-    // lấy % lợi nhuận của loại sp đó để tính ra giá bán tự động
     let margin = 0;
     for (let i = 0; i < categories.length; i++) {
         if (categories[i].categoryCode === catCode) {
@@ -267,7 +330,6 @@ function saveProduct() {
     }
     let computedSellingPrice = Math.round(priceNum * (1 + margin / 100) / 1000) * 1000;
 
-    // nếu nhập nhiều link hình cách nhau bằng dấu phẩy thì tách ra thành mảng
     let imgArray = [];
     if (image !== "") {
         let parts = image.split(",");
@@ -276,10 +338,9 @@ function saveProduct() {
             if (s !== "") imgArray.push(s);
         }
     }
-    let firstImage = imgArray.length > 0 ? imgArray[0] : "https://via.placeholder.com/200?text=SportMax";
+    let firstImage = imgArray.length > 0 ? imgArray[0] : "https://via.placeholder.com/200?text=SportStore";
 
     if (isEditMode) {
-        // nếu đang ở chế độ Sửa thì cập nhật lại thông tin cho sp đó
         for (let i = 0; i < products.length; i++) {
             if (products[i].productCode === currentEditCode) {
                 products[i].name = name;
@@ -296,7 +357,6 @@ function saveProduct() {
             }
         }
     } else {
-        // nếu thêm mới thì check xem mã sp có bị trùng với sp cũ ko
         for (let i = 0; i < products.length; i++) {
             if (products[i].productCode === code) {
                 alert("Mã sản phẩm đã tồn tại trong hệ thống!");
@@ -319,16 +379,14 @@ function saveProduct() {
             profitMarginOverride: 0,
             isHidden: isHidden
         };
-        products.unshift(newPro); // nhét sp mới thêm lên đầu bảng cho dễ thấy
+        products.unshift(newPro);
     }
 
     localStorage.setItem("products", JSON.stringify(products));
-    let searchBox = document.getElementById("adminSearchInput");
-    renderProducts(searchBox ? searchBox.value : "");
+    renderProducts();
     document.getElementById("productModal").style.display = "none";
 }
 
-// bấm nút Sửa thì mở popup lên và điền lại đầy đủ thông tin cũ vào các ô
 window.openEditModal = function(code) {
     isEditMode = true;
     currentEditCode = code;
@@ -357,7 +415,6 @@ window.openEditModal = function(code) {
     }
 };
 
-// bấm nút Ẩn/Hiện để tạm ẩn sp ngoài trang khách mà ko cần xoá mất dữ liệu
 window.toggleProductStatus = function(code) {
     for (let i = 0; i < products.length; i++) {
         if (products[i].productCode === code) {
@@ -366,11 +423,9 @@ window.toggleProductStatus = function(code) {
         }
     }
     localStorage.setItem("products", JSON.stringify(products));
-    let searchBox = document.getElementById("adminSearchInput");
-    renderProducts(searchBox ? searchBox.value : "");
+    renderProducts();
 };
 
-// xoá hẳn sp khỏi danh sách (có hỏi confirm trước)
 window.deleteProduct = function(code) {
     if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
         let newList = [];
@@ -381,8 +436,7 @@ window.deleteProduct = function(code) {
         }
         products = newList;
         localStorage.setItem("products", JSON.stringify(products));
-        let searchBox = document.getElementById("adminSearchInput");
-        renderProducts(searchBox ? searchBox.value : "");
+        renderProducts();
     }
 };
 
