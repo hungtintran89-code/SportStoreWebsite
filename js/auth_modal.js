@@ -24,8 +24,10 @@
       }
     }
     return (list || []).map(function (c) {
+      var custId = c.customerId || c.id;
       return {
-        id: c.id,
+        customerId: custId,
+        id: custId,
         name: c.name,
         email: c.email,
         phone: c.phone,
@@ -46,6 +48,7 @@
 
     // Tài khoản Admin hệ thống chuẩn
     var adminAccount = {
+      customerId: 'ADMIN-001',
       id: 'ADMIN-001',
       name: 'Quản Trị Viên SportStore',
       email: 'admin@sportstore.vn',
@@ -175,8 +178,10 @@
       if (!user) return;
 
       var isAdmin = user.role === 'admin';
+      var activeId = user.customerId || user.id;
       localStorage.setItem(SESSION_KEY, JSON.stringify({
-        id: user.id,
+        customerId: activeId,
+        id: activeId,
         name: user.name,
         email: user.email,
         phone: user.phone || '',
@@ -279,8 +284,10 @@
           throw new Error('Số điện thoại này đã được đăng ký.');
         }
 
+        var regId = 'KH-' + String(Date.now()).slice(-4);
         var newUser = {
-          id: 'u-' + Date.now(),
+          customerId: regId,
+          id: regId,
           name: form.name.value.trim(),
           email: accountInput,
           password: form.password.value,
@@ -298,7 +305,8 @@
           var storeCusts = JSON.parse(localStorage.getItem('sport_customers') || '[]');
           if (Array.isArray(storeCusts)) {
             storeCusts.push({
-              id: 'KH-' + String(Date.now()).slice(-4),
+              customerId: regId,
+              id: regId,
               name: newUser.name,
               phone: newUser.phone,
               email: newUser.email,
@@ -331,8 +339,10 @@
       if (!user) throw new Error('Email/SĐT hoặc mật khẩu không đúng.');
 
       var isAdmin = user.role === 'admin';
+      var activeId = user.customerId || user.id;
       localStorage.setItem(SESSION_KEY, JSON.stringify({
-        id: user.id,
+        customerId: activeId,
+        id: activeId,
         name: user.name,
         email: user.email,
         phone: user.phone || '',

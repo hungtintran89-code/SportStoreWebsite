@@ -1,9 +1,3 @@
-/**
- * ==========================================================================
- * SPORTSTORE - DEV 1 MODULE: TRANG CHỦ & TRÌNH DIỄN THƯƠNG HIỆU (DEV1_HOME.JS)
- * Chuẩn chạy Local file:/// không phát sinh lỗi CORS
- * ==========================================================================
- */
 
 (function () {
   'use strict';

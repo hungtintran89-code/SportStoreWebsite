@@ -84,8 +84,6 @@ function renderOrderTable() {
 
 /**
  * Chuyển trạng thái đơn hàng khi chọn dropdown
- * @param {string} orderId
- * @param {string} newStatus
  */
 function changeOrderStatus(orderId, newStatus) {
   var orders = getStorage(STORAGE_KEYS.ORDERS, []);
@@ -104,7 +102,6 @@ function changeOrderStatus(orderId, newStatus) {
 
 /**
  * Mở modal xem chi tiết đơn hàng
- * @param {string} orderId
  */
 function viewOrderDetail(orderId) {
   var orders = getStorage(STORAGE_KEYS.ORDERS, []);

@@ -26,7 +26,9 @@
       }
     }
     return allOrders.filter(function (ord) {
-      return ord.customerId === currentSession.id ||
+      var sId = currentSession.customerId || currentSession.id;
+      return (ord.customerId && ord.customerId === sId) ||
+             (ord.userId && ord.userId === sId) ||
              (ord.email && ord.email.toLowerCase() === (currentSession.email || '').toLowerCase()) ||
              (ord.phone && ord.phone === currentSession.phone);
     }).map(function (ord) {
@@ -59,8 +61,10 @@
         allCustomers = customers;
       }
     }
+    var sId = currentSession.customerId || currentSession.id;
     var cust = allCustomers.find(function (c) {
-      return c.id === currentSession.id ||
+      return (c.customerId && c.customerId === sId) ||
+             c.id === sId ||
              (c.email && c.email.toLowerCase() === (currentSession.email || '').toLowerCase()) ||
              (c.phone && c.phone === currentSession.phone);
     });

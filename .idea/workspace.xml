@@ -6,9 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/store/init-storage.js" beforeDir="false" afterPath="$PROJECT_DIR$/data/store/init-storage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/admin/admin-main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/admin/admin-main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/store/customers.js" beforeDir="false" afterPath="$PROJECT_DIR$/data/store/customers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/store/init-storage.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/admin/init-storage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/admin/tab-category.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/admin/tab-category.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/admin/tab-customer.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/admin/tab-customer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/admin/tab-import.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/admin/tab-import.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/auth_modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/auth_modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev1_home.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev1_home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev4_checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev4_checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev5_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev5_user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/admin.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,27 +45,32 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "tv4",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/TaiLieuHoc/Project/SportStoreWebsite",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;TV1-main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/TaiLieuHoc/Project/SportStoreWebsite&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\TaiLieuHoc\Project\SportStoreWebsite\js\admin" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="SportStoreWebsite" />

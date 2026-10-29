@@ -28,8 +28,8 @@ function renderCustomerTable() {
   for (var i = 0; i < customers.length; i++) {
     var c = customers[i];
 
-    // Trích xuất an toàn các trường thông tin (tương thích mọi định dạng ID)
-    var custId = c.id || c.customerId || c.code || ("KH-" + (i + 1 < 10 ? "00" : "0") + (i + 1));
+    // Trích xuất an toàn các trường thông tin (chuẩn hóa customerId)
+    var custId = c.customerId || c.id || c.code || ("KH-" + (i + 1 < 10 ? "00" : "0") + (i + 1));
     var custName = c.name || "Khách Hàng " + custId;
     var custEmail = c.email || "chua_co_email@sportstore.vn";
     var custPhone = c.phone || "N/A";
@@ -81,7 +81,6 @@ function renderCustomerTable() {
 
 /**
  * Đặt lại mật khẩu khách hàng về '123456' theo Bareme SGU
- * @param {string} customerId
  */
 function resetPassword(customerId) {
   var customers = getStorage(STORAGE_KEYS.CUSTOMERS, []);
@@ -89,10 +88,11 @@ function resetPassword(customerId) {
 
   for (var i = 0; i < customers.length; i++) {
     var c = customers[i];
-    var currentId = c.id || c.customerId || c.code;
+    var currentId = c.customerId || c.id || c.code;
     if (currentId === customerId || (!currentId && ("KH-" + (i + 1 < 10 ? "00" : "0") + (i + 1)) === customerId)) {
       customers[i].password = "123456";
-      customers[i].id = customerId; // Chuẩn hóa lại ID
+      customers[i].customerId = customerId;
+      customers[i].id = customerId;
       found = true;
       break;
     }
@@ -111,7 +111,6 @@ function resetPassword(customerId) {
 
 /**
  * Chuyển trạng thái tài khoản khách hàng giữa 'Đang hoạt động' và 'Bị khóa'
- * @param {string} customerId
  */
 function toggleLockUser(customerId) {
   var customers = getStorage(STORAGE_KEYS.CUSTOMERS, []);
@@ -119,7 +118,7 @@ function toggleLockUser(customerId) {
 
   for (var i = 0; i < customers.length; i++) {
     var c = customers[i];
-    var currentId = c.id || c.customerId || c.code;
+    var currentId = c.customerId || c.id || c.code;
     if (currentId === customerId || (!currentId && ("KH-" + (i + 1 < 10 ? "00" : "0") + (i + 1)) === customerId)) {
       if (customers[i].status === "locked" || customers[i].status === "Bị khóa") {
         customers[i].status = "active";
@@ -128,6 +127,7 @@ function toggleLockUser(customerId) {
         customers[i].status = "locked";
         newStatus = "Bị khóa";
       }
+      customers[i].customerId = customerId;
       customers[i].id = customerId; // Chuẩn hóa lại ID
       break;
     }

@@ -1,20 +1,8 @@
-/**
- * ==============================================================================
- * SPORTSTORE - TAB 3: QUẢN LÝ LOẠI SẢN PHẨM (TAB-CATEGORY.JS)
- * Chuẩn Bareme SGU (0.5 Điểm):
- *  - Thêm loại mới, Sửa tên loại, Xóa / Ẩn loại SP
- *  - Modal thêm/sửa loại sản phẩm
- *  - Đếm số lượng sản phẩm liên kết với từng loại
- *  - Thao tác trực tiếp trên LocalStorage
- * ==============================================================================
- */
-
 // Biến lưu ID loại sản phẩm đang được chỉnh sửa (nếu là "" nghĩa là đang thêm mới)
 var currentEditingCategoryId = "";
 
 /**
- * Vẽ bảng danh mục loại sản phẩm
- */
+ * Vẽ bảng danh mục loại sản phẩm*/
 function renderCategoryTable() {
   var categories = getStorage(STORAGE_KEYS.CATEGORIES, []);
   var products = getStorage(STORAGE_KEYS.PRODUCTS, []);
@@ -32,16 +20,15 @@ function renderCategoryTable() {
   for (var i = 0; i < categories.length; i++) {
     var cat = categories[i];
 
-    // Lọc tìm kiếm theo tên hoặc mã loại
     if (filterKeyword) {
-      var matchName =
-        cat.name && cat.name.toLowerCase().indexOf(filterKeyword) !== -1;
-      var matchId =
-        cat.id && cat.id.toLowerCase().indexOf(filterKeyword) !== -1;
+
+      var matchName = cat.name && cat.name.toLowerCase().indexOf(filterKeyword) !== -1;
+
+      var matchId = cat.id && cat.id.toLowerCase().indexOf(filterKeyword) !== -1;
+
       if (!matchName && !matchId) continue;
     }
 
-    // Đếm số lượng sản phẩm thuộc loại này
     var productCount = 0;
     for (var j = 0; j < products.length; j++) {
       if (
@@ -89,12 +76,15 @@ function renderCategoryTable() {
  * Mở modal thêm mới loại sản phẩm
  */
 function openModalAddCategory() {
+
   currentEditingCategoryId = "";
-  document.getElementById("modal-category-title").textContent =
-    "Thêm Mới Loại Sản Phẩm";
-  document.getElementById("cat-id").value =
-    "CAT-" + Date.now().toString().slice(-4);
-  document.getElementById("cat-id").disabled = false;
+
+  document.getElementById("modal-category-title").textContent = "Thêm Mới Loại Sản Phẩm";
+
+  document.getElementById("cat-id").value =  "CAT-" + (categories.length + 1);
+
+  document.getElementById("cat-id").disabled = true;
+
   document.getElementById("cat-name").value = "";
   document.getElementById("cat-icon").value = "🏆";
   document.getElementById("cat-desc").value = "";
@@ -103,10 +93,7 @@ function openModalAddCategory() {
   openModal("modal-category");
 }
 
-/**
- * Mở modal chỉnh sửa loại sản phẩm
- * @param {string} catId
- */
+/** Mở modal chỉnh sửa loại sản phẩm*/
 function openModalEditCategory(catId) {
   var categories = getStorage(STORAGE_KEYS.CATEGORIES, []);
   var target = null;
@@ -141,15 +128,15 @@ function saveCategory() {
   var desc = document.getElementById("cat-desc").value.trim();
   var profit = Number(document.getElementById("cat-profit").value) || 25;
 
-  if (!id || !name) {
-    alert("Vui lòng nhập đầy đủ Mã loại và Tên loại sản phẩm!");
+  if ( !name || !icon || !desc || !profit) {
+    alert("Vui lòng nhập đầy đủ thông tin!");
     return;
   }
 
   var categories = getStorage(STORAGE_KEYS.CATEGORIES, []);
 
   if (currentEditingCategoryId === "") {
-    // Kiểm tra trùng mã
+
     for (var i = 0; i < categories.length; i++) {
       if (categories[i].id === id) {
         alert("Mã loại [" + id + "] đã tồn tại! Vui lòng chọn mã khác.");
@@ -187,7 +174,6 @@ function saveCategory() {
 
 /**
  * Xóa loại sản phẩm
- * @param {string} catId
  */
 function deleteCategory(catId) {
   if (!confirm("Bạn có chắc chắn muốn xóa loại sản phẩm này không?")) return;
@@ -208,7 +194,6 @@ function deleteCategory(catId) {
 
 /**
  * Ẩn / Hiện loại sản phẩm
- * @param {string} catId
  */
 function toggleHideCategory(catId) {
   var categories = getStorage(STORAGE_KEYS.CATEGORIES, []);

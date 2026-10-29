@@ -134,8 +134,10 @@
 
   /* ---------- 4. ĐỊA CHỈ TỪ TÀI KHOẢN HOẶC NHẬP MỚI ---------- */
   function isAddressOfUser(addr, user) {
-    if (!addr || !user || user.id == null || addr.userId == null) return false;
-    return String(addr.userId) === String(user.id);
+    const cId = user && (user.customerId || user.id);
+    const aId = addr && (addr.customerId || addr.userId);
+    if (!addr || !user || !cId || !aId) return false;
+    return String(aId) === String(cId);
   }
 
   function switchAddressMode(mode) {
@@ -302,9 +304,11 @@
       return Math.max(max, num);
     }, 0);
 
+    const custIdentifier = (user && (user.customerId || user.id)) || "KHACH-VANG-LAI";
     const newOrder = {
+      orderId: "DH-" + String(maxId + 1).padStart(4, "0"),
       id: "DH-" + String(maxId + 1).padStart(4, "0"),
-      userId: user.id,
+      customerId: custIdentifier,
       createdAt: new Date().toISOString(),
       status: "pending",
       items: [...cartItems],

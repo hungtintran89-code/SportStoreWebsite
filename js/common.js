@@ -50,8 +50,9 @@ function formatMoney(amount) {
  */
 function getCart() {
   const user = getCurrentUser();
+  const cId = user && (user.customerId || user.id);
 
-  if (!user || user.id == null) {
+  if (!cId) {
     return [];
   }
 
@@ -61,7 +62,7 @@ function getCart() {
   const userCart = allCarts.find(
     (item) =>
       item &&
-      String(item.id) === String(user.id) &&
+      String(item.customerId || item.id) === String(cId) &&
       Array.isArray(item.product),
   );
 
@@ -69,12 +70,13 @@ function getCart() {
 }
 /**
  * 5. HÀM LƯU DANH SÁCH GIỎ HÀNG CỦA TÀI KHOẢN HIỆN TẠI
- * Lưu theo cấu trúc: [ { id: user.id, product: [ ... ] } ]
+ * Lưu theo cấu trúc: [ { customerId: user.customerId, product: [ ... ] } ]
  */
 function saveCart(cartArray) {
   try {
     const user = getCurrentUser();
-    if (!user) {
+    const cId = user && (user.customerId || user.id);
+    if (!cId) {
       updateCartBadge();
       return;
     }
@@ -84,13 +86,14 @@ function saveCart(cartArray) {
       : [];
     const safeProducts = Array.isArray(cartArray) ? cartArray : [];
     const userCart = allCarts.find(
-      (item) => String(item.id) === String(user.id),
+      (item) => String(item.customerId || item.id) === String(cId),
     );
     if (userCart) {
       userCart.product = safeProducts;
+      userCart.customerId = cId;
     } else {
       allCarts.push({
-        id: user.id,
+        customerId: cId,
         product: safeProducts,
       });
     }
