@@ -3,75 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Quản lý Danh Mục Sản Phẩm</title>
+    <title>SportStore | Quản Lý Sản Phẩm & Trang Bị Thể Thao</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-body">
+    <!-- thanh header trang admin -->
     <header class="admin-header">
-        <div class="logo"><h2>SPORT MAX ADMIN</h2></div>
-        <div class="admin-info">
-            Xin chào, Quản trị viên |
-            <a href="../products.html" style="margin-right: 10px;">Xem trang khách hàng</a> |
-            <a href="#">Đăng xuất</a>
+        <div class="admin-header-left">
+            <a href="../products.html" class="sport-brand-logo" onclick="goToStorePage(); return false;">
+                <div class="logo-icon">⚡</div>
+                <div>SPORT<span class="accent">STORE</span></div>
+            </a>
+            <span class="admin-badge-pill">ADMIN</span>
+        </div>
+
+        <div class="admin-header-right">
+            <a href="../products.html" class="btn-admin-store" onclick="goToStorePage(); return false;">
+                🏪 Về Cửa Hàng
+            </a>
+            <div class="admin-user-box">
+                <div class="admin-avatar-circle">👤</div>
+                <div class="admin-user-text">
+                    <strong>Quản Trị Viên</strong>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+            <a href="../products.html" class="btn-admin-logout-top" onclick="goToStorePage(); return false;">
+                🚪 Đăng Xuất
+            </a>
         </div>
     </header>
 
     <div class="admin-container">
+        <!-- menu quản trị bên trái -->
         <aside class="admin-sidebar">
-            <ul class="admin-menu">
-                <li><a href="#">Quản lý người dùng</a></li>
-                <li><a href="categories.html">Quản lý loại SP</a></li>
-                <li><a href="products.html" class="active">Quản lý danh mục SP</a></li>
-                <li><a href="#">Quản lý nhập hàng</a></li>
-                <li><a href="#">Quản lý giá bán</a></li>
-                <li><a href="#">Quản lý đơn hàng</a></li>
-                <li><a href="#">Báo cáo tồn kho</a></li>
-            </ul>
-        </aside>
-
-        <main class="admin-content">
-            <div class="content-header" style="flex-wrap: wrap; gap: 12px;">
-                <h2>Quản lý Danh mục Sản Phẩm</h2>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="text" id="adminSearchInput" placeholder="Tìm mã hoặc tên SP..." oninput="renderProducts(this.value)" style="padding: 9px 12px; border: 1px solid #d7e3ec; border-radius: 6px; width: 240px;">
-                    <button id="btnAddProduct" class="btn-primary" style="width: auto;" onclick="openAddProductModal()">+ Thêm Sản Phẩm</button>
-                </div>
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">TỔNG QUAN</div>
+                <ul class="admin-menu">
+                    <li><a href="#"><span class="nav-ico">📊</span> Bảng Điều Khiển</a></li>
+                </ul>
             </div>
 
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Hình ảnh</th>
-                        <th>Mã SP</th>
-                        <th>Tên SP</th>
-                        <th>Loại SP</th>
-                        <th>Giá vốn</th>
-                        <th>Tồn kho</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody id="productTableBody"></tbody>
-            </table>
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">QUẢN LÝ KHO & SẢN PHẨM</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="categories.html">
+                            <span><span class="nav-ico">🏷️</span> Quản Lý Loại SP</span>
+                            <span class="nav-count-badge" id="navCatCount">8</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products_admin.html" class="active">
+                            <span><span class="nav-ico">👟</span> Quản Lý Sản Phẩm</span>
+                            <span class="nav-count-badge" id="navProdCount">501</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">📥</span> Quản Lý Nhập Hàng</span>
+                            <span class="nav-count-badge badge-green">30</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">💲</span> Quản Lý Giá Bán</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁN HÀNG & KHÁCH HÀNG</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">📦</span> Quản Lý Đơn Hàng</span>
+                            <span class="nav-count-badge badge-amber">31</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">👥</span> Quản Lý Khách Hàng</span>
+                            <span class="nav-count-badge">32</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁO CÁO & THỐNG KÊ</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="#">
+                            <span><span class="nav-ico">📈</span> Báo Cáo Tồn Kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- khung nội dung quản lý sp bên phải -->
+        <main class="admin-content">
+            <div class="content-header">
+                <h2>Quản Lý Sản Phẩm & Trang Bị Thể Thao</h2>
+                <button id="btnAddProduct" class="btn-primary btn-admin-add" onclick="openAddProductModal()">+ Thêm Mới Sản Phẩm</button>
+            </div>
+
+            <!-- thanh công cụ tìm kiếm + lọc loại sp + lọc hãng -->
+            <div class="admin-filter-bar">
+                <input type="text" id="adminSearchInput" placeholder="Tìm theo tên sản phẩm, mã..." oninput="renderProducts()">
+                <select id="adminFilterCategory" onchange="renderProducts()">
+                    <option value="">Tất cả môn thể thao</option>
+                </select>
+                <select id="adminFilterBrand" onchange="renderProducts()">
+                    <option value="">Tất cả thương hiệu</option>
+                    <option value="Yonex">Yonex</option>
+                    <option value="Mizuno">Mizuno</option>
+                    <option value="Lining">Li-Ning</option>
+                    <option value="Victor">Victor</option>
+                    <option value="Asics">Asics</option>
+                    <option value="Nike">Nike</option>
+                    <option value="Adidas">Adidas</option>
+                    <option value="Kamito">Kamito</option>
+                    <option value="Kumpoo">Kumpoo</option>
+                </select>
+            </div>
+
+            <!-- bảng danh sách sp (chỉ cuộn nội dung trong bảng này) -->
+            <div class="admin-table-wrap" id="adminTableScrollWrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ẢNH</th>
+                            <th>TÊN TRANG BỊ</th>
+                            <th>PHÂN LOẠI</th>
+                            <th>HÃNG</th>
+                            <th>GIÁ BÁN</th>
+                            <th>TỒN KHO</th>
+                            <th>TRẠNG THÁI</th>
+                            <th>THAO TÁC</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody"></tbody>
+                </table>
+            </div>
         </main>
     </div>
 
+    <!-- popup thêm / sửa thông tin sp -->
     <div id="productModal" class="modal">
-        <div class="modal-content" style="width: 600px; margin-top: 20px;">
+        <div class="modal-content" style="width: 600px;">
             <div class="modal-header">
                 <h3 id="modalTitle">Thêm Sản Phẩm Mới</h3>
                 <span class="close-modal" id="btnCloseModal" onclick="closeProductModal()">&times;</span>
             </div>
 
-            <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+            <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
                 <div class="form-group">
-                    <label>Mã sản phẩm (VD: SP01):</label>
+                    <label>Mã sản phẩm (VD: SP001):</label>
                     <input type="text" id="proCodeInput">
                 </div>
                 <div class="form-group">
@@ -87,7 +182,7 @@
                     <input type="text" id="proImageInput" placeholder="VD: link1.jpg, link2.jpg">
                 </div>
                 <div class="form-group">
-                    <label>Giá vốn (VNĐ):</label>
+                    <label>Giá bán / Giá vốn (VNĐ):</label>
                     <input type="number" id="proPriceInput">
                 </div>
                 <div class="form-group">
@@ -96,13 +191,13 @@
                 </div>
                 <div class="form-group">
                     <label>Mô tả chi tiết:</label>
-                    <textarea id="proDescInput" rows="3" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #e5e7eb;"></textarea>
+                    <textarea id="proDescInput" rows="3" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; box-sizing: border-box;"></textarea>
                 </div>
                 <div class="form-group">
                     <label>Trạng thái:</label>
                     <select id="proStatusInput">
-                        <option value="false">Hiện</option>
-                        <option value="true">Ẩn</option>
+                        <option value="false">Đang bán</option>
+                        <option value="true">Đang ẩn</option>
                     </select>
                 </div>
             </div>
@@ -114,18 +209,8 @@
     </div>
 
     <script src="../js/products.js"></script>
-    <script>
-        if (typeof mockProducts === "undefined") {
-            document.write('<script src="js/products.js"><\/script>');
-            document.write('<script src="products.js"><\/script>');
-        }
-    </script>
+    <script src="products.js"></script>
     <script src="js/admin-products.js"></script>
-    <script>
-        if (typeof openEditModal === "undefined") {
-            document.write('<script src="admin-products.js"><\/script>');
-        }
-    </script>
+    <script src="admin-products.js"></script>
 </body>
 </html>
-

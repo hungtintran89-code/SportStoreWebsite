@@ -1,4 +1,4 @@
-// Danh sách link hình ảnh phụ (gallery) của các sản phẩm
+// ds hình phụ của từng sp
 window.SPORTMAX_GALLERIES = {
     "https://shopvnb.com/ao-cau-long-beyono-top-cl22-nu-hong-chinh-hang.html": [
         "https://cdn.shopvnb.com/uploads/gallery/ao-cau-long-beyono-top-cl22-nu-hong-chinh-hang_1789760086.webp",
