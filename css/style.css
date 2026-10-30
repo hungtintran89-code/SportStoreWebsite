@@ -190,7 +190,6 @@ input::placeholder, textarea::placeholder {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 70px;
     gap: 16px;
     position: relative;
 }
@@ -240,7 +239,7 @@ input::placeholder, textarea::placeholder {
 .sport-nav-menu > li > a {
     display: inline-flex;
     align-items: center;
-    padding: 10px 14px;
+    padding: 8px 14px;
     color: #334155;
     text-decoration: none;
     font-weight: 600;
@@ -257,7 +256,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .sport-nav-menu > li.has-mega-menu {
-    padding: 15px 0;
+    padding: 0;
 }
 
 .sport-nav-menu .menu-arrow {

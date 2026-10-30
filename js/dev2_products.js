@@ -82,7 +82,7 @@ function getCartTotalCount() {
     return total;
 }
 // cập nhật số lượng trên icon giỏ hàng ở header
-function updateCartHeaderBadge() {
+function updateCartBadge () {
     let totalCount = getCartTotalCount();
     let sportBadge = document.getElementById("header-cart-badge-count");
     if (sportBadge) {
@@ -307,7 +307,7 @@ function quickAddToCart(productCode) {
 
     localStorage.setItem("sport_cart" , JSON.stringify(cart)) ;
 
-    updateCartHeaderBadge();
+    updateCartBadge ();
 
     showSportMaxToast("Đã thêm " + product.name + " vào giỏ hàng")
 
