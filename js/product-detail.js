@@ -1,16 +1,21 @@
-// lấy cái id sản phẩm trên thanh url xuống (vd: ?id=SP01)
+
+// lấy cái id sản phẩm trên thanh url xuống (vd: ?id=201 hoặc ?id=SP-201)
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 
-// lấy danh sách sp với loại sp từ localStorage ra
-const products = JSON.parse(localStorage.getItem("products")) || (typeof mockProducts !== "undefined" ? mockProducts : []);
-const categories = JSON.parse(localStorage.getItem("categories")) || (typeof mockCategories !== "undefined" ? mockCategories : []);
+// Đọc danh sách từ LocalStorage hệ thống chung (sport_products)
+let rawProds = [];
+try {
+    rawProds = JSON.parse(localStorage.getItem("sport_products")) || (typeof products !== "undefined" ? products : []);
+} catch(e) {
+    rawProds = typeof products !== "undefined" ? products : [];
+}
 
 // dò trong mảng xem khách đang bấm coi sp nào
 let currentProduct = null;
-for (let i = 0; i < products.length; i++) {
-    if (products[i].productCode === productId) {
-        currentProduct = products[i];
+for (let i = 0; i < rawProds.length; i++) {
+    if (rawProds[i].productCode === productId) {
+        currentProduct = rawProds[i];
         break;
     }
 }
@@ -552,52 +557,29 @@ function addToLocalStorageCart(redirect) {
         selectedOptionText = sizeVal ? (sizeVal + " - " + specVal) : specVal;
     }
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let existingItem = null;
-    for (let i = 0; i < cart.length; i++) {
-        if ((cart[i].productCode === currentProduct.productCode || cart[i].id === currentProduct.productCode) && cart[i].selectedOption === selectedOptionText) {
-            existingItem = cart[i];
-            break;
-        }
-    }
+    // Chuẩn bị thông tin sản phẩm chuẩn
+    let productToAdd = {
+        id: currentProduct.id || null ,
+        name: currentProduct.name,
+        price: getProductDisplayPrice(currentProduct),
+        image: (currentGalleryImages && currentGalleryImages[0]) || currentProduct.image,
+        size: selectedOptionText || "Tiêu chuẩn",
+        color: document.getElementById("productVariantSelect") ? document.getElementById("productVariantSelect").value : "Mặc định",
+        stock: currentProduct.stock || 0
+    };
 
-    if (existingItem) {
-        existingItem.quantity = (existingItem.quantity || existingItem.qty || 1) + qtyVal;
-        existingItem.qty = existingItem.quantity;
+    // 1. Gọi hàm chuẩn từ common.js (Nếu người dùng chưa đăng nhập, common.js sẽ tự nhắc đăng nhập)
+    if (typeof addToCart === "function") {
+        let isSuccess = addToCart(productToAdd, qtyVal);
+        if (!isSuccess) return; // Dừng lại nếu chưa đăng nhập
     } else {
-        let fullName = selectedOptionText ? (currentProduct.name + " (" + selectedOptionText + ")") : currentProduct.name;
-        cart.push({
-            id: currentProduct.productCode,
-            productCode: currentProduct.productCode,
-            name: fullName,
-            price: getProductDisplayPrice(currentProduct),
-            image: currentGalleryImages[0] || currentProduct.image,
-            selectedOption: selectedOptionText,
-            quantity: qtyVal,
-            qty: qtyVal
-        });
+        alert("Đang nạp thư viện giỏ hàng, vui lòng thử lại sau giây lát!");
+        return;
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
-    if (typeof updateCartHeaderBadge === "function") {
-        updateCartHeaderBadge();
-    }
-    let sportBadge = document.getElementById("header-cart-badge-count");
-    if (sportBadge) {
-        let totalQty = 0;
-        for (let cIdx = 0; cIdx < cart.length; cIdx++) {
-            totalQty += Number(cart[cIdx].quantity || cart[cIdx].qty || 1);
-        }
-        sportBadge.innerText = totalQty;
-    }
-
+    // 2. Nếu bấm "Mua Ngay" thì chuyển hướng sang trang thanh toán
     if (redirect) {
         window.location.href = "dev4_checkout.html";
-    } else if (typeof showSportMaxToast === "function") {
-        let optLabel = selectedOptionText ? " [" + selectedOptionText + "]" : "";
-        showSportMaxToast('Đã thêm ' + qtyVal + ' "' + currentProduct.name + '"' + optLabel + ' vào giỏ hàng!');
-    } else {
-        alert('Đã thêm ' + qtyVal + ' sản phẩm "' + currentProduct.name + '" vào giỏ hàng!');
     }
 }
 
