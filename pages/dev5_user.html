@@ -6,6 +6,10 @@
   <title>Tài khoản | SportStore</title>
   <link rel="stylesheet" href="../css/common.css">
   <link rel="stylesheet" href="../css/dev5_user.css">
+  <link rel="stylesheet" href="../css/admin/admin-common.css">
+  <link rel="stylesheet" href="../css/admin/tab-dashboard.css">
+  <link rel="stylesheet" href="../css/admin/modal.css">
+
 </head>
 
 <body>
@@ -24,7 +28,6 @@
       <ul class="sport-nav-menu nav-menu">
         <li><a href="../index.html">Trang Chủ</a></li>
         <li><a href="dev2_products.html">Sản Phẩm</a></li>
-        <li><a href="product-detail.html">Chi Tiết & So Sánh</a></li>
         <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
       </ul>
 
@@ -73,29 +76,26 @@
       </div>
     </div>
   </header>
+<section id="view-auth-guard" class="dev5-auth-guard" style="display: none;">
+  <div style="text-align: center; max-width: 440px; margin: 40px auto; padding: 30px 20px;">
+    <div style="font-size: 40px; margin-bottom: 12px;">🔒</div>
+    <h3 style="font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Vui Lòng Đăng Nhập</h3>
+    <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Bạn cần đăng nhập tài khoản để xem thông tin trang cá nhân hoặc bảng quản trị.</p>
+    <div style="display: flex; gap: 12px; justify-content: center;">
+      <button type="button" class="btn-sport btn-primary btn-sm" data-auth-action="login">🔑 Đăng Nhập</button>
+      <a href="../index.html" class="btn-sport btn-outline btn-sm">← Về Trang Chủ</a>
+    </div>
+  </div>
+</section>
 
-    <main class="dev5-user-wrapper">
-    <div class="container">
-      <!-- THÔNG BÁO KHI CHƯA ĐĂNG NHẬP (TỰ ĐỘNG BẬT MODAL) -->
-      <section class="dev5-auth-guard dev5-hidden" data-auth-guard>
-        <div style="text-align: center; max-width: 440px; margin: 40px auto; padding: 30px 20px;">
-          <div style="font-size: 40px; margin-bottom: 12px;">🔒</div>
-          <h3 style="font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Vui Lòng Đăng Nhập Tài Khoản</h3>
-          <p style="font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.5;">Vui lòng đăng nhập để xem thông tin hồ sơ, đơn mua và sổ địa chỉ của bạn.</p>
-          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-sport btn-primary btn-sm" data-auth-action="login" style="padding: 10px 20px; font-weight: 600;">
-              🔑 Đăng Nhập
-            </button>
-            <a href="../index.html" class="btn-sport btn-outline btn-sm" style="padding: 10px 20px; font-weight: 600; display: inline-flex; align-items: center;">
-              ← Về Trang Chủ
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- KHỐI GIAO DIỆN HỘI VIÊN KHI ĐÃ ĐĂNG NHẬP -->
-      <div class="dev5-authorized-content" data-authorized-content>
-        <section class="dev5-hero">
+<!-- ============================================================================== -->
+<!-- KHỐI 2: DÀNH CHO KHÁCH HÀNG (USER ROLE) - Mặc định ẩn -->
+<!-- ============================================================================== -->
+<main id="view-user" class="dev5-user-wrapper" style="display: none;">
+  <div class="container">
+    <div class="dev5-authorized-content" data-authorized-content>
+      <!-- TOÀN BỘ NỘI DUNG CŨ CỦA DEV5: HERO, SIDEBAR, HỒ SƠ, ĐƠN MUA, SỔ ĐỊA CHỈ GIỮ NGUYÊN TẠI ĐÂY -->
+      <section class="dev5-hero">
         <div>
           <span class="dev5-eyebrow">MEMBER CENTER</span>
           <h1>Xin chào, <span data-user-name>Hội viên</span></h1>
@@ -105,185 +105,1274 @@
       </section>
 
       <div class="dev5-layout">
-        <aside class="dev5-sidebar" aria-label="Menu tài khoản">
-          <button class="dev5-tab is-active" type="button" data-tab="overview">
-            Tổng quan
-          </button>
-          <button class="dev5-tab" type="button" data-tab="orders">
-            Đơn hàng
-          </button>
-          <button class="dev5-tab" type="button" data-tab="addresses">
-            Sổ địa chỉ
-          </button>
-          <button class="dev5-tab" type="button" data-tab="wishlist">
-            Wishlist
-          </button>
-          <button class="dev5-tab" type="button" data-tab="faq">
-            FAQ &amp; Bảo hành
-          </button>
-        </aside>
+        <div class="dev5-layout">
+          <!-- 1. CỘT MENU BÊN TRÁI (SIDEBAR) -->
+          <aside class="dev5-sidebar" aria-label="Menu tài khoản">
+            <button class="dev5-tab is-active" type="button" data-tab="overview">
+              📊 Tổng quan
+            </button>
+            <button class="dev5-tab" type="button" data-tab="orders">
+              📦 Đơn mua
+            </button>
+            <button class="dev5-tab" type="button" data-tab="addresses">
+              📍 Sổ địa chỉ
+            </button>
+            <button class="dev5-tab" type="button" data-tab="wishlist">
+              ❤️ Sản phẩm yêu thích
+            </button>
+            <button class="dev5-tab" type="button" data-tab="faq">
+              🛡️ FAQ &amp; Bảo hành
+            </button>
+          </aside>
 
-        <div class="dev5-content">
-          <section class="dev5-panel is-active" data-panel="overview">
-            <div class="dev5-panel-heading">
-              <div>
-                <span class="dev5-eyebrow">PROFILE</span>
-                <h2>Thông tin hội viên</h2>
+          <!-- 2. KHU VỰC NỘI DUNG CÁC TAB BÊN PHẢI -->
+          <div class="dev5-content">
+            <!-- TAB 1: TỔNG QUAN & HỒ SƠ -->
+            <section class="dev5-panel is-active" data-panel="overview">
+              <div class="dev5-panel-heading">
+                <div>
+                  <span class="dev5-eyebrow">PROFILE</span>
+                  <h2>Thông tin hội viên</h2>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <button class="dev5-secondary-button dev5-hidden" type="button" data-edit-profile-btn>
+                    ✏️ Chỉnh sửa hồ sơ
+                  </button>
+                  <button class="dev5-link-button" type="button" data-auth-action="login">
+                    Đổi tài khoản
+                  </button>
+                </div>
               </div>
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <button class="dev5-secondary-button dev5-hidden" type="button" data-edit-profile-btn>
-                   Chỉnh sửa hồ sơ
+
+              <!-- Thẻ hiển thị thông tin user -->
+              <div class="dev5-profile-card">
+                <div>
+                  <h3 data-user-name>Hội viên</h3>
+                  <p data-user-email></p>
+                  <p data-user-phone style="color: #64748b; font-size: 13px; margin: 4px 0;"></p>
+                  <span class="dev5-tier" data-user-tier>Member</span>
+                </div>
+              </div>
+
+              <!-- FORM CHỈNH SỬA THÔNG TIN CÁ NHÂN -->
+              <form class="dev5-address-form dev5-hidden" data-profile-form style="margin-top: 20px;">
+                <h3 style="font-size: 16px; margin-bottom: 12px; color: #0f172a;">✏️ Cập nhật thông tin cá nhân</h3>
+                <div class="dev5-form-grid">
+                  <label>
+                    Họ và tên
+                    <input name="profileName" required minlength="2">
+                  </label>
+                  <label>
+                    Số điện thoại
+                    <input name="profilePhone" required pattern="0[0-9]{9}">
+                  </label>
+                  <label class="dev5-form-wide">
+                    Email
+                    <input name="profileEmail" type="email" required>
+                  </label>
+                  <label class="dev5-form-wide">
+                    Đổi mật khẩu mới (bỏ trống nếu không muốn đổi)
+                    <input name="profilePassword" type="password" placeholder="Nhập mật khẩu mới từ 8 ký tự...">
+                  </label>
+                </div>
+                <div class="dev5-form-actions">
+                  <button class="dev5-secondary-button" type="button" data-cancel-profile>Hủy</button>
+                  <button class="dev5-primary-button" type="submit">Lưu thông tin</button>
+                </div>
+              </form>
+
+              <!-- 3 Khung thống kê nhanh -->
+              <div class="dev5-stat-grid">
+                <div>
+                  <strong data-order-count>0</strong>
+                  <span>Đơn hàng</span>
+                </div>
+                <div>
+                  <strong data-address-count>0</strong>
+                  <span>Địa chỉ</span>
+                </div>
+                <div>
+                  <strong data-wishlist-count>0</strong>
+                  <span>Yêu thích</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- TAB 2: LỊCH SỬ ĐƠN HÀNG -->
+            <section class="dev5-panel" data-panel="orders">
+              <div class="dev5-panel-heading">
+                <div>
+                  <span class="dev5-eyebrow">ORDER HISTORY</span>
+                  <h2>Lịch sử &amp; theo dõi đơn hàng</h2>
+                </div>
+              </div>
+              <div data-orders></div>
+            </section>
+
+            <!-- TAB 3: SỔ ĐỊA CHỈ NHẬN HÀNG -->
+            <section class="dev5-panel" data-panel="addresses">
+              <div class="dev5-panel-heading">
+                <div>
+                  <span class="dev5-eyebrow">DELIVERY BOOK</span>
+                  <h2>Sổ địa chỉ giao hàng</h2>
+                </div>
+                <button class="dev5-primary-button" type="button" data-add-address>
+                  + Thêm địa chỉ
                 </button>
-                <button class="dev5-link-button" type="button" data-auth-action="login">
-                  Đổi tài khoản
-                </button>
-              </div>
-            </div>
-
-            <div class="dev5-profile-card">
-              <div>
-                <h3 data-user-name>Hội viên</h3>
-                <p data-user-email></p>
-                <p data-user-phone style="color: #64748b; font-size: 13px; margin: 4px 0;"></p>
-                <span class="dev5-tier" data-user-tier>Member</span>
-              </div>
-            </div>
-
-            <!-- FORM CHỈNH SỬA THÔNG TIN CÁ NHÂN (THEO RUBRIC 0.50 ĐIỂM) -->
-            <form class="dev5-address-form dev5-hidden" data-profile-form style="margin-top: 20px;">
-              <h3 style="font-size: 16px; margin-bottom: 12px; color: #0f172a;">✏️ Cập nhật thông tin cá nhân</h3>
-              <div class="dev5-form-grid">
-                <label>
-                  Họ và tên
-                  <input name="profileName" required minlength="2">
-                </label>
-                <label>
-                  Số điện thoại
-                  <input name="profilePhone" required pattern="0[0-9]{9}">
-                </label>
-                <label class="dev5-form-wide">
-                  Email
-                  <input name="profileEmail" type="email" required>
-                </label>
-                <label class="dev5-form-wide">
-                  Đổi mật khẩu mới (bỏ trống nếu không muốn đổi)
-                  <input name="profilePassword" type="password" placeholder="Nhập mật khẩu mới từ 8 ký tự...">
-                </label>
-              </div>
-              <div class="dev5-form-actions">
-                <button class="dev5-secondary-button" type="button" data-cancel-profile>Hủy</button>
-                <button class="dev5-primary-button" type="submit">Lưu thông tin</button>
-              </div>
-            </form>
-
-            <div class="dev5-stat-grid">
-              <div>
-                <strong data-order-count>0</strong>
-                <span>Đơn hàng</span>
-              </div>
-              <div>
-                <strong data-address-count>0</strong>
-                <span>Địa chỉ</span>
-              </div>
-              <div>
-                <strong data-wishlist-count>0</strong>
-                <span>Yêu thích</span>
-              </div>
-            </div>
-          </section>
-
-          <section class="dev5-panel" data-panel="orders">
-            <div class="dev5-panel-heading">
-              <div>
-                <span class="dev5-eyebrow">ORDER HISTORY</span>
-                <h2>Lịch sử &amp; theo dõi đơn hàng</h2>
-              </div>
-            </div>
-            <div data-orders></div>
-          </section>
-
-          <section class="dev5-panel" data-panel="addresses">
-            <div class="dev5-panel-heading">
-              <div>
-                <span class="dev5-eyebrow">DELIVERY BOOK</span>
-                <h2>Sổ địa chỉ giao hàng</h2>
-              </div>
-              <button class="dev5-primary-button" type="button" data-add-address>
-                + Thêm địa chỉ
-              </button>
-              <button class="dev5-secondary-button dev5-hidden" type="button" data-edit-address>
-                Chỉnh sửa
-              </button>
-            </div>
-
-            <div data-addresses></div>
-
-            <form class="dev5-address-form dev5-hidden" data-address-form>
-              <div class="dev5-form-grid">
-                <label>
-                  Người nhận
-                  <input name="recipient" required>
-                </label>
-                <label>
-                  Số điện thoại
-                  <input name="phone" required>
-                </label>
-                <label class="dev5-form-wide">
-                  Địa chỉ
-                  <input name="line" required>
-                </label>
-                <label>
-                  Quận/Huyện
-                  <input name="district" required>
-                </label>
-                <label>
-                  Tỉnh/Thành phố
-                  <input name="city" required>
-                </label>
-              </div>
-
-              <div class="dev5-form-actions">
-                <button class="dev5-secondary-button" type="button" data-cancel-address>
-                  Hủy
-                </button>
-                <button class="dev5-primary-button" type="submit">
-                  Lưu địa chỉ
+                <button class="dev5-secondary-button dev5-hidden" type="button" data-edit-address>
+                  Chỉnh sửa
                 </button>
               </div>
-            </form>
-          </section>
 
-          <section class="dev5-panel" data-panel="wishlist">
-            <div class="dev5-panel-heading">
-              <div>
-                <span class="dev5-eyebrow">YOUR PICKS</span>
-                <h2>Sản phẩm yêu thích</h2>
-              </div>
-            </div>
-            <div class="dev5-wishlist-grid" data-wishlist></div>
-          </section>
+              <div data-addresses></div>
 
-          <section class="dev5-panel" data-panel="faq">
-            <div class="dev5-panel-heading">
-              <div>
-                <span class="dev5-eyebrow">SUPPORT</span>
-                <h2>FAQ &amp; chính sách bảo hành</h2>
+              <!-- Form thêm / sửa địa chỉ -->
+              <form class="dev5-address-form dev5-hidden" data-address-form>
+                <div class="dev5-form-grid">
+                  <label>
+                    Người nhận
+                    <input name="recipient" required>
+                  </label>
+                  <label>
+                    Số điện thoại
+                    <input name="phone" required>
+                  </label>
+                  <label class="dev5-form-wide">
+                    Địa chỉ chi tiết
+                    <input name="line" required>
+                  </label>
+                  <label>
+                    Quận/Huyện
+                    <input name="district" required>
+                  </label>
+                  <label>
+                    Tỉnh/Thành phố
+                    <input name="city" required>
+                  </label>
+                </div>
+
+                <div class="dev5-form-actions">
+                  <button class="dev5-secondary-button" type="button" data-cancel-address>
+                    Hủy
+                  </button>
+                  <button class="dev5-primary-button" type="submit">
+                    Lưu địa chỉ
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <!-- TAB 4: SẢN PHẨM YÊU THÍCH -->
+            <section class="dev5-panel" data-panel="wishlist">
+              <div class="dev5-panel-heading">
+                <div>
+                  <span class="dev5-eyebrow">YOUR PICKS</span>
+                  <h2>Sản phẩm yêu thích</h2>
+                </div>
               </div>
-            </div>
-            <div data-faq></div>
-          </section>
+              <div class="dev5-wishlist-grid" data-wishlist></div>
+            </section>
+
+            <!-- TAB 5: FAQ & BẢO HÀNH -->
+            <section class="dev5-panel" data-panel="faq">
+              <div class="dev5-panel-heading">
+                <div>
+                  <span class="dev5-eyebrow">SUPPORT</span>
+                  <h2>FAQ &amp; chính sách bảo hành</h2>
+                </div>
+              </div>
+              <div data-faq></div>
+            </section>
+          </div>
         </div>
-      </div>
+
       </div>
     </div>
-  </main>
-
-
-
+  </div>
+</main>
 <!-- ============================================================================== -->
-  <!-- 2. FOOTER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->
-  <!-- ============================================================================== -->
-  <footer class="sport-footer site-footer">
+<!-- KHỐI 3: DÀNH CHO QUẢN TRỊ VIÊN (ADMIN ROLE) - Mặc định ẩn -->
+<!-- ============================================================================== -->
+<div id="view-admin" class="admin-wrapper" style="display: none; min-height: 85vh;">
+<aside class="admin-sidebar">
+        <div>
+          <!-- Nhóm 1: TỔNG QUAN -->
+          <div class="admin-menu-group">
+            <div class="admin-menu-title">TỔNG QUAN</div>
+            <button
+              type="button"
+              class="admin-nav-item active"
+              id="nav-dashboard"
+              onclick="switchTab('dashboard', this)"
+            >
+              <div class="nav-left">
+                <span class="nav-icon">📊</span>
+                <span>Bảng Điều Khiển</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Nhóm 2: QUẢN LÝ KHO & SẢN PHẨM -->
+          <div class="admin-menu-group">
+            <div class="admin-menu-title">QUẢN LÝ KHO & SẢN PHẨM</div>
+
+            <!-- Tab 3: Loại sản phẩm -->
+            <button
+              type="button"
+              class="admin-nav-item"
+              id="nav-category"
+              onclick="switchTab('category', this)"
+            >
+              <div class="nav-left">
+                <span class="nav-icon">🏷️</span>
+                <span>Quản Lý Loại SP</span>
+              </div>
+              <span class="nav-badge badge-blue" id="badge-count-categories"
+                >5</span
+              >
+            </button>
+
+            <!-- Tab 4: Sản phẩm -->
+            <button
+              type="button"
+              class="admin-nav-item"
+              id="nav-product"
+              onclick="switchTab('product', this)"
+            >
+              <div class="nav-left">
+                <span class="nav-icon">👟</span>
+                <span>Quản Lý Sản Phẩm</span>
+              </div>
+              <span class="nav-badge badge-blue" id="badge-count-products"
+                >8</span
+              >
+            </button>
+
+            <!-- Tab 5: Nhập hàng -->
+            <button
+              type="button"
+              class="admin-nav-item"
+              id="nav-import"
+              onclick="switchTab('import', this)"
+            >
+              <div class="nav-left">
+                <span class="nav-icon">📥</span>
+                <span>Quản Lý Nhập Hàng</span>
+              </div>
+              <span class="nav-badge badge-green" id="badge-count-imports"
+                >5</span
+              >
+            </button>
+
+            <!-- Tab 6: Giá bán -->
+            <button
+              type="button"
+              class="admin-nav-item"
+              id="nav-pricing"
+              onclick="switchTab('pricing', this)"
+            >
+              <div class="nav-left">
+                <span class="nav-icon">💲</span>
+                <span>Quản Lý Giá Bán</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Nhóm 3: BÁN HÀNG & KHÁCH HÀNG -->
+          <div class="admin-menu-group">
+            <div class="admin-menu-title">BÁN HÀNG & KHÁCH HÀNG</div>
+
+            <!-- Tab 7: Đơn hàng -->
+            <button
+              type="button"
+              class="admin-nav-item"
+              id="nav-order"
+              onclick="switchTab('order', this)"
+            >
+              <div class="nav-left">
+                <span class="nav-icon">📦</span>
+                <span>Quản Lý Đơn Hàng</span>
+              </div>
+              <span class="nav-badge badge-orange" id="badge-count-orders"
+                >5</span
+              >
+            </button>
+
+            <!-- Tab 2: Khách hàng -->
+            <button
+              type="button"
+              class="admin-nav-item"
+              id="nav-customer"
+              onclick="switchTab('customer', this)"
+            >
+              <div class="nav-left">
+                <span class="nav-icon">👥</span>
+                <span>Quản Lý Khách Hàng</span>
+              </div>
+              <span class="nav-badge badge-blue" id="badge-count-customers"
+                >5</span
+              >
+            </button>
+          </div>
+
+          <!-- Nhóm 4: BÁO CÁO & THỐNG KÊ -->
+          <div class="admin-menu-group">
+            <div class="admin-menu-title">BÁO CÁO & THỐNG KÊ</div>
+
+            <!-- Tab 8: Tồn kho -->
+            <button
+              type="button"
+              class="admin-nav-item"
+              id="nav-inventory"
+              onclick="switchTab('inventory', this)"
+            >
+              <div class="nav-left">
+                <span class="nav-icon">📊</span>
+                <span>Báo Cáo Tồn Kho</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CONTENT KHU VỰC CHÍNH -->
+      <main class="admin-content">
+        <!-- ======================================================================== -->
+        <!-- TAB 1: BẢNG ĐIỀU KHIỂN (DASHBOARD) -->
+        <!-- ======================================================================== -->
+        <div id="tab-dashboard" class="admin-tab-content active">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-page-title">Tổng Quan Tình Hình Kinh Doanh</h1>
+            </div>
+          </div>
+
+          <!-- 4 KPI Cards -->
+          <div class="admin-kpi-grid">
+            <div class="admin-kpi-card kpi-blue">
+              <div class="kpi-top">
+                <span class="kpi-label">TỔNG DOANH THU ĐƠN GIAO</span>
+                <span class="kpi-icon">💰</span>
+              </div>
+              <div class="kpi-value" id="kpi-total-revenue">10.890.000 đ</div>
+              <div class="kpi-trend">
+                <span>↑ +18.4%</span> so với tháng trước
+              </div>
+            </div>
+
+            <div class="admin-kpi-card kpi-orange">
+              <div class="kpi-top">
+                <span class="kpi-label">TỔNG SỐ ĐƠN ĐẶT HÀNG</span>
+                <span class="kpi-icon">📦</span>
+              </div>
+              <div class="kpi-value" id="kpi-total-orders">5 Đơn</div>
+              <div class="kpi-trend"><span>↑ Tỷ lệ xử lý</span> đạt 100%</div>
+            </div>
+
+            <div class="admin-kpi-card kpi-green">
+              <div class="kpi-top">
+                <span class="kpi-label">HỘI VIÊN ĐĂNG KÝ (SPORT CLUB)</span>
+                <span class="kpi-icon">👥</span>
+              </div>
+              <div class="kpi-value" id="kpi-total-customers">5 Khách</div>
+              <div class="kpi-trend">
+                <span>2 Hội Viên Vàng</span> chi tiêu cao
+              </div>
+            </div>
+
+            <div class="admin-kpi-card kpi-purple">
+              <div class="kpi-top">
+                <span class="kpi-label">TỔNG TỒN KHO TRANG BỊ</span>
+                <span class="kpi-icon">👟</span>
+              </div>
+              <div class="kpi-value" id="kpi-total-stock">172 Món</div>
+              <div class="kpi-trend">Theo dõi hàng tồn an toàn</div>
+            </div>
+          </div>
+
+          <!-- Grid 2 Cột: Biểu đồ thể thao + Đơn hàng gần đây -->
+          <div class="dashboard-two-col">
+            <!-- Cột 1: Biểu đồ doanh số thể thao -->
+            <div class="admin-table-card dashboard-card">
+              <div class="dashboard-card-header">
+                <h3 class="dashboard-card-title">
+                  Biểu Đồ Doanh Số Theo Bộ Môn Thể Thao
+                </h3>
+                <span class="nav-badge badge-blue">THÁNG 10/2026</span>
+              </div>
+
+              <!-- CSS Bar Chart mô phỏng biểu đồ cột đẹp mắt -->
+              <div class="chart-container">
+                <!-- Cột 1: Chạy Bộ -->
+                <div class="chart-col">
+                  <div class="chart-bar chart-bar-run"></div>
+                  <div class="chart-col-label">Chạy Bộ (42tr)</div>
+                </div>
+                <!-- Cột 2: Bóng Đá -->
+                <div class="chart-col">
+                  <div class="chart-bar chart-bar-football"></div>
+                  <div class="chart-col-label">Bóng Đá (31tr)</div>
+                </div>
+                <!-- Cột 3: Cầu Lông -->
+                <div class="chart-col">
+                  <div class="chart-bar chart-bar-badminton"></div>
+                  <div class="chart-col-label">Cầu Lông (26tr)</div>
+                </div>
+                <!-- Cột 4: Tennis -->
+                <div class="chart-col">
+                  <div class="chart-bar chart-bar-tennis"></div>
+                  <div class="chart-col-label">Tennis (21tr)</div>
+                </div>
+                <!-- Cột 5: Gym -->
+                <div class="chart-col">
+                  <div class="chart-bar chart-bar-gym"></div>
+                  <div class="chart-col-label">Gym (14tr)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cột 2: Đơn hàng gần đây cần xử lý -->
+            <div class="admin-table-card dashboard-card">
+              <div class="dashboard-card-header">
+                <h3 class="dashboard-card-title">Đơn Hàng Gần Đây Cần Xử Lý</h3>
+                <a
+                  href="javascript:void(0)"
+                  onclick="switchTab('order')"
+                  class="dashboard-view-all"
+                  >Xem tất cả →</a
+                >
+              </div>
+
+              <div id="dashboard-recent-orders-list">
+                <!-- Render động bởi tab-dashboard.js -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- TAB 2: QUẢN LÝ KHÁCH HÀNG (0.75đ) -->
+        <!-- ======================================================================== -->
+        <div id="tab-customer" class="admin-tab-content">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-page-title">Quản Lý Khách Hàng & Hội Viên</h1>
+            </div>
+          </div>
+
+          <div class="admin-filter-bar">
+            <input
+              type="text"
+              id="customer-search-input"
+              class="filter-input"
+              placeholder="Tìm kiếm theo tên, email, SĐT..."
+              oninput="filterCustomers()"
+            />
+          </div>
+
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>MÃ KH</th>
+                  <th>HỌ TÊN KHÁCH HÀNG</th>
+                  <th>EMAIL</th>
+                  <th>SỐ ĐIỆN THOẠI</th>
+                  <th>HẠNG HỘI VIÊN</th>
+                  <th>TRẠNG THÁI</th>
+                  <th>THAO TÁC</th>
+                </tr>
+              </thead>
+              <tbody id="customer-tbody">
+                <!-- Render bởi tab-customer.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- TAB 3: QUẢN LÝ LOẠI SẢN PHẨM (0.5đ) -->
+        <!-- ======================================================================== -->
+        <div id="tab-category" class="admin-tab-content">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-page-title">Quản Lý Phân Loại Sản Phẩm</h1>
+            </div>
+            <button
+              type="button"
+              class="btn-sport btn-primary"
+              onclick="openModalAddCategory()"
+            >
+              + Thêm Mới Loại SP
+            </button>
+          </div>
+
+          <div class="admin-filter-bar">
+            <input
+              type="text"
+              id="category-search-input"
+              class="filter-input"
+              placeholder="Tìm kiếm loại theo mã, tên..."
+              oninput="filterCategories()"
+            />
+          </div>
+
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th class="col-icon">ICON</th>
+                  <th>MÃ LOẠI</th>
+                  <th>TÊN PHÂN LOẠI</th>
+                  <th>SP LIÊN KẾT</th>
+                  <th>% LỢI NHUẬN</th>
+                  <th>TRẠNG THÁI</th>
+                  <th>THAO TÁC</th>
+                </tr>
+              </thead>
+              <tbody id="category-tbody">
+                <!-- Render bởi tab-category.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- TAB 4: QUẢN LÝ SẢN PHẨM & TRANG BỊ (0.75đ) -->
+        <!-- ======================================================================== -->
+        <div id="tab-product" class="admin-tab-content">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-page-title">
+                Quản Lý Sản Phẩm & Trang Bị Thể Thao
+              </h1>
+            </div>
+            <button
+              type="button"
+              class="btn-sport btn-primary"
+              onclick="openModalAddProduct()"
+            >
+              + Thêm Mới Sản Phẩm
+            </button>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="admin-filter-bar">
+            <input
+              type="text"
+              id="product-search-input"
+              class="filter-input"
+              placeholder="Tìm theo tên sản phẩm, mã SP, hãng..."
+              oninput="filterProducts()"
+            />
+
+            <select
+              id="product-filter-category"
+              class="filter-select"
+              onchange="filterProducts()"
+            >
+              <option value="ALL">Tất cả môn thể thao</option>
+            </select>
+
+            <select
+              id="product-filter-brand"
+              class="filter-select"
+              onchange="filterProducts()"
+            >
+              <option value="ALL">Tất cả thương hiệu</option>
+              <option value="Nike">Nike</option>
+              <option value="Adidas">Adidas</option>
+              <option value="Yonex">Yonex</option>
+              <option value="Wilson">Wilson</option>
+              <option value="Puma">Puma</option>
+              <option value="Garmin">Garmin</option>
+            </select>
+          </div>
+
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ẢNH</th>
+                  <th>TÊN TRANG BỊ</th>
+                  <th>PHÂN LOẠI</th>
+                  <th>HÃNG</th>
+                  <th>GIÁ BÁN</th>
+                  <th>TỒN KHO</th>
+                  <th>TRẠNG THÁI</th>
+                  <th>THAO TÁC</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-tbody">
+                <!-- Render bởi tab-product.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- TAB 5: QUẢN LÝ NHẬP HÀNG (0.75đ) -->
+        <!-- ======================================================================== -->
+        <div id="tab-import" class="admin-tab-content">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-page-title">Quản Lý Phiếu Nhập Hàng Vào Kho</h1>
+            </div>
+            <button
+              type="button"
+              class="btn-sport btn-primary"
+              onclick="openModalAddImport()"
+            >
+              + Tạo Phiếu Nhập Hàng
+            </button>
+          </div>
+
+          <div class="admin-filter-bar">
+            <input
+              type="text"
+              id="import-search-input"
+              class="filter-input"
+              placeholder="Tìm theo mã phiếu (PN-...), nhà cung cấp..."
+              oninput="filterImports()"
+            />
+
+            <label class="filter-label">Từ ngày:</label>
+            <input
+              type="date"
+              id="import-filter-from-date"
+              class="filter-input filter-date"
+              onchange="filterImports()"
+            />
+
+            <label class="filter-label">Đến ngày:</label>
+            <input
+              type="date"
+              id="import-filter-to-date"
+              class="filter-input filter-date"
+              onchange="filterImports()"
+            />
+
+            <select
+              id="import-filter-status"
+              class="filter-select"
+              onchange="filterImports()"
+            >
+              <option value="ALL">Tất cả trạng thái</option>
+              <option value="Hoàn thành">Hoàn thành</option>
+              <option value="Tạm lưu">Tạm lưu</option>
+            </select>
+          </div>
+
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>MÃ PHIẾU</th>
+                  <th>NHÀ CUNG CẤP</th>
+                  <th>NGÀY NHẬP</th>
+                  <th>SỐ LƯỢNG</th>
+                  <th>TỔNG TIỀN VỐN</th>
+                  <th>NGƯỜI TẠO</th>
+                  <th>TRẠNG THÁI</th>
+                  <th>THAO TÁC</th>
+                </tr>
+              </thead>
+              <tbody id="admin-imports-tbody">
+                <!-- Render bởi tab-import.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- TAB 6: QUẢN LÝ GIÁ BÁN & LỢI NHUẬN (0.5đ) -->
+        <!-- ======================================================================== -->
+        <div id="tab-pricing" class="admin-tab-content">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-page-title">Quản Lý Giá Bán & % Lợi Nhuận</h1>
+            </div>
+          </div>
+
+          <div class="admin-filter-bar">
+            <select
+              id="pricing-filter-category"
+              class="filter-select"
+              onchange="filterPricing()"
+            >
+              <option value="ALL">Tất cả môn thể thao</option>
+            </select>
+          </div>
+
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ẢNH</th>
+                  <th>TÊN TRANG BỊ</th>
+                  <th>LOẠI SP</th>
+                  <th>GIÁ VỐN (TỪ PHIẾU)</th>
+                  <th>% LỢI NHUẬN</th>
+                  <th>GIÁ BÁN NIÊM YẾT</th>
+                  <th>THAO TÁC</th>
+                </tr>
+              </thead>
+              <tbody id="admin-pricing-tbody">
+                <!-- Render bởi tab-pricing.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- TAB 7: QUẢN LÝ ĐƠN HÀNG (0.5đ) -->
+        <!-- ======================================================================== -->
+        <div id="tab-order" class="admin-tab-content">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-page-title">Quản Lý Đơn Đặt Hàng</h1>
+            </div>
+          </div>
+
+          <div class="admin-filter-bar">
+            <label class="filter-label">Từ ngày:</label>
+            <input
+              type="date"
+              id="order-filter-from-date"
+              class="filter-input filter-date"
+              onchange="filterOrders()"
+            />
+
+            <label class="filter-label">Đến ngày:</label>
+            <input
+              type="date"
+              id="order-filter-to-date"
+              class="filter-input filter-date"
+              onchange="filterOrders()"
+            />
+
+            <select
+              id="order-filter-status"
+              class="filter-select"
+              onchange="filterOrders()"
+            >
+              <option value="ALL">Tất cả trạng thái</option>
+              <option value="Mới đặt">Mới đặt</option>
+              <option value="Đã xử lý">Đã xử lý</option>
+              <option value="Đang giao">Đang giao</option>
+              <option value="Đã giao">Đã giao</option>
+              <option value="Đã hủy">Đã hủy</option>
+            </select>
+          </div>
+
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>MÃ ĐƠN</th>
+                  <th>KHÁCH HÀNG</th>
+                  <th>NGÀY ĐẶT</th>
+                  <th>MẶT HÀNG</th>
+                  <th>TỔNG TIỀN</th>
+                  <th>THANH TOÁN</th>
+                  <th>TÌNH TRẠNG</th>
+                  <th>CHI TIẾT</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-tbody">
+                <!-- Render bởi tab-order.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================================== -->
+        <!-- TAB 8: QUẢN LÝ TỒN KHO & BÁO CÁO NHẬP - XUẤT - TỒN (0.75đ) -->
+        <!-- ======================================================================== -->
+        <div id="tab-inventory" class="admin-tab-content">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-page-title">
+                Báo Cáo Tồn Kho & Cảnh Báo Nhập Gấp
+              </h1>
+            </div>
+          </div>
+
+          <!-- 2 Thẻ tóm tắt Compact hiện đại tiết kiệm chiều cao -->
+          <div class="admin-kpi-grid inventory-kpi-grid">
+            <div class="admin-kpi-card kpi-compact kpi-red">
+              <div class="kpi-compact-info">
+                <span class="kpi-label"
+                  >SẢN PHẨM CẢNH BÁO SẮP HẾT (≤ 5 MÓN)</span
+                >
+                <div class="kpi-value text-danger" id="inventory-summary-low">
+                  3 Sản Phẩm Cần Nhập
+                </div>
+              </div>
+              <div class="kpi-compact-icon icon-red">⚠️</div>
+            </div>
+
+            <div class="admin-kpi-card kpi-compact kpi-blue">
+              <div class="kpi-compact-info">
+                <span class="kpi-label">TỔNG SỐ LƯỢNG MÓN ĐỒ TRONG KHO</span>
+                <div
+                  class="kpi-value text-primary"
+                  id="inventory-summary-total"
+                >
+                  677 Món Đồ
+                </div>
+              </div>
+              <div class="kpi-compact-icon icon-blue">📦</div>
+            </div>
+          </div>
+
+          <!-- Thanh điều khiển tích hợp: Chuyển bảng con Sub-tabs + Lọc phân loại -->
+          <div class="inventory-controls-bar">
+            <div class="inventory-subtabs">
+              <button
+                type="button"
+                class="subtab-btn active"
+                id="btn-subtab-detail"
+                onclick="switchInventorySubTab('detail', this)"
+              >
+                📦 1. Tồn Kho Chi Tiết Theo Sản Phẩm
+              </button>
+              <button
+                type="button"
+                class="subtab-btn"
+                id="btn-subtab-nxt"
+                onclick="switchInventorySubTab('nxt', this)"
+              >
+                📈 2. Báo Cáo Nhập - Xuất - Tồn (N-X-T)
+              </button>
+            </div>
+            <div class="inventory-filter-wrap" id="wrap-inventory-filter">
+              <select
+                id="inventory-filter-category"
+                class="filter-select"
+                onchange="filterInventory()"
+              >
+                <option value="ALL">Tất cả phân loại</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Phần 1: Bảng tồn kho chi tiết -->
+          <div id="inventory-section-detail" class="inventory-section">
+            <div class="admin-table-card">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ẢNH</th>
+                    <th>TÊN TRANG BỊ</th>
+                    <th>PHÂN LOẠI</th>
+                    <th>GIÁ VỐN</th>
+                    <th>TỒN KHO HIỆN TẠI</th>
+                    <th>HÀNH ĐỘNG</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-inventory-tbody">
+                  <!-- Render bởi tab-inventory.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Phần 2: Báo cáo Nhập - Xuất - Tồn -->
+          <div
+            id="inventory-section-nxt"
+            class="inventory-section"
+            style="display: none"
+          >
+            <div class="admin-table-card">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>MÃ SP</th>
+                    <th>TÊN SẢN PHẨM</th>
+                    <th class="text-center">TỒN ĐẦU KỲ</th>
+                    <th class="text-center">NHẬP TRONG KỲ</th>
+                    <th class="text-center">XUẤT BÁN KỲ</th>
+                    <th class="text-center">TỒN CUỐI KỲ</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-nxt-tbody">
+                  <!-- Render bởi tab-inventory.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+</div>
+
+<div id="modal-category" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-category-title">
+            Thêm Mới Loại Sản Phẩm
+          </h3>
+          <button
+            type="button"
+            class="modal-close-btn"
+            onclick="closeModal('modal-category')"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Mã loại:</label>
+              <input type="text" id="cat-id" placeholder="Tự động tạo mã" disabled style="background-color: #f1f5f9; cursor: not-allowed;" />
+            </div>
+            <div class="form-group">
+              <label>Icon cảm xúc:</label>
+              <input type="text" id="cat-icon" placeholder="👟" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tên phân loại thể thao:</label>
+            <input
+              type="text"
+              id="cat-name"
+              placeholder="Chạy Bộ, Bóng Đá, Cầu Lông..."
+            />
+          </div>
+          <div class="form-group">
+            <label>Lợi nhuận định mức:</label>
+            <input type="number" id="cat-profit" value="30" placeholder="30" />
+          </div>
+          <div class="form-group">
+            <label>Mô tả loại trang bị:</label>
+            <textarea
+              id="cat-desc"
+              rows="3"
+              placeholder="Đặc tính sản phẩm, đối tượng tập luyện..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-sport btn-outline"
+            onclick="closeModal('modal-category')"
+          >
+            Hủy Bỏ
+          </button>
+          <button
+            type="button"
+            class="btn-sport btn-primary"
+            onclick="saveCategory()"
+          >
+            Lưu Loại SP
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================================== -->
+    <!-- MODAL 2: THÊM / SỬA SẢN PHẨM (TAB 4) -->
+    <!-- ============================================================================== -->
+    <div id="modal-product" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-product-title">
+            Thêm Mới Sản Phẩm
+          </h3>
+          <button
+            type="button"
+            class="modal-close-btn"
+            onclick="closeModal('modal-product')"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Tên sản phẩm thể thao:</label>
+            <input
+              type="text"
+              id="prod-name"
+              placeholder="Giày Chạy Bộ Nike ZoomX Vaporfly 3..."
+            />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Mã sản phẩm (Code):</label>
+              <input type="text" id="prod-code" placeholder="SP-201" />
+            </div>
+            <div class="form-group">
+              <label>Thương hiệu:</label>
+              <input
+                type="text"
+                id="prod-brand"
+                placeholder="Nike, Adidas, Yonex, Wilson..."
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Môn thể thao / Danh mục:</label>
+            <select id="prod-category"></select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Giá vốn (VNĐ):</label>
+              <input type="number" id="prod-cost" placeholder="3500000" />
+            </div>
+            <div class="form-group">
+              <label>Giá bán niêm yết (VNĐ):</label>
+              <input type="number" id="prod-price" placeholder="5290000" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Số lượng tồn kho ban đầu:</label>
+            <input
+              type="number"
+              id="prod-stock"
+              value="10"
+              placeholder="0"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label>Link hình ảnh (URL):</label>
+            <input
+              type="text"
+              id="prod-image"
+              placeholder="https://images.unsplash.com/photo-..."
+            />
+          </div>
+          <!-- KHỐI 2 CỘT CHUẨN GIAO DIỆN FORM CỦA ADMIN -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Sản phẩm Bán Chạy:</label>
+              <label class="flag-input-control" for="prod-is-hot">
+                <input type="checkbox" id="prod-is-hot" class="flag-checkbox">
+                <span>Tab Bán Chạy Nhất</span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label>Sản phẩm Mới Về:</label>
+              <label class="flag-input-control" for="prod-is-new">
+                <input type="checkbox" id="prod-is-new" class="flag-checkbox">
+                <span>Tab Hàng Mới Về</span>
+              </label>
+            </div>
+          </div>
+
+
+
+          <div class="form-group">
+            <label>Mô tả chi tiết trang bị:</label>
+            <textarea
+              id="prod-desc"
+              rows="3"
+              placeholder="Chất liệu sợi, công nghệ đệm, hướng dẫn chọn size..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-sport btn-outline"
+            onclick="closeModal('modal-product')"
+          >
+            Hủy Bỏ
+          </button>
+          <button
+            type="button"
+            class="btn-sport btn-primary"
+            onclick="saveProduct()"
+          >
+            Lưu Sản Phẩm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================================== -->
+    <!-- MODAL 3: TẠO / SỬA PHIẾU NHẬP HÀNG (TAB 5) -->
+    <!-- ============================================================================== -->
+    <div id="modal-import" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-import-title">
+            Tạo Phiếu Nhập Hàng Vào Kho
+          </h3>
+          <button
+            type="button"
+            class="modal-close-btn"
+            onclick="closeModal('modal-import')"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Mã phiếu nhập:</label>
+              <input type="text" id="import-id" placeholder="PN-2026-001" />
+            </div>
+            <div class="form-group">
+              <label>Ngày nhập hàng:</label>
+              <input type="date" id="import-date" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nhà cung cấp / Đối tác phân phối:</label>
+            <input
+              type="text"
+              id="import-supplier"
+              placeholder="Nike Việt Nam Distribution..."
+            />
+          </div>
+          <div class="form-group">
+            <label>Chọn sản phẩm nhập vào kho:</label>
+            <select
+              id="import-product-select"
+              onchange="onImportProductChange()"
+            ></select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Số lượng nhập (món):</label>
+              <input
+                type="number"
+                id="import-qty"
+                value="10"
+                min="1"
+                placeholder="10"
+              />
+            </div>
+            <div class="form-group">
+              <label>Đơn giá nhập vốn (VNĐ):</label>
+              <input
+                type="number"
+                id="import-unit-price"
+                placeholder="3000000"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Trạng thái phiếu nhập:</label>
+            <select id="import-status">
+              <option value="Tạm lưu">Tạm lưu (Cho phép sửa sau)</option>
+              <option value="Hoàn thành">
+                Hoàn thành (Tự động cộng vào kho ngay)
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ghi chú nhập hàng:</label>
+            <textarea
+              id="import-note"
+              rows="2"
+              placeholder="Lô hàng thi đấu quý 4..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-sport btn-outline"
+            onclick="closeModal('modal-import')"
+          >
+            Hủy Bỏ
+          </button>
+          <button
+            type="button"
+            class="btn-sport btn-primary"
+            onclick="saveImport()"
+          >
+            Lưu Phiếu Nhập
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================================== -->
+    <!-- MODAL 4: XEM CHI TIẾT ĐƠN HÀNG (TAB 7) -->
+    <!-- ============================================================================== -->
+    <div id="modal-order-detail" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-order-title">
+            Chi Tiết Đơn Hàng #SPORT-88234
+          </h3>
+          <button
+            type="button"
+            class="modal-close-btn"
+            onclick="closeModal('modal-order-detail')"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="order-info-card">
+            <div>
+              <strong>Khách hàng:</strong>
+              <span id="order-detail-customer">Trần Hùng Tín</span>
+            </div>
+            <div>
+              <strong>Email:</strong>
+              <span id="order-detail-email">hungtintran89@gmail.com</span>
+            </div>
+            <div>
+              <strong>Địa chỉ giao:</strong>
+              <span id="order-detail-address"
+                >273 An Dương Vương, Q.5, TP.HCM</span
+              >
+            </div>
+            <div>
+              <strong>Ngày đặt:</strong>
+              <span id="order-detail-date">08/10/2026</span>
+            </div>
+            <div>
+              <strong>Thanh toán:</strong>
+              <span id="order-detail-payment">Ví MoMo</span>
+            </div>
+            <div>
+              <strong>Tình trạng:</strong>
+              <span id="order-detail-status" class="nav-badge badge-blue"
+                >Đang giao</span
+              >
+            </div>
+            <div>
+              <strong>Ghi chú:</strong>
+              <span id="order-detail-note">Giao giờ hành chính</span>
+            </div>
+          </div>
+
+          <h4 class="order-items-heading">Danh Sách Mặt Hàng Trong Đơn:</h4>
+          <div id="order-detail-items-list">
+            <!-- Render danh sách mặt hàng -->
+          </div>
+
+          <div class="order-total-row">
+            <strong class="order-total-label">TỔNG TIỀN ĐƠN HÀNG:</strong>
+            <strong id="order-detail-total" class="order-total-value"
+              >5.290.000 đ</strong
+            >
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-sport btn-primary"
+            onclick="closeModal('modal-order-detail')"
+          >
+            Đóng
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================================== -->
+    <!-- NẠP CÁC FILE DỮ LIỆU CHUẨN (DATA STORE) -->
+    <!-- ============================================================================== -->
+
+<footer class="sport-footer site-footer">
     <div class="sport-container container">
       <div class="sport-footer-grid footer-grid">
         <div class="sport-footer-col footer-col">
@@ -330,15 +1419,80 @@
     </div>
   </footer>
 
-  <!-- NẠP DỮ LIỆU STORE & ĐỒNG BỘ LOCALSTORAGE -->
-  <script src="../data/store/customers.js"></script>
-  <script src="../data/store/orders.js"></script>
-  <script src="../data/store/faqs.js"></script>
-  <script src="../data/store/init-storage.js"></script>
 
-  <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP & DEV5 -->
-  <script src="../js/auth_modal.js"></script>
-  <script src="../js/dev5_user.js"></script>
+<script src="../data/store/banners.js"></script>
+<script src="../data/store/categories.js"></script>
+<script src="../data/store/customers.js"></script>
+<script src="../data/store/faqs.js"></script>
+<script src="../data/store/flash_sale.js"></script>
+<script src="../data/store/imports.js"></script>
+<script src="../data/store/orders.js"></script>
+<script src="../data/store/products.js"></script>
+<script src="../data/store/shipping.js"></script>
+<script src="../data/store/vouchers.js"></script>
+<script src="../js/admin/init-storage.js"></script>
+
+<script src="../js/common.js"></script>
+<script src="../js/auth_modal.js"></script>
+
+<script src="../js/admin/admin-main.js"></script>
+<script src="../js/admin/tab-dashboard.js"></script>
+<script src="../js/admin/tab-customer.js"></script>
+<script src="../js/admin/tab-category.js"></script>
+<script src="../js/admin/tab-product.js"></script>
+<script src="../js/admin/tab-import.js"></script>
+<script src="../js/admin/tab-pricing.js"></script>
+<script src="../js/admin/tab-order.js"></script>
+<script src="../js/admin/tab-inventory.js"></script>
+
+<!-- 4. LOGIC CỦA USER -->
+<script src="../js/dev5_user.js"></script>
+<!-- 5. BỘ ĐIỀU PHỐI GIAO DIỆN THEO ROLE (ROLE ROUTER) -->
+<script>
+  function dieuPhoiGiaoDienTheoRole() {
+    // Đọc thông tin tài khoản đang đăng nhập từ LocalStorage
+    var session = null;
+    try {
+      session = JSON.parse(localStorage.getItem('sport_user'));
+    } catch (e) {
+      session = null;
+    }
+    var viewGuest = document.getElementById('view-auth-guard');
+    var viewUser = document.getElementById('view-user');
+    var viewAdmin = document.getElementById('view-admin');
+    var siteFooter = document.querySelector('.sport-footer');
+    // TRƯỜNG HỢP 1: Chưa đăng nhập -> Hiện hộp khóa
+    if (!session) {
+      if (viewGuest) viewGuest.style.display = 'block';
+      if (viewUser) viewUser.style.display = 'none';
+      if (viewAdmin) viewAdmin.style.display = 'none';
+      if (siteFooter) siteFooter.style.display = 'block';
+      return;
+    }
+    // TRƯỜNG HỢP 2: Tài khoản có quyền Quản Trị Viên (role === 'admin')
+    if (session.role === 'admin') {
+      if (viewGuest) viewGuest.style.display = 'none';
+      if (viewUser) viewUser.style.display = 'none';
+      if (viewAdmin) viewAdmin.style.display = 'flex'; // Khối Admin dùng flex layout
+      if (siteFooter) siteFooter.style.display = 'none'; // Admin toàn màn hình nên ẩn Footer trang web
+      // Khởi động các bảng và số liệu thống kê của Admin
+      if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
+      if (typeof switchTab === 'function') switchTab('dashboard');
+      return;
+    }
+    // TRƯỜNG HỢP 3: Tài khoản Khách Hàng bình thường (role === 'user')
+    if (viewGuest) viewGuest.style.display = 'none';
+    if (viewAdmin) viewAdmin.style.display = 'none';
+    if (viewUser) viewUser.style.display = 'block';
+    if (siteFooter) siteFooter.style.display = 'block';
+    // Khởi động hồ sơ khách hàng
+    if (typeof renderUserProfile === 'function') renderUserProfile();
+  }
+  // Chạy điều phối ngay khi mở trang
+  document.addEventListener('DOMContentLoaded', dieuPhoiGiaoDienTheoRole);
+</script>
+
+
 </body>
 </html>
 

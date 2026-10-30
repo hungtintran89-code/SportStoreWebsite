@@ -358,11 +358,9 @@
       message.textContent = 'Đăng nhập thành công.';
       updateAuthButtons();
 
+
       setTimeout(function () {
-        var destination = isAdmin
-          ? getPageUrl('admin.html')
-          : getPageUrl('dev5_user.html');
-        window.location.href = destination;
+        window.location.href = getPageUrl('dev5_user.html');
       }, 250);
     }).catch(function (error) { message.textContent = error.message; });
   }
@@ -415,16 +413,16 @@
       // 1. Nếu là Admin: đổi thành "Quản Lý Cài Đặt" và trỏ thẳng vào admin.html
       if (overviewLink) {
         overviewLink.textContent = '⚙️ Quản Lý Cài Đặt';
-        overviewLink.href = getPageUrl('admin.html');
+        overviewLink.href = getPageUrl('dev5_user.html');
         overviewLink.setAttribute('data-admin-menu-link', '');
-        overviewLink.removeAttribute('data-action-tab'); // Tránh bị chặn sự kiện chuyển trang
+        overviewLink.removeAttribute('data-action-tab');
       }
-      // 2. Ẩn mục "Đơn Mua" của khách hàng vì Admin không cần dùng
+
       if (ordersLink) {
         ordersLink.classList.add('dev5-hidden');
       }
     } else {
-      // Nếu là Khách hàng bình thường: giữ nguyên menu Shopee chuẩn
+
       if (overviewLink) {
         overviewLink.textContent = 'Tài Khoản Của Tôi';
         overviewLink.href = getPageUrl('dev5_user.html?tab=overview');

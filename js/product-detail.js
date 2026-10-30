@@ -14,8 +14,8 @@ try {
 // dò trong mảng xem khách đang bấm coi sp nào
 let currentProduct = null;
 for (let i = 0; i < rawProds.length; i++) {
-    if (rawProds[i].productCode === productId) {
-        currentProduct = rawProds[i];
+    if( String(p.id) === productId ){
+        currentProduct = rawProds[i] ;
         break;
     }
 }

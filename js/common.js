@@ -21,6 +21,7 @@ function readJson(key, fallback = null) {
     console.error("Lỗi khi đọc LocalStorage:", error);
     return fallback;
   }
+
 }
 
 /**

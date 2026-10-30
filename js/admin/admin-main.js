@@ -114,7 +114,7 @@ function closeModal(modalId) {
 
 window.addEventListener("DOMContentLoaded", function () {
   // 1. Kiểm tra quyền Admin
-  kiemTraDangNhapAdmin();
+  // kiemTraDangNhapAdmin();
   // 2. Cập nhật số đếm thống kê menu
   updateSidebarBadges();
   // 3. Mặc định mở Tab Tổng Quan (Dashboard) đầu tiên

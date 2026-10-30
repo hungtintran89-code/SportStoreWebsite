@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../css/common.css">
 </head>
 
@@ -99,7 +98,7 @@
               <div class="banner-box">
                 <p><strong>BST THỂ THAO MÙA MỚI</strong></p>
                 <span class="discount">ƯU ĐÃI ĐẾN 30%</span>
-                <button type="button" class="btn-banner" onclick="window.location.href='products.html'">XEM NGAY</button>
+                <button type="button" class="btn-banner" onclick="window.location.href='dev2_products.html'">XEM NGAY</button>
               </div>
             </div>
 
@@ -120,15 +119,14 @@
             </div>
           </div>
         </li>
-        <li><a href="product-detail.html">Chi Tiết & So Sánh</a></li>
-        <li><a href="dev4_checkout.html">Giỏ Hàng</ a></li>
+        <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
       </ul>
 
         <!-- Cụm Hành Động Góc Phải -->
         <div class="sport-nav-actions header-actions">
-            <!-- Nút Admin (Mặc định ẩn với dev5-hidden, chỉ hiện khi đăng nhập tài khoản Admin) -->
+
             <a
-                    href="admin.html"
+                    href="dev5_user.html"
                     id="header-nav-admin-btn"
                     class="btn-sport btn-outline nav-admin-btn dev5-hidden"
                     data-admin-link
@@ -282,6 +280,81 @@
         </section>
     </main>
 
+  <!-- ============================================================================== -->
+  <!-- POPUP (MODAL) CHI TIẾT SẢN PHẨM & CHỌN SIZE MUA NGAY -->
+  <!-- ============================================================================== -->
+  <div id="modal-quick-view" class="qv-overlay" onclick="dongModalKhiBamRaNgoai(event)" style="display: none;">
+      <div class="qv-container">
+          <!-- Nút đóng dấu X -->
+          <button type="button" class="qv-close-btn" onclick="dongChiTietSanPham()" aria-label="Đóng">&times;</button>
+          <div class="qv-content-grid">
+              <!-- CỘT BÊN TRÁI: HÌNH ẢNH SẢN PHẨM -->
+              <div class="qv-gallery-col">
+                  <div class="qv-main-image-wrap">
+                      <img id="qv-main-img" src="" alt="Ảnh sản phẩm">
+                  </div>
+                  <!-- Các ảnh phụ góc chụp -->
+                  <div class="qv-thumb-list" id="qv-thumb-list"></div>
+              </div>
+              <!-- CỘT BÊN PHẢI: THÔNG TIN CHI TIẾT & CHỌN MUA -->
+              <div class="qv-info-col">
+                  <!-- Nhãn hãng và danh mục -->
+                  <div class="qv-badges">
+                      <span class="qv-badge" id="qv-brand">NIKE</span>
+                      <span class="qv-badge qv-badge-blue" id="qv-category">CHẠY BỘ</span>
+                  </div>
+                  <!-- Tên sản phẩm -->
+                  <h2 class="qv-title" id="qv-title">Tên sản phẩm thể thao</h2>
+                  <div class="qv-code-text">Mã sản phẩm: <strong id="qv-code">SP-201</strong></div>
+                  <!-- Giá bán -->
+                  <div class="qv-price-row">
+                      <span class="qv-price-main" id="qv-price">4.890.000 ₫</span>
+                      <span class="qv-price-old" id="qv-old-price"></span>
+                  </div>
+                  <!-- Tình trạng kho -->
+                  <div class="qv-stock-status">
+                      Tình trạng: <strong id="qv-stock" style="color: #16a34a;">Còn hàng</strong>
+                  </div>
+                  <hr class="qv-divider">
+                  <!-- Chọn màu sắc -->
+                  <div class="qv-option-group" id="qv-color-group">
+                      <label class="qv-label">Màu sắc:</label>
+                      <div class="qv-btn-group" id="qv-colors-box"></div>
+                  </div>
+                  <!-- Chọn kích cỡ (Size) -->
+                  <div class="qv-option-group" id="qv-size-group">
+                      <label class="qv-label">Kích cỡ (Size):</label>
+                      <div class="qv-btn-group" id="qv-sizes-box"></div>
+                  </div>
+                  <!-- Chọn số lượng mua -->
+                  <div class="qv-qty-row">
+                      <label class="qv-label">Số lượng:</label>
+                      <div class="qv-qty-picker">
+                          <button type="button" class="qv-qty-btn" onclick="thayDoiSoLuong(-1)">-</button>
+                          <input type="number" id="qv-quantity-input" value="1" min="1" max="99" readonly>
+                          <button type="button" class="qv-qty-btn" onclick="thayDoiSoLuong(1)">+</button>
+                      </div>`
+                  </div>
+                  <!-- Mô tả tóm tắt -->
+                  <div class="qv-desc-box">
+                      <strong>Đặc điểm nổi bật:</strong>
+                      <p id="qv-desc">Mô tả tóm tắt tính năng sản phẩm...</p>
+                  </div>
+                  <!-- 2 Nút Mua hàng -->
+                  <div class="qv-actions-row">
+                      <button type="button" class="btn-sport btn-outline qv-btn-add" onclick="themVaoGioTuModal(false)">
+                          🛒 Thêm Vào Giỏ
+                      </button>
+                      <button type="button" class="btn-sport btn-primary qv-btn-buy" onclick="themVaoGioTuModal(true)">
+                          ⚡ Mua Ngay
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
   <!-- phần chân trang dùng chung -->
   <footer class="sport-footer site-footer">
     <div class="sport-container container">
@@ -299,7 +372,7 @@
           <ul class="footer-links">
             <li><a href="../index.html">Trang Chủ</a></li>
             <li><a href="products.html">Sản Phẩm Tuyển Chọn</a></li>
-            <li><a href="../product-detail.html">Chi Tiết & Bảng So Sánh</a></li>
+            <li><a href="../dev3_details.html">Chi Tiết & Bảng So Sánh</a></li>
             <li><a href="dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
             <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
           </ul>
@@ -355,7 +428,6 @@
     <script src="../js/common.js"></script>
     <script src="../js/auth_modal.js"></script>
     <script src="../js/dev2_products.js"></script>
-    <script src="../js/product-detail.js"></script>
 
 
 </html>
