@@ -479,12 +479,47 @@ function moChiTietSanPham( productId ){
     //Điền tình trạng tồn kho
     var stockCount = sanPhamDangXem.stock !== undefined ? sanPhamDangXem.stock : 25;
     var stockEl = document.getElementById("qv-stock");
-    if (stockCount > 0) {
-        stockEl.textContent = "Còn hàng (" + stockCount + " món)";
-        stockEl.style.color = "#16a34a";
-    } else {
+    var btnThemVaoGio = document.querySelector(".qv-btn-add");
+    var btnMuaNgay = document.querySelector(".qv-btn-buy");
+    var oNhapSoLuong = document.getElementById("qv-quantity-input");
+
+
+    // TRƯỜNG HỢP 1: HẾT HÀNG
+    if (stockCount <= 0) {
         stockEl.textContent = "Tạm hết hàng";
         stockEl.style.color = "#ef4444";
+        // Khóa nút Thêm vào giỏ
+        if (btnThemVaoGio) {
+            btnThemVaoGio.disabled = true; // Khóa không cho click
+            btnThemVaoGio.style.opacity = "0.5"; // Làm mờ nút
+            btnThemVaoGio.style.cursor = "not-allowed"; // Hiện con trỏ cấm
+            btnThemVaoGio.textContent = "Tạm Hết Hàng";
+        }
+        // Khóa nút Mua ngay
+        if (btnMuaNgay) {
+            btnMuaNgay.disabled = true;
+            btnMuaNgay.style.opacity = "0.5";
+            btnMuaNgay.style.cursor = "not-allowed";
+        }
+        if (oNhapSoLuong) oNhapSoLuong.value = 0; // Đưa số lượng về 0
+        // TRƯỜNG HỢP 2: CÒN HÀNG
+    } else {
+        stockEl.textContent = "Còn hàng (" + stockCount + " món)";
+        stockEl.style.color = "#16a34a";
+        // Mở khóa lại nút Thêm vào giỏ
+        if (btnThemVaoGio) {
+            btnThemVaoGio.disabled = false;
+            btnThemVaoGio.style.opacity = "1";
+            btnThemVaoGio.style.cursor = "pointer";
+            btnThemVaoGio.textContent = "🛒 Thêm Vào Giỏ";
+        }
+        // Mở khóa lại nút Mua ngay
+        if (btnMuaNgay) {
+            btnMuaNgay.disabled = false;
+            btnMuaNgay.style.opacity = "1";
+            btnMuaNgay.style.cursor = "pointer";
+        }
+        if (oNhapSoLuong) oNhapSoLuong.value = 1;
     }
 
     //Điền mô tả
@@ -530,7 +565,6 @@ function moChiTietSanPham( productId ){
     // Đặt lại số lượng về 1 và hiện Modal
     document.getElementById("qv-quantity-input").value = 1;
     document.getElementById("modal-quick-view").style.display = "flex";
-
 }
 
 function dongChiTietSanPham() {
@@ -551,8 +585,10 @@ function thayDoiSoLuong(delta) {
 
     var tonKho = (sanPhamDangXem && sanPhamDangXem.stock != undefined ) ? sanPhamDangXem.stock : 0;
 
-    if (nextVal >= 1 && nextVal <= sanPhamDangXem) {
+    if (nextVal >= 1 && nextVal <= sanPhamDangXem.stock) {
         input.value = nextVal;
+    }else if (nextVal > sanPhamDangXem.stock) {
+        showToast("Sản phẩm này trong kho chỉ còn " + tonKho + " món!", "danger");
     }
 }
 

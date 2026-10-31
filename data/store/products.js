@@ -31,7 +31,7 @@ var products = [
   },
   {
     id: 203, code: "SP-203", name: "Vợt Cầu Lông Yonex Astrox 100ZZ Kurenai", brand: "Yonex", categoryId: "CAT-RACKET", category: "Cầu Lông - Tennis",
-    costPrice: 3200000, profitPercent: 32.81, price: 4250000, salePrice: 3950000, discount: "-7%", stock: 12, sold: 104, rating: 5.0, reviewCount: 82,
+    costPrice: 3200000, profitPercent: 32.81, price: 4250000, salePrice: 3950000, discount: "-7%", stock: 0, sold: 104, rating: 5.0, reviewCount: 82,
     image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600&auto=format&fit=crop&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&auto=format&fit=crop&q=80",
@@ -45,7 +45,7 @@ var products = [
   },
   {
     id: 204, code: "SP-204", name: "Áo Thun Tập Gym Nam Under Armour HeatGear Compression", brand: "Under Armour", categoryId: "CAT-GYM", category: "Gym & Fitness",
-    costPrice: 550000, profitPercent: 36.36, price: 750000, salePrice: 650000, discount: "-13%", stock: 45, sold: 230, rating: 4.7, reviewCount: 110,
+    costPrice: 550000, profitPercent: 36.36, price: 750000, salePrice: 650000, discount: "-13%", stock: 2, sold: 230, rating: 4.7, reviewCount: 110,
     image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600&auto=format&fit=crop&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&auto=format&fit=crop&q=80",

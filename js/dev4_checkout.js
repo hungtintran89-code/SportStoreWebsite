@@ -481,6 +481,25 @@ function khoiTaoTrang() {
   }
 }
 
+function xoaTatCaGioHang(){
+  if( !danhSachGioHang || danhSachGioHang.length === 0 ){
+    showToast("Giỏ hàng của bạn đang trống!", "info");
+    return ;
+  }
+
+  var xacNhan = confirm("Bạn có chắc chắn muốn xóa TOÀN BỘ sản phẩm trong giỏ hàng không?");
+
+  if(xacNhan){
+
+    danhSachGioHang = [] ;
+
+    saveCart();
+
+    showToast("Đã xóa sạch toàn bộ giỏ hàng!", "info");
+    hienThiGioHang();
+  }
+}
+
 // Chạy khởi tạo ngay khi tải xong file JavaScript
 khoiTaoTrang();
 

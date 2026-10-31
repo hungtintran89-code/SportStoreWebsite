@@ -1,9 +1,3 @@
-/**
- * ==========================================================================
- * SPORTSTORE - CÁC HÀM TIỆN ÍCH DÙNG CHUNG (COMMON.JS)
- * Dành cho toàn bộ 5 thành viên sử dụng chung.
- * ==========================================================================
- */
 
 // Tên khóa lưu trữ trong LocalStorage
 const STORAGE_CART_KEY = "sport_cart"; // Lưu mảng: [ { id: user.id, product: [...] } ]
@@ -127,9 +121,14 @@ function addToCart(product, quantityToAdd = 1) {
       (item.size || "Mặc định") === size &&
       (item.color || "Tiêu chuẩn") === color,
   );
+  const soLuongDangCo = existingItem ? existingItem.quantity : 1 ;
+  if( soLuongDangCo + addQty > product.stock ){
+    showToast("Không thể thêm! Trong kho chỉ còn " + tonKho + " món (bạn đã có " + soLuongDangCo + " món trong giỏ).",  "danger");
+    return false;
+  }
 
   if (existingItem) {
-    existingItem.quantity = Math.min(10, existingItem.quantity + addQty);
+    existingItem.quantity = soLuongDangCo + addQty ;
   } else {
     cart.push({
       id: product.id,
