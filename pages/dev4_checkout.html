@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ hàng & Thanh toán - SportStore</title>
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/dev4_checkout.css" />
+  </head>
+  <body>
+    <!-- ============================================================================== -->
+    <!-- 1. HEADER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->
+    <!-- ============================================================================== -->
+    <header class="sport-navbar site-header">
+      <div class="sport-container sport-navbar-inner header-inner">
+        <!-- Logo Cửa Hàng -->
+        <a href="../index.html" class="sport-brand-logo site-logo">
+          <div class="logo-icon">⚡</div>
+          <div>SPORT<span class="accent">STORE</span></div>
+        </a>
+
+        <!-- Menu Điều Hướng (Mỗi Dev chủ động thêm class 'active' vào trang của mình) -->
+        <ul class="sport-nav-menu nav-menu">
+          <li><a href="../index.html">Trang Chủ</a></li>
+          <li><a href="dev2_products.html">Sản Phẩm</a></li>
+          <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
+        </ul>
+
+        <!-- Cụm Hành Động Góc Phải -->
+        <div class="sport-nav-actions header-actions">
+          <!-- Nút Admin (Mặc định ẩn với dev5-hidden, chỉ hiện khi đăng nhập tài khoản Admin) -->
+          <a
+            href="dev5_user.html"
+            id="header-nav-admin-btn"
+            class="btn-sport btn-outline nav-admin-btn dev5-hidden"
+            data-admin-link
+            title="Truy cập Bảng Quản Trị Admin"
+          >
+            ⚙️ Admin
+          </a>
+
+          <!-- Nút Giỏ Hàng -->
+          <a
+            href="dev4_checkout.html"
+            class="nav-badge-btn"
+            title="Xem giỏ hàng"
+          >
+            🛒
+            <span class="badge-pill" id="header-cart-badge-count">0</span>
+          </a>
+
+          <div
+            class="dev5-header-user-wrapper dev5-hidden"
+            data-auth-profile-wrap
+          >
+            <div
+              class="sport-user-logged-pill dev5-user-pill-btn"
+              data-auth-profile
+              title="Hồ sơ tài khoản"
+            >
+              <img
+                data-header-avatar
+                alt="Avatar"
+                style="
+                  width: 24px;
+                  height: 24px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                "
+              />
+              <span data-header-name>Tài khoản</span>
+              <span class="dev5-caret-down">▾</span>
+            </div>
+            <!-- Menu thả xuống Shopee (Hình 1) -->
+            <div class="dev5-shopee-dropdown">
+              <div class="dev5-shopee-arrow"></div>
+              <a
+                href="dev5_user.html?tab=overview"
+                class="dev5-shopee-item"
+                data-action-tab="overview"
+              >
+                Tài Khoản Của Tôi
+              </a>
+              <a
+                href="dev5_user.html?tab=orders"
+                class="dev5-shopee-item"
+                data-action-tab="orders"
+              >
+                Đơn Mua
+              </a>
+              <button
+                type="button"
+                class="dev5-shopee-item dev5-shopee-logout"
+                data-auth-action="logout"
+              >
+                Đăng Xuất
+              </button>
+            </div>
+          </div>
+
+          <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
+          <button
+            type="button"
+            class="btn-sport btn-outline btn-sm dev5-hidden"
+            data-auth-action="login"
+            id="sport-btn-open-login"
+            title="Đăng nhập tài khoản"
+          >
+            Đăng Nhập
+          </button>
+          <button
+            type="button"
+            class="btn-sport btn-primary btn-sm dev5-hidden"
+            data-auth-action="register"
+            id="sport-btn-open-register"
+            title="Đăng ký thành viên"
+          >
+             Đăng Ký
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== NỘI DUNG RIÊNG CỦA DEV 4 ===== -->
+    <main class="dev4-checkout-wrapper">
+      <div class="container d4-main">
+        <nav class="d4-breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">Trang chủ</a> /
+          <strong>Giỏ hàng &amp; thanh toán</strong>
+        </nav>
+        <h1 class="d4-title">Giỏ hàng của bạn</h1>
+
+        <!-- ============ 1. TRẠNG THÁI CHƯA ĐĂNG NHẬP ============ -->
+        <section
+          class="d4-empty"
+          id="d4Auth"
+          hidden
+          aria-labelledby="d4AuthTitle"
+        >
+          <div class="d4-empty-icon" aria-hidden="true">🔒</div>
+          <h2 id="d4AuthTitle">Vui lòng đăng nhập để sử dụng giỏ hàng</h2>
+          <p>
+            Khách hàng cần đăng ký và đăng nhập tài khoản mới sử dụng được chức
+            năng giỏ hàng và đặt mua sản phẩm.
+          </p>
+          <div class="d4-empty-actions">
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="
+                if (window.SportAuth) window.SportAuth.openModal('login');
+              "
+            >
+               Đăng nhập ngay
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline"
+              onclick="
+                if (window.SportAuth) window.SportAuth.openModal('register');
+              "
+            >
+               Đăng ký tài khoản
+            </button>
+          </div>
+        </section>
+
+        <!-- ============ 2. TRẠNG THÁI GIỎ HÀNG TRỐNG ============ -->
+        <section
+          class="d4-empty"
+          id="d4Empty"
+          hidden
+          aria-labelledby="d4EmptyTitle"
+        >
+          <div class="d4-empty-icon" aria-hidden="true">🛒</div>
+          <h2 id="d4EmptyTitle">Giỏ hàng đang trống</h2>
+          <p>Chọn thêm vài món đồ thể thao yêu thích rồi quay lại đây nhé.</p>
+          <div class="d4-empty-actions">
+            <a href="dev2_products.html" class="btn btn-primary"
+              >Xem sản phẩm</a
+            >
+          </div>
+        </section>
+
+        <!-- ============ 3. NỘI DUNG GIỎ HÀNG & THANH TOÁN ============ -->
+        <div class="d4-layout" id="d4Layout" hidden>
+          <div class="d4-col-main">
+            <!-- Bảng sản phẩm trong giỏ -->
+            <section class="d4-card" aria-labelledby="d4HItems">
+              <h2 id="d4HItems">
+                Sản phẩm đã chọn
+                <span class="d4-pill" id="d4ItemCount">0 món</span>
+                <button type="button"
+                        onclick="xoaTatCaGioHang()"
+                        style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                  🗑️ Xóa tất cả
+                </button>
+              </h2>
+
+
+
+              <div class="d4-table-wrap">
+                <table class="d4-table">
+                  <caption class="d4-sr">
+                    Danh sách sản phẩm trong giỏ hàng
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Sản phẩm</th>
+                      <th scope="col">Đơn giá</th>
+                      <th scope="col">Số lượng</th>
+                      <th scope="col">Thành tiền</th>
+                      <th scope="col"><span class="d4-sr">Xóa</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="d4Items"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- Form thông tin nhận hàng -->
+            <form
+              class="d4-card"
+              id="d4Form"
+              novalidate
+              aria-labelledby="d4HShip"
+            >
+              <h2 id="d4HShip">Thông tin nhận hàng</h2>
+
+              <!-- Chọn địa chỉ từ tài khoản hoặc nhập mới -->
+              <div
+                class="d4-addr-mode"
+                id="d4AddrMode"
+                role="radiogroup"
+                aria-label="Cách chọn địa chỉ nhận hàng"
+                hidden
+              >
+                <label class="d4-addr-radio selected" id="d4LblAddrSaved">
+                  <input
+                    type="radio"
+                    name="addrMode"
+                    value="saved"
+                    id="d4RadioSaved"
+                    checked
+                  />
+                  <span>Chọn địa chỉ nhận hàng từ tài khoản</span>
+                </label>
+                <label class="d4-addr-radio" id="d4LblAddrNew">
+                  <input
+                    type="radio"
+                    name="addrMode"
+                    value="new"
+                    id="d4RadioNew"
+                  />
+                  <span>Nhập địa chỉ giao hàng mới</span>
+                </label>
+              </div>
+
+              <!-- Khung hiển thị địa chỉ đã lưu của tài khoản -->
+              <div class="d4-saved" id="d4SavedBox" hidden>
+                <p class="d4-saved-text" id="d4SavedText"></p>
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  id="d4EditAddr"
+                >
+                  Nhập địa chỉ mới
+                </button>
+              </div>
+
+              <!-- Các ô nhập địa chỉ giao hàng mới -->
+              <div id="d4Fields">
+                <div class="d4-row">
+                  <div class="d4-field">
+                    <label for="fullName"
+                      >Họ và tên người nhận
+                      <abbr title="bắt buộc">*</abbr></label
+                    >
+                    <input
+                      type="text"
+                      id="fullName"
+                      placeholder="Ví dụ: Nguyễn Văn A"
+                    />
+                    <p class="d4-error" id="err-fullName"></p>
+                  </div>
+                  <div class="d4-field">
+                    <label for="phone"
+                      >Số điện thoại (10 số)
+                      <abbr title="bắt buộc">*</abbr></label
+                    >
+                    <input
+                      type="tel"
+                      id="phone"
+                      maxlength="10"
+                      placeholder="Ví dụ: 0912345678"
+                    />
+                    <p class="d4-error" id="err-phone"></p>
+                  </div>
+                </div>
+                <div class="d4-row">
+                  <div class="d4-field">
+                    <label for="email"
+                      >Email <abbr title="bắt buộc">*</abbr></label
+                    >
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="Ví dụ: nguyenvana@gmail.com"
+                    />
+                    <p class="d4-error" id="err-email"></p>
+                  </div>
+                  <div class="d4-field">
+                    <label for="province"
+                      >Tỉnh / Thành phố <abbr title="bắt buộc">*</abbr></label
+                    >
+                    <select id="province">
+                      <option value="hn">
+                        Hà Nội (Nội thành - Hỏa tốc 2h)
+                      </option>
+                      <option value="hcm">
+                        TP. Hồ Chí Minh (Nội thành - Hỏa tốc 2h)
+                      </option>
+                      <option value="dn">Đà Nẵng (1-2 ngày)</option>
+                      <option value="other">
+                        Tỉnh / thành khác (2-4 ngày)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="d4-field">
+                  <label for="address"
+                    >Địa chỉ chi tiết (số nhà, đường, phường/xã)
+                    <abbr title="bắt buộc">*</abbr></label
+                  >
+                  <input
+                    type="text"
+                    id="address"
+                    placeholder="Ví dụ: 123 Nguyễn Huệ, Phường Bến Nghé, Quận 1"
+                  />
+                  <p class="d4-error" id="err-address"></p>
+                </div>
+              </div>
+
+              <div class="d4-field">
+                <label for="note">Ghi chú giao hàng (tùy chọn)</label>
+                <input
+                  type="text"
+                  id="note"
+                  maxlength="200"
+                  placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi đến"
+                />
+              </div>
+            </form>
+
+            <!-- Phương thức thanh toán (mặc định chọn COD) -->
+            <section class="d4-card" aria-labelledby="d4HPay">
+              <h2 id="d4HPay">Phương thức thanh toán</h2>
+              <div
+                class="d4-pay-list"
+                id="d4PayList"
+                role="radiogroup"
+                aria-labelledby="d4HPay"
+              >
+                <!-- 1. Tiền mặt COD (Mặc định) -->
+                <label class="d4-pay-option selected">
+                  <input type="radio" name="payment" value="COD" checked />
+                  <span>
+                    <strong>Thanh toán tiền mặt khi nhận hàng (COD)</strong>
+                    <em class="d4-tag">Mặc định</em>
+                    <small
+                      >Kiểm tra hàng trước khi trả tiền mặt cho shipper.</small
+                    >
+                  </span>
+                </label>
+
+                <!-- 2. Chuyển khoản QR -->
+                <label class="d4-pay-option">
+                  <input type="radio" name="payment" value="QR" />
+                  <span>
+                    <strong>Chuyển khoản ngân hàng (VietQR)</strong>
+                    <em class="d4-tag">Tiện lợi</em>
+                    <small
+                      >Quét mã QR chuyển khoản ngân hàng nhanh chóng.</small
+                    >
+                  </span>
+                </label>
+                <div class="d4-qr" id="d4QrBox" hidden>
+                  <div class="d4-qr-img" aria-hidden="true">
+                    Mã QR<br />thanh toán
+                  </div>
+                  <ul class="d4-qr-info" id="d4QrInfo">
+                    <li><strong>Ngân hàng:</strong> Vietcombank</li>
+                    <li><strong>Chủ tài khoản:</strong> CTY SPORTSTORE</li>
+                    <li><strong>Số tài khoản:</strong> 0123 456 789</li>
+                    <li><strong>Nội dung:</strong> Mã đơn hàng + SĐT</li>
+                  </ul>
+                </div>
+
+                <!-- 3. Thanh toán trực tuyến (ONLINE) -->
+                <label class="d4-pay-option">
+                  <input type="radio" name="payment" value="ONLINE" />
+                  <span>
+                    <strong
+                      >Thanh toán trực tuyến (Thẻ ATM / Visa /
+                      MasterCard)</strong
+                    >
+                    <em class="d4-tag">Online</em>
+                    <small
+                      >Thanh toán trực tuyến an toàn qua cổng thẻ ngân
+                      hàng.</small
+                    >
+                  </span>
+                </label>
+                <div class="d4-online" id="d4OnlineBox" hidden>
+                  <p class="d4-online-title">
+                    💳 Nhập thông tin thẻ thanh toán trực tuyến
+                  </p>
+                  <div class="d4-row">
+                    <div class="d4-field">
+                      <label for="cardNumber"
+                        >Số thẻ ngân hàng / Visa
+                        <abbr title="bắt buộc">*</abbr></label
+                      >
+                      <input
+                        type="text"
+                        id="cardNumber"
+                        form="d4Form"
+                        maxlength="19"
+                        placeholder="Ví dụ: 9704 1234 5678 9012"
+                      />
+                      <p class="d4-error" id="err-cardNumber"></p>
+                    </div>
+                    <div class="d4-field">
+                      <label for="cardHolder"
+                        >Tên in trên thẻ (không dấu)
+                        <abbr title="bắt buộc">*</abbr></label
+                      >
+                      <input
+                        type="text"
+                        id="cardHolder"
+                        form="d4Form"
+                        placeholder="Ví dụ: NGUYEN VAN A"
+                      />
+                      <p class="d4-error" id="err-cardHolder"></p>
+                    </div>
+                  </div>
+                  <div class="d4-row">
+                    <div class="d4-field">
+                      <label for="cardExpiry"
+                        >Ngày hết hạn (MM/YY)
+                        <abbr title="bắt buộc">*</abbr></label
+                      >
+                      <input
+                        type="text"
+                        id="cardExpiry"
+                        form="d4Form"
+                        maxlength="5"
+                        placeholder="MM/YY (VD: 08/28)"
+                      />
+                      <p class="d4-error" id="err-cardExpiry"></p>
+                    </div>
+                    <div class="d4-field">
+                      <label for="cardCvv"
+                        >Mã bảo mật CVV / OTP
+                        <abbr title="bắt buộc">*</abbr></label
+                      >
+                      <input
+                        type="password"
+                        id="cardCvv"
+                        form="d4Form"
+                        maxlength="6"
+                        placeholder="3-6 chữ số"
+                      />
+                      <p class="d4-error" id="err-cardCvv"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Tóm tắt đơn hàng -->
+          <aside class="d4-summary d4-card" aria-labelledby="d4HSum">
+            <h2 id="d4HSum">Tóm tắt đơn hàng</h2>
+
+            <dl class="d4-totals">
+              <div>
+                <dt>Tạm tính</dt>
+                <dd id="d4Subtotal">0 ₫</dd>
+              </div>
+              <div>
+                <dt>Phí vận chuyển</dt>
+                <dd id="d4Shipping" class="d4-green">Miễn phí</dd>
+              </div>
+              <div class="d4-grand">
+                <dt>Tổng thanh toán</dt>
+                <dd id="d4Total">0 ₫</dd>
+              </div>
+            </dl>
+
+            <button
+              type="submit"
+              form="d4Form"
+              class="btn btn-primary d4-btn-block"
+              id="d4Confirm"
+            >
+              Xác nhận đặt hàng
+            </button>
+            <p class="d4-hint">
+              Miễn phí vận chuyển toàn quốc • Đổi trả trong 30 ngày
+            </p>
+          </aside>
+        </div>
+
+        <!-- ============ 4. ĐẶT HÀNG THÀNH CÔNG & XEM LẠI ĐƠN ============ -->
+        <section
+          class="d4-success"
+          id="d4Success"
+          hidden
+          aria-labelledby="d4SuccessTitle"
+        >
+          <div class="d4-success-icon" aria-hidden="true">✓</div>
+          <h2 id="d4SuccessTitle">Đặt hàng thành công!</h2>
+          <p>
+            Mã đơn hàng: <strong class="d4-code" id="d4OrderCode">—</strong>
+          </p>
+          <p>Tổng thanh toán: <strong id="d4OrderTotal">—</strong></p>
+          <p id="d4OrderNote"></p>
+
+          <!-- Bảng xem lại chi tiết đơn đặt hàng vừa mua -->
+          <div class="d4-review" id="d4OrderReview"></div>
+
+          <div class="d4-empty-actions">
+            <a href="dev5_user.html#orders" class="btn btn-outline"
+              >Xem lịch sử đơn hàng</a
+            >
+            <a href="dev2_products.html" class="btn btn-primary"
+              >Tiếp tục mua sắm</a
+            >
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ============================================================================== -->
+    <!-- 2. FOOTER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->
+    <!-- ============================================================================== -->
+    <footer class="sport-footer site-footer">
+      <div class="sport-container container">
+        <div class="sport-footer-grid footer-grid">
+          <div class="sport-footer-col footer-col">
+            <div class="sport-brand-logo" style="margin-bottom: 14px">
+              <div class="logo-icon">⚡</div>
+              <div style="color: #ffffff">
+                SPORT<span class="accent">STORE</span>
+              </div>
+            </div>
+            <p>
+              Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng
+              đầu Việt Nam. Đồng hành cùng mọi vận động viên bứt phá giới hạn.
+            </p>
+          </div>
+
+          <div class="sport-footer-col footer-col">
+            <h4>Điều Hướng Nhanh</h4>
+            <ul class="footer-links">
+              <li><a href="../index.html">Trang Chủ</a></li>
+              <li><a href="dev2_products.html">Sản Phẩm Tuyển Chọn</a></li>
+              <li><a href="dev3_details.html">Chi Tiết & Bảng So Sánh</a></li>
+              <li><a href="dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
+              <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
+            </ul>
+          </div>
+
+          <div class="sport-footer-col footer-col">
+            <h4>Hỗ Trợ & Chính Sách</h4>
+            <ul class="footer-links">
+              <li><a href="dev5_user.html">Chính Sách Bảo Hành</a></li>
+              <li><a href="dev5_user.html">Quy Định Đổi Trả 30 Ngày</a></li>
+              <li><a href="dev5_user.html">Hướng Dẫn Chọn Size Chuẩn</a></li>
+              <li><a href="dev5_user.html">Theo Dõi Vận Đơn</a></li>
+            </ul>
+          </div>
+
+          <div class="sport-footer-col footer-col">
+            <h4>Hotline & Liên Hệ</h4>
+            <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
+            <p>✉️ Email: support@sportstore.vn</p>
+            <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
+          </div>
+        </div>
+
+        <div class="sport-footer-bottom footer-bottom">
+          <div>
+            © 2026 SportStore. Thiết kế kiến trúc Decoupled Vanilla Frontend.
+          </div>
+          <div>Chạy mượt mà 100% Client-side & Không phụ thuộc Backend</div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- NẠP DỮ LIỆU STORE & ĐỒNG BỘ LOCALSTORAGE -->
+    <script src="../data/store/customers.js"></script>
+    <script src="../data/store/orders.js"></script>
+    <script src="../data/store/init-storage.js"></script>
+
+    <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP Ở CUỐI TRANG -->
+    <script src="../js/auth_modal.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/dev4_checkout.js"></script>
+  </body>
+</html>

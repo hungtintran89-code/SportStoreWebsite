@@ -1,0 +1,1478 @@
+/* ==========================================================================
+   SPORTSTORE - SHARED DESIGN SYSTEM & TOKENS (COMMON.CSS)
+   Phong cách: Trắng Sáng + Xanh Nhạt Thể Thao (Pristine White & Soft Light Blue)
+   Tác giả: Principal Frontend Architect & Tech Lead
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
+
+:root {
+  /* Bảng màu chính: Tông Trắng + Xanh Nhạt Dịu Mắt */
+  --bg-primary: #f0f7ff; /* Nền tổng thể màu trắng ngà ánh xanh băng nhẹ */
+  --bg-secondary: #ffffff; /* Nền trắng tinh khiết cho Card, Section */
+  --bg-card: #ffffff; /* Thẻ giao diện nền trắng */
+  --bg-card-hover: #f8fbff; /* Nền hover ánh xanh nhẹ */
+  --bg-glass: rgba(255, 255, 255, 0.88);
+
+  /* Điểm nhấn xanh biển nhạt & thể thao */
+  --accent-cyan: #0284c7; /* Xanh biển thể thao năng động (Royal Sky Blue) */
+  --accent-cyan-light: #e0f2fe; /* Xanh nhạt pastel làm nền badge / tag */
+  --accent-cyan-border: #bae6fd; /* Viền xanh nhạt trang nhã */
+  --accent-cyan-glow: rgba(2, 132, 199, 0.18);
+
+  --accent-orange: #ea580c; /* Cam san hô thể thao cho Flash Sale, Giá bán */
+  --accent-orange-light: #ffedd5;
+  --accent-emerald: #059669; /* Xanh lá bảo hành, thành công */
+  --accent-emerald-light: #d1fae5;
+  --accent-purple: #7c3aed;
+
+  /* Màu chữ có độ tương phản cao, dịu mắt trên nền sáng */
+  --text-main: #0f172a; /* Chữ chính màu Slate Navy đậm - rõ nét */
+  --text-muted: #475569; /* Chữ phụ, mô tả xám đậm - dễ đọc */
+  --text-dim: #64748b; /* Chữ chú thích, thời gian */
+
+  /* Viền & Đổ bóng tinh tế */
+  --border-subtle: #e2e8f0; /* Viền sáng nhẹ chuẩn hiện đại */
+  --border-light-blue: #bae6fd; /* Viền xanh nhạt tạo điểm nhấn */
+  --border-glow: rgba(2, 132, 199, 0.35);
+  --border-focus: #0284c7;
+
+  /* Typography */
+  --font-main: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", var(--font-main);
+
+  /* Hiệu ứng chuyển động mượt */
+  --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+
+  /* Đổ bóng đổ mịn màng trên nền sáng */
+  --shadow-card:
+    0 10px 25px -5px rgba(186, 230, 253, 0.45),
+    0 4px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-hover:
+    0 16px 32px -6px rgba(2, 132, 199, 0.2),
+    0 6px 12px -3px rgba(15, 23, 42, 0.06);
+  --shadow-glow: 0 0 20px rgba(14, 165, 233, 0.25);
+}
+
+/* Reset căn bản */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(186, 230, 253, 0.6) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 88% 85%,
+      rgba(224, 242, 254, 0.7) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(240, 249, 255, 0.8) 0%,
+      transparent 70%
+    );
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Scrollbar dịu mắt */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyan);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Container chuẩn */
+.sport-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ==========================================================================
+   HEADER & NAVBAR CHUNG (WHITE + SOFT BLUE BORDER)
+   ========================================================================== */
+.sport-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-light-blue);
+  box-shadow: 0 4px 20px rgba(186, 230, 253, 0.35);
+  padding: 14px 0;
+}
+
+.sport-navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sport-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.5px;
+  color: #0f172a;
+  transition: var(--transition-fast);
+}
+
+.sport-brand-logo .logo-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+.sport-brand-logo span.accent {
+  color: var(--accent-cyan);
+}
+
+.sport-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.sport-nav-menu li a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.sport-nav-menu li a:hover {
+  color: var(--accent-cyan);
+  background: #f0f9ff;
+}
+
+.sport-nav-menu li a.active {
+  color: var(--accent-cyan);
+  background: #e0f2fe;
+  font-weight: 700;
+  border-bottom: 2px solid var(--accent-cyan);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.sport-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Nút truy cập nhanh Quản trị Admin trên Navbar (Phân quyền: Mặc định ẩn, chỉ hiện khi đã đăng nhập Admin) */
+.nav-admin-btn {
+  display: none !important;
+  font-size: 0.85rem;
+  padding: 7px 12px;
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 700;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.nav-admin-btn.is-admin-visible {
+  display: inline-flex !important;
+}
+
+/* Badge số lượng thông báo / giỏ hàng */
+.nav-badge-btn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: #f0f9ff;
+  border: 1px solid var(--border-light-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  color: var(--accent-cyan);
+  transition: var(--transition-fast);
+}
+
+.nav-badge-btn:hover {
+  background: #e0f2fe;
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+}
+
+.nav-badge-btn .badge-pill {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--accent-orange);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  min-width: 18px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   BUTTONS & UI COMPONENTS
+   ========================================================================== */
+.btn-sport {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-main);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: var(--transition-normal);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);
+}
+
+.btn-accent:hover {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.45);
+}
+
+.btn-outline {
+  background: #ffffff;
+  color: #0284c7;
+  border: 1px solid var(--border-light-blue);
+  box-shadow: 0 2px 6px rgba(186, 230, 253, 0.3);
+}
+
+.btn-outline:hover {
+  background: #f0f9ff;
+  border-color: var(--accent-cyan);
+  color: #0369a1;
+  transform: translateY(-1px);
+}
+
+/* Badges */
+.sport-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-cyan {
+  background: var(--accent-cyan-light);
+  color: #0369a1;
+  border: 1px solid var(--border-light-blue);
+}
+
+.badge-orange {
+  background: var(--accent-orange-light);
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.badge-emerald {
+  background: var(--accent-emerald-light);
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+/* Toast Container & Notification */
+.sport-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.sport-toast {
+  pointer-events: auto;
+  min-width: 320px;
+  max-width: 440px;
+  background: #ffffff;
+  border: 1px solid var(--border-light-blue);
+  border-left: 5px solid var(--accent-cyan);
+  color: #0f172a;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 500;
+  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.sport-toast.success {
+  border-left-color: var(--accent-emerald);
+}
+.sport-toast.error {
+  border-left-color: #ef4444;
+}
+.sport-toast.warning {
+  border-left-color: var(--accent-orange);
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   FOOTER CHUNG (CLEAN LIGHT BACKGROUND)
+   ========================================================================== */
+.sport-footer {
+  background: #ffffff;
+  border-top: 1px solid var(--border-light-blue);
+  padding: 60px 0 30px;
+  margin-top: 80px;
+  box-shadow: 0 -4px 20px rgba(186, 230, 253, 0.2);
+}
+
+.sport-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.sport-footer-col h4 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 18px;
+}
+
+.sport-footer-col p {
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.sport-footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sport-footer-col ul li a {
+  color: #475569;
+  font-size: 0.9rem;
+  transition: var(--transition-fast);
+}
+
+.sport-footer-col ul li a:hover {
+  color: var(--accent-cyan);
+  padding-left: 4px;
+}
+
+.sport-footer-bottom {
+  padding-top: 25px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+@media (max-width: 900px) {
+  .sport-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .sport-footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .sport-nav-menu {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   AUTHENTICATION UI (MODAL & NAVBAR STATES - WHITE + LIGHT BLUE)
+   ========================================================================== */
+.sport-auth-nav-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sport-guest-nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sport-user-logged-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sport-user-logged-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f9ff;
+  border: 1px solid var(--border-light-blue);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  transition: var(--transition-fast);
+}
+
+.sport-user-logged-pill:hover {
+  background: #e0f2fe;
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.sport-btn-logout-icon {
+  background: #f8fafc;
+  border: 1px solid var(--border-light-blue);
+  border-radius: var(--radius-pill);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: var(--transition-fast);
+}
+
+.sport-btn-logout-icon:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  transform: scale(1.1);
+}
+
+/* Auth Modal Overlay */
+.sport-auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.sport-auth-modal-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.sport-auth-modal {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border: 1px solid var(--border-light-blue);
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(2, 132, 199, 0.25);
+  overflow: hidden;
+  animation: authModalZoom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes authModalZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.sport-auth-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  z-index: 10;
+}
+
+.sport-auth-close-btn:hover {
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.sport-auth-header {
+  padding: 24px 24px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+}
+
+.sport-auth-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sport-auth-tagline {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 4px 0 16px;
+}
+
+.sport-auth-tab-switch {
+  display: flex;
+  background: #e0f2fe;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light-blue);
+}
+
+.sport-auth-tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.sport-auth-tab-btn.active {
+  background: #ffffff;
+  color: #0284c7;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
+}
+
+.sport-auth-body {
+  padding: 20px 24px 24px;
+}
+
+.sport-auth-form-panel {
+  display: none;
+}
+
+.sport-auth-form-panel.active {
+  display: block;
+}
+
+.sport-auth-form-group {
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sport-auth-form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.sport-auth-form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid var(--border-light-blue);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: #0f172a;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.sport-auth-form-group input:focus {
+  background: #ffffff;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(2, 132, 199, 0.25);
+}
+
+.sport-pass-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sport-pass-wrap input {
+  padding-right: 40px;
+}
+
+.sport-toggle-pass-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.sport-auth-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.sport-auth-remember-row {
+  margin-bottom: 16px;
+}
+
+.sport-auth-submit-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
+.sport-auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 18px 0;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.sport-auth-divider::before,
+.sport-auth-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sport-auth-divider span {
+  padding: 0 10px;
+}
+
+.sport-social-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sport-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px;
+  background: #f8fafc;
+  border: 1px solid var(--border-light-blue);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.sport-social-btn:hover {
+  background: #f0f9ff;
+  border-color: var(--accent-cyan);
+}
+
+.sport-quick-demo-box {
+  margin-bottom: 16px;
+}
+
+.sport-btn-quick-demo {
+  width: 100%;
+  padding: 9px;
+  background: #f0fdf4;
+  border: 1px dashed #86efac;
+  border-radius: var(--radius-sm);
+  color: #15803d;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.sport-btn-quick-demo:hover {
+  background: #dcfce7;
+  border-color: #22c55e;
+}
+
+.sport-auth-footer-text {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.sport-auth-footer-text a {
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.sport-register-reward-banner {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+/* Guest notice banner on user page */
+.dev5-guest-notice-banner {
+  background: #f0f9ff;
+  border: 2px dashed #7dd3fc;
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  margin-bottom: 24px;
+}
+
+/* Footer brand logo spacing */
+.sport-footer .sport-brand-logo {
+  margin-bottom: 16px;
+}
+
+.site-footer .site-logo {
+  margin-bottom: 14px;
+}
+
+.site-footer .site-logo span:last-child {
+  color: #ffffff;
+}
+
+/* Template & Sample page content */
+.sample-main-content {
+  padding: 40px 20px;
+  min-height: 500px;
+}
+
+.products-empty-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #64748b;
+  padding: 20px;
+}
+
+/* Auth modal & utility classes (Loại bỏ triệt để CSS inline) */
+.sport-auth-sub-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sport-auth-forgot-link {
+  font-size: 0.8rem;
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+
+.sport-auth-forgot-link:hover {
+  text-decoration: underline;
+}
+
+.sport-auth-remember-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #475569;
+  cursor: pointer;
+}
+
+.social-icon-google {
+  font-weight: bold;
+  color: #ea4335;
+}
+
+.social-icon-fb {
+  font-weight: bold;
+  color: #1877f2;
+}
+
+.req-star {
+  color: #ef4444;
+}
+
+.sport-btn-nav-login {
+  font-size: 0.85rem;
+  padding: 7px 12px;
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.sport-btn-nav-register {
+  font-size: 0.85rem;
+  padding: 7px 12px;
+}
+
+.guest-notice-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.guest-notice-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.guest-notice-icon {
+  font-size: 2rem;
+}
+
+.guest-notice-title {
+  color: #0f172a;
+  margin-bottom: 2px;
+  font-weight: 800;
+}
+
+.guest-notice-desc {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.guest-notice-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Toast message structure */
+.sport-toast-item-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sport-toast-icon {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.sport-toast-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+#prod-stock:read-only,
+#prod-stock:disabled {
+  background-color: #f1f3f5;
+  color: #6c757d;
+  cursor: not-allowed;
+  border-color: #dee2e6;
+}
+
+
+
+
+  /* Header User Dropdown Wrapper */
+.dev5-header-user-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dev5-user-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  color: #0369a1;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.dev5-user-pill-btn:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
+}
+
+.dev5-caret-down {
+  font-size: 12px;
+  color: #0284c7;
+  transition: transform 0.2s ease;
+}
+
+.dev5-header-user-wrapper:hover .dev5-caret-down {
+  transform: rotate(180deg);
+}
+
+/* Shopee-style Dropdown Popover */
+.dev5-shopee-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 175px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14), 0 0 1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 6px 0;
+  z-index: 10000;
+  display: none;
+  animation: dev5FadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dev5-shopee-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 100%;
+  height: 12px;
+}
+
+.dev5-header-user-wrapper:hover .dev5-shopee-dropdown,
+.dev5-header-user-wrapper:focus-within .dev5-shopee-dropdown {
+  display: block;
+}
+
+/* Pointer Arrow on top of Dropdown (Tam giác chỉ lên như Shopee) */
+.dev5-shopee-arrow {
+  position: absolute;
+  top: -5px;
+  right: 14px;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  transform: rotate(45deg);
+}
+
+.dev5-shopee-item {
+  display: block;
+  width: 100%;
+  padding: 11px 18px;
+  text-align: left;
+  font-size: 14px;
+  color: #1e293b;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.dev5-shopee-item:hover {
+  background-color: #f8fafc;
+  color: #0284c7;
+}
+
+.dev5-shopee-logout {
+  border-top: 1px solid #f1f5f9;
+  color: #dc2626;
+  margin-top: 4px;
+  padding-top: 10px;
+}
+
+.dev5-shopee-logout:hover {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+@keyframes dev5FadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================================== */
+/* AUTH GUARD - MÀN HÌNH KHÓA TRANG KHI CHƯA ĐĂNG NHẬP                            */
+/* ============================================================================== */
+.dev5-auth-guard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 480px;
+  padding: 36px 16px;
+}
+
+.dev5-guard-card {
+  max-width: 520px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 4px solid #0284c7;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px -15px rgba(2, 132, 199, 0.15), 0 2px 8px rgba(0,0,0,0.04);
+  padding: 44px 36px;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.dev5-guard-icon-wrap {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.2);
+}
+
+.dev5-guard-icon {
+  font-size: 38px;
+}
+
+.dev5-guard-badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.dev5-guard-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+
+.dev5-guard-message {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 28px;
+}
+
+.dev5-guard-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.dev5-guard-btn-main {
+  width: 100%;
+  padding: 13px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+  transition: all 0.2s ease;
+}
+
+.dev5-guard-btn-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
+}
+
+.dev5-guard-btn-sub {
+  width: 100%;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev5-guard-btn-sub:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.dev5-guard-btn-demo {
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 12px;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px dashed #86efac;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev5-guard-btn-demo:hover {
+  background: #dcfce7;
+  border-color: #22c55e;
+}
+
+.dev5-guard-footer-note {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.dev5-guard-back-home {
+  font-size: 13px;
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.dev5-guard-back-home:hover {
+  color: #0284c7;
+  text-decoration: underline;
+}
+
+/* ============================================================================== */
+/* UTILITY CLASS ẨN HIỆN & NÚT NHỎ DÙNG CHUNG AUTH                                 */
+/* ============================================================================== */
+.dev5-hidden {
+  display: none !important;
+}
+
+.btn-sm {
+  padding: 6px 14px !important;
+  font-size: 0.85rem !important;
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+}
+
+/* ============================================================================== */
+/* MODAL ĐĂNG NHẬP / ĐĂNG KÝ DÙNG CHUNG (SPORTSTORE AUTH MODAL)                    */
+/* ============================================================================== */
+.dev5-auth-modal {
+  display: none;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.dev5-auth-modal.is-open {
+  display: grid;
+}
+
+.dev5-auth-box {
+  position: relative;
+  width: min(100%, 420px);
+  padding: 30px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35);
+}
+
+.dev5-auth-box h2 {
+  margin: 5px 0 18px;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.dev5-auth-box label {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.dev5-auth-box input {
+  padding: 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.dev5-auth-box input:focus {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.dev5-auth-tabs {
+  display: flex;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.dev5-auth-tab {
+  flex: 1;
+  padding: 10px 8px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev5-auth-tab.is-active {
+  color: #0284c7;
+  border-bottom-color: #0284c7;
+}
+
+.dev5-auth-btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.dev5-auth-btn-row .dev5-primary-button {
+  flex: 1;
+  margin-top: 0;
+}
+
+.dev5-demo-button {
+  flex: 1.2;
+  padding: 10px 10px;
+  background: #f8fafc;
+  color: #0369a1;
+  border: 1px dashed #0284c7;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.dev5-demo-button:hover {
+  background: #f0f9ff;
+  border-color: #0369a1;
+}
+
+.dev5-demo-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.dev5-demo-choice {
+  padding: 8px 12px;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev5-demo-choice:hover {
+  background: #f0f9ff;
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+.dev5-auth-box .dev5-primary-button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.dev5-auth-box .dev5-primary-button:hover {
+  opacity: 0.92;
+}
+
+.dev5-auth-close {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dev5-auth-close:hover {
+  color: #0f172a;
+}
+
+.dev5-auth-message {
+  min-height: 20px;
+  color: #dc2626;
+  font-size: 13px;
+  margin: 6px 0;
+}
+
+.dev5-auth-switch {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: center;
+  margin-top: 14px;
+}
+
+.dev5-auth-switch button {
+  border: 0;
+  background: none;
+  color: #0284c7;
+  font-weight: 800;
+  cursor: pointer;
+}
+
