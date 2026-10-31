@@ -429,6 +429,10 @@ body.admin-body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Chỉ ẩn badge trên Sidebar khi ở chế độ thu gọn 72px */
+.admin-sidebar .nav-badge {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -449,6 +453,18 @@ body.admin-body {
   background: #FFF1E6;
   color: #C2410C;
   border: 1px solid #FDBA74;
+}
+
+.badge-green {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.badge-red {
+  background: #FEE2E2;
+  color: #DC2626;
+  border: 1px solid #FCA5A5;
 }
 
 .admin-nav-item.active .nav-badge {
