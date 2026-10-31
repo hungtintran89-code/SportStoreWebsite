@@ -86,15 +86,18 @@ function updateSidebarBadges() {
     { el: document.getElementById("badge-count-customers"), count: danhSachKhachHang.length }
   ];
 
-  badgeConfigs.forEach(function (cfg) {
-    if (!cfg.el) return;
-    if (cfg.count <= 0) {
-      cfg.el.style.display = "none";
-    } else {
-      cfg.el.style.display = "inline-flex";
-      cfg.el.textContent = cfg.count > 99 ? "99+" : cfg.count;
+  // Dùng vòng for truyền thống duyệt cập nhật từng badge
+  for (var i = 0; i < badgeConfigs.length; i++) {
+    var cfg = badgeConfigs[i];
+    if (cfg.el) {
+      if (cfg.count <= 0) {
+        cfg.el.style.display = "none";
+      } else {
+        cfg.el.style.display = "inline-flex";
+        cfg.el.textContent = cfg.count > 99 ? "99+" : cfg.count;
+      }
     }
-  });
+  }
 }
 
 

@@ -214,8 +214,12 @@ function saveImport() {
   };
 
   var imports = getStorage(STORAGE_KEYS.IMPORTS, []);
-  imports.unshift(newImport);
-  setStorage(STORAGE_KEYS.IMPORTS, imports);
+  // Dùng vòng for đơn giản đưa phiếu mới lên đầu danh sách
+  var danhSachMoi = [newImport];
+  for (var i = 0; i < imports.length; i++) {
+    danhSachMoi.push(imports[i]);
+  }
+  setStorage(STORAGE_KEYS.IMPORTS, danhSachMoi);
 
   // Nếu phiếu nhập có trạng thái "Hoàn thành", tự động cộng dồn số lượng tồn kho của sản phẩm
   if (status === "Hoàn thành" && selectedProductId) {
@@ -251,9 +255,13 @@ function deleteImport(importId) {
   if (!xacNhan) return;
 
   var imports = getStorage(STORAGE_KEYS.IMPORTS, []);
-  var newImports = imports.filter(function (item) {
-    return item.importId !== importId;
-  });
+  // Dùng vòng for đơn giản lọc bỏ phiếu cần xóa
+  var newImports = [];
+  for (var i = 0; i < imports.length; i++) {
+    if (imports[i].importId !== importId) {
+      newImports.push(imports[i]);
+    }
+  }
 
   setStorage(STORAGE_KEYS.IMPORTS, newImports);
   alert("Đã xóa phiếu nhập hàng [#" + importId + "]!");
