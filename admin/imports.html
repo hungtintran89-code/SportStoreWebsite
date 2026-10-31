@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportStore | Quản Lý Nhập Hàng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <!-- thanh header trang admin -->
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <a href="../products.html" class="sport-brand-logo">
+                <div class="logo-icon">⚡</div>
+                <div>SPORT<span class="accent">STORE</span></div>
+            </a>
+            <span class="admin-badge-pill">ADMIN</span>
+        </div>
+
+        <div class="admin-header-right">
+            <a href="../products.html" class="btn-admin-store">🏪 Về Cửa Hàng</a>
+            <div class="admin-user-box">
+                <div class="admin-avatar-circle">👤</div>
+                <div class="admin-user-text">
+                    <strong>Quản Trị Viên</strong>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+            <a href="../products.html" class="btn-admin-logout-top">🚪 Đăng Xuất</a>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <!-- menu quản trị bên trái -->
+        <aside class="admin-sidebar">
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">TỔNG QUAN</div>
+                <ul class="admin-menu">
+                    <li><a href="dashboard.html"><span class="nav-ico">📊</span> Bảng Điều Khiển</a></li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">QUẢN LÝ KHO & SẢN PHẨM</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="categories.html">
+                            <span><span class="nav-ico">🏷️</span> Quản Lý Loại SP</span>
+                            <span class="nav-count-badge">8</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products_admin.html">
+                            <span><span class="nav-ico">👟</span> Quản Lý Sản Phẩm</span>
+                            <span class="nav-count-badge">501</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="imports.html" class="active">
+                            <span><span class="nav-ico">📥</span> Quản Lý Nhập Hàng</span>
+                            <span class="nav-count-badge badge-green">30</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pricing.html">
+                            <span><span class="nav-ico">💲</span> Quản Lý Giá Bán</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁN HÀNG & KHÁCH HÀNG</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="orders.html">
+                            <span><span class="nav-ico">📦</span> Quản Lý Đơn Hàng</span>
+                            <span class="nav-count-badge badge-amber">31</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="customers.html">
+                            <span><span class="nav-ico">👥</span> Quản Lý Khách Hàng</span>
+                            <span class="nav-count-badge">32</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁO CÁO & THỐNG KÊ</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="inventory.html">
+                            <span><span class="nav-ico">📈</span> Báo Cáo Tồn Kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- khung nội dung bên phải -->
+        <main class="admin-content">
+            <div class="content-header">
+                <h2>Quản Lý Nhập Hàng</h2>
+                <button class="btn-primary btn-admin-add">+ Thêm Phiếu Nhập</button>
+            </div>
+
+            <!-- thẻ tóm tắt ngắn gọn -->
+            <div class="admin-summary-grid">
+                <div class="admin-summary-card">
+                    <div class="summary-card-left">
+                        <span class="summary-card-title">Tổng Phiếu Nhập</span>
+                        <span class="summary-card-value">30</span>
+                    </div>
+                </div>
+
+                <div class="admin-summary-card">
+                    <div class="summary-card-left">
+                        <span class="summary-card-title">Chưa Hoàn Thành</span>
+                        <span class="summary-card-value val-warning">2</span>
+                    </div>
+                </div>
+
+                <div class="admin-summary-card">
+                    <div class="summary-card-left">
+                        <span class="summary-card-title">Đã Hoàn Thành</span>
+                        <span class="summary-card-value">28</span>
+                    </div>
+                </div>
+
+                <div class="admin-summary-card">
+                    <div class="summary-card-left">
+                        <span class="summary-card-title">Tổng Tiền Nhập</span>
+                        <span class="summary-card-value val-large">286.400.000 đ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- thanh tìm kiếm và lọc -->
+            <div class="admin-filter-bar">
+                <input type="text" id="importSearchInput" placeholder="Tìm theo mã phiếu..." class="w-input-sm">
+                <div class="admin-filter-item">
+                    <span>Từ:</span>
+                    <input type="date" value="2026-10-01">
+                    <span>Đến:</span>
+                    <input type="date" value="2026-10-31">
+                </div>
+                <select id="importStatusFilter">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="draft">Chưa hoàn thành</option>
+                    <option value="completed">Đã hoàn thành</option>
+                </select>
+            </div>
+
+            <!-- danh sách phiếu nhập hàng dạng DIV -->
+            <div class="admin-table-wrap">
+                <div class="div-table div-table-imports">
+                    <div class="div-header-imports">
+                        <div class="div-cell">MÃ PHIẾU</div>
+                        <div class="div-cell">NGÀY NHẬP</div>
+                        <div class="div-cell">SẢN PHẨM NHẬP</div>
+                        <div class="div-cell">SỐ LƯỢNG</div>
+                        <div class="div-cell">TỔNG TIỀN</div>
+                        <div class="div-cell">TRẠNG THÁI</div>
+                        <div class="div-cell cell-actions">THAO TÁC</div>
+                    </div>
+
+                    <div class="div-table-body" id="importTableBody">
+                        <!-- Phiếu 1 (Chưa hoàn thành) -->
+                        <div class="div-row-imports row-draft">
+                            <div class="div-cell"><span class="badge-category-pill pill-draft">PN-202610-30</span></div>
+                            <div class="div-cell">31/10/2026</div>
+                            <div class="div-cell line-wrap">
+                                <div class="val-dark"><strong>Yonex Nanoflare 1000Z (SL: 15 | 3.4tr)</strong></div>
+                                <div class="val-muted">Giày Yonex 65Z3 (SL: 20 | 1.95tr)</div>
+                            </div>
+                            <div class="div-cell"><strong>35 món</strong></div>
+                            <div class="div-cell"><span class="admin-price-col">90.000.000 đ</span></div>
+                            <div class="div-cell col-status"><span class="badge-status badge-warning">Chưa hoàn thành</span></div>
+                            <div class="div-cell cell-actions col-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-edit">Sửa</button>
+                                    <button class="btn-action btn-complete-import">Hoàn thành</button>
+                                    <button class="btn-action btn-delete">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phiếu 2 (Chưa hoàn thành) -->
+                        <div class="div-row-imports row-draft">
+                            <div class="div-cell"><span class="badge-category-pill pill-draft">PN-202610-29</span></div>
+                            <div class="div-cell">30/10/2026</div>
+                            <div class="div-cell line-wrap">
+                                <div class="val-dark"><strong>Giày Kamito TA11 (SL: 40 | 650k)</strong></div>
+                                <div class="val-muted">Bọc ống đồng (SL: 30 | 85k)</div>
+                            </div>
+                            <div class="div-cell"><strong>70 món</strong></div>
+                            <div class="div-cell"><span class="admin-price-col">28.550.000 đ</span></div>
+                            <div class="div-cell col-status"><span class="badge-status badge-warning">Chưa hoàn thành</span></div>
+                            <div class="div-cell cell-actions col-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-edit">Sửa</button>
+                                    <button class="btn-action btn-complete-import">Hoàn thành</button>
+                                    <button class="btn-action btn-delete">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phiếu 3 (Đã hoàn thành) -->
+                        <div class="div-row-imports">
+                            <div class="div-cell"><span class="badge-category-pill">PN-202610-28</span></div>
+                            <div class="div-cell">28/10/2026</div>
+                            <div class="div-cell line-wrap">
+                                <div class="val-dark"><strong>Vợt Yonex 88D Pro (SL: 20 | 3.2tr)</strong></div>
+                                <div class="val-muted">Cước BG65 (SL: 50 | 90k)</div>
+                            </div>
+                            <div class="div-cell"><strong>70 món</strong></div>
+                            <div class="div-cell"><span class="admin-price-col">68.500.000 đ</span></div>
+                            <div class="div-cell col-status"><span class="badge-status badge-success">Đã hoàn thành</span></div>
+                            <div class="div-cell cell-actions col-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-disabled" disabled>Đã khóa</button>
+                                    <button class="btn-action btn-edit">Xem</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phiếu 4 (Đã hoàn thành) -->
+                        <div class="div-row-imports">
+                            <div class="div-cell"><span class="badge-category-pill">PN-202610-27</span></div>
+                            <div class="div-cell">26/10/2026</div>
+                            <div class="div-cell line-wrap">
+                                <div class="val-dark"><strong>Nike Vaporfly 3 (SL: 15 | 4.1tr)</strong></div>
+                                <div class="val-muted">Nike Pegasus 40 (SL: 14 | 2.2tr)</div>
+                            </div>
+                            <div class="div-cell"><strong>29 đôi</strong></div>
+                            <div class="div-cell"><span class="admin-price-col">92.300.000 đ</span></div>
+                            <div class="div-cell col-status"><span class="badge-status badge-success">Đã hoàn thành</span></div>
+                            <div class="div-cell cell-actions col-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-disabled" disabled>Đã khóa</button>
+                                    <button class="btn-action btn-edit">Xem</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phiếu 5 (Đã hoàn thành) -->
+                        <div class="div-row-imports">
+                            <div class="div-cell"><span class="badge-category-pill">PN-202610-26</span></div>
+                            <div class="div-cell">22/10/2026</div>
+                            <div class="div-cell line-wrap">
+                                <div class="val-dark"><strong>Áo Mizuno DryLite (SL: 50 | 320k)</strong></div>
+                                <div class="val-muted">Quần Short (SL: 40 | 210k)</div>
+                            </div>
+                            <div class="div-cell"><strong>90 bộ</strong></div>
+                            <div class="div-cell"><span class="admin-price-col">24.400.000 đ</span></div>
+                            <div class="div-cell col-status"><span class="badge-status badge-success">Đã hoàn thành</span></div>
+                            <div class="div-cell cell-actions col-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-disabled" disabled>Đã khóa</button>
+                                    <button class="btn-action btn-edit">Xem</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- popup thêm / sửa phiếu nhập hàng -->
+    <div id="importModal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="importModalTitle">Phiếu Nhập Hàng</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body modal-body-scroll">
+                <div class="modal-row-2col">
+                    <div class="form-group flex-1">
+                        <label class="form-label-bold">Mã phiếu:</label>
+                        <input type="text" id="importCodeInput" value="PN-202610-31" readonly class="input-readonly input-h38">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label class="form-label-bold">Ngày nhập:</label>
+                        <input type="date" id="importDateInput" value="2026-10-31" class="input-h38">
+                    </div>
+                </div>
+
+                <div class="section-header-row mb-8">
+                    <label class="form-label-title">Chi tiết sản phẩm & giá nhập:</label>
+                    <button type="button" class="btn-action btn-edit">+ Thêm Dòng</button>
+                </div>
+
+                <div class="div-modal-table" id="importItemsTable">
+                    <div class="div-modal-table-header">
+                        <div>SẢN PHẨM</div>
+                        <div class="text-center">SỐ LƯỢNG</div>
+                        <div>GIÁ NHẬP (Đ)</div>
+                        <div class="text-right">THÀNH TIỀN</div>
+                    </div>
+                    <div class="div-modal-table-body">
+                        <div class="div-modal-table-row">
+                            <div>
+                                <select>
+                                    <option value="3400000" selected>Vợt Yonex Nanoflare 1000Z</option>
+                                    <option value="4100000">Giày Nike Vaporfly 3</option>
+                                    <option value="650000">Giày Kamito TA11 Pro</option>
+                                    <option value="1950000">Giày Yonex Cushion 65Z3</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="number" value="10" min="1" class="text-center">
+                            </div>
+                            <div>
+                                <input type="number" value="3400000" step="10000">
+                            </div>
+                            <div class="import-col-subtotal">34.000.000 đ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-14">
+                    <label class="form-label-bold">Trạng thái:</label>
+                    <select id="importModalStatus" class="input-h38">
+                        <option value="draft">Chưa hoàn thành (Lưu tạm)</option>
+                        <option value="completed">Đã hoàn thành (Cộng kho & Khóa)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action btn-modal-cancel-lg">Hủy</button>
+                <button class="btn-primary btn-modal-save-lg">Lưu</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

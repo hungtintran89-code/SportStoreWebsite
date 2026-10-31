@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportStore | Báo Cáo Tồn Kho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <!-- thanh header trang admin -->
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <a href="../products.html" class="sport-brand-logo">
+                <div class="logo-icon">⚡</div>
+                <div>SPORT<span class="accent">STORE</span></div>
+            </a>
+            <span class="admin-badge-pill">ADMIN</span>
+        </div>
+
+        <div class="admin-header-right">
+            <a href="../products.html" class="btn-admin-store">🏪 Về Cửa Hàng</a>
+            <div class="admin-user-box">
+                <div class="admin-avatar-circle">👤</div>
+                <div class="admin-user-text">
+                    <strong>Quản Trị Viên</strong>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+            <a href="../products.html" class="btn-admin-logout-top">🚪 Đăng Xuất</a>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <!-- menu quản trị bên trái -->
+        <aside class="admin-sidebar">
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">TỔNG QUAN</div>
+                <ul class="admin-menu">
+                    <li><a href="dashboard.html"><span class="nav-ico">📊</span> Bảng Điều Khiển</a></li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">QUẢN LÝ KHO & SẢN PHẨM</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="categories.html">
+                            <span><span class="nav-ico">🏷️</span> Quản Lý Loại SP</span>
+                            <span class="nav-count-badge">8</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products_admin.html">
+                            <span><span class="nav-ico">👟</span> Quản Lý Sản Phẩm</span>
+                            <span class="nav-count-badge">501</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="imports.html">
+                            <span><span class="nav-ico">📥</span> Quản Lý Nhập Hàng</span>
+                            <span class="nav-count-badge badge-green">30</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pricing.html">
+                            <span><span class="nav-ico">💲</span> Quản Lý Giá Bán</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁN HÀNG & KHÁCH HÀNG</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="orders.html">
+                            <span><span class="nav-ico">📦</span> Quản Lý Đơn Hàng</span>
+                            <span class="nav-count-badge badge-amber">31</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="customers.html">
+                            <span><span class="nav-ico">👥</span> Quản Lý Khách Hàng</span>
+                            <span class="nav-count-badge">32</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁO CÁO & THỐNG KÊ</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="inventory.html" class="active">
+                            <span><span class="nav-ico">📈</span> Báo Cáo Tồn Kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- khung nội dung bên phải -->
+        <main class="admin-content">
+            <div class="content-header">
+                <h2>Báo Cáo Tồn Kho</h2>
+                <div class="inventory-tab-switch">
+                    <button class="inventory-tab-btn active" id="tabBtnSnapshot">Tồn Kho Theo Loại</button>
+                    <button class="inventory-tab-btn" id="tabBtnMovement">Nhập – Xuất – Tồn</button>
+                </div>
+            </div>
+
+            <!-- VIEW 1: TỒN KHO THEO LOẠI TẠI MỘT THỜI ĐIỂM -->
+            <div id="viewSnapshotSection">
+                <!-- Thẻ tóm tắt chỉ số tồn kho (không icon, gọn gàng) -->
+                <div class="admin-summary-grid">
+                    <div class="admin-summary-card">
+                        <div class="summary-card-left">
+                            <span class="summary-card-title">Tổng Tồn Kho</span>
+                            <span class="summary-card-value">501</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-summary-card">
+                        <div class="summary-card-left">
+                            <span class="summary-card-title">Còn Hàng</span>
+                            <span class="summary-card-value val-success">487</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-summary-card">
+                        <div class="summary-card-left">
+                            <span class="summary-card-title">Cảnh Báo (Tồn < 5)</span>
+                            <span class="summary-card-value val-orange">12</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-summary-card">
+                        <div class="summary-card-left">
+                            <span class="summary-card-title">Đã Hết Hàng</span>
+                            <span class="summary-card-value val-danger">2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CẢNH BÁO HẾT HÀNG / TỒN THẤP -->
+                <div class="inventory-alert-box">
+                    <div class="inventory-alert-header">
+                        <div class="alert-title-wrap">
+                            <span class="alert-title-text">Cảnh Báo Tồn Kho (Tồn < 5)</span>
+                            <span class="badge-status badge-danger">14 mặt hàng</span>
+                        </div>
+                        <a href="imports.html" class="btn-primary btn-inline btn-top-order">+ Tạo Phiếu Nhập</a>
+                    </div>
+
+                    <div class="inventory-alert-items">
+                        <div class="inventory-alert-item alert-critical">
+                            <div class="alert-item-info">
+                                <strong>Kamito TA11 Pro</strong>
+                                <span class="val-danger">Tồn: <b>0 đôi</b> (Hết hàng)</span>
+                            </div>
+                            <a href="imports.html" class="btn-action btn-urgent-import btn-link-sm">Nhập ngay</a>
+                        </div>
+
+                        <div class="inventory-alert-item">
+                            <div class="alert-item-info">
+                                <strong>Yonex Nanoflare 1000Z</strong>
+                                <span class="val-danger">Tồn: <b>3 cây</b></span>
+                            </div>
+                            <a href="imports.html" class="btn-action btn-edit btn-link-sm">Nhập ngay</a>
+                        </div>
+
+                        <div class="inventory-alert-item">
+                            <div class="alert-item-info">
+                                <strong>Yonex Astrox 88D Pro</strong>
+                                <span class="val-danger">Tồn: <b>4 cây</b></span>
+                            </div>
+                            <a href="imports.html" class="btn-action btn-edit btn-link-sm">Nhập ngay</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thanh lọc tìm kiếm -->
+                <div class="admin-filter-bar">
+                    <div class="admin-filter-item">
+                        <span>Ngày:</span>
+                        <input type="date" value="2026-10-31">
+                    </div>
+
+                    <div class="admin-filter-item">
+                        <span>Loại SP:</span>
+                        <select>
+                            <option value="">Tất cả (8 Loại)</option>
+                            <option value="CAT01">Vợt & Dụng Cụ</option>
+                            <option value="CAT02">Giày Thể Thao</option>
+                            <option value="CAT03">Áo Thể Thao</option>
+                            <option value="CAT04">Váy Thể Thao</option>
+                            <option value="CAT05">Quần Thể Thao</option>
+                            <option value="CAT06">Balo Thể Thao</option>
+                            <option value="CAT07">Túi Thể Thao</option>
+                            <option value="CAT08">Phụ Kiện</option>
+                        </select>
+                    </div>
+
+                    <input type="text" placeholder="Tìm theo tên sản phẩm, mã SP..." class="flex-1">
+                </div>
+
+                <!-- Bảng danh sách tồn kho dạng DIV -->
+                <div class="admin-table-wrap">
+                    <div class="div-table div-table-inventory">
+                        <div class="div-header-inventory">
+                            <div class="div-cell">MÃ SP</div>
+                            <div class="div-cell">TÊN SẢN PHẨM</div>
+                            <div class="div-cell">LOẠI SP</div>
+                            <div class="div-cell">GIÁ VỐN</div>
+                            <div class="div-cell">TỒN KHO</div>
+                            <div class="div-cell">TRẠNG THÁI</div>
+                            <div class="div-cell cell-actions">THAO TÁC</div>
+                        </div>
+
+                        <div class="div-table-body">
+                            <!-- SP001 -->
+                            <div class="div-row-inventory">
+                                <div class="div-cell"><span class="badge-category-pill">SP001</span></div>
+                                <div class="div-cell"><strong>Yonex Astrox 88D Pro</strong></div>
+                                <div class="div-cell">Vợt & Dụng Cụ</div>
+                                <div class="div-cell">3.200.000 đ</div>
+                                <div class="div-cell"><strong class="text-stock-danger">4</strong></div>
+                                <div class="div-cell"><span class="badge-status badge-warning">Cảnh báo</span></div>
+                                <div class="div-cell cell-actions">
+                                    <a href="imports.html" class="btn-action btn-edit btn-link-sm">+ Nhập</a>
+                                </div>
+                            </div>
+
+                            <!-- SP002 -->
+                            <div class="div-row-inventory">
+                                <div class="div-cell"><span class="badge-category-pill">SP002</span></div>
+                                <div class="div-cell"><strong>Nike ZoomX Vaporfly 3</strong></div>
+                                <div class="div-cell">Giày Thể Thao</div>
+                                <div class="div-cell">4.100.000 đ</div>
+                                <div class="div-cell"><strong class="text-stock-normal">18</strong></div>
+                                <div class="div-cell"><span class="badge-status badge-success">Bình thường</span></div>
+                                <div class="div-cell cell-actions">
+                                    <button class="btn-action btn-edit">Xem</button>
+                                </div>
+                            </div>
+
+                            <!-- SP003 -->
+                            <div class="div-row-inventory">
+                                <div class="div-cell"><span class="badge-category-pill">SP003</span></div>
+                                <div class="div-cell"><strong>Yonex Nanoflare 1000Z</strong></div>
+                                <div class="div-cell">Vợt & Dụng Cụ</div>
+                                <div class="div-cell">3.400.000 đ</div>
+                                <div class="div-cell"><strong class="text-stock-danger">3</strong></div>
+                                <div class="div-cell"><span class="badge-status badge-warning">Cảnh báo</span></div>
+                                <div class="div-cell cell-actions">
+                                    <a href="imports.html" class="btn-action btn-edit btn-link-sm">+ Nhập</a>
+                                </div>
+                            </div>
+
+                            <!-- SP004 -->
+                            <div class="div-row-inventory">
+                                <div class="div-cell"><span class="badge-category-pill">SP004</span></div>
+                                <div class="div-cell"><strong>Yonex Cushion 65Z3</strong></div>
+                                <div class="div-cell">Giày Thể Thao</div>
+                                <div class="div-cell">1.950.000 đ</div>
+                                <div class="div-cell"><strong class="text-stock-normal">25</strong></div>
+                                <div class="div-cell"><span class="badge-status badge-success">Bình thường</span></div>
+                                <div class="div-cell cell-actions">
+                                    <button class="btn-action btn-edit">Xem</button>
+                                </div>
+                            </div>
+
+                            <!-- SP006 -->
+                            <div class="div-row-inventory">
+                                <div class="div-cell"><span class="badge-category-pill">SP006</span></div>
+                                <div class="div-cell"><strong>Kamito TA11 Pro</strong></div>
+                                <div class="div-cell">Giày Thể Thao</div>
+                                <div class="div-cell">650.000 đ</div>
+                                <div class="div-cell"><strong class="text-stock-zero">0</strong></div>
+                                <div class="div-cell"><span class="badge-status badge-danger">Cảnh báo</span></div>
+                                <div class="div-cell cell-actions">
+                                    <a href="imports.html" class="btn-action btn-urgent-import btn-link-sm">+ Nhập</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 2: NHẬP – XUẤT – TỒN TRONG KHOẢNG THỜI GIAN -->
+            <div id="viewMovementSection" class="d-none">
+                <div class="admin-filter-bar">
+                    <div class="admin-filter-item">
+                        <span>Sản phẩm:</span>
+                        <select class="w-input-lg">
+                            <option>SP001 - Yonex Astrox 88D Pro</option>
+                            <option>SP002 - Nike ZoomX Vaporfly 3</option>
+                            <option>SP003 - Yonex Nanoflare 1000Z</option>
+                            <option>SP006 - Kamito TA11 Pro</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-filter-item">
+                        <span>Từ:</span>
+                        <input type="date" value="2026-10-01">
+                        <span>Đến:</span>
+                        <input type="date" value="2026-10-31">
+                    </div>
+                </div>
+
+                <!-- Thẻ tóm tắt Nhập Xuất Tồn (gọn gàng, không icon) -->
+                <div class="admin-summary-grid">
+                    <div class="admin-summary-card">
+                        <div class="summary-card-left">
+                            <span class="summary-card-title">Tồn Đầu Kỳ</span>
+                            <span class="summary-card-value">12</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-summary-card">
+                        <div class="summary-card-left">
+                            <span class="summary-card-title">Tổng Nhập</span>
+                            <span class="summary-card-value val-success">+20</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-summary-card">
+                        <div class="summary-card-left">
+                            <span class="summary-card-title">Tổng Xuất</span>
+                            <span class="summary-card-value val-orange">-28</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-summary-card">
+                        <div class="summary-card-left">
+                            <span class="summary-card-title">Tồn Cuối Kỳ</span>
+                            <span class="summary-card-value val-danger">4</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bảng chi tiết dạng DIV -->
+                <div class="admin-table-wrap">
+                    <div class="div-table">
+                        <div class="div-header-movement">
+                            <div class="div-cell">NGÀY</div>
+                            <div class="div-cell">CHỨNG TỪ</div>
+                            <div class="div-cell">LOẠI GIAO DỊCH</div>
+                            <div class="div-cell">SL NHẬP</div>
+                            <div class="div-cell">SL XUẤT</div>
+                            <div class="div-cell">TỒN KHO</div>
+                            <div class="div-cell">GHI CHÚ</div>
+                        </div>
+
+                        <div class="div-table-body">
+                            <div class="div-row-movement row-highlight-gray">
+                                <div class="div-cell">01/10/2026</div>
+                                <div class="div-cell"><strong>ĐẦU KỲ</strong></div>
+                                <div class="div-cell">Tồn ban đầu</div>
+                                <div class="div-cell">—</div>
+                                <div class="div-cell">—</div>
+                                <div class="div-cell"><strong>12 cây</strong></div>
+                                <div class="div-cell">Kết chuyển tháng trước</div>
+                            </div>
+
+                            <div class="div-row-movement">
+                                <div class="div-cell">08/10/2026</div>
+                                <div class="div-cell">#DH1055</div>
+                                <div class="div-cell">Xuất bán</div>
+                                <div class="div-cell">—</div>
+                                <div class="div-cell"><strong class="val-orange">-4</strong></div>
+                                <div class="div-cell"><strong>8 cây</strong></div>
+                                <div class="div-cell">Đơn hàng bán lẻ</div>
+                            </div>
+
+                            <div class="div-row-movement">
+                                <div class="div-cell">15/10/2026</div>
+                                <div class="div-cell">#DH1062</div>
+                                <div class="div-cell">Xuất bán</div>
+                                <div class="div-cell">—</div>
+                                <div class="div-cell"><strong class="val-orange">-6</strong></div>
+                                <div class="div-cell"><strong>2 cây</strong></div>
+                                <div class="div-cell">Đơn hàng online</div>
+                            </div>
+
+                            <div class="div-row-movement row-highlight-green">
+                                <div class="div-cell">28/10/2026</div>
+                                <div class="div-cell"><strong>PN-202610-28</strong></div>
+                                <div class="div-cell">Nhập kho</div>
+                                <div class="div-cell"><strong class="val-success">+20</strong></div>
+                                <div class="div-cell">—</div>
+                                <div class="div-cell"><strong>22 cây</strong></div>
+                                <div class="div-cell">Phiếu nhập kho</div>
+                            </div>
+
+                            <div class="div-row-movement">
+                                <div class="div-cell">31/10/2026</div>
+                                <div class="div-cell">#DH1081</div>
+                                <div class="div-cell">Xuất bán</div>
+                                <div class="div-cell">—</div>
+                                <div class="div-cell"><strong class="val-orange">-18</strong></div>
+                                <div class="div-cell"><strong class="val-danger">4 cây</strong></div>
+                                <div class="div-cell">Xuất CLB Tân Bình</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

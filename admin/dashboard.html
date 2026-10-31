@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportStore | Bảng Điều Khiển Quản Trị</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <!-- thanh header trang admin -->
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <a href="../products.html" class="sport-brand-logo">
+                <div class="logo-icon">⚡</div>
+                <div>SPORT<span class="accent">STORE</span></div>
+            </a>
+            <span class="admin-badge-pill">ADMIN</span>
+        </div>
+
+        <div class="admin-header-right">
+            <a href="../products.html" class="btn-admin-store">
+                🏪 Về Cửa Hàng
+            </a>
+            <div class="admin-user-box">
+                <div class="admin-avatar-circle">👤</div>
+                <div class="admin-user-text">
+                    <strong>Quản Trị Viên</strong>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+            <a href="../products.html" class="btn-admin-logout-top">
+                🚪 Đăng Xuất
+            </a>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <!-- menu quản trị bên trái -->
+        <aside class="admin-sidebar">
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">TỔNG QUAN</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="dashboard.html" class="active">
+                            <span class="nav-ico">📊</span> Bảng Điều Khiển
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">QUẢN LÝ KHO & SẢN PHẨM</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="categories.html">
+                            <span><span class="nav-ico">🏷️</span> Quản Lý Loại SP</span>
+                            <span class="nav-count-badge">8</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products_admin.html">
+                            <span><span class="nav-ico">👟</span> Quản Lý Sản Phẩm</span>
+                            <span class="nav-count-badge">501</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="imports.html">
+                            <span><span class="nav-ico">📥</span> Quản Lý Nhập Hàng</span>
+                            <span class="nav-count-badge badge-green">30</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pricing.html">
+                            <span><span class="nav-ico">💲</span> Quản Lý Giá Bán</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁN HÀNG & KHÁCH HÀNG</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="orders.html">
+                            <span><span class="nav-ico">📦</span> Quản Lý Đơn Hàng</span>
+                            <span class="nav-count-badge badge-amber">31</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="customers.html">
+                            <span><span class="nav-ico">👥</span> Quản Lý Khách Hàng</span>
+                            <span class="nav-count-badge">32</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁO CÁO & THỐNG KÊ</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="inventory.html">
+                            <span><span class="nav-ico">📈</span> Báo Cáo Tồn Kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- khung nội dung bên phải -->
+        <main class="admin-content">
+            <div class="content-header">
+                <h2>Bảng Điều Khiển</h2>
+            </div>
+
+            <!-- 4 Thẻ KPI Dashboard -->
+            <div class="kpi-main-grid">
+                <div class="kpi-main-card border-blue">
+                    <div class="kpi-head">
+                        <span>TỔNG DOANH THU</span>
+                    </div>
+                    <div class="kpi-num">148.500.000 đ</div>
+                    <div class="kpi-subtext"><strong>↑ +18.4%</strong> tháng này</div>
+                </div>
+
+                <div class="kpi-main-card border-orange">
+                    <div class="kpi-head">
+                        <span>TỔNG ĐƠN HÀNG</span>
+                    </div>
+                    <div class="kpi-num">142 Đơn</div>
+                    <div class="kpi-subtext"><strong>31 đơn</strong> đang xử lý</div>
+                </div>
+
+                <div class="kpi-main-card border-green">
+                    <div class="kpi-head">
+                        <span>HỘI VIÊN CLUB</span>
+                    </div>
+                    <div class="kpi-num">1.250 Khách</div>
+                    <div class="kpi-subtext"><strong>8 Hội Viên Vàng</strong></div>
+                </div>
+
+                <div class="kpi-main-card border-purple">
+                    <div class="kpi-head">
+                        <span>TỔNG TỒN KHO</span>
+                    </div>
+                    <div class="kpi-num">501 Món</div>
+                    <div class="kpi-subtext val-danger"><strong>14 món</strong> sắp hết</div>
+                </div>
+            </div>
+
+            <!-- Bố cục 2 Cột Dashboard -->
+            <div class="dashboard-layout-grid">
+                <!-- Cột trái: Biểu đồ và tiến độ -->
+                <div>
+                    <!-- Biểu đồ phân bổ doanh số theo môn thể thao -->
+                    <div class="dashboard-box">
+                        <div class="dashboard-box-title">
+                            <h3>Biểu Đồ Doanh Số Theo Bộ Môn Thể Thao</h3>
+                            <span class="badge-status badge-info">Tháng 10/2026</span>
+                        </div>
+
+                        <div class="sport-bar-chart">
+                            <div class="sport-bar-col">
+                                <span class="sport-bar-value">48tr</span>
+                                <div class="sport-bar-fill bar-h140"></div>
+                                <span class="sport-bar-name">Chạy Bộ</span>
+                            </div>
+                            <div class="sport-bar-col">
+                                <span class="sport-bar-value">39tr</span>
+                                <div class="sport-bar-fill bar-h115"></div>
+                                <span class="sport-bar-name">Bóng Đá</span>
+                            </div>
+                            <div class="sport-bar-col">
+                                <span class="sport-bar-value">32tr</span>
+                                <div class="sport-bar-fill bar-h95"></div>
+                                <span class="sport-bar-name">Cầu Lông</span>
+                            </div>
+                            <div class="sport-bar-col">
+                                <span class="sport-bar-value">21tr</span>
+                                <div class="sport-bar-fill bar-h65"></div>
+                                <span class="sport-bar-name">Tennis</span>
+                            </div>
+                            <div class="sport-bar-col">
+                                <span class="sport-bar-value">16tr</span>
+                                <div class="sport-bar-fill bar-h48"></div>
+                                <span class="sport-bar-name">Gym/Fitness</span>
+                            </div>
+                            <div class="sport-bar-col">
+                                <span class="sport-bar-value">12tr</span>
+                                <div class="sport-bar-fill bar-h38"></div>
+                                <span class="sport-bar-name">Pickleball</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tiến độ chỉ tiêu doanh số -->
+                    <div class="dashboard-box">
+                        <div class="dashboard-box-title">
+                            <h3>Tiến Độ Mục Tiêu Kinh Doanh Quý 4</h3>
+                            <strong class="val-blue">82.5%</strong>
+                        </div>
+                        <div class="mb-12">
+                            <div class="progress-row-label">
+                                <span>Chỉ tiêu doanh thu (148.5tr / 180tr):</span>
+                                <strong>82.5%</strong>
+                            </div>
+                            <div class="stock-progress-bar progress-h10">
+                                <div class="stock-progress-fill progress-fill-blue-rate"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="progress-row-label">
+                                <span>Chỉ tiêu đơn hàng hoàn tất (142 / 150 đơn):</span>
+                                <strong>94.6%</strong>
+                            </div>
+                            <div class="stock-progress-bar progress-h10">
+                                <div class="stock-progress-fill stock-fill-safe progress-fill-safe-rate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Đơn hàng mới và cảnh báo tồn kho -->
+                <div>
+                    <!-- Đơn hàng cần xử lý gấp -->
+                    <div class="dashboard-box">
+                        <div class="dashboard-box-title">
+                            <h3>Đơn Hàng Gần Đây Cần Xử Lý</h3>
+                            <a href="orders.html" class="dash-link-more">Xem tất cả →</a>
+                        </div>
+
+                        <div class="dash-order-row">
+                            <div class="dash-order-info">
+                                <strong>#DH1082 • Nguyễn Minh Tuấn</strong>
+                                <span>1x Giày Nike Vaporfly 3 (Size 42)</span>
+                            </div>
+                            <div class="dash-order-right">
+                                <div class="dash-order-price">5.330.000 đ</div>
+                                <span class="badge-status badge-warning">Mới đặt</span>
+                            </div>
+                        </div>
+
+                        <div class="dash-order-row">
+                            <div class="dash-order-info">
+                                <strong>#DH1081 • Trần Hoàng Long</strong>
+                                <span>1x Vợt Astrox 88D Pro + 2x Cước BG65</span>
+                            </div>
+                            <div class="dash-order-right">
+                                <div class="dash-order-price">4.120.000 đ</div>
+                                <span class="badge-status badge-info">Đang giao</span>
+                            </div>
+                        </div>
+
+                        <div class="dash-order-row">
+                            <div class="dash-order-info">
+                                <strong>#DH1080 • Phạm Thị Mai Hương</strong>
+                                <span>1x Giày Yonex 65Z3 + 1x Áo Mizuno</span>
+                            </div>
+                            <div class="dash-order-right">
+                                <div class="dash-order-price">2.870.000 đ</div>
+                                <span class="badge-status badge-success">Đã giao</span>
+                            </div>
+                        </div>
+
+                        <div class="dash-order-row">
+                            <div class="dash-order-info">
+                                <strong>#DH1079 • Đỗ Quang Huy</strong>
+                                <span>2x Giày Kamito TA11 Sân Cỏ</span>
+                            </div>
+                            <div class="dash-order-right">
+                                <div class="dash-order-price">1.860.000 đ</div>
+                                <span class="badge-status badge-success">Đã giao</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cảnh báo tồn kho -->
+                    <div class="dashboard-box">
+                        <div class="dashboard-box-title">
+                            <h3>Cảnh Báo Hàng Tồn Sắp Hết</h3>
+                            <a href="inventory.html" class="dash-link-more">Chi tiết kho →</a>
+                        </div>
+                        <div class="dash-alert-container">
+                            <div class="dash-alert-card-red">
+                                <div>
+                                    <strong class="dash-alert-text-red">Vợt Yonex Nanoflare 1000Z</strong>
+                                    <div class="dash-alert-subtext">Còn lại 3 cây trong kho</div>
+                                </div>
+                                <a href="imports.html" class="btn-action btn-edit btn-link-action">+ Nhập</a>
+                            </div>
+
+                            <div class="dash-alert-card-red">
+                                <div>
+                                    <strong class="dash-alert-text-red">Vợt Yonex Astrox 88D Pro</strong>
+                                    <div class="dash-alert-subtext">Còn lại 4 cây trong kho</div>
+                                </div>
+                                <a href="imports.html" class="btn-action btn-edit btn-link-action">+ Nhập</a>
+                            </div>
+
+                            <div class="dash-alert-card-yellow">
+                                <div>
+                                    <strong class="dash-alert-text-yellow">Giày Đá Bóng Kamito TA11</strong>
+                                    <div class="dash-alert-subtext">Đã hết hàng (0 đôi)</div>
+                                </div>
+                                <a href="imports.html" class="btn-action btn-toggle-status btn-link-action">Nhập gấp</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+
