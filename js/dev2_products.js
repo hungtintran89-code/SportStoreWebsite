@@ -482,7 +482,8 @@ function moChiTietSanPham( productId ){
     var btnThemVaoGio = document.querySelector(".qv-btn-add");
     var btnMuaNgay = document.querySelector(".qv-btn-buy");
     var oNhapSoLuong = document.getElementById("qv-quantity-input");
-
+    var btnColor = document.getElementById("qv-color-group");
+    var btnSize = document.getElementById("qv-size-group");
 
     // TRƯỜNG HỢP 1: HẾT HÀNG
     if (stockCount <= 0) {
@@ -490,7 +491,7 @@ function moChiTietSanPham( productId ){
         stockEl.style.color = "#ef4444";
         // Khóa nút Thêm vào giỏ
         if (btnThemVaoGio) {
-            btnThemVaoGio.disabled = true; // Khóa không cho click
+            btnThemVaoGio.disabled = true;
             btnThemVaoGio.style.opacity = "0.5"; // Làm mờ nút
             btnThemVaoGio.style.cursor = "not-allowed"; // Hiện con trỏ cấm
             btnThemVaoGio.textContent = "Tạm Hết Hàng";
@@ -501,7 +502,22 @@ function moChiTietSanPham( productId ){
             btnMuaNgay.style.opacity = "0.5";
             btnMuaNgay.style.cursor = "not-allowed";
         }
-        if (oNhapSoLuong) oNhapSoLuong.value = 0; // Đưa số lượng về 0
+        if (btnColor) {
+            btnColor.disabled = true;
+            btnColor.style.opacity = "0.5";
+            btnColor.style.cursor = "not-allowed";
+        }
+        if (btnSize) {
+            btnSize.disabled = true;
+            btnSize.style.opacity = "0.5";
+            btnSize.style.cursor = "not-allowed";
+        }
+        if (oNhapSoLuong){
+            oNhapSoLuong.disabled = true;
+            oNhapSoLuong.style.opacity = "0.5"; // Làm mờ nút
+            oNhapSoLuong.style.cursor = "not-allowed" ;
+            oNhapSoLuong.value = 0; // Đưa số lượng về 0
+        }
         // TRƯỜNG HỢP 2: CÒN HÀNG
     } else {
         stockEl.textContent = "Còn hàng (" + stockCount + " món)";
