@@ -1,300 +1,434 @@
 <!doctype html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tài khoản | SportStore</title>
-  <link rel="stylesheet" href="../css/common.css">
-  <link rel="stylesheet" href="../css/dev5_user.css">
-  <link rel="stylesheet" href="../css/admin/admin-common.css">
-  <link rel="stylesheet" href="../css/admin/tab-dashboard.css">
-  <link rel="stylesheet" href="../css/admin/modal.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tài khoản | SportStore</title>
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/dev5_user.css" />
+    <link rel="stylesheet" href="../css/admin/admin-common.css" />
+    <link rel="stylesheet" href="../css/admin/tab-dashboard.css" />
+    <link rel="stylesheet" href="../css/admin/modal.css" />
+  </head>
 
-</head>
-
-<body>
-<!-- ============================================================================== -->
-  <!-- 1. HEADER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->
-  <!-- ============================================================================== -->
-  <header class="sport-navbar site-header">
-    <div class="sport-container sport-navbar-inner header-inner">
-      <!-- Logo Cửa Hàng -->
-      <a href="../index.html" class="sport-brand-logo site-logo">
-        <div class="logo-icon">⚡</div>
-        <div>SPORT<span class="accent">STORE</span></div>
-      </a>
-
-      <!-- Menu Điều Hướng (Mỗi Dev chủ động thêm class 'active' vào trang của mình) -->
-      <ul class="sport-nav-menu nav-menu">
-        <li><a href="../index.html">Trang Chủ</a></li>
-        <li><a href="dev2_products.html">Sản Phẩm</a></li>
-        <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
-      </ul>
-
-              <!-- Cụm Hành Động Góc Phải -->
-      <div class="sport-nav-actions header-actions">
-        <!-- Nút Admin (Mặc định ẩn với dev5-hidden, chỉ hiện khi đăng nhập tài khoản Admin) -->
-        <a href="admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden" data-admin-link title="Truy cập Bảng Quản Trị Admin">
-          ⚙️ Admin
+  <body>
+    <!-- ============================================================================== -->
+    <!-- 1. HEADER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->
+    <!-- ============================================================================== -->
+    <header class="sport-navbar site-header">
+      <div class="sport-container sport-navbar-inner header-inner">
+        <!-- Logo Cửa Hàng -->
+        <a href="../index.html" class="sport-brand-logo site-logo">
+          <div class="logo-icon">⚡</div>
+          <div>SPORT<span class="accent">STORE</span></div>
         </a>
 
-        <!-- Nút Giỏ Hàng -->
-        <a href="dev4_checkout.html" class="nav-badge-btn" title="Xem giỏ hàng">
-          🛒
-          <span class="badge-pill" id="header-cart-badge-count">0</span>
-        </a>
+        <!-- Menu Điều Hướng (Mỗi Dev chủ động thêm class 'active' vào trang của mình) -->
+        <ul class="sport-nav-menu nav-menu">
+          <li><a href="../index.html">Trang Chủ</a></li>
+          <li><a href="dev2_products.html">Sản Phẩm</a></li>
+          <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
+        </ul>
 
-        <!-- KHỐI TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP (Dropdown Avatar + Tên theo phong cách Shopee) -->
-        <div class="dev5-header-user-wrapper dev5-hidden" data-auth-profile-wrap>
-          <div class="sport-user-logged-pill dev5-user-pill-btn" data-auth-profile title="Hồ sơ tài khoản">
-            <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
-            <span data-header-name>Tài khoản</span>
-            <span class="dev5-caret-down">▾</span>
+        <!-- Cụm Hành Động Góc Phải -->
+        <div class="sport-nav-actions header-actions">
+          <!-- Nút Admin (Mặc định ẩn với dev5-hidden, chỉ hiện khi đăng nhập tài khoản Admin) -->
+          <a
+            href="admin.html"
+            id="header-nav-admin-btn"
+            class="btn-sport btn-outline nav-admin-btn dev5-hidden"
+            data-admin-link
+            title="Truy cập Bảng Quản Trị Admin"
+          >
+            ⚙️ Admin
+          </a>
+
+          <!-- Nút Giỏ Hàng -->
+          <a
+            href="dev4_checkout.html"
+            class="nav-badge-btn"
+            title="Xem giỏ hàng"
+          >
+            🛒
+            <span class="badge-pill" id="header-cart-badge-count">0</span>
+          </a>
+
+          <!-- KHỐI TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP (Dropdown Avatar + Tên theo phong cách Shopee) -->
+          <div
+            class="dev5-header-user-wrapper dev5-hidden"
+            data-auth-profile-wrap
+          >
+            <div
+              class="sport-user-logged-pill dev5-user-pill-btn"
+              data-auth-profile
+              title="Hồ sơ tài khoản"
+            >
+              <img
+                data-header-avatar
+                alt="Avatar"
+                style="
+                  width: 24px;
+                  height: 24px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                "
+              />
+              <span data-header-name>Tài khoản</span>
+              <span class="dev5-caret-down">▾</span>
+            </div>
+            <!-- Menu thả xuống Shopee (Hình 1) -->
+            <div class="dev5-shopee-dropdown">
+              <div class="dev5-shopee-arrow"></div>
+              <a
+                href="dev5_user.html?tab=overview"
+                class="dev5-shopee-item"
+                data-action-tab="overview"
+              >
+                Tài Khoản Của Tôi
+              </a>
+              <a
+                href="dev5_user.html?tab=orders"
+                class="dev5-shopee-item"
+                data-action-tab="orders"
+              >
+                Đơn Mua
+              </a>
+              <button
+                type="button"
+                class="dev5-shopee-item dev5-shopee-logout"
+                data-auth-action="logout"
+              >
+                Đăng Xuất
+              </button>
+            </div>
           </div>
-          <!-- Menu thả xuống Shopee (Hình 1) -->
-          <div class="dev5-shopee-dropdown">
-            <div class="dev5-shopee-arrow"></div>
-            <a href="dev5_user.html?tab=overview" class="dev5-shopee-item" data-action-tab="overview">
-              Tài Khoản Của Tôi
-            </a>
-            <a href="dev5_user.html?tab=orders" class="dev5-shopee-item" data-action-tab="orders">
-              Đơn Mua
-            </a>
-            <button type="button" class="dev5-shopee-item dev5-shopee-logout" data-auth-action="logout">
-              Đăng Xuất
-            </button>
-          </div>
+
+          <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
+          <button
+            type="button"
+            class="btn-sport btn-outline btn-sm dev5-hidden"
+            data-auth-action="login"
+            id="sport-btn-open-login"
+            title="Đăng nhập tài khoản"
+          >
+            🔑 Đăng Nhập
+          </button>
+          <button
+            type="button"
+            class="btn-sport btn-primary btn-sm dev5-hidden"
+            data-auth-action="register"
+            id="sport-btn-open-register"
+            title="Đăng ký thành viên"
+          >
+            ✨ Đăng Ký
+          </button>
         </div>
-
-        <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
-        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
-           Đăng Nhập
-        </button>
-        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
-           Đăng Ký
-        </button>
       </div>
-    </div>
-  </header>
-<section id="view-auth-guard" class="dev5-auth-guard" style="display: none;">
-  <div style="text-align: center; max-width: 440px; margin: 40px auto; padding: 30px 20px;">
-    <div style="font-size: 40px; margin-bottom: 12px;">🔒</div>
-    <h3 style="font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Vui Lòng Đăng Nhập</h3>
-    <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Bạn cần đăng nhập tài khoản để xem thông tin trang cá nhân hoặc bảng quản trị.</p>
-    <div style="display: flex; gap: 12px; justify-content: center;">
-      <button type="button" class="btn-sport btn-primary btn-sm" data-auth-action="login">🔑 Đăng Nhập</button>
-      <a href="../index.html" class="btn-sport btn-outline btn-sm">← Về Trang Chủ</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================================== -->
-<!-- KHỐI 2: DÀNH CHO KHÁCH HÀNG (USER ROLE) - Mặc định ẩn -->
-<!-- ============================================================================== -->
-<main id="view-user" class="dev5-user-wrapper" style="display: none;">
-  <div class="container">
-    <div class="dev5-authorized-content" data-authorized-content>
-      <!-- TOÀN BỘ NỘI DUNG CŨ CỦA DEV5: HERO, SIDEBAR, HỒ SƠ, ĐƠN MUA, SỔ ĐỊA CHỈ GIỮ NGUYÊN TẠI ĐÂY -->
-      <section class="dev5-hero">
-        <div>
-          <span class="dev5-eyebrow">MEMBER CENTER</span>
-          <h1>Xin chào, <span data-user-name>Hội viên</span></h1>
-          <p>Quản lý hồ sơ, địa chỉ giao hàng và theo dõi hành trình đơn hàng.</p>
+    </header>
+    <section id="view-auth-guard" class="dev5-auth-guard" style="display: none">
+      <div class="dev5-guard-card">
+        <div class="dev5-guard-icon-wrap">
+          <span class="dev5-guard-icon">🔒</span>
         </div>
-        <div class="dev5-role-badge" data-user-role>Thành viên</div>
-      </section>
+        <span class="dev5-guard-badge">Yêu cầu đăng nhập</span>
+        <h3 class="dev5-guard-title">Vui Lòng Đăng Nhập</h3>
+        <p class="dev5-guard-message">
+          Bạn cần đăng nhập tài khoản để xem thông tin trang cá nhân hoặc bảng
+          quản trị.
+        </p>
+        <div class="dev5-guard-btn-group">
+          <button
+            type="button"
+            class="dev5-guard-btn-main"
+            data-auth-action="login"
+          >
+            🔑 Đăng Nhập
+          </button>
+          <a href="../index.html" class="dev5-guard-btn-sub">← Về Trang Chủ</a>
+        </div>
+      </div>
+    </section>
 
-      <div class="dev5-layout">
-        <div class="dev5-layout">
-          <!-- 1. CỘT MENU BÊN TRÁI (SIDEBAR) -->
-          <aside class="dev5-sidebar" aria-label="Menu tài khoản">
-            <button class="dev5-tab is-active" type="button" data-tab="overview">
-              📊 Tổng quan
-            </button>
-            <button class="dev5-tab" type="button" data-tab="orders">
-              📦 Đơn mua
-            </button>
-            <button class="dev5-tab" type="button" data-tab="addresses">
-              📍 Sổ địa chỉ
-            </button>
-            <button class="dev5-tab" type="button" data-tab="wishlist">
-              ❤️ Sản phẩm yêu thích
-            </button>
-            <button class="dev5-tab" type="button" data-tab="faq">
-              🛡️ FAQ &amp; Bảo hành
-            </button>
-          </aside>
+    <!-- ============================================================================== -->
+    <!-- KHỐI 2: DÀNH CHO KHÁCH HÀNG (USER ROLE) - Mặc định ẩn -->
+    <!-- ============================================================================== -->
+    <main id="view-user" class="dev5-user-wrapper" style="display: none">
+      <div class="sport-container">
+        <div class="dev5-authorized-content" data-authorized-content>
+          <!-- HERO CHÀO MỪNG -->
+          <section class="dev5-hero">
+            <div class="dev5-hero-text">
+              <span class="dev5-eyebrow">MEMBER CENTER</span>
+              <h1>Xin chào, <span data-user-name>Hội viên</span> 👋</h1>
+              <p>
+                Quản lý hồ sơ, địa chỉ giao hàng và theo dõi hành trình đơn
+                hàng.
+              </p>
+            </div>
+            <div class="dev5-role-badge" data-user-role>Thành viên</div>
+          </section>
 
-          <!-- 2. KHU VỰC NỘI DUNG CÁC TAB BÊN PHẢI -->
-          <div class="dev5-content">
-            <!-- TAB 1: TỔNG QUAN & HỒ SƠ -->
-            <section class="dev5-panel is-active" data-panel="overview">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">PROFILE</span>
-                  <h2>Thông tin hội viên</h2>
-                </div>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                  <button class="dev5-secondary-button dev5-hidden" type="button" data-edit-profile-btn>
-                    ✏️ Chỉnh sửa hồ sơ
-                  </button>
-                  <button class="dev5-link-button" type="button" data-auth-action="login">
-                    Đổi tài khoản
-                  </button>
-                </div>
-              </div>
+          <div class="dev5-layout">
+            <!-- 1. CỘT MENU BÊN TRÁI (SIDEBAR) -->
+            <aside class="dev5-sidebar" aria-label="Menu tài khoản">
+              <div class="dev5-sidebar-title">TÀI KHOẢN CỦA TÔI</div>
+              <button
+                class="dev5-tab is-active"
+                type="button"
+                data-tab="overview"
+              >
+                <span class="dev5-tab-icon">📊</span><span>Tổng quan</span>
+              </button>
+              <button class="dev5-tab" type="button" data-tab="orders">
+                <span class="dev5-tab-icon">📦</span><span>Đơn mua</span>
+              </button>
+              <button class="dev5-tab" type="button" data-tab="addresses">
+                <span class="dev5-tab-icon">📍</span><span>Sổ địa chỉ</span>
+              </button>
+              <button class="dev5-tab" type="button" data-tab="wishlist">
+                <span class="dev5-tab-icon">❤️</span
+                ><span>Sản phẩm yêu thích</span>
+              </button>
+              <button class="dev5-tab" type="button" data-tab="faq">
+                <span class="dev5-tab-icon">🛡️</span
+                ><span>FAQ &amp; Bảo hành</span>
+              </button>
+            </aside>
 
-              <!-- Thẻ hiển thị thông tin user -->
-              <div class="dev5-profile-card">
-                <div>
-                  <h3 data-user-name>Hội viên</h3>
-                  <p data-user-email></p>
-                  <p data-user-phone style="color: #64748b; font-size: 13px; margin: 4px 0;"></p>
-                  <span class="dev5-tier" data-user-tier>Member</span>
-                </div>
-              </div>
-
-              <!-- FORM CHỈNH SỬA THÔNG TIN CÁ NHÂN -->
-              <form class="dev5-address-form dev5-hidden" data-profile-form style="margin-top: 20px;">
-                <h3 style="font-size: 16px; margin-bottom: 12px; color: #0f172a;">✏️ Cập nhật thông tin cá nhân</h3>
-                <div class="dev5-form-grid">
-                  <label>
-                    Họ và tên
-                    <input name="profileName" required minlength="2">
-                  </label>
-                  <label>
-                    Số điện thoại
-                    <input name="profilePhone" required pattern="0[0-9]{9}">
-                  </label>
-                  <label class="dev5-form-wide">
-                    Email
-                    <input name="profileEmail" type="email" required>
-                  </label>
-                  <label class="dev5-form-wide">
-                    Đổi mật khẩu mới (bỏ trống nếu không muốn đổi)
-                    <input name="profilePassword" type="password" placeholder="Nhập mật khẩu mới từ 8 ký tự...">
-                  </label>
-                </div>
-                <div class="dev5-form-actions">
-                  <button class="dev5-secondary-button" type="button" data-cancel-profile>Hủy</button>
-                  <button class="dev5-primary-button" type="submit">Lưu thông tin</button>
-                </div>
-              </form>
-
-              <!-- 3 Khung thống kê nhanh -->
-              <div class="dev5-stat-grid">
-                <div>
-                  <strong data-order-count>0</strong>
-                  <span>Đơn hàng</span>
-                </div>
-                <div>
-                  <strong data-address-count>0</strong>
-                  <span>Địa chỉ</span>
-                </div>
-                <div>
-                  <strong data-wishlist-count>0</strong>
-                  <span>Yêu thích</span>
-                </div>
-              </div>
-            </section>
-
-            <!-- TAB 2: LỊCH SỬ ĐƠN HÀNG -->
-            <section class="dev5-panel" data-panel="orders">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">ORDER HISTORY</span>
-                  <h2>Lịch sử &amp; theo dõi đơn hàng</h2>
-                </div>
-              </div>
-              <div data-orders></div>
-            </section>
-
-            <!-- TAB 3: SỔ ĐỊA CHỈ NHẬN HÀNG -->
-            <section class="dev5-panel" data-panel="addresses">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">DELIVERY BOOK</span>
-                  <h2>Sổ địa chỉ giao hàng</h2>
-                </div>
-                <button class="dev5-primary-button" type="button" data-add-address>
-                  + Thêm địa chỉ
-                </button>
-                <button class="dev5-secondary-button dev5-hidden" type="button" data-edit-address>
-                  Chỉnh sửa
-                </button>
-              </div>
-
-              <div data-addresses></div>
-
-              <!-- Form thêm / sửa địa chỉ -->
-              <form class="dev5-address-form dev5-hidden" data-address-form>
-                <div class="dev5-form-grid">
-                  <label>
-                    Người nhận
-                    <input name="recipient" required>
-                  </label>
-                  <label>
-                    Số điện thoại
-                    <input name="phone" required>
-                  </label>
-                  <label class="dev5-form-wide">
-                    Địa chỉ chi tiết
-                    <input name="line" required>
-                  </label>
-                  <label>
-                    Quận/Huyện
-                    <input name="district" required>
-                  </label>
-                  <label>
-                    Tỉnh/Thành phố
-                    <input name="city" required>
-                  </label>
+            <!-- 2. KHU VỰC NỘI DUNG CÁC TAB BÊN PHẢI -->
+            <div class="dev5-content">
+              <!-- TAB 1: TỔNG QUAN & HỒ SƠ -->
+              <section class="dev5-panel is-active" data-panel="overview">
+                <div class="dev5-panel-heading">
+                  <div>
+                    <span class="dev5-eyebrow">PROFILE</span>
+                    <h2>Thông tin hội viên</h2>
+                  </div>
+                  <div class="dev5-heading-actions">
+                    <button
+                      class="dev5-secondary-button dev5-hidden"
+                      type="button"
+                      data-edit-profile-btn
+                    >
+                      ✏️ Chỉnh sửa hồ sơ
+                    </button>
+                    <button
+                      class="dev5-link-button"
+                      type="button"
+                      data-auth-action="login"
+                    >
+                      Đổi tài khoản
+                    </button>
+                  </div>
                 </div>
 
-                <div class="dev5-form-actions">
-                  <button class="dev5-secondary-button" type="button" data-cancel-address>
-                    Hủy
-                  </button>
-                  <button class="dev5-primary-button" type="submit">
-                    Lưu địa chỉ
-                  </button>
-                </div>
-              </form>
-            </section>
+                <!-- Thẻ hiển thị thông tin hội viên -->
+                <div class="dev5-profile-card">
+                  <div class="dev5-profile-info">
+                    <div class="dev5-profile-name-row">
+                      <h3 data-user-name>Hội viên</h3>
+                      <span class="dev5-tier" data-user-tier>Member</span>
+                    </div>
 
-            <!-- TAB 4: SẢN PHẨM YÊU THÍCH -->
-            <section class="dev5-panel" data-panel="wishlist">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">YOUR PICKS</span>
-                  <h2>Sản phẩm yêu thích</h2>
-                </div>
-              </div>
-              <div class="dev5-wishlist-grid" data-wishlist></div>
-            </section>
+                    <p
+                      class="dev5-profile-line dev5-line-email"
+                      data-user-email
+                    ></p>
 
-            <!-- TAB 5: FAQ & BẢO HÀNH -->
-            <section class="dev5-panel" data-panel="faq">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">SUPPORT</span>
-                  <h2>FAQ &amp; chính sách bảo hành</h2>
+                    <p
+                      class="dev5-profile-line dev5-line-phone"
+                      data-user-phone
+                    ></p>
+                  </div>
                 </div>
-              </div>
-              <div data-faq></div>
-            </section>
+
+                <!-- FORM CHỈNH SỬA THÔNG TIN CÁ NHÂN -->
+                <form class="dev5-address-form dev5-hidden" data-profile-form>
+                  <h3 class="dev5-form-title">✏️ Cập nhật thông tin cá nhân</h3>
+                  <div class="dev5-form-grid">
+                    <label>
+                      Họ và tên
+                      <input name="profileName" required minlength="2" />
+                    </label>
+                    <label>
+                      Số điện thoại
+                      <input name="profilePhone" required pattern="0[0-9]{9}" />
+                    </label>
+                    <label class="dev5-form-wide">
+                      Email
+                      <input name="profileEmail" type="email" required />
+                    </label>
+                    <label class="dev5-form-wide">
+                      Đổi mật khẩu mới (bỏ trống nếu không muốn đổi)
+                      <input
+                        name="profilePassword"
+                        type="password"
+                        placeholder="Nhập mật khẩu mới từ 8 ký tự..."
+                      />
+                    </label>
+                  </div>
+                  <div class="dev5-form-actions">
+                    <button
+                      class="dev5-secondary-button"
+                      type="button"
+                      data-cancel-profile
+                    >
+                      Hủy
+                    </button>
+                    <button class="dev5-primary-button" type="submit">
+                      Lưu thông tin
+                    </button>
+                  </div>
+                </form>
+
+                <!-- 3 Khung thống kê nhanh -->
+                <div class="dev5-stat-grid">
+                  <div class="dev5-stat-card">
+                    <span class="dev5-stat-icon">📦</span>
+                    <div class="dev5-stat-text">
+                      <strong data-order-count>0</strong>
+                      <span>Đơn hàng</span>
+                    </div>
+                  </div>
+                  <div class="dev5-stat-card">
+                    <span class="dev5-stat-icon">📍</span>
+                    <div class="dev5-stat-text">
+                      <strong data-address-count>0</strong>
+                      <span>Địa chỉ</span>
+                    </div>
+                  </div>
+                  <div class="dev5-stat-card">
+                    <span class="dev5-stat-icon">❤️</span>
+                    <div class="dev5-stat-text">
+                      <strong data-wishlist-count>0</strong>
+                      <span>Yêu thích</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- TAB 2: LỊCH SỬ ĐƠN HÀNG -->
+              <section class="dev5-panel" data-panel="orders">
+                <div class="dev5-panel-heading">
+                  <div>
+                    <span class="dev5-eyebrow">ORDER HISTORY</span>
+                    <h2>Lịch sử &amp; theo dõi đơn hàng</h2>
+                  </div>
+                </div>
+                <div data-orders></div>
+              </section>
+
+              <!-- TAB 3: SỔ ĐỊA CHỈ NHẬN HÀNG -->
+              <section class="dev5-panel" data-panel="addresses">
+                <div class="dev5-panel-heading">
+                  <div>
+                    <span class="dev5-eyebrow">DELIVERY BOOK</span>
+                    <h2>Sổ địa chỉ giao hàng</h2>
+                  </div>
+                  <div class="dev5-heading-actions">
+                    <button
+                      class="dev5-primary-button"
+                      type="button"
+                      data-add-address
+                    >
+                      + Thêm địa chỉ
+                    </button>
+                    <button
+                      class="dev5-secondary-button dev5-hidden"
+                      type="button"
+                      data-edit-address
+                    >
+                      ✏️ Chỉnh sửa
+                    </button>
+                  </div>
+                </div>
+
+                <div data-addresses></div>
+
+                <!-- Form thêm / sửa địa chỉ -->
+                <form class="dev5-address-form dev5-hidden" data-address-form>
+                  <h3 class="dev5-form-title">📍 Địa chỉ nhận hàng</h3>
+                  <div class="dev5-form-grid">
+                    <label>
+                      Người nhận
+                      <input
+                        name="recipient"
+                        required
+                        placeholder="Nguyễn Văn A"
+                      />
+                    </label>
+                    <label>
+                      Số điện thoại
+                      <input name="phone" required placeholder="09xx xxx xxx" />
+                    </label>
+                    <label class="dev5-form-wide">
+                      Địa chỉ chi tiết
+                      <input
+                        name="line"
+                        required
+                        placeholder="Số nhà, tên đường, phường/xã..."
+                      />
+                    </label>
+                    <label>
+                      Quận/Huyện
+                      <input name="district" required />
+                    </label>
+                    <label>
+                      Tỉnh/Thành phố
+                      <input name="city" required />
+                    </label>
+                  </div>
+
+                  <div class="dev5-form-actions">
+                    <button
+                      class="dev5-secondary-button"
+                      type="button"
+                      data-cancel-address
+                    >
+                      Hủy
+                    </button>
+                    <button class="dev5-primary-button" type="submit">
+                      Lưu địa chỉ
+                    </button>
+                  </div>
+                </form>
+              </section>
+
+              <!-- TAB 4: SẢN PHẨM YÊU THÍCH -->
+              <section class="dev5-panel" data-panel="wishlist">
+                <div class="dev5-panel-heading">
+                  <div>
+                    <span class="dev5-eyebrow">YOUR PICKS</span>
+                    <h2>Sản phẩm yêu thích</h2>
+                  </div>
+                </div>
+                <div class="dev5-wishlist-grid" data-wishlist></div>
+              </section>
+
+              <!-- TAB 5: FAQ & BẢO HÀNH -->
+              <section class="dev5-panel" data-panel="faq">
+                <div class="dev5-panel-heading">
+                  <div>
+                    <span class="dev5-eyebrow">SUPPORT</span>
+                    <h2>FAQ &amp; chính sách bảo hành</h2>
+                  </div>
+                </div>
+                <div data-faq></div>
+              </section>
+            </div>
           </div>
         </div>
-
       </div>
-    </div>
-  </div>
-</main>
-<!-- ============================================================================== -->
-<!-- KHỐI 3: DÀNH CHO QUẢN TRỊ VIÊN (ADMIN ROLE) - Mặc định ẩn -->
-<!-- ============================================================================== -->
-<div id="view-admin" class="admin-wrapper" style="display: none; min-height: 85vh;">
-<aside class="admin-sidebar">
+    </main>
+    <!-- ============================================================================== -->
+    <!-- KHỐI 3: DÀNH CHO QUẢN TRỊ VIÊN (ADMIN ROLE) - Mặc định ẩn -->
+    <!-- ============================================================================== -->
+    <div
+      id="view-admin"
+      class="admin-wrapper"
+      style="display: none; min-height: 85vh"
+    >
+      <aside class="admin-sidebar">
         <div>
           <!-- Nhóm 1: TỔNG QUAN -->
           <div class="admin-menu-group">
@@ -1004,9 +1138,9 @@
           </div>
         </div>
       </main>
-</div>
+    </div>
 
-<div id="modal-category" class="modal-overlay">
+    <div id="modal-category" class="modal-overlay">
       <div class="modal-box">
         <div class="modal-header">
           <h3 class="modal-title" id="modal-category-title">
@@ -1024,7 +1158,13 @@
           <div class="form-row">
             <div class="form-group">
               <label>Mã loại:</label>
-              <input type="text" id="cat-id" placeholder="Tự động tạo mã" disabled style="background-color: #f1f5f9; cursor: not-allowed;" />
+              <input
+                type="text"
+                id="cat-id"
+                placeholder="Tự động tạo mã"
+                disabled
+                style="background-color: #f1f5f9; cursor: not-allowed"
+              />
             </div>
             <div class="form-group">
               <label>Icon cảm xúc:</label>
@@ -1148,20 +1288,18 @@
             <div class="form-group">
               <label>Sản phẩm Bán Chạy:</label>
               <label class="flag-input-control" for="prod-is-hot">
-                <input type="checkbox" id="prod-is-hot" class="flag-checkbox">
+                <input type="checkbox" id="prod-is-hot" class="flag-checkbox" />
                 <span>Tab Bán Chạy Nhất</span>
               </label>
             </div>
             <div class="form-group">
               <label>Sản phẩm Mới Về:</label>
               <label class="flag-input-control" for="prod-is-new">
-                <input type="checkbox" id="prod-is-new" class="flag-checkbox">
+                <input type="checkbox" id="prod-is-new" class="flag-checkbox" />
                 <span>Tab Hàng Mới Về</span>
               </label>
             </div>
           </div>
-
-
 
           <div class="form-group">
             <label>Mô tả chi tiết trang bị:</label>
@@ -1372,128 +1510,132 @@
     <!-- NẠP CÁC FILE DỮ LIỆU CHUẨN (DATA STORE) -->
     <!-- ============================================================================== -->
 
-<footer class="sport-footer site-footer">
-    <div class="sport-container container">
-      <div class="sport-footer-grid footer-grid">
-        <div class="sport-footer-col footer-col">
-          <div class="sport-brand-logo" style="margin-bottom: 14px;">
-            <div class="logo-icon">⚡</div>
-            <div style="color: #ffffff;">SPORT<span class="accent">STORE</span></div>
+    <footer class="sport-footer site-footer">
+      <div class="sport-container container">
+        <div class="sport-footer-grid footer-grid">
+          <div class="sport-footer-col footer-col">
+            <div class="sport-brand-logo" style="margin-bottom: 14px">
+              <div class="logo-icon">⚡</div>
+              <div style="color: #ffffff">
+                SPORT<span class="accent">STORE</span>
+              </div>
+            </div>
+            <p>
+              Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng
+              đầu Việt Nam. Đồng hành cùng mọi vận động viên bứt phá giới hạn.
+            </p>
           </div>
-          <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam. Đồng hành cùng mọi vận động viên bứt phá giới hạn.</p>
+
+          <div class="sport-footer-col footer-col">
+            <h4>Điều Hướng Nhanh</h4>
+            <ul class="footer-links">
+              <li><a href="../index.html">Trang Chủ</a></li>
+              <li><a href="dev2_products.html">Sản Phẩm Tuyển Chọn</a></li>
+              <li><a href="dev3_details.html">Chi Tiết & Bảng So Sánh</a></li>
+              <li><a href="dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
+              <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
+            </ul>
+          </div>
+
+          <div class="sport-footer-col footer-col">
+            <h4>Hỗ Trợ & Chính Sách</h4>
+            <ul class="footer-links">
+              <li><a href="dev5_user.html">Chính Sách Bảo Hành</a></li>
+              <li><a href="dev5_user.html">Quy Định Đổi Trả 30 Ngày</a></li>
+              <li><a href="dev5_user.html">Hướng Dẫn Chọn Size Chuẩn</a></li>
+              <li><a href="dev5_user.html">Theo Dõi Vận Đơn</a></li>
+            </ul>
+          </div>
+
+          <div class="sport-footer-col footer-col">
+            <h4>Hotline & Liên Hệ</h4>
+            <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
+            <p>✉️ Email: support@sportstore.vn</p>
+            <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
+          </div>
         </div>
 
-        <div class="sport-footer-col footer-col">
-          <h4>Điều Hướng Nhanh</h4>
-          <ul class="footer-links">
-            <li><a href="../index.html">Trang Chủ</a></li>
-            <li><a href="dev2_products.html">Sản Phẩm Tuyển Chọn</a></li>
-            <li><a href="dev3_details.html">Chi Tiết & Bảng So Sánh</a></li>
-            <li><a href="dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
-            <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
-          </ul>
-        </div>
-
-        <div class="sport-footer-col footer-col">
-          <h4>Hỗ Trợ & Chính Sách</h4>
-          <ul class="footer-links">
-            <li><a href="dev5_user.html">Chính Sách Bảo Hành</a></li>
-            <li><a href="dev5_user.html">Quy Định Đổi Trả 30 Ngày</a></li>
-            <li><a href="dev5_user.html">Hướng Dẫn Chọn Size Chuẩn</a></li>
-            <li><a href="dev5_user.html">Theo Dõi Vận Đơn</a></li>
-          </ul>
-        </div>
-
-        <div class="sport-footer-col footer-col">
-          <h4>Hotline & Liên Hệ</h4>
-          <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
-          <p>✉️ Email: support@sportstore.vn</p>
-          <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
+        <div class="sport-footer-bottom footer-bottom">
+          <div>
+            © 2026 SportStore. Thiết kế kiến trúc Decoupled Vanilla Frontend.
+          </div>
+          <div>Chạy mượt mà 100% Client-side & Không phụ thuộc Backend</div>
         </div>
       </div>
+    </footer>
 
-      <div class="sport-footer-bottom footer-bottom">
-        <div>© 2026 SportStore. Thiết kế kiến trúc Decoupled Vanilla Frontend.</div>
-        <div>Chạy mượt mà 100% Client-side & Không phụ thuộc Backend</div>
-      </div>
-    </div>
-  </footer>
+    <script src="../data/store/banners.js"></script>
+    <script src="../data/store/categories.js"></script>
+    <script src="../data/store/customers.js"></script>
+    <script src="../data/store/faqs.js"></script>
+    <script src="../data/store/flash_sale.js"></script>
+    <script src="../data/store/imports.js"></script>
+    <script src="../data/store/orders.js"></script>
+    <script src="../data/store/products.js"></script>
+    <script src="../data/store/shipping.js"></script>
+    <script src="../data/store/vouchers.js"></script>
+    <script src="../js/admin/init-storage.js"></script>
 
+    <script src="../js/common.js"></script>
+    <script src="../js/auth_modal.js"></script>
 
-<script src="../data/store/banners.js"></script>
-<script src="../data/store/categories.js"></script>
-<script src="../data/store/customers.js"></script>
-<script src="../data/store/faqs.js"></script>
-<script src="../data/store/flash_sale.js"></script>
-<script src="../data/store/imports.js"></script>
-<script src="../data/store/orders.js"></script>
-<script src="../data/store/products.js"></script>
-<script src="../data/store/shipping.js"></script>
-<script src="../data/store/vouchers.js"></script>
-<script src="../js/admin/init-storage.js"></script>
+    <script src="../js/admin/admin-main.js"></script>
+    <script src="../js/admin/tab-dashboard.js"></script>
+    <script src="../js/admin/tab-customer.js"></script>
+    <script src="../js/admin/tab-category.js"></script>
+    <script src="../js/admin/tab-product.js"></script>
+    <script src="../js/admin/tab-import.js"></script>
+    <script src="../js/admin/tab-pricing.js"></script>
+    <script src="../js/admin/tab-order.js"></script>
+    <script src="../js/admin/tab-inventory.js"></script>
 
-<script src="../js/common.js"></script>
-<script src="../js/auth_modal.js"></script>
-
-<script src="../js/admin/admin-main.js"></script>
-<script src="../js/admin/tab-dashboard.js"></script>
-<script src="../js/admin/tab-customer.js"></script>
-<script src="../js/admin/tab-category.js"></script>
-<script src="../js/admin/tab-product.js"></script>
-<script src="../js/admin/tab-import.js"></script>
-<script src="../js/admin/tab-pricing.js"></script>
-<script src="../js/admin/tab-order.js"></script>
-<script src="../js/admin/tab-inventory.js"></script>
-
-<!-- 4. LOGIC CỦA USER -->
-<script src="../js/dev5_user.js"></script>
-<!-- 5. BỘ ĐIỀU PHỐI GIAO DIỆN THEO ROLE (ROLE ROUTER) -->
-<script>
-  function dieuPhoiGiaoDienTheoRole() {
-    // Đọc thông tin tài khoản đang đăng nhập từ LocalStorage
-    var session = null;
-    try {
-      session = JSON.parse(localStorage.getItem('sport_user'));
-    } catch (e) {
-      session = null;
-    }
-    var viewGuest = document.getElementById('view-auth-guard');
-    var viewUser = document.getElementById('view-user');
-    var viewAdmin = document.getElementById('view-admin');
-    var siteFooter = document.querySelector('.sport-footer');
-    // TRƯỜNG HỢP 1: Chưa đăng nhập -> Hiện hộp khóa
-    if (!session) {
-      if (viewGuest) viewGuest.style.display = 'block';
-      if (viewUser) viewUser.style.display = 'none';
-      if (viewAdmin) viewAdmin.style.display = 'none';
-      if (siteFooter) siteFooter.style.display = 'block';
-      return;
-    }
-    // TRƯỜNG HỢP 2: Tài khoản có quyền Quản Trị Viên (role === 'admin')
-    if (session.role === 'admin') {
-      if (viewGuest) viewGuest.style.display = 'none';
-      if (viewUser) viewUser.style.display = 'none';
-      if (viewAdmin) viewAdmin.style.display = 'flex'; // Khối Admin dùng flex layout
-      if (siteFooter) siteFooter.style.display = 'none'; // Admin toàn màn hình nên ẩn Footer trang web
-      // Khởi động các bảng và số liệu thống kê của Admin
-      if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
-      if (typeof switchTab === 'function') switchTab('dashboard');
-      return;
-    }
-    // TRƯỜNG HỢP 3: Tài khoản Khách Hàng bình thường (role === 'user')
-    if (viewGuest) viewGuest.style.display = 'none';
-    if (viewAdmin) viewAdmin.style.display = 'none';
-    if (viewUser) viewUser.style.display = 'block';
-    if (siteFooter) siteFooter.style.display = 'block';
-    // Khởi động hồ sơ khách hàng
-    if (typeof renderUserProfile === 'function') renderUserProfile();
-  }
-  // Chạy điều phối ngay khi mở trang
-  document.addEventListener('DOMContentLoaded', dieuPhoiGiaoDienTheoRole);
-</script>
-
-
-</body>
+    <!-- 4. LOGIC CỦA USER -->
+    <script src="../js/dev5_user.js"></script>
+    <!-- 5. BỘ ĐIỀU PHỐI GIAO DIỆN THEO ROLE (ROLE ROUTER) -->
+    <script>
+      function dieuPhoiGiaoDienTheoRole() {
+        // Đọc thông tin tài khoản đang đăng nhập từ LocalStorage
+        var session = null;
+        try {
+          session = JSON.parse(localStorage.getItem("sport_user"));
+        } catch (e) {
+          session = null;
+        }
+        var viewGuest = document.getElementById("view-auth-guard");
+        var viewUser = document.getElementById("view-user");
+        var viewAdmin = document.getElementById("view-admin");
+        var siteFooter = document.querySelector(".sport-footer");
+        var root = document.documentElement;
+        // TRƯỜNG HỢP 1: Chưa đăng nhập -> Hiện hộp khóa
+        if (!session) {
+          if (viewGuest) viewGuest.style.display = "block";
+          if (viewUser) viewUser.style.display = "none";
+          if (viewAdmin) viewAdmin.style.display = "none";
+          if (siteFooter) siteFooter.style.display = "block";
+          return;
+        }
+        // TRƯỜNG HỢP 2: Tài khoản có quyền Quản Trị Viên (role === 'admin')
+        if (session.role === "admin") {
+          if (viewGuest) viewGuest.style.display = "none";
+          if (viewUser) viewUser.style.display = "none";
+          if (viewAdmin) viewAdmin.style.display = "flex"; // Khối Admin dùng flex layout
+          if (siteFooter) siteFooter.style.display = "none"; // Admin toàn màn hình nên ẩn Footer trang web
+          // Khởi động các bảng và số liệu thống kê của Admin
+          if (typeof updateSidebarBadges === "function") updateSidebarBadges();
+          if (typeof switchTab === "function") switchTab("dashboard");
+          return;
+        }
+        // TRƯỜNG HỢP 3: Tài khoản Khách Hàng bình thường (role === 'user')
+        root.classList.add("dev5-scroll-page");
+        if (viewGuest) viewGuest.style.display = "none";
+        if (viewAdmin) viewAdmin.style.display = "none";
+        if (viewUser) viewUser.style.display = "block";
+        if (siteFooter) siteFooter.style.display = "block";
+        // Khởi động hồ sơ khách hàng
+        if (typeof renderUserProfile === "function") renderUserProfile();
+      }
+      // Chạy điều phối ngay khi mở trang
+      document.addEventListener("DOMContentLoaded", dieuPhoiGiaoDienTheoRole);
+    </script>
+  </body>
 </html>
-
- 
