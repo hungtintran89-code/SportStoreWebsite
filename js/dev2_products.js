@@ -1,4 +1,3 @@
-// 1. Hàm đọc dữ liệu an toàn từ LocalStorage hoặc mảng biến toàn cục data/store
 function loadAppProducts() {
     try {
         let stored = localStorage.getItem("sport_products");
@@ -19,18 +18,15 @@ function loadAppCategories() {
     return (typeof categories !== "undefined") ? categories : [];
 }
 
-// Lấy danh sách sản phẩm và danh mục chuẩn
 let allProducts = loadAppProducts();
 let allCategories = loadAppCategories();
 
-// Hàm kiểm tra sản phẩm / danh mục có đang hiển thị không (hỗ trợ cả isHidden và status)
 function isItemActive(item) {
     if (!item) return false;
     if ( item.status === "inactive") return false;
     return true;
 }
 
-// Khởi tạo danh sách lọc ban đầu gồm các sản phẩm đang bán
 let filteredList = [];
 for (let i = 0; i < allProducts.length; i++) {
     if (isItemActive(allProducts[i])) {
@@ -38,13 +34,11 @@ for (let i = 0; i < allProducts.length; i++) {
     }
 }
 
-// Lấy giá bán thực tế của sản phẩm
 function getProductDisplayPrice(product) {
     let price = product.price || 0;
     return Number(price);
 }
 
-// Lấy giá niêm yết ban đầu (nếu có giảm giá)
 function getProductOriginalPrice(product) {
     if (product.originalPrice) return Number(product.originalPrice);
     if (product.salePrice && product.price && Number(product.price) > Number(product.salePrice)) {
@@ -54,35 +48,10 @@ function getProductOriginalPrice(product) {
 }
 
 let currentPage = 1;
-const productsPerPage = 15; // mỗi trang hiện 15 sp
+const productsPerPage = 15;
 let toastTimer = null;
 let ignoreUrlSale = false;
 
-// lấy giá bán của sp
-function getProductDisplayPrice(product) {
-    let price = product.price || 0;
-    return Number(price);
-}
-
-// tính tổng sl sp đang có trong giỏ hàng
-function getCartTotalCount() {
-    let cart = [];
-    try {
-        let raw = localStorage.getItem("cart");
-        if (raw) cart = JSON.parse(raw);
-    } catch (e) {
-        cart = [];
-    }
-    if (!Array.isArray(cart)) return 0;
-
-    let total = 0;
-    for (let i = 0; i < cart.length; i++) {
-        total += Number(cart[i].quantity || cart[i].qty || 1);
-    }
-    return total;
-}
-
-// Đổ danh mục ra cột lọc bên trái
 function renderCategories() {
     let categoryBox = document.getElementById("category-filter");
     if (!categoryBox) return;
@@ -119,7 +88,6 @@ function renderCategories() {
     }
 }
 
-// hiện dòng báo tìm thấy bao nhiêu sp trên thanh lọc
 function updateFilterStatusSummary() {
     let summaryEl = document.getElementById("filterResultSummary");
     if (!summaryEl) return;
@@ -135,8 +103,6 @@ function updateFilterStatusSummary() {
     }
 }
 
-// vẽ danh sách sp ra lưới
-// Vẽ danh sách sản phẩm ra lưới
 function renderProducts() {
     let grid = document.getElementById("productGrid");
     if (!grid) return;
@@ -168,19 +134,15 @@ function renderProducts() {
         let productCode = product.code || product.productCode || product.id;
 
         // Lấy ảnh hiển thị
-        let cardImage = product.image || (Array.isArray(product.gallery) && product.gallery[0]) || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600";
-        if (window.SPORTMAX_GALLERIES && product.sourceUrl && window.SPORTMAX_GALLERIES[product.sourceUrl]) {
-            let galleryArr = window.SPORTMAX_GALLERIES[product.sourceUrl];
-            if (galleryArr.length > 0) cardImage = galleryArr[0];
-        }
+        let cardImage = product.image || (Array.isArray(product.gallery) && product.gallery[0]);
 
         // Tính toán giá và huy hiệu SALE
         let displayPrice = getProductDisplayPrice(product);
-        let formattedPrice = displayPrice.toLocaleString("vi-VN");
+        let formattedPrice = formatMoney(displayPrice) ;
         let originalPrice = getProductOriginalPrice(product);
         let hasDiscount = originalPrice > displayPrice;
         let originalPriceHtml = hasDiscount
-            ? `<span class="original-price" style="text-decoration: line-through; color: #94a3b8; font-size: 13px; margin-left: 6px;">${originalPrice.toLocaleString("vi-VN")} ₫</span>`
+            ? `<span class="original-price" style="text-decoration: line-through; color: #94a3b8; font-size: 13px; margin-left: 6px;">${formatMoney(originalPrice)} ₫</span>`
             : "";
 
         let productCard = `
@@ -189,7 +151,7 @@ function renderProducts() {
                 
                 <!-- Bấm vào ảnh hoặc tên sản phẩm sẽ mở Popup Chi Tiết ngay trên trang -->
                 <a href="javascript:void(0)" onclick="moChiTietSanPham('${product.id}')" style="text-decoration: none; color: inherit;">
-                    <img src="${cardImage}" alt="${product.name}" onerror="handleProductImageError('${product.id}', this)">
+                    <img src="${cardImage}" alt="${product.name}">
                     <h4>${product.name}</h4>
                 </a>
                 
@@ -215,7 +177,6 @@ function renderProducts() {
     renderPagination();
 }
 
-// bấm nút đặt lại bộ lọc thì xoá trắng các ô rồi load lại tất cả sp
 function resetAllFilters() {
     if (document.getElementById("searchInput")) document.getElementById("searchInput").value = "";
     if (document.getElementById("advNameInput")) document.getElementById("advNameInput").value = "";
@@ -233,7 +194,6 @@ function resetAllFilters() {
     applyAdvancedFilters();
 }
 
-// bấm icon giỏ hàng trên từng thẻ sp để thêm nhanh 1 món vô giỏ
 function quickAddToCart(productCode) {
     let product = null ;
     for( let i = 0 ; i < allProducts.length ; i++){
@@ -285,13 +245,6 @@ function quickAddToCart(productCode) {
     showToast("Đã thêm " + product.name + " vào giỏ hàng", "success");
 }
 
-// nếu ảnh bị lỗi link thì đổi qua ảnh mặc định
-function handleProductImageError(productCode, imageElement) {
-    imageElement.onerror = null;
-    imageElement.src = "https://via.placeholder.com/200?text=SportStore";
-}
-
-// vẽ các nút phân trang 1, 2, 3... ở dưới lưới sp
 function renderPagination() {
     let paginationBox = document.getElementById("pagination");
     if (!paginationBox) return;
@@ -328,7 +281,6 @@ function renderPagination() {
     paginationBox.innerHTML = html;
 }
 
-// đổi trang và cuộn lên đầu danh sách
 function changePage(pageNumber) {
     let totalPages = Math.ceil(filteredList.length / productsPerPage);
     if (totalPages < 1) totalPages = 1;
@@ -341,7 +293,6 @@ function changePage(pageNumber) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// bỏ dấu tiếng Việt để gõ ko dấu vẫn tìm đc sp
 function removeVietnameseTones(str) {
     str = String(str || "").toLowerCase();
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -356,7 +307,6 @@ function removeVietnameseTones(str) {
     return str;
 }
 
-// kiểm tra tên sp có khớp với từ khoá tìm kiếm ko
 function matchProductSearch(productText, rawQuery) {
     let queryStr = String(rawQuery || "").trim();
     if (queryStr === "") return true;
@@ -387,8 +337,6 @@ function matchProductSearch(productText, rawQuery) {
     return false;
 }
 
-// lọc nâng cao kết hợp: Tên + Loại sp + Hãng + Khoảng giá
-// Lọc nâng cao: Tên + Danh mục + Thương hiệu + Khoảng giá
 function applyAdvancedFilters() {
     let headerKeyword = document.getElementById("searchInput") ? document.getElementById("searchInput").value.trim() : "";
     let advKeyword = document.getElementById("advNameInput") ? document.getElementById("advNameInput").value.trim() : "";
@@ -451,7 +399,6 @@ function applyAdvancedFilters() {
     renderProducts();
 }
 
-// bấm tìm trên header thì bỏ tích checkbox cũ để tìm toàn bộ shop
 function triggerDirectSearch() {
     let checkedBoxes = document.querySelectorAll(".cat-checkbox:checked");
     for (let i = 0; i < checkedBoxes.length; i++) {
@@ -460,7 +407,6 @@ function triggerDirectSearch() {
     applyAdvancedFilters();
 }
 
-// sắp xếp danh sách sp theo giá tăng hoặc giảm
 function applySortLogic() {
     let sortEl = document.getElementById("sortSelect");
     let sortValue = sortEl ? sortEl.value : "default";
@@ -476,13 +422,11 @@ function applySortLogic() {
     }
 }
 
-// chạy lần đầu khi mở trang ds sp
 if (document.getElementById("productGrid")) {
     renderCategories();
     renderProducts();
 }
 
-// đọc tham số trên url nếu khách bấm từ menu xổ xuống qua
 function initPageFromUrl() {
     updateCartBadge();
 
@@ -543,10 +487,10 @@ function moChiTietSanPham( productId ){
 
     //Điền giá bán
     var giaHienThi = getProductDisplayPrice(sanPhamDangXem);
-    document.getElementById("qv-price").textContent = giaHienThi.toLocaleString("vi-VN") + " ₫";
+    document.getElementById("qv-price").textContent = formatMoney(giaHienThi)
     var oldPriceEl = document.getElementById("qv-old-price");
     if (sanPhamDangXem.originalPrice && Number(sanPhamDangXem.originalPrice) > giaHienThi) {
-        oldPriceEl.textContent = Number(sanPhamDangXem.originalPrice).toLocaleString("vi-VN") + " ₫";
+        oldPriceEl.textContent = formatMoney(Number(sanPhamDangXem.originalPrice)) ;
         oldPriceEl.style.display = "inline";
     } else {
         oldPriceEl.style.display = "none";
@@ -609,20 +553,17 @@ function moChiTietSanPham( productId ){
 
 }
 
-/*** 2. ĐÓNG MODAL*/
 function dongChiTietSanPham() {
     var modal = document.getElementById("modal-quick-view");
     if (modal) modal.style.display = "none";
 }
+
 function dongModalKhiBamRaNgoai(event) {
     if (event.target.id === "modal-quick-view") {
         dongChiTietSanPham();
     }
 }
 
-
-
-/*** 3. TĂNG / GIẢM SỐ LƯỢNG MUA*/
 function thayDoiSoLuong(delta) {
     var input = document.getElementById("qv-quantity-input");
     var current = parseInt(input.value) || 1;

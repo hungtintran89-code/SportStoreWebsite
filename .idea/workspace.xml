@@ -6,13 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/store/gallery-data.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/store/mock-product.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/admin/admin-main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/admin/admin-main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/common.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/dev1_home.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev1_home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/dev2_products.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev2_products.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/dev5_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev5_user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/admin.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev4_checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev4_checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/product-detail.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

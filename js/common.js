@@ -154,10 +154,7 @@ function addToCart(product, quantityToAdd = 1) {
  */
 function updateCartBadge() {
   const cart = getCart();
-  let totalCount = 0;
-  for (let i = 0; i < cart.length; i++) {
-    totalCount += Number(cart[i].quantity) || 1;
-  }
+  let totalCount = cart.length ;
 
   const badgeElements = document.querySelectorAll(
     ".cart-badge, #cartBadge, #header-cart-badge-count, .badge-pill",

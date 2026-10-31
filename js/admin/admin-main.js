@@ -23,10 +23,7 @@ function dangXuatAdmin(){
 
 // 2. Chuyển đổi giữa các Tab (Dashboard, Sản phẩm, Đơn hàng...)
 function switchTab(tabName, btnElement) {
-  // A. Ẩn tất cả các nội dung tab đang mở
-  document.querySelectorAll(".admin-tab-content").forEach(function (tab) {
-    tab.classList.remove("active");
-  });
+
   var tatCaNoiDungTab = document.querySelectorAll(".admin-tab-content") ;
   for( let i = 0 ; i < tatCaNoiDungTab.length ;i++){
     tatCaNoiDungTab[i].classList.remove("active") ;

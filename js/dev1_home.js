@@ -1,16 +1,9 @@
-// ==============================================================================
-// FILE: js/dev1_home.js - LOGIC TRANG CHỦ SPORTSTORE
-// Viết theo cú pháp cơ bản, mộc mạc, dễ hiểu và dễ giải thích khi báo cáo
-// ==============================================================================
 
 // Biến lưu trạng thái của Slider Banner
 var slideHienTai = 0;
 var danhSachBanner = [];
 var timerTuDongChay = null;
 
-// ==============================================================================
-// BƯỚC KHỞI ĐỘNG: KHI TRANG WEB TẢI XONG THÌ CHẠY TẤT CẢ CÁC CHỨC NĂNG
-// ==============================================================================
 document.addEventListener("DOMContentLoaded", function () {
   // 1. Cập nhật số lượng giỏ hàng trên Header (hàm của common.js)
   if (typeof updateCartBadge === "function") {
@@ -26,16 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
   khoiTaoFormDangKyNhanTin();
 });
 
-// Hàm hỗ trợ format tiền Việt (VD: 500000 -> "500.000 ₫")
-function dinhDangTien(soTien) {
-  if (!soTien || isNaN(soTien)) return "0 ₫";
-  return Number(soTien).toLocaleString("vi-VN") + " ₫";
-}
-
-
-// ==============================================================================
-// CHỨC NĂNG 1: BANNER SLIDER TỰ ĐỘNG CHUYỂN ẢNH
-// ==============================================================================
 function khoiTaoBannerSlider() {
   // Lấy dữ liệu từ file banners.js
   if (typeof banners !== "undefined") {
@@ -110,7 +93,6 @@ function khoiTaoBannerSlider() {
   batDauTuDongChaySlide();
 }
 
-// Hàm đổi class active cho slide và dot đang chọn
 function hienThiSlide(viTri) {
   slideHienTai = viTri;
 
@@ -140,10 +122,6 @@ function batDauTuDongChaySlide() {
   }, 4500);
 }
 
-
-// ==============================================================================
-// CHỨC NĂNG 2: ĐỒNG HỒ ĐẾM NGƯỢC & DANH SÁCH FLASH SALE
-// ==============================================================================
 function khoiTaoDongHoFlashSale() {
   // Đặt thời gian đếm ngược: 8 tiếng 45 phút 27 giây
   var tongSoGiay = 8 * 3600 + 45 * 60 + 27;
@@ -194,8 +172,8 @@ function hienThiSanPhamFlashSale() {
         <div class="dev1-card-cat">${item.category}</div>
         <h3 class="dev1-card-title">${item.name}</h3>
         <div class="dev1-price-row">
-          <span class="dev1-sale-price">${dinhDangTien(item.salePrice)}</span>
-          <span class="dev1-old-price">${dinhDangTien(item.price)}</span>
+          <span class="dev1-sale-price">${formatMoney(item.salePrice)}</span>
+          <span class="dev1-old-price">${formatMoney(item.price)}</span>
         </div>
         <div class="dev1-progress-bar">
           <div class="dev1-progress-fill" style="width: ${phanTramDaBan}%"></div>
@@ -212,10 +190,6 @@ function hienThiSanPhamFlashSale() {
   }
 }
 
-
-// ==============================================================================
-// CHỨC NĂNG 3: 4 DANH MỤC THỂ THAO TIÊU BIỂU
-// ==============================================================================
 function hienThiDanhMucTieuBieu() {
   var dsDanhMuc = [];
   if (typeof categories !== "undefined") {
@@ -243,10 +217,6 @@ function hienThiDanhMucTieuBieu() {
   }
 }
 
-
-// ==============================================================================
-// CHỨC NĂNG 4: TAB TRANG BỊ XU HƯỚNG ("Bán chạy nhất" & "Hàng mới về")
-// ==============================================================================
 function khoiTaoTabTrangBiXuHuong() {
   // 1. Đọc tất cả sản phẩm từ LocalStorage hoặc file products.js
   var tatCaSanPham = [];
@@ -305,7 +275,6 @@ function khoiTaoTabTrangBiXuHuong() {
   veDanhSachSanPhamTrending(dsBanChay);
 }
 
-// Hàm vẽ các thẻ sản phẩm ra lưới
 function veDanhSachSanPhamTrending(danhSach) {
   var khungLưới = document.getElementById("dev1-trending-grid");
   if (!khungLưới) return;
@@ -331,7 +300,7 @@ function veDanhSachSanPhamTrending(danhSach) {
         <div class="dev1-card-cat">${sp.category || "Thể Thao"}</div>
         <h3 class="dev1-card-title">${sp.name}</h3>
         <div class="dev1-price-row">
-          <span class="dev1-sale-price">${dinhDangTien(sp.salePrice || sp.price)}</span>
+          <span class="dev1-sale-price">${formatMoney(sp.salePrice || sp.price)}</span>
           <span class="dev1-rating-star">⭐ ${sp.rating || 5.0}</span>
         </div>
         <div class="dev1-card-btn-row">
@@ -347,10 +316,6 @@ function veDanhSachSanPhamTrending(danhSach) {
   }
 }
 
-
-// ==============================================================================
-// CHỨC NĂNG 5: HÀM TOÀN CỤC THÊM VÀO GIỎ HÀNG TỪ TRANG CHỦ
-// ==============================================================================
 window.themVaoGioTrangChu = function (idSanPham) {
   // 1. Tìm sản phẩm trong danh sách
   var tatCa = [];
@@ -399,10 +364,6 @@ window.themVaoGioTrangChu = function (idSanPham) {
   }
 };
 
-
-// ==============================================================================
-// CHỨC NĂNG 6: FORM ĐĂNG KÝ NHẬN BẢN TIN (NEWSLETTER)
-// ==============================================================================
 function khoiTaoFormDangKyNhanTin() {
   var form = document.getElementById("dev1-nl-form");
   var inputEmail = document.getElementById("dev1-email-input");
