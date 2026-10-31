@@ -164,7 +164,7 @@ function renderProducts() {
                     </button>
                     
                     <!-- Nút Thêm nhanh 1 món vào giỏ hàng -->
-                    <button class="btn-primary" style="width: 42px; padding: 10px 0; background-color: #0f172a;" onclick="quickAddToCart('${product.id}')" title="Thêm vào giỏ hàng">
+                    <button class="btn-primary" style="width: 42px; padding: 10px 0; background-color: #0f172a;" onclick="themNhanhVaoGio('${product.id}')" title="Thêm vào giỏ hàng">
                         <i class="fa-solid fa-cart-plus"></i>
                     </button>
                 </div>
@@ -176,6 +176,36 @@ function renderProducts() {
 
     renderPagination();
 }
+
+// Hàm thêm nhanh 1 món vào giỏ hàng khi bấm icon xe đẩy
+function themNhanhVaoGio(productCode) {
+    // 1. Tìm đúng món hàng trong allProducts
+    var product = null;
+    for (var i = 0; i < allProducts.length; i++) {
+        if (String(allProducts[i].id) === String(productCode)) {
+            product = allProducts[i];
+            break;
+        }
+    }
+    if (!product) return;
+
+    // 2. Đóng gói thành Object chuẩn
+    var monHang = {
+        id: product.id,
+        name: product.name,
+        price: getProductDisplayPrice(product),
+        image: product.image || (Array.isArray(product.gallery) && product.gallery[0]) || "",
+        size: "Tiêu chuẩn",
+        color: "Mặc định",
+        stock: product.stock || 50
+    };
+
+    // 3. Gọi hàm addToCart chuẩn của common.js để lưu đúng vào tài khoản
+    if (typeof addToCart === "function") {
+        addToCart(monHang, 1);
+    }
+}
+
 
 function resetAllFilters() {
     if (document.getElementById("searchInput")) document.getElementById("searchInput").value = "";
@@ -194,56 +224,6 @@ function resetAllFilters() {
     applyAdvancedFilters();
 }
 
-function quickAddToCart(productCode) {
-    let product = null ;
-    for( let i = 0 ; i < allProducts.length ; i++){
-        let code = allProducts[i].id ;
-        if( String(productCode) === String(allProducts[i].id)){
-            product = allProducts[i];
-            break;
-        }
-    }
-    if( !product ) return ;
-
-    let cart = [] ;
-    try {
-        let raw = localStorage.getItem("sport_cart") ;
-        if( raw ) cart = JSON.parse(raw);
-    }catch (e){
-        cart = [];
-    }
-
-    if( !Array.isArray(cart)) cart = [];
-
-    let pId = product.id ;
-    let existingItem  = null ;
-
-    for( let i = 0 ; i < allProducts.length ;i++){
-        let itemId = allProducts[i].id ;
-        if( String(itemId) === pId ){
-            existingItem = cart[i];
-        }
-    }
-
-    if( existingItem  ){
-        existingItem.quantity  = (existingItem.quantity || 1 ) + 1 ;
-    }else{
-        cart.push({
-            id: pId,
-            code: pId,
-            name: product.name,
-            price: getProductDisplayPrice(product),
-            image: product.image || (Array.isArray(product.gallery) && product.gallery[0]) || "",
-            quantity: 1
-        })
-    }
-
-    localStorage.setItem("sport_cart" , JSON.stringify(cart)) ;
-
-    updateCartBadge ();
-
-    showToast("Đã thêm " + product.name + " vào giỏ hàng", "success");
-}
 
 function renderPagination() {
     let paginationBox = document.getElementById("pagination");
@@ -568,7 +548,10 @@ function thayDoiSoLuong(delta) {
     var input = document.getElementById("qv-quantity-input");
     var current = parseInt(input.value) || 1;
     var nextVal = current + delta;
-    if (nextVal >= 1 && nextVal <= 99) {
+
+    var tonKho = (sanPhamDangXem && sanPhamDangXem.stock != undefined ) ? sanPhamDangXem.stock : 0;
+
+    if (nextVal >= 1 && nextVal <= sanPhamDangXem) {
         input.value = nextVal;
     }
 }

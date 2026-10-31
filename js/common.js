@@ -69,10 +69,7 @@ function getCart() {
 
   return userCart ? userCart.product : [];
 }
-/**
- * 5. HÀM LƯU DANH SÁCH GIỎ HÀNG CỦA TÀI KHOẢN HIỆN TẠI
- * Lưu theo cấu trúc: [ { customerId: user.customerId, product: [ ... ] } ]
- */
+
 function saveCart(cartArray) {
   try {
     const user = getCurrentUser();
@@ -113,6 +110,9 @@ function addToCart(product, quantityToAdd = 1) {
   const user = getCurrentUser();
   if (!user) {
     showToast("Vui lòng đăng nhập tài khoản để mua sản phẩm!", "danger");
+    if (window.sportStoreAuth && typeof window.sportStoreAuth.openModal === "function") {
+      window.sportStoreAuth.openModal("login");
+    }
     return false;
   }
 
