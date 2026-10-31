@@ -81,34 +81,7 @@ function getCartTotalCount() {
     }
     return total;
 }
-// cập nhật số lượng trên icon giỏ hàng ở header
-function updateCartBadge () {
-    let totalCount = getCartTotalCount();
-    let sportBadge = document.getElementById("header-cart-badge-count");
-    if (sportBadge) {
-        sportBadge.innerText = totalCount;
-    }
-}
 
-// hiện thông báo nhỏ góc dưới khi bấm thêm giỏ hàng
-function showSportMaxToast(message) {
-    let toast = document.getElementById("sportmax-toast");
-    if (!toast) {
-        toast = document.createElement("div");
-        toast.id = "sportmax-toast";
-        toast.className = "sportmax-toast";
-        document.body.appendChild(toast);
-    }
-    toast.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>' + message + '</span>';
-    toast.classList.add("show");
-
-    if (toastTimer) {
-        clearTimeout(toastTimer);
-    }
-    toastTimer = setTimeout(function() {
-        toast.classList.remove("show");
-    }, 2800);
-}
 // Đổ danh mục ra cột lọc bên trái
 function renderCategories() {
     let categoryBox = document.getElementById("category-filter");
@@ -309,8 +282,7 @@ function quickAddToCart(productCode) {
 
     updateCartBadge ();
 
-    showSportMaxToast("Đã thêm " + product.name + " vào giỏ hàng")
-
+    showToast("Đã thêm " + product.name + " vào giỏ hàng", "success");
 }
 
 // nếu ảnh bị lỗi link thì đổi qua ảnh mặc định
@@ -512,12 +484,17 @@ if (document.getElementById("productGrid")) {
 
 // đọc tham số trên url nếu khách bấm từ menu xổ xuống qua
 function initPageFromUrl() {
-    updateCartHeaderBadge();
+    updateCartBadge();
 
     let params = new URLSearchParams(window.location.search);
+    let productId = params.get("id");
     let searchKeyword = params.get("search") || params.get("keyword");
     let catCode = params.get("cat");
     let saleFlag = params.get("sale");
+
+    if( productId ){
+        moChiTietSanPham(productId);
+    }
 
     if (catCode) {
         let targetCheckbox = document.querySelector('.cat-checkbox[value="' + catCode + '"]');
@@ -550,7 +527,7 @@ function moChiTietSanPham( productId ){
     }
 
     if( !sanPhamDangXem ){
-        alert("Không tìm thấy thông tin chi tiết của sản phẩm này!");
+        showToast("Không tìm thấy thông tin chi tiết của sản phẩm này!", "danger");
         return ;
     }
 
@@ -680,10 +657,7 @@ function themVaoGioTuModal( muangay ){
 
     if( muangay ){
         window.location.href = "dev4_checkout.html";
-    }else{
-        alert("Đã thêm " + soLuong + " sản phẩm [" + sanPhamDangXem.name + "] vào giỏ hàng!");
     }
-
 }
 
 initPageFromUrl();

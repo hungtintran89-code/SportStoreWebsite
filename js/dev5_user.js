@@ -492,7 +492,7 @@
       }
 
       form.classList.add('dev5-hidden');
-      alert('Đã cập nhật thông tin cá nhân thành công!');
+        showToast("Đã cập nhật thông tin cá nhân thành công!", "success");
       };
     }
   }

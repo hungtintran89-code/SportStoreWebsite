@@ -1,513 +1,424 @@
+// ==============================================================================
+// FILE: js/dev1_home.js - LOGIC TRANG CHỦ SPORTSTORE
+// Viết theo cú pháp cơ bản, mộc mạc, dễ hiểu và dễ giải thích khi báo cáo
+// ==============================================================================
 
-(function () {
-  'use strict';
+// Biến lưu trạng thái của Slider Banner
+var slideHienTai = 0;
+var danhSachBanner = [];
+var timerTuDongChay = null;
 
-  // State cục bộ riêng biệt của Dev 1
-  var currentSlideIndex = 0;
-  var slidesData = [];
-  var sliderTimer = null;
-  var trendingData = [];
-  var activeTabId = 'bestseller';
-
-  // Khởi tạo khi DOM sẵn sàng
-  document.addEventListener('DOMContentLoaded', function () {
-    initHomeModule();
-    updateCartCountBadge();
-  });
-
-  function initHomeModule() {
-    loadHomeData();
-    initCountdownTimer();
-    initNewsletterForm();
+// ==============================================================================
+// BƯỚC KHỞI ĐỘNG: KHI TRANG WEB TẢI XONG THÌ CHẠY TẤT CẢ CÁC CHỨC NĂNG
+// ==============================================================================
+document.addEventListener("DOMContentLoaded", function () {
+  // 1. Cập nhật số lượng giỏ hàng trên Header (hàm của common.js)
+  if (typeof updateCartBadge === "function") {
+    updateCartBadge();
   }
 
-  function getPageUrl(targetPage) {
-    var isPagesDir = window.location.pathname.includes('/pages/');
-    return isPagesDir ? targetPage : 'pages/' + targetPage;
+  // 2. Chạy lần lượt 6 chức năng của trang chủ
+  khoiTaoBannerSlider();
+  khoiTaoDongHoFlashSale();
+  hienThiSanPhamFlashSale();
+  hienThiDanhMucTieuBieu();
+  khoiTaoTabTrangBiXuHuong();
+  khoiTaoFormDangKyNhanTin();
+});
+
+// Hàm hỗ trợ format tiền Việt (VD: 500000 -> "500.000 ₫")
+function dinhDangTien(soTien) {
+  if (!soTien || isNaN(soTien)) return "0 ₫";
+  return Number(soTien).toLocaleString("vi-VN") + " ₫";
+}
+
+
+// ==============================================================================
+// CHỨC NĂNG 1: BANNER SLIDER TỰ ĐỘNG CHUYỂN ẢNH
+// ==============================================================================
+function khoiTaoBannerSlider() {
+  // Lấy dữ liệu từ file banners.js
+  if (typeof banners !== "undefined") {
+    danhSachBanner = banners;
   }
+  if (!danhSachBanner || danhSachBanner.length === 0) return;
 
-  /**
-   * Nạp dữ liệu trang chủ không gây lỗi CORS
-   */
-  /**
-   * Nạp dữ liệu trang chủ tự động từ data/store và LocalStorage
-   * (Cú pháp cơ bản, dễ hiểu, dễ giải thích khi báo cáo)
-   */
-  function loadHomeData() {
+  var khungChuaSlides = document.getElementById("dev1-carousel-slides");
+  var khungChuaDots = document.getElementById("dev1-carousel-dots");
+  if (!khungChuaSlides || !khungChuaDots) return;
 
-    var homeBanners = [];
-    if (typeof banners !== 'undefined') {
-      homeBanners = banners;
-    }
+  // Xóa nội dung mẫu cũ
+  khungChuaSlides.innerHTML = "";
+  khungChuaDots.innerHTML = "";
 
-    var flashSaleList = [];
-    if (typeof flashSale !== 'undefined' && flashSale.items) {
-      flashSaleList = flashSale.items;
-    }
+  // Tạo từng slide ảnh và từng chấm tròn
+  for (var i = 0; i < danhSachBanner.length; i++) {
+    var b = danhSachBanner[i];
 
-    var homeCategories = [];
-    if (typeof categories !== 'undefined') {
-      for (var i = 0; i < categories.length && i < 4; i++) {
-        var cat = categories[i];
-        homeCategories.push({
-          id: cat.id,
-          name: cat.name,
-          count: (cat.itemCount || 10) + "+ Sản phẩm",
-          icon: cat.icon || "🏅"
-        });
-      }
-    }
+    // Tạo thẻ div cho slide
+    var slideDiv = document.createElement("div");
+    slideDiv.className = "dev1-slide-item" + (i === 0 ? " active" : "");
+    slideDiv.style.backgroundImage = "url('" + (b.bg || "") + "')";
 
-    var allProducts = [];
-
-    if (typeof getStorage === 'function') {
-      allProducts = getStorage('sport_products', []);
-    }
-
-    if (allProducts.length === 0 && typeof products !== 'undefined') {
-      allProducts = products;
-    }
-
-    var bestSellerList = [];
-    for (var j = 0; j < allProducts.length; j++) {
-      var sp = allProducts[j];
-      if (sp.isHot === true) {
-        bestSellerList.push({
-          id: sp.id,
-          name: sp.name,
-          category: sp.category,
-          price: sp.salePrice || sp.price,
-          rating: sp.rating || 4.9,
-          image: sp.image,
-          badge: "HOT"
-        });
-      }
-      if (bestSellerList.length >= 6) {
-        break;
-      }
-    }
-
-    var newArrivalList = [];
-    for (var k = 0; k < allProducts.length; k++) {
-      var spMoi = allProducts[k];
-      if (spMoi.isNew === true) {
-        newArrivalList.push({
-          id: spMoi.id,
-          name: spMoi.name,
-          category: spMoi.category,
-          price: spMoi.salePrice || spMoi.price,
-          rating: spMoi.rating || 4.8,
-          image: spMoi.image,
-          badge: "NEW"
-        });
-      }
-      if (newArrivalList.length >= 6) {
-        break;
-      }
-    }
-
-    var homeTrendingTabs = [
-      {
-        tabId: "bestseller",
-        title: "Bán Chạy Nhất",
-        products: bestSellerList
-      },
-      {
-        tabId: "newarrival",
-        title: "Hàng Mới Về 2026",
-        products: newArrivalList
-      }
-    ];
-
-    renderHeroCarousel(homeBanners);
-    renderFlashSale(flashSaleList);
-    renderCategories(homeCategories);
-    initTrendingTabs(homeTrendingTabs);
-  }
-
-
-  /**
-   * 1. Render Hero Banner Carousel & Auto Slide
-   */
-  function renderHeroCarousel(banners) {
-    slidesData = banners;
-    var slidesContainer = document.getElementById('dev1-carousel-slides');
-    var dotsContainer = document.getElementById('dev1-carousel-dots');
-    if (!slidesContainer || !dotsContainer || banners.length === 0) return;
-
-    slidesContainer.innerHTML = '';
-    dotsContainer.innerHTML = '';
-
-    for (var idx = 0; idx < banners.length; idx++) {
-      var b = banners[idx];
-      var slideEl = document.createElement('div');
-      slideEl.className = 'dev1-slide-item ' + (idx === 0 ? 'active' : '');
-      slideEl.style.backgroundImage = "url('" + (b.bg || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1600") + "')";
-
-      var slideLink = getPageUrl(b.link || 'dev2_products.html');
-      slideEl.innerHTML = `
-        <div class="dev1-slide-overlay"></div>
-        <div class="dev1-slide-content">
-          <span class="sport-badge badge-cyan dev1-slide-badge">${b.badge || 'SPORT EXCLUSIVE'}</span>
-          <h1 class="dev1-slide-title">${b.title}</h1>
-          <p class="dev1-slide-sub">${b.subtitle}</p>
-          <div class="dev1-slide-tag-row">
-            <a href="${slideLink}" class="btn-sport btn-primary">${b.btnText || 'Khám Phá Ngay'}</a>
-            <span class="sport-badge badge-orange dev1-slide-tag-pill">${b.tag || 'HOT DEAL'}</span>
-          </div>
+    slideDiv.innerHTML = `
+      <div class="dev1-slide-overlay"></div>
+      <div class="dev1-slide-content">
+        <span class="sport-badge badge-cyan dev1-slide-badge">${b.badge || "SPORT"}</span>
+        <h1 class="dev1-slide-title">${b.title}</h1>
+        <p class="dev1-slide-sub">${b.subtitle}</p>
+        <div class="dev1-slide-tag-row">
+          <a href="pages/dev2_products.html" class="btn-sport btn-primary">${b.btnText || "Khám Phá"}</a>
+          <span class="sport-badge badge-orange dev1-slide-tag-pill">${b.tag || "HOT"}</span>
         </div>
-      `;
-      slidesContainer.appendChild(slideEl);
-
-      // Tạo dot indicator
-      (function (i) {
-        var dot = document.createElement('div');
-        dot.className = 'dev1-dot ' + (i === 0 ? 'active' : '');
-        dot.addEventListener('click', function () {
-          goToSlide(i);
-          restartSliderTimer();
-        });
-        dotsContainer.appendChild(dot);
-      })(idx);
-    }
-
-    // Gắn sự kiện nút Prev / Next
-    var prevBtn = document.getElementById('dev1-prev-slide');
-    var nextBtn = document.getElementById('dev1-next-slide');
-
-    if (prevBtn) {
-      prevBtn.addEventListener('click', function () {
-        goToSlide((currentSlideIndex - 1 + slidesData.length) % slidesData.length);
-        restartSliderTimer();
-      });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', function () {
-        goToSlide((currentSlideIndex + 1) % slidesData.length);
-        restartSliderTimer();
-      });
-    }
-
-    startSliderTimer();
-  }
-
-  function goToSlide(index) {
-    var slides = document.querySelectorAll('.dev1-slide-item');
-    var dots = document.querySelectorAll('.dev1-dot');
-    if (!slides.length) return;
-
-    for (var i = 0; i < slides.length; i++) {
-      slides[i].classList.remove('active');
-    }
-    for (var j = 0; j < dots.length; j++) {
-      dots[j].classList.remove('active');
-    }
-
-    currentSlideIndex = index;
-    if (slides[currentSlideIndex]) slides[currentSlideIndex].classList.add('active');
-    if (dots[currentSlideIndex]) dots[currentSlideIndex].classList.add('active');
-  }
-
-  function startSliderTimer() {
-    sliderTimer = setInterval(function () {
-      goToSlide((currentSlideIndex + 1) % slidesData.length);
-    }, 4500);
-  }
-
-  function restartSliderTimer() {
-    clearInterval(sliderTimer);
-    startSliderTimer();
-  }
-
-  /**
-   * 2. Flash Sale Countdown Timer
-   */
-  function initCountdownTimer() {
-    var totalSeconds = 8 * 3600 + 45 * 60 + 27;
-
-    var hoursEl = document.getElementById('dev1-hours');
-    var minutesEl = document.getElementById('dev1-minutes');
-    var secondsEl = document.getElementById('dev1-seconds');
-
-    if (!hoursEl || !minutesEl || !secondsEl) return;
-
-    setInterval(function () {
-      if (totalSeconds <= 0) return;
-      totalSeconds--;
-
-      var h = Math.floor(totalSeconds / 3600);
-      var m = Math.floor((totalSeconds % 3600) / 60);
-      var s = totalSeconds % 60;
-
-      hoursEl.textContent = String(h).padStart(2, '0');
-      minutesEl.textContent = String(m).padStart(2, '0');
-      secondsEl.textContent = String(s).padStart(2, '0');
-    }, 1000);
-  }
-
-  /**
-   * 3. Render sản phẩm Flash Sale
-   */
-  function renderFlashSale(items) {
-    var grid = document.getElementById('dev1-flash-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i];
-      var card = document.createElement('div');
-      card.className = 'dev1-flash-card';
-      var percentSold = Math.round((item.sold / item.stock) * 100);
-
-      card.innerHTML = `
-        <div class="dev1-card-media">
-          <img src="${item.image}" alt="${item.name}" loading="lazy">
-          <span class="dev1-card-discount-badge">${item.discount}</span>
-        </div>
-        <div class="dev1-card-body">
-          <div class="dev1-card-cat">${item.category}</div>
-          <h3 class="dev1-card-title">${item.name}</h3>
-          <div class="dev1-price-row">
-            <span class="dev1-sale-price">${formatCurrency(item.salePrice)}</span>
-            <span class="dev1-old-price">${formatCurrency(item.price)}</span>
-          </div>
-          <div class="dev1-progress-bar">
-            <div class="dev1-progress-fill" style="width: ${percentSold}%"></div>
-          </div>
-          <div class="dev1-flash-progress-meta">
-            <span>Đã bán: ${item.sold}</span>
-            <span>⭐ ${item.rating}</span>
-          </div>
-          <a href="${getPageUrl('dev3_details.html')}?id=${item.id}" class="btn-sport btn-accent dev1-btn-flash-buy dev1-btn-flash-buy-btn">Săn sale ngay</a>
-
-        </div>
-      `;
-      grid.appendChild(card);
-    }
-
-    // Sự kiện nút Săn Sale Ngay
-    var flashButtons = grid.querySelectorAll('.dev1-btn-flash-buy');
-    for (var k = 0; k < flashButtons.length; k++) {
-      flashButtons[k].addEventListener('click', function (e) {
-        var id = this.getAttribute('data-id');
-        var name = this.getAttribute('data-name');
-        var price = Number(this.getAttribute('data-price'));
-        var image = this.getAttribute('data-image');
-        addProductToCart({ id: id, name: name, price: price, image: image });
-        showToast('Đã săn sale món "' + name + '" thành công!', 'success');
-      });
-    }
-  }
-
-  /**
-   * 4. Render danh mục nổi bật
-   */
-  function renderCategories(categories) {
-    var catGrid = document.getElementById('dev1-cat-grid');
-    if (!catGrid) return;
-    catGrid.innerHTML = '';
-
-    for (var i = 0; i < categories.length; i++) {
-      var cat = categories[i];
-      var card = document.createElement('a');
-      card.href = getPageUrl('dev2_products.html');
-      card.className = 'dev1-cat-card';
-      card.innerHTML = `
-        <div class="dev1-cat-icon">${cat.icon}</div>
-        <div>
-          <div class="dev1-cat-title">${cat.name}</div>
-          <div class="dev1-cat-count">${cat.count}</div>
-        </div>
-      `;
-      catGrid.appendChild(card);
-    }
-  }
-
-  /**
-   * 5. Tab Trending Gears Switcher
-   */
-  function initTrendingTabs(tabs) {
-    trendingData = tabs;
-    var tabBtnsContainer = document.getElementById('dev1-tab-buttons');
-    if (!tabBtnsContainer || !tabs.length) return;
-    tabBtnsContainer.innerHTML = '';
-
-    for (var idx = 0; idx < tabs.length; idx++) {
-      (function (t, i) {
-        var btn = document.createElement('button');
-        btn.className = 'dev1-tab-btn ' + (i === 0 ? 'active' : '');
-        btn.textContent = t.title;
-        btn.addEventListener('click', function () {
-          var allBtns = document.querySelectorAll('.dev1-tab-btn');
-          for (var b = 0; b < allBtns.length; b++) {
-            allBtns[b].classList.remove('active');
-          }
-          btn.classList.add('active');
-          activeTabId = t.tabId;
-          renderTrendingProducts(t.products);
-        });
-        tabBtnsContainer.appendChild(btn);
-      })(tabs[idx], idx);
-    }
-
-    renderTrendingProducts(tabs[0].products);
-  }
-
-  function renderTrendingProducts(products) {
-    var grid = document.getElementById('dev1-trending-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    for (var i = 0; i < products.length; i++) {
-      var p = products[i];
-      var card = document.createElement('div');
-      card.className = 'dev1-gear-card';
-      card.innerHTML = `
-        <div class="dev1-card-media">
-          <img src="${p.image}" alt="${p.name}" loading="lazy">
-          <span class="sport-badge badge-cyan dev1-card-badge">${p.badge}</span>
-        </div>
-        <div class="dev1-card-body">
-          <div class="dev1-card-cat">${p.category}</div>
-          <h3 class="dev1-card-title">${p.name}</h3>
-          <div class="dev1-price-row">
-            <span class="dev1-sale-price">${formatCurrency(p.price)}</span>
-            <span class="dev1-rating-star">⭐ ${p.rating}</span>
-          </div>
-          <div class="dev1-card-btn-row">
-            <a href="${getPageUrl('dev3_details.html')}?id=${p.id}" class="btn-sport btn-outline dev1-card-btn-detail">Chi Tiết</a>
-            <button type="button" class="btn-sport btn-primary dev1-btn-add-cart dev1-card-btn-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">+ Giỏ</button>
-          </div>
-        </div>
-      `;
-      grid.appendChild(card);
-    }
-
-    // Gắn sự kiện nút + Giỏ
-    var addButtons = grid.querySelectorAll('.dev1-btn-add-cart');
-    for (var k = 0; k < addButtons.length; k++) {
-      addButtons[k].addEventListener('click', function (e) {
-        var id = this.getAttribute('data-id');
-        var name = this.getAttribute('data-name');
-        var price = Number(this.getAttribute('data-price'));
-        var image = this.getAttribute('data-image');
-        addProductToCart({ id: id, name: name, price: price, image: image });
-        showToast('Đã thêm "' + name + '" vào giỏ hàng!', 'success');
-      });
-    }
-  }
-
-  /**
-   * Thêm sản phẩm vào giỏ hàng LocalStorage & cập nhật Badge Header
-   */
-  function addProductToCart(product) {
-    try {
-      var cartKey = 'sport_cart';
-      var raw = localStorage.getItem(cartKey);
-      var cart = raw ? JSON.parse(raw) : [];
-
-      var found = false;
-      for (var i = 0; i < cart.length; i++) {
-        if (String(cart[i].id) === String(product.id)) {
-          cart[i].quantity = (Number(cart[i].quantity) || 1) + 1;
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) {
-        cart.push({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          quantity: 1
-        });
-      }
-
-      localStorage.setItem(cartKey, JSON.stringify(cart));
-      updateCartCountBadge();
-    } catch (err) {
-      console.warn('Lỗi ghi giỏ hàng:', err);
-    }
-  }
-
-  function updateCartCountBadge() {
-    try {
-      var cartKey = 'sport_cart';
-      var raw = localStorage.getItem(cartKey);
-      var cart = raw ? JSON.parse(raw) : [];
-      var total = 0;
-      for (var i = 0; i < cart.length; i++) {
-        total += Number(cart[i].quantity) || 1;
-      }
-      var badge = document.getElementById('header-cart-badge-count');
-      if (badge) {
-        badge.textContent = total;
-      }
-    } catch (e) {}
-  }
-
-  /**
-   * 6. Newsletter Form Validation & Toast
-   */
-  function initNewsletterForm() {
-    var form = document.getElementById('dev1-nl-form');
-    var emailInput = document.getElementById('dev1-email-input');
-    if (!form || !emailInput) return;
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var email = emailInput.value.trim();
-      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailRegex.test(email)) {
-        showToast('Vui lòng nhập định dạng email hợp lệ!', 'error');
-        emailInput.focus();
-        return;
-      }
-
-      showToast('Đăng ký thành công! Mã SPORT2026 đã gửi tới ' + email, 'success');
-      form.reset();
-    });
-  }
-
-  /**
-   * Format tiền VNĐ
-   */
-  function formatCurrency(num) {
-    return Number(num).toLocaleString('vi-VN') + ' ₫';
-  }
-
-  /**
-   * Hiển thị Toast Notification góc phải màn hình
-   */
-  function showToast(message, type) {
-    if (!type) type = 'success';
-    var container = document.getElementById('sport-toast-container');
-    if (!container) return;
-
-    var toast = document.createElement('div');
-    toast.className = 'sport-toast ' + type;
-    var icon = type === 'success' ? '✔' : type === 'error' ? '✖' : 'ℹ';
-
-    toast.innerHTML = `
-      <div class="sport-toast-item-inner">
-        <span class="sport-toast-icon">${icon}</span>
-        <span>${message}</span>
       </div>
-      <button class="sport-toast-close-btn">&times;</button>
     `;
+    khungChuaSlides.appendChild(slideDiv);
 
-    toast.querySelector('button').addEventListener('click', function () {
-      toast.remove();
-    });
-
-    container.appendChild(toast);
-    setTimeout(function () {
-      if (toast.parentElement) toast.remove();
-    }, 3500);
+    // Tạo chấm tròn (dot)
+    var dotSpan = document.createElement("div");
+    dotSpan.className = "dev1-dot" + (i === 0 ? " active" : "");
+    dotSpan.setAttribute("data-index", i);
+    // Khi bấm vào chấm tròn thì nhảy tới slide đó
+    dotSpan.onclick = function () {
+      var viTri = Number(this.getAttribute("data-index"));
+      hienThiSlide(viTri);
+    };
+    khungChuaDots.appendChild(dotSpan);
   }
 
-})();
+  // Nút bấm lùi lại (❮)
+  var nutPrev = document.getElementById("dev1-prev-slide");
+  if (nutPrev) {
+    nutPrev.onclick = function () {
+      var viTriMoi = slideHienTai - 1;
+      if (viTriMoi < 0) viTriMoi = danhSachBanner.length - 1;
+      hienThiSlide(viTriMoi);
+    };
+  }
+
+  // Nút bấm tiến tới (❯)
+  var nutNext = document.getElementById("dev1-next-slide");
+  if (nutNext) {
+    nutNext.onclick = function () {
+      var viTriMoi = slideHienTai + 1;
+      if (viTriMoi >= danhSachBanner.length) viTriMoi = 0;
+      hienThiSlide(viTriMoi);
+    };
+  }
+
+  // Thiết lập tự động nhảy slide sau mỗi 4.5 giây
+  batDauTuDongChaySlide();
+}
+
+// Hàm đổi class active cho slide và dot đang chọn
+function hienThiSlide(viTri) {
+  slideHienTai = viTri;
+
+  var tatCaSlides = document.querySelectorAll(".dev1-slide-item");
+  var tatCaDots = document.querySelectorAll(".dev1-dot");
+
+  for (var i = 0; i < tatCaSlides.length; i++) {
+    tatCaSlides[i].classList.remove("active");
+  }
+  for (var j = 0; j < tatCaDots.length; j++) {
+    tatCaDots[j].classList.remove("active");
+  }
+
+  if (tatCaSlides[slideHienTai]) tatCaSlides[slideHienTai].classList.add("active");
+  if (tatCaDots[slideHienTai]) tatCaDots[slideHienTai].classList.add("active");
+
+  // Khởi động lại đồng hồ đếm 4.5s sau khi người dùng bấm nút
+  batDauTuDongChaySlide();
+}
+
+function batDauTuDongChaySlide() {
+  clearInterval(timerTuDongChay);
+  timerTuDongChay = setInterval(function () {
+    var viTriTiepTheo = slideHienTai + 1;
+    if (viTriTiepTheo >= danhSachBanner.length) viTriTiepTheo = 0;
+    hienThiSlide(viTriTiepTheo);
+  }, 4500);
+}
+
+
+// ==============================================================================
+// CHỨC NĂNG 2: ĐỒNG HỒ ĐẾM NGƯỢC & DANH SÁCH FLASH SALE
+// ==============================================================================
+function khoiTaoDongHoFlashSale() {
+  // Đặt thời gian đếm ngược: 8 tiếng 45 phút 27 giây
+  var tongSoGiay = 8 * 3600 + 45 * 60 + 27;
+
+  var oGio = document.getElementById("dev1-hours");
+  var oPhut = document.getElementById("dev1-minutes");
+  var oGiay = document.getElementById("dev1-seconds");
+
+  if (!oGio || !oPhut || !oGiay) return;
+
+  setInterval(function () {
+    if (tongSoGiay <= 0) return;
+    tongSoGiay--;
+
+    var h = Math.floor(tongSoGiay / 3600);
+    var m = Math.floor((tongSoGiay % 3600) / 60);
+    var s = tongSoGiay % 60;
+
+    // Định dạng luôn có 2 chữ số (VD: 08:05:09)
+    oGio.textContent = (h < 10 ? "0" : "") + h;
+    oPhut.textContent = (m < 10 ? "0" : "") + m;
+    oGiay.textContent = (s < 10 ? "0" : "") + s;
+  }, 1000);
+}
+
+function hienThiSanPhamFlashSale() {
+  var dsSale = [];
+  if (typeof flashSale !== "undefined" && flashSale.items) {
+    dsSale = flashSale.items;
+  }
+
+  var khungFlashSale = document.getElementById("dev1-flash-grid");
+  if (!khungFlashSale) return;
+  khungFlashSale.innerHTML = "";
+
+  for (var i = 0; i < dsSale.length; i++) {
+    var item = dsSale[i];
+    var phanTramDaBan = Math.round((item.sold / item.stock) * 100);
+
+    var cardDiv = document.createElement("div");
+    cardDiv.className = "dev1-flash-card";
+    cardDiv.innerHTML = `
+      <div class="dev1-card-media">
+        <img src="${item.image}" alt="${item.name}" loading="lazy">
+        <span class="dev1-card-discount-badge">${item.discount}</span>
+      </div>
+      <div class="dev1-card-body">
+        <div class="dev1-card-cat">${item.category}</div>
+        <h3 class="dev1-card-title">${item.name}</h3>
+        <div class="dev1-price-row">
+          <span class="dev1-sale-price">${dinhDangTien(item.salePrice)}</span>
+          <span class="dev1-old-price">${dinhDangTien(item.price)}</span>
+        </div>
+        <div class="dev1-progress-bar">
+          <div class="dev1-progress-fill" style="width: ${phanTramDaBan}%"></div>
+        </div>
+        <div class="dev1-flash-progress-meta">
+          <span>Đã bán: ${item.sold}</span>
+          <span>⭐ ${item.rating}</span>
+        </div>
+        <!-- Bấm Săn sale ngay sẽ dẫn sang trang sản phẩm mở món này -->
+        <a href="pages/dev2_products.html?id=${item.id}" class="btn-sport btn-accent dev1-btn-flash-buy">Săn sale ngay</a>
+      </div>
+    `;
+    khungFlashSale.appendChild(cardDiv);
+  }
+}
+
+
+// ==============================================================================
+// CHỨC NĂNG 3: 4 DANH MỤC THỂ THAO TIÊU BIỂU
+// ==============================================================================
+function hienThiDanhMucTieuBieu() {
+  var dsDanhMuc = [];
+  if (typeof categories !== "undefined") {
+    dsDanhMuc = categories;
+  }
+
+  var khungDanhMuc = document.getElementById("dev1-cat-grid");
+  if (!khungDanhMuc) return;
+  khungDanhMuc.innerHTML = "";
+
+  // Lấy tối đa 4 danh mục để hiển thị đẹp trên trang chủ
+  for (var i = 0; i < dsDanhMuc.length && i < 4; i++) {
+    var c = dsDanhMuc[i];
+    var theDiv = document.createElement("a");
+    theDiv.href = "pages/dev2_products.html";
+    theDiv.className = "dev1-cat-card";
+    theDiv.innerHTML = `
+      <div class="dev1-cat-icon">${c.icon || "🏅"}</div>
+      <div>
+        <div class="dev1-cat-title">${c.name}</div>
+        <div class="dev1-cat-count">${c.itemCount || 10}+ Sản phẩm</div>
+      </div>
+    `;
+    khungDanhMuc.appendChild(theDiv);
+  }
+}
+
+
+// ==============================================================================
+// CHỨC NĂNG 4: TAB TRANG BỊ XU HƯỚNG ("Bán chạy nhất" & "Hàng mới về")
+// ==============================================================================
+function khoiTaoTabTrangBiXuHuong() {
+  // 1. Đọc tất cả sản phẩm từ LocalStorage hoặc file products.js
+  var tatCaSanPham = [];
+  try {
+    var raw = localStorage.getItem("sport_products");
+    if (raw) tatCaSanPham = JSON.parse(raw);
+  } catch (e) {
+    tatCaSanPham = [];
+  }
+  if (!tatCaSanPham || tatCaSanPham.length === 0) {
+    if (typeof products !== "undefined") tatCaSanPham = products;
+  }
+
+  // 2. Lọc ra danh sách Bán chạy nhất (isHot == true)
+  var dsBanChay = [];
+  for (var i = 0; i < tatCaSanPham.length; i++) {
+    if (tatCaSanPham[i].isHot === true) {
+      dsBanChay.push(tatCaSanPham[i]);
+    }
+  }
+
+  // 3. Lọc ra danh sách Hàng mới về (isNew == true)
+  var dsHangMoi = [];
+  for (var j = 0; j < tatCaSanPham.length; j++) {
+    if (tatCaSanPham[j].isNew === true) {
+      dsHangMoi.push(tatCaSanPham[j]);
+    }
+  }
+
+  // Khung chứa 2 nút tab
+  var khungNutTab = document.getElementById("dev1-tab-buttons");
+  if (!khungNutTab) return;
+  khungNutTab.innerHTML = `
+    <button type="button" class="dev1-tab-btn active" id="btn-tab-bestseller">Bán Chạy Nhất</button>
+    <button type="button" class="dev1-tab-btn" id="btn-tab-newarrival">Hàng Mới Về 2026</button>
+  `;
+
+  var btnBanChay = document.getElementById("btn-tab-bestseller");
+  var btnHangMoi = document.getElementById("btn-tab-newarrival");
+
+  // Sự kiện khi bấm tab "Bán Chạy Nhất"
+  btnBanChay.onclick = function () {
+    btnBanChay.classList.add("active");
+    btnHangMoi.classList.remove("active");
+    veDanhSachSanPhamTrending(dsBanChay);
+  };
+
+  // Sự kiện khi bấm tab "Hàng Mới Về"
+  btnHangMoi.onclick = function () {
+    btnHangMoi.classList.add("active");
+    btnBanChay.classList.remove("active");
+    veDanhSachSanPhamTrending(dsHangMoi);
+  };
+
+  // Mặc định ban đầu vẽ danh sách Bán chạy
+  veDanhSachSanPhamTrending(dsBanChay);
+}
+
+// Hàm vẽ các thẻ sản phẩm ra lưới
+function veDanhSachSanPhamTrending(danhSach) {
+  var khungLưới = document.getElementById("dev1-trending-grid");
+  if (!khungLưới) return;
+  khungLưới.innerHTML = "";
+
+  if (!danhSach || danhSach.length === 0) {
+    khungLưới.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:30px; color:#64748b;">Chưa có sản phẩm nào.</p>';
+    return;
+  }
+
+  // Giới hạn hiển thị tối đa 6 sản phẩm cho đẹp
+  for (var i = 0; i < danhSach.length && i < 6; i++) {
+    var sp = danhSach[i];
+    var theDiv = document.createElement("div");
+    theDiv.className = "dev1-gear-card";
+
+    theDiv.innerHTML = `
+      <div class="dev1-card-media">
+        <img src="${sp.image}" alt="${sp.name}" loading="lazy">
+        <span class="sport-badge badge-cyan dev1-card-badge">${sp.badge || "HOT"}</span>
+      </div>
+      <div class="dev1-card-body">
+        <div class="dev1-card-cat">${sp.category || "Thể Thao"}</div>
+        <h3 class="dev1-card-title">${sp.name}</h3>
+        <div class="dev1-price-row">
+          <span class="dev1-sale-price">${dinhDangTien(sp.salePrice || sp.price)}</span>
+          <span class="dev1-rating-star">⭐ ${sp.rating || 5.0}</span>
+        </div>
+        <div class="dev1-card-btn-row">
+          <!-- Nút Chi Tiết: Chuyển sang dev2_products.html mở đúng id này -->
+          <a href="pages/dev2_products.html?id=${sp.id}" class="btn-sport btn-outline dev1-card-btn-detail" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">Chi Tiết</a>
+
+          <!-- Nút + Giỏ: Gọi hàm thêm nhanh vào giỏ hàng -->
+          <button type="button" class="btn-sport btn-primary dev1-card-btn-cart" onclick="themVaoGioTrangChu('${sp.id}')">+ Giỏ</button>
+        </div>
+      </div>
+    `;
+    khungLưới.appendChild(theDiv);
+  }
+}
+
+
+// ==============================================================================
+// CHỨC NĂNG 5: HÀM TOÀN CỤC THÊM VÀO GIỎ HÀNG TỪ TRANG CHỦ
+// ==============================================================================
+window.themVaoGioTrangChu = function (idSanPham) {
+  // 1. Tìm sản phẩm trong danh sách
+  var tatCa = [];
+  try {
+    var raw = localStorage.getItem("sport_products");
+    if (raw) tatCa = JSON.parse(raw);
+  } catch (e) {
+    tatCa = [];
+  }
+  if (!tatCa || tatCa.length === 0) {
+    if (typeof products !== "undefined") tatCa = products;
+  }
+
+  var spDuocChon = null;
+  for (var i = 0; i < tatCa.length; i++) {
+    if (String(tatCa[i].id) === String(idSanPham)) {
+      spDuocChon = tatCa[i];
+      break;
+    }
+  }
+
+  if (!spDuocChon) {
+    showToast("Không tìm thấy sản phẩm này!", "danger");
+    return;
+  }
+
+  // 2. Chuẩn bị thông tin sản phẩm
+  var monHang = {
+    id: spDuocChon.id,
+    name: spDuocChon.name,
+    price: spDuocChon.salePrice || spDuocChon.price || 0,
+    image: spDuocChon.image,
+    size: "Tiêu chuẩn",
+    color: "Mặc định",
+    stock: spDuocChon.stock || 50
+  };
+
+  // 3. Gọi hàm addToCart chuẩn của common.js (có kiểm tra đăng nhập & nhảy số Header)
+  if (typeof addToCart === "function") {
+    var thanhCong = addToCart(monHang, 1);
+    if (thanhCong && typeof updateCartBadge === "function") {
+      updateCartBadge();
+    }
+  } else {
+    alert("Đã thêm [" + monHang.name + "] vào giỏ hàng!");
+  }
+};
+
+
+// ==============================================================================
+// CHỨC NĂNG 6: FORM ĐĂNG KÝ NHẬN BẢN TIN (NEWSLETTER)
+// ==============================================================================
+function khoiTaoFormDangKyNhanTin() {
+  var form = document.getElementById("dev1-nl-form");
+  var inputEmail = document.getElementById("dev1-email-input");
+  if (!form || !inputEmail) return;
+
+  form.onsubmit = function (e) {
+    e.preventDefault(); // Chặn việc tải lại trang web
+    var email = inputEmail.value.trim();
+
+    if (!email || email.indexOf("@") === -1) {
+      showToast("Vui lòng nhập địa chỉ email hợp lệ!", "danger");
+      inputEmail.focus();
+      return;
+    }
+
+    showToast("Đăng ký thành công! Mã ưu đãi SPORT2026 đã gửi tới " + email, "success");
+    form.reset();
+  };
+}

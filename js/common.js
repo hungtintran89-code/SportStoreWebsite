@@ -171,7 +171,7 @@ function updateCartBadge() {
  * 8. HÀM HIỂN THỊ THÔNG BÁO NHẸ GÓC MÀN HÌNH (TOAST NOTIFICATION)
  * Dùng đúng class .sport-toast-container và .sport-toast của common.css mới
  */
-function showToast(message, type = "info") {
+function showToast(message, type = "info" ) {
   let container = document.getElementById("toast-container");
   if (!container) {
     container = document.createElement("div");
