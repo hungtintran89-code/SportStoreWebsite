@@ -479,62 +479,11 @@ function moChiTietSanPham( productId ){
     var stockEl = document.getElementById("qv-stock");
     var btnThemVaoGio = document.querySelector(".qv-btn-add");
     var btnMuaNgay = document.querySelector(".qv-btn-buy");
+    var btnColor = document.getElementById("qv-colors-box");
+    var btnSize = document.getElementById("qv-sizes-box");
     var oNhapSoLuong = document.getElementById("qv-quantity-input");
-    var btnColor = document.getElementById("qv-color-group");
-    var btnSize = document.getElementById("qv-size-group");
+    var pickerSoLuong = document.querySelector(".qv-qty-picker");
 
-    // TRƯỜNG HỢP 1: HẾT HÀNG
-    if (stockCount <= 0) {
-        stockEl.textContent = "Tạm hết hàng";
-        stockEl.style.color = "#ef4444";
-        // Khóa nút Thêm vào giỏ
-        if (btnThemVaoGio) {
-            btnThemVaoGio.disabled = true;
-            btnThemVaoGio.style.opacity = "0.5"; // Làm mờ nút
-            btnThemVaoGio.style.cursor = "not-allowed"; // Hiện con trỏ cấm
-            btnThemVaoGio.textContent = "Tạm Hết Hàng";
-        }
-        // Khóa nút Mua ngay
-        if (btnMuaNgay) {
-            btnMuaNgay.disabled = true;
-            btnMuaNgay.style.opacity = "0.5";
-            btnMuaNgay.style.cursor = "not-allowed";
-        }
-        if (btnColor) {
-            btnColor.disabled = true;
-            btnColor.style.opacity = "0.5";
-            btnColor.style.cursor = "not-allowed";
-        }
-        if (btnSize) {
-            btnSize.disabled = true;
-            btnSize.style.opacity = "0.5";
-            btnSize.style.cursor = "not-allowed";
-        }
-        if (oNhapSoLuong){
-            oNhapSoLuong.disabled = true;
-            oNhapSoLuong.style.opacity = "0.5"; // Làm mờ nút
-            oNhapSoLuong.style.cursor = "not-allowed" ;
-            oNhapSoLuong.value = 0; // Đưa số lượng về 0
-        }
-        // TRƯỜNG HỢP 2: CÒN HÀNG
-    } else {
-        stockEl.textContent = "Còn hàng (" + stockCount + " món)";
-        stockEl.style.color = "#16a34a";
-        // Mở khóa lại nút Thêm vào giỏ
-        if (btnThemVaoGio) {
-            btnThemVaoGio.disabled = false;
-            btnThemVaoGio.style.opacity = "1";
-            btnThemVaoGio.style.cursor = "pointer";
-            btnThemVaoGio.textContent = "🛒 Thêm Vào Giỏ";
-        }
-        // Mở khóa lại nút Mua ngay
-        if (btnMuaNgay) {
-            btnMuaNgay.disabled = false;
-            btnMuaNgay.style.opacity = "1";
-            btnMuaNgay.style.cursor = "pointer";
-        }
-        if (oNhapSoLuong) oNhapSoLuong.value = 1;
-    }
 
     //Điền mô tả
     document.getElementById("qv-desc").textContent = sanPhamDangXem.desc || "Sản phẩm thể thao cao cấp chính hãng, tối ưu hóa độ bền và hiệu năng tập luyện thi đấu đỉnh cao.";
@@ -575,6 +524,74 @@ function moChiTietSanPham( productId ){
         };
         colorsBox.appendChild(btn);
     });
+
+    // TRƯỜNG HỢP 1: HẾT HÀNG
+    if (stockCount <= 0) {
+        stockEl.textContent = "Tạm hết hàng";
+        stockEl.style.color = "#ef4444";
+        // Khóa nút Thêm vào giỏ
+        if (btnThemVaoGio) {
+            btnThemVaoGio.disabled = true;
+            btnThemVaoGio.style.opacity = "0.5";
+            btnThemVaoGio.style.cursor = "not-allowed";
+            btnThemVaoGio.textContent = "Tạm Hết Hàng";
+        }
+        // Khóa nút Mua ngay
+        if (btnMuaNgay) {
+            btnMuaNgay.disabled = true;
+            btnMuaNgay.style.opacity = "0.5";
+            btnMuaNgay.style.cursor = "not-allowed";
+        }
+        if (btnColor) {
+            btnColor.disabled = true;
+            btnColor.style.opacity = "0.5";
+            btnColor.style.cursor = "not-allowed";
+        }
+        if (btnSize) {
+            btnSize.disabled = true;
+            btnSize.style.opacity = "0.5";
+            btnSize.style.cursor = "not-allowed";
+        }
+        if (pickerSoLuong) {
+            pickerSoLuong.style.opacity = "0.5";
+            pickerSoLuong.style.pointerEvents = "none";
+        }
+        if (oNhapSoLuong){
+            oNhapSoLuong.value = 0;
+        }
+        // TRƯỜNG HỢP 2: CÒN HÀNG
+    } else {
+        stockEl.textContent = "Còn hàng (" + stockCount + " món)";
+        stockEl.style.color = "#16a34a";
+        // Mở khóa lại nút Thêm vào giỏ
+        if (btnThemVaoGio) {
+            btnThemVaoGio.disabled = false;
+            btnThemVaoGio.style.opacity = "1";
+            btnThemVaoGio.style.cursor = "pointer";
+            btnThemVaoGio.textContent = "🛒 Thêm Vào Giỏ";
+        }
+        // Mở khóa lại nút Mua ngay
+        if (btnMuaNgay) {
+            btnMuaNgay.disabled = false;
+            btnMuaNgay.style.opacity = "1";
+            btnMuaNgay.style.cursor = "pointer";
+        }
+        if (btnColor) {
+            btnColor.disabled = false;
+            btnColor.style.opacity = "1";
+            btnColor.style.cursor = "pointer";
+        }
+        if (btnSize) {
+            btnSize.disabled = false;
+            btnSize.style.opacity = "1";
+            btnSize.style.cursor = "pointer";
+        }
+        if (oNhapSoLuong){
+            oNhapSoLuong.disabled = false;
+            oNhapSoLuong.style.opacity = "1"; // Làm mờ nút
+            oNhapSoLuong.value = 1;
+        }
+    }
 
     // Đặt lại số lượng về 1 và hiện Modal
     document.getElementById("qv-quantity-input").value = 1;
