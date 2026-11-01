@@ -1,15 +1,4 @@
 /**
- * ==============================================================================
- * SPORTSTORE - TAB 2: QUẢN LÝ KHÁCH HÀNG (TAB-CUSTOMER.JS)
- * Chuẩn Bareme SGU (0.75 Điểm):
- *  - Hiển thị bảng khách hàng (Mã, Tên, Email, SĐT, Trạng thái)
- *  - Nút onclick="resetPassword(id)": Đặt mật khẩu về 123456, hiện alert thông báo
- *  - Nút onclick="toggleLockUser(id)": Đổi trạng thái "Đang hoạt động" <-> "Bị khóa"
- *  - Lưu và đọc trực tiếp từ LocalStorage
- * ==============================================================================
- */
-
-/**
  * Vẽ bảng danh sách khách hàng từ LocalStorage
  */
 function renderCustomerTable() {

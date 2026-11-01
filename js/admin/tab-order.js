@@ -30,7 +30,7 @@ function renderOrderTable() {
 
   tbody.innerHTML = "";
 
-  for (var i = 0; i < orders.length; i++) {
+  for (var i = orders.length -1; i >= 0 ; i--) {
     var o = orders[i];
 
     // Lọc theo trạng thái
@@ -62,15 +62,15 @@ function renderOrderTable() {
     tr.innerHTML = `
       <td><strong class="text-primary">#${o.orderId}</strong></td>
       <td>
-        <div class="item-title">${o.customer}</div>
+        <div class="item-title">${o.customer.name}</div>
         <div class="item-code">SĐT: ${o.phone}</div>
       </td>
-      <td>${formatDateVN(o.date)}</td>
+      <td>${formatDateVN(o.createdAt)}</td>
       <td class="col-summary">
         <div>${productSummary}</div>
       </td>
       <td><strong class="text-primary">${formatVND(o.total)}</strong></td>
-      <td><span class="nav-badge badge-gray">${o.payment || "Tiền mặt"}</span></td>
+      <td><span class="nav-badge badge-gray">${o.paymentMethod || "Tiền mặt"}</span></td>
       <td>${statusSelectHtml}</td>
       <td>
         <button type="button" class="btn-action btn-edit" onclick="viewOrderDetail('${o.orderId}')" title="Xem chi tiết các mặt hàng & địa chỉ">

@@ -363,7 +363,7 @@
               >
                 <!-- 1. Tiền mặt COD (Mặc định) -->
                 <label class="d4-pay-option selected">
-                  <input type="radio" name="payment" value="COD" checked />
+                  <input type="radio" name="payment" value="COD" checked onclick="chonPhuongThuc(this.value)"/>
                   <span>
                     <strong>Thanh toán tiền mặt khi nhận hàng (COD)</strong>
                     <em class="d4-tag">Mặc định</em>
@@ -375,7 +375,7 @@
 
                 <!-- 2. Chuyển khoản QR -->
                 <label class="d4-pay-option">
-                  <input type="radio" name="payment" value="QR" />
+                  <input type="radio" name="payment" value="QR" onclick="chonPhuongThuc(this.value)"/>
                   <span>
                     <strong>Chuyển khoản ngân hàng (VietQR)</strong>
                     <em class="d4-tag">Tiện lợi</em>
@@ -398,7 +398,7 @@
 
                 <!-- 3. Thanh toán trực tuyến (ONLINE) -->
                 <label class="d4-pay-option">
-                  <input type="radio" name="payment" value="ONLINE" />
+                  <input type="radio" name="payment" value="ONLINE" onclick="chonPhuongThuc(this.value)" />
                   <span>
                     <strong
                       >Thanh toán trực tuyến (Thẻ ATM / Visa /
@@ -602,7 +602,9 @@
     <!-- NẠP DỮ LIỆU STORE & ĐỒNG BỘ LOCALSTORAGE -->
     <script src="../data/store/customers.js"></script>
     <script src="../data/store/orders.js"></script>
-    <script src="../data/store/init-storage.js"></script>
+    <script src="../js/admin/init-storage.js"></script>
+    <script src="../data/store/orderItem.js"></script>
+
 
     <!-- NHÚNG SCRIPT QUẢN LÝ ĐĂNG NHẬP Ở CUỐI TRANG -->
     <script src="../js/auth_modal.js"></script>

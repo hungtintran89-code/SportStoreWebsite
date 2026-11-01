@@ -206,7 +206,6 @@ function themNhanhVaoGio(productCode) {
     }
 }
 
-
 function resetAllFilters() {
     if (document.getElementById("searchInput")) document.getElementById("searchInput").value = "";
     if (document.getElementById("advNameInput")) document.getElementById("advNameInput").value = "";
@@ -223,7 +222,6 @@ function resetAllFilters() {
     ignoreUrlSale = true;
     applyAdvancedFilters();
 }
-
 
 function renderPagination() {
     let paginationBox = document.getElementById("pagination");

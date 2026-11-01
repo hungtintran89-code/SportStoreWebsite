@@ -240,7 +240,7 @@ function chonPhuongThuc(loai) {
 
 // --- 7. KIỂM TRA LỖI VÀ ĐẶT HÀNG ---
 function datHang(e) {
-  if (e) e.preventDefault(); // Ngăn trình duyệt tự load lại trang khi bấm submit form
+  if (e) e.preventDefault();
 
   let nguoiDung = getCurrentUser();
   if (!nguoiDung) {
@@ -340,28 +340,39 @@ function datHang(e) {
 
   // Tạo mã đơn hàng tự động tăng, ví dụ: DH-0001, DH-0002...
   let maDonMoi = "DH-" + String(danhSachDonHang.length + 1).padStart(4, "0");
-  let maKhachHang = nguoiDung.customerId || nguoiDung.id || "KHACH";
+
+  // Tạo orderItem list
+  let orderItemList = []
+  for( let i = 0 ; i < danhSachGioHang.length  ;i++){
+    orderItemList.push({
+      id : i + 1 ,
+      orderItemId : maDonMoi +`-${i+1}` ,
+      orderId : maDonMoi ,
+      productId : danhSachGioHang[i].productId ,
+      code: "SP-" + danhSachGioHang[i].id,
+      name : danhSachGioHang[i].name ,
+      color : danhSachGioHang[i].color ,
+      quantity : danhSachGioHang[i].quantity ,
+      size : danhSachGioHang[i].size ,
+      price : danhSachGioHang[i].price ,
+      total : danhSachGioHang[i].total ,
+      image : danhSachGioHang[i].image
+    })
+  }
 
   let donHangMoi = {
     orderId: maDonMoi,
     id: maDonMoi,
-    customerId: maKhachHang,
+    customerId: nguoiDung.id ,
     createdAt: new Date().toISOString(),
     status: "pending",
-    items: danhSachGioHang,
+    items: orderItemList,
     subtotal: tongTien,
     discount: 0,
     shippingFee: 0,
     total: tongTien,
-    paymentMethod: phuongThucThanhToan,
-    customer: {
-      fullName: hoTen,
-      phone: sdt,
-      email: email,
-      province: tinhThanh,
-      address: diaChi,
-      note: ghiChu
-    }
+    paymentMethod: phuongThucThanhToan ,
+    customer: nguoiDung ,
   };
 
   // Lưu đơn vào mảng đơn hàng trong localStorage
@@ -464,14 +475,6 @@ function khoiTaoTrang() {
   let btnSuaDiaChi = document.getElementById("d4EditAddr");
   if (btnSuaDiaChi) {
     btnSuaDiaChi.onclick = function() { chonCheDoDiaChi("new"); };
-  }
-
-  // Gắn sự kiện click cho các nút chọn phương thức thanh toán
-  let danhSachRadioThanhToan = document.querySelectorAll('#d4PayList input[name="payment"]');
-  for (let i = 0; i < danhSachRadioThanhToan.length; i++) {
-    danhSachRadioThanhToan[i].onclick = function() {
-      chonPhuongThuc(this.value);
-    };
   }
 
   // Gắn sự kiện submit form khi người dùng bấm nút "Xác nhận đặt hàng"
