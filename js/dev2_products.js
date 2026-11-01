@@ -155,7 +155,7 @@ function renderProducts() {
                     <h4>${product.name}</h4>
                 </a>
                 
-                <div class="product-price">${formattedPrice} ₫ ${originalPriceHtml}</div>
+                <div class="product-price">${formattedPrice}${originalPriceHtml}</div>
                 
                 <div style="display: flex; gap: 8px; margin-top: auto;">
                     <!-- Nút Xem chi tiết: Bật Popup Chi Tiết -->
