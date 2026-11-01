@@ -174,28 +174,33 @@
         <!-- 1. CỘT MENU BÊN TRÁI (SIDEBAR) -->
         <aside class="dev5-sidebar" aria-label="Menu tài khoản">
           <div class="dev5-sidebar-title">TÀI KHOẢN CỦA TÔI</div>
-          <button
-                  class="dev5-tab is-active"
-                  type="button"
-                  data-tab="overview"
-          >
+
+          <!-- Tab 1: Tổng quan -->
+          <button class="dev5-tab is-active" type="button" data-tab="overview" onclick="chuyenTab('overview')">
             <span class="dev5-tab-icon">📊</span><span>Tổng quan</span>
           </button>
-          <button class="dev5-tab" type="button" data-tab="orders">
+
+          <!-- Tab 2: Đơn mua -->
+          <button class="dev5-tab" type="button" data-tab="orders" onclick="chuyenTab('orders')">
             <span class="dev5-tab-icon">📦</span><span>Đơn mua</span>
           </button>
-          <button class="dev5-tab" type="button" data-tab="addresses">
+
+          <!-- Tab 3: Sổ địa chỉ -->
+          <button class="dev5-tab" type="button" data-tab="addresses" onclick="chuyenTab('addresses')">
             <span class="dev5-tab-icon">📍</span><span>Sổ địa chỉ</span>
           </button>
-          <button class="dev5-tab" type="button" data-tab="wishlist">
-                <span class="dev5-tab-icon">❤️</span
-                ><span>Sản phẩm yêu thích</span>
+
+          <!-- Tab 4: Yêu thích -->
+          <button class="dev5-tab" type="button" data-tab="wishlist" onclick="chuyenTab('wishlist')">
+            <span class="dev5-tab-icon">❤️</span><span>Sản phẩm yêu thích</span>
           </button>
-          <button class="dev5-tab" type="button" data-tab="faq">
-                <span class="dev5-tab-icon">🛡️</span
-                ><span>FAQ &amp; Bảo hành</span>
+
+          <!-- Tab 5: FAQ & Bảo hành -->
+          <button class="dev5-tab" type="button" data-tab="faq" onclick="chuyenTab('faq')">
+            <span class="dev5-tab-icon">🛡️</span><span>FAQ &amp; Bảo hành</span>
           </button>
         </aside>
+
 
         <!-- 2. KHU VỰC NỘI DUNG CÁC TAB BÊN PHẢI -->
         <div class="dev5-content">
@@ -207,79 +212,42 @@
                 <h2>Thông tin hội viên</h2>
               </div>
               <div class="dev5-heading-actions">
-                <button
-                        class="dev5-secondary-button dev5-hidden"
-                        type="button"
-                        data-edit-profile-btn
-                >
+                <button class="dev5-secondary-button" type="button" data-edit-profile-btn onclick="moFormSuaHoSo()">
                   ✏️ Chỉnh sửa hồ sơ
                 </button>
-                <button
-                        class="dev5-link-button"
-                        type="button"
-                        data-auth-action="login"
-                >
+                <button class="dev5-link-button" type="button" onclick="dangXuat()">
                   Đổi tài khoản
                 </button>
               </div>
-            </div>
+            </div> <!-- Đóng dev5-panel-heading tại đây -->
 
-            <!-- Thẻ hiển thị thông tin hội viên -->
+            <!-- Thẻ hiển thị thông tin cá nhân -->
             <div class="dev5-profile-card">
               <div class="dev5-profile-info">
                 <div class="dev5-profile-name-row">
                   <h3 data-user-name>Hội viên</h3>
-                  <span class="dev5-tier" data-user-tier>Member</span>
+                  <span class="dev5-tier" data-user-tier>Standard</span>
                 </div>
-
-                <p
-                        class="dev5-profile-line dev5-line-email"
-                        data-user-email
-                ></p>
-
-                <p
-                        class="dev5-profile-line dev5-line-phone"
-                        data-user-phone
-                ></p>
+                <p class="dev5-profile-line dev5-line-email" data-user-email></p>
+                <p class="dev5-profile-line dev5-line-phone" data-user-phone></p>
               </div>
             </div>
 
-            <!-- FORM CHỈNH SỬA THÔNG TIN CÁ NHÂN -->
-            <form class="dev5-address-form dev5-hidden" data-profile-form>
+            <!-- Form sửa hồ sơ -->
+            <form class="dev5-address-form dev5-hidden" data-profile-form onsubmit="luuHoSo(event)">
               <h3 class="dev5-form-title">✏️ Cập nhật thông tin cá nhân</h3>
               <div class="dev5-form-grid">
-                <label>
-                  Họ và tên
-                  <input name="profileName" required minlength="2" />
-                </label>
-                <label>
-                  Số điện thoại
-                  <input name="profilePhone" required pattern="0[0-9]{9}" />
-                </label>
+                <label>Họ và tên <input name="profileName" required minlength="2" /></label>
+                <label>Số điện thoại <input name="profilePhone" required pattern="0[0-9]{9}" /></label>
+                <label class="dev5-form-wide">Email <input name="profileEmail" type="email" required /></label>
                 <label class="dev5-form-wide">
-                  Email
-                  <input name="profileEmail" type="email" required />
-                </label>
-                <label class="dev5-form-wide">
-                  Đổi mật khẩu mới (bỏ trống nếu không muốn đổi)
-                  <input
-                          name="profilePassword"
-                          type="password"
-                          placeholder="Nhập mật khẩu mới từ 8 ký tự..."
-                  />
+                  Đổi mật khẩu mới (bỏ trống nếu không đổi)
+                  <input name="profilePassword" type="password" placeholder="Nhập mật khẩu mới..." />
                 </label>
               </div>
               <div class="dev5-form-actions">
-                <button
-                        class="dev5-secondary-button"
-                        type="button"
-                        data-cancel-profile
-                >
-                  Hủy
-                </button>
-                <button class="dev5-primary-button" type="submit">
-                  Lưu thông tin
-                </button>
+                <button class="dev5-secondary-button" type="button" onclick="dongFormSuaHoSo()">Hủy</button>
+                <button class="dev5-primary-button" type="submit">Lưu thông tin</button>
               </div>
             </form>
 
@@ -309,6 +277,7 @@
             </div>
           </section>
 
+
           <!-- TAB 2: LỊCH SỬ ĐƠN HÀNG -->
           <section class="dev5-panel" data-panel="orders">
             <div class="dev5-panel-heading">
@@ -327,20 +296,10 @@
                 <span class="dev5-eyebrow">DELIVERY BOOK</span>
                 <h2>Sổ địa chỉ giao hàng</h2>
               </div>
+              <!-- Dòng 287: Thêm onclick -->
               <div class="dev5-heading-actions">
-                <button
-                        class="dev5-primary-button"
-                        type="button"
-                        data-add-address
-                >
+                <button class="dev5-primary-button" type="button" data-add-address onclick="moFormThemDiaChi()">
                   + Thêm địa chỉ
-                </button>
-                <button
-                        class="dev5-secondary-button dev5-hidden"
-                        type="button"
-                        data-edit-address
-                >
-                  ✏️ Chỉnh sửa
                 </button>
               </div>
             </div>
@@ -348,7 +307,7 @@
             <div data-addresses></div>
 
             <!-- Form thêm / sửa địa chỉ -->
-            <form class="dev5-address-form dev5-hidden" data-address-form>
+            <form class="dev5-address-form dev5-hidden" data-address-form onsubmit="luuDiaChi(event)">
               <h3 class="dev5-form-title">📍 Địa chỉ nhận hàng</h3>
               <div class="dev5-form-grid">
                 <label>
@@ -382,16 +341,9 @@
               </div>
 
               <div class="dev5-form-actions">
-                <button
-                        class="dev5-secondary-button"
-                        type="button"
-                        data-cancel-address
-                >
-                  Hủy
-                </button>
-                <button class="dev5-primary-button" type="submit">
-                  Lưu địa chỉ
-                </button>
+                <!-- Dòng 341: Thêm onclick -->
+                <button class="dev5-secondary-button" type="button" onclick="dongFormDiaChi()">Hủy</button>
+                <button class="dev5-primary-button" type="submit">Lưu địa chỉ</button>
               </div>
             </form>
           </section>
@@ -1345,20 +1297,11 @@
 <!-- ============================================================================== -->
 <script src="../data/store/banners.js"></script>
 <script src="../data/store/categories.js"></script>
-<script src="../data/store/customers.js"></script>
-<script src="../data/store/faqs.js"></script>
-<script src="../data/store/flash_sale.js"></script>
-<script src="../data/store/imports.js"></script>
-<script src="../data/store/orders.js"></script>
-<script src="../data/store/products.js"></script>
-<script src="../data/store/shipping.js"></script>
-<script src="../data/store/vouchers.js"></script>
-<script src="../js/admin/init-storage.js"></script>
-<script src="../data/store/orderItem.js"></script>
+<script src="../data/store/products.js"></script>ipt>
 
 <script src="../js/common.js"></script>
 <script src="../js/auth_modal.js"></script>
-
+<script src="../js/admin/init-storage.js"></script>
 <script src="../js/admin/admin-main.js"></script>
 <script src="../js/admin/tab-dashboard.js"></script>
 <script src="../js/admin/tab-customer.js"></script>
@@ -1387,7 +1330,7 @@
 
     // 1. Chưa đăng nhập -> Hiện hộp khóa
     if (!session) {
-      if (viewGuest) viewGuest.style.display = "block";
+      if (viewGuest) viewGuest.style.display = "flex";
       if (viewUser) viewUser.style.display = "none";
       if (viewAdmin) viewAdmin.style.display = "none";
       if (siteFooter) siteFooter.style.display = "block";

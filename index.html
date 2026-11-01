@@ -81,8 +81,9 @@
         </div>
         
         <!-- Controls Carousel -->
-        <button class="dev1-carousel-btn dev1-btn-prev" id="dev1-prev-slide" aria-label="Slide trước">&#10094;</button>
-        <button class="dev1-carousel-btn dev1-btn-next" id="dev1-next-slide" aria-label="Slide tiếp theo">&#10095;</button>
+        <!-- Thêm onclick="luiSlide()" và onclick="toiSlide()" -->
+        <button class="dev1-carousel-btn dev1-btn-prev" id="dev1-prev-slide" onclick="luiSlide()">&#10094;</button>
+        <button class="dev1-carousel-btn dev1-btn-next" id="dev1-next-slide" onclick="toiSlide()">&#10095;</button>
         <div class="dev1-carousel-dots" id="dev1-carousel-dots"></div>
       </section>
 
@@ -126,16 +127,15 @@
 
       <!-- TRENDING GEARS WITH TABS -->
       <section class="dev1-trending-section">
-        <div class="dev1-trending-header">
-          <div>
-            <span class="sport-badge badge-orange">TOP GEAR TRENDING</span>
-            <h2 class="dev1-section-title">TRANG BỊ XU HƯỚNG 2026</h2>
-          </div>
-          <!-- TAB SWITCHER ĐỘNG -->
-          <div class="dev1-tab-buttons" id="dev1-tab-buttons">
-            <!-- Render tabs động -->
-          </div>
+        <div class="dev1-tab-buttons" id="dev1-tab-buttons">
+          <button type="button" class="dev1-tab-btn active" id="tab-bestseller" onclick="chonTabXuHuong('bestseller')">
+            Bán Chạy Nhất
+          </button>
+          <button type="button" class="dev1-tab-btn" id="tab-new" onclick="chonTabXuHuong('new')">
+            Hàng Mới Về 2026
+          </button>
         </div>
+
 
         <!-- Products Grid theo Tab -->
         <div class="dev1-trending-grid" id="dev1-trending-grid">
@@ -149,7 +149,7 @@
           <span class="sport-badge badge-emerald">SPORT CLUB MEMBER</span>
           <h2>Đăng Ký Nhận Bản Tin & Mã Ưu Đãi 20%</h2>
           <p>Nhận thông báo sớm nhất về các đợt phát hành phiên bản giới hạn và quà tặng sinh nhật dành riêng cho vận động viên.</p>
-          <form class="dev1-nl-form" id="dev1-nl-form">
+          <form class="dev1-nl-form" id="dev1-nl-form" onsubmit="dangKyNhanTin(event)">
             <input type="email" id="dev1-email-input" placeholder="Nhập địa chỉ email của bạn..." required>
             <button type="submit" class="btn-sport btn-accent">ĐĂNG KÝ NGAY</button>
           </form>
@@ -212,16 +212,9 @@
   <!-- ============================================================================== -->
   <!-- 4. SCRIPTS: NẠP DỮ LIỆU STORE, LOCALSTORAGE & LOGIC TRANG CHỦ -->
   <!-- ============================================================================== -->
-  <!-- Nạp dữ liệu các module từ data/store/ -->
   <script src="data/store/banners.js"></script>
-  <script src="data/store/flash_sale.js"></script>
-  <script src="data/store/categories.js"></script>
   <script src="data/store/products.js"></script>
-  <script src="data/store/imports.js"></script>
-  <script src="data/store/orders.js"></script>
-  <script src="data/store/customers.js"></script>
-  <script src="../data/store/orderItem.js"></script>
-
+  <script src="data/store/categories.js"></script>
 
   <!-- Khởi tạo LocalStorage hệ thống -->
   <script src="data/store/init-storage.js"></script>

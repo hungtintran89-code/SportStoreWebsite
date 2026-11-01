@@ -270,25 +270,25 @@ function datHang(e) {
   let coLoi = false;
 
   // Kiểm tra Họ tên
-  if (hoTen.length < 2) {
+  if (hoTen.length === 0) {
     document.getElementById("err-fullName").textContent = "Vui lòng nhập họ tên đầy đủ!";
     coLoi = true;
   }
 
-  // Kiểm tra Số điện thoại (phải 10 số và bắt đầu bằng số 0)
+  // Kiểm tra Số điện thoại
   if (sdt.length !== 10 || sdt.charAt(0) !== "0" || isNaN(sdt)) {
     document.getElementById("err-phone").textContent = "Số điện thoại phải đủ 10 số và bắt đầu bằng số 0!";
     coLoi = true;
   }
 
   // Kiểm tra Email
-  if (email.length < 5 || email.indexOf("@") === -1) {
+  if (email.length < 5 || email.indexOf("@gmail.com") === -1) {
     document.getElementById("err-email").textContent = "Email chưa đúng định dạng!";
     coLoi = true;
   }
 
   // Kiểm tra Địa chỉ
-  if (diaChi.length < 5) {
+  if (diaChi.length === 0) {
     document.getElementById("err-address").textContent = "Vui lòng nhập địa chỉ cụ thể!";
     coLoi = true;
   }
@@ -326,12 +326,11 @@ function datHang(e) {
   // Nếu có bất kỳ ô nào nhập sai -> Báo lỗi và dừng lại
   if (coLoi) {
     showToast("Vui lòng kiểm tra lại các thông tin màu đỏ!", "danger");
-    // Nếu đang ở chế độ địa chỉ có sẵn mà bị lỗi, chuyển sang ô nhập mới để người dùng sửa
     chonCheDoDiaChi("new");
     return;
   }
 
-  // --- TẠO ĐƠN HÀNG MỚI NẾU KHÔNG CÓ LỖI ---
+
   let tongTien = tinhTongTien();
   let danhSachDonHang = readJson("sport_orders", []);
   if (!Array.isArray(danhSachDonHang)) {
@@ -349,7 +348,7 @@ function datHang(e) {
       orderItemId : maDonMoi +`-${i+1}` ,
       orderId : maDonMoi ,
       productId : danhSachGioHang[i].productId ,
-      code: "SP-" + danhSachGioHang[i].id,
+      code: "SP-" + danhSachGioHang[i].productId,
       name : danhSachGioHang[i].name ,
       color : danhSachGioHang[i].color ,
       quantity : danhSachGioHang[i].quantity ,
@@ -364,15 +363,13 @@ function datHang(e) {
     orderId: maDonMoi,
     id: maDonMoi,
     customerId: nguoiDung.id ,
-    createdAt: new Date().toISOString(),
-    status: "pending",
-    items: orderItemList,
-    subtotal: tongTien,
-    discount: 0,
-    shippingFee: 0,
-    total: tongTien,
-    paymentMethod: phuongThucThanhToan ,
     customer: nguoiDung ,
+    createdAt: new Date().toISOString(),
+    paymentMethod: phuongThucThanhToan ,
+    status: "pending",
+    total: tongTien,
+    note : ghiChu ,
+    items: orderItemList,
   };
 
   // Lưu đơn vào mảng đơn hàng trong localStorage

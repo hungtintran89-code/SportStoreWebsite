@@ -1,557 +1,1118 @@
-(function () {
-  'use strict';
 
-  var USER_DATA_PREFIX = 'sportstore_user_data_';
-  var userData;
+function layUserHienTai() {
+  var user = null;
+  try {
+    user = JSON.parse(localStorage.getItem('sport_user'));
+  } catch (e) {
+    user = null;
+  }
+  // Nếu chưa đăng nhập nhưng có danh sách khách mẫu, lấy người đầu tiên để xem thử giao diện
+  if (!user && typeof customers !== 'undefined' && customers.length > 0) {
+    user = customers[0];
+  }
+  return user;
+}
 
-  function formatMoney(value) {
-    return new Intl.NumberFormat('vi-VN').format(value || 0) + ' đ';
+function chuyenTab(tenTab) {
+  // Bước 1: Bỏ kích hoạt ở tất cả các nút tab
+  var cacNut = document.querySelectorAll('.dev5-sidebar .dev5-tab');
+  for (var i = 0; i < cacNut.length; i++) {
+    cacNut[i].classList.remove('is-active');
   }
 
-  function getSession() {
-    return window.sportStoreAuth
-      ? window.sportStoreAuth.session()
-      : null;
+  // Bước 2: Ẩn tất cả các bảng nội dung tab
+  var cacBang = document.querySelectorAll('.dev5-content .dev5-panel');
+  for (var i = 0; i < cacBang.length; i++) {
+    cacBang[i].classList.remove('is-active');
   }
 
-  // Nạp danh sách đơn hàng ĐỘNG của khách hàng từ data store hoặc LocalStorage
-  function getCustomerOrdersFromStore(currentSession) {
-    var allOrders = [];
-    try {
-      allOrders = JSON.parse(localStorage.getItem('sport_orders') || '[]');
-    } catch (e) {}
-    if (!allOrders || allOrders.length === 0) {
-      if (typeof orders !== 'undefined' && Array.isArray(orders)) {
-        allOrders = orders;
+  // Bước 3: Đánh dấu nút vừa bấm là đang chọn
+  var nutChon = document.querySelector('.dev5-tab[data-tab="' + tenTab + '"]');
+  if (nutChon) {
+    nutChon.classList.add('is-active');
+  }
+
+  // Bước 4: Hiện bảng nội dung tương ứng
+  var bangChon = document.querySelector('.dev5-panel[data-panel="' + tenTab + '"]');
+  if (bangChon) {
+    bangChon.classList.add('is-active');
+  }
+}
+
+function hienThiThongTinUser() {
+  var user = layUserHienTai();
+  if (!user) return;
+
+  // Hiển thị tên lên trang
+  var cacTheTen = document.querySelectorAll('[data-user-name]');
+  for (var i = 0; i < cacTheTen.length; i++) {
+    cacTheTen[i].textContent = user.name || 'Hội viên';
+  }
+
+  // Hiển thị email
+  var theEmail = document.querySelector('[data-user-email]');
+  if (theEmail) {
+    theEmail.textContent = 'Email: ' + (user.email || 'Chưa cập nhật');
+  }
+
+  // Hiển thị số điện thoại
+  var theSdt = document.querySelector('[data-user-phone]');
+  if (theSdt) {
+    theSdt.textContent = 'SĐT: ' + (user.phone || 'Chưa cập nhật');
+  }
+
+  // Hiển thị hạng thành viên
+  var theTier = document.querySelector('[data-user-tier]');
+  if (theTier) {
+    theTier.textContent = user.tier || 'Gold Elite';
+  }
+
+  var theRole = document.querySelector('[data-user-role]');
+  if (theRole) {
+    theRole.textContent = 'Thành viên ' + (user.tier || 'Gold Elite');
+  }
+
+  // Đảm bảo nút "Chỉnh sửa hồ sơ" hiển thị
+  var nutSua = document.querySelector('[data-edit-profile-btn]');
+  if (nutSua) {
+    nutSua.classList.remove('dev5-hidden');
+  }
+}
+
+function moFormSuaHoSo() {
+  var form = document.querySelector('[data-profile-form]');
+  if (!form) return;
+
+  var user = layUserHienTai();
+  if (user) {
+    if (form.querySelector('[name="profileName"]')) {
+      form.querySelector('[name="profileName"]').value = user.name || '';
+    }
+    if (form.querySelector('[name="profilePhone"]')) {
+      form.querySelector('[name="profilePhone"]').value = user.phone || '';
+    }
+    if (form.querySelector('[name="profileEmail"]')) {
+      form.querySelector('[name="profileEmail"]').value = user.email || '';
+    }
+  }
+  form.classList.remove('dev5-hidden');
+}
+
+function dongFormSuaHoSo() {
+  var form = document.querySelector('[data-profile-form]');
+  if (form) {
+    form.classList.add('dev5-hidden');
+  }
+}
+
+function luuHoSo(event) {
+  event.preventDefault(); // Chặn trang web tải lại khi submit form
+
+  var form = document.querySelector('[data-profile-form]');
+  if (!form) return;
+
+  var user = layUserHienTai() || {};
+  user.name = form.querySelector('[name="profileName"]').value;
+  user.phone = form.querySelector('[name="profilePhone"]').value;
+  user.email = form.querySelector('[name="profileEmail"]').value;
+
+  var matKhauMoi = form.querySelector('[name="profilePassword"]').value;
+  if (matKhauMoi && matKhauMoi.trim() !== '') {
+    user.password = matKhauMoi;
+  }
+
+  // Lưu thông tin mới vào LocalStorage
+  localStorage.setItem('sport_user', JSON.stringify(user));
+
+  alert('Cập nhật thông tin cá nhân thành công!');
+  dongFormSuaHoSo();
+  hienThiThongTinUser();
+}
+
+function hienThiDonHang() {
+  var user = layUserHienTai();
+  var hopChua = document.querySelector('[data-orders]');
+  if (!hopChua) return;
+
+  if (!user) {
+    hopChua.innerHTML = '<p class="dev5-muted">Vui lòng đăng nhập để xem đơn hàng.</p>';
+    return;
+  }
+
+  // Lấy đơn hàng từ LocalStorage hoặc file orders.js
+  var tatCaDon = [];
+  try {
+    tatCaDon = JSON.parse(localStorage.getItem('sport_orders')) || [];
+  } catch (e) {
+    tatCaDon = [];
+  }
+  if (tatCaDon.length === 0 && typeof orders !== 'undefined') {
+    tatCaDon = orders;
+  }
+
+  // Tìm các đơn hàng của riêng người này bằng vòng lặp for
+  var donCuaUser = [];
+  for (var i = 0; i < tatCaDon.length; i++) {
+    var d = tatCaDon[i];
+    var sId = user.customerId ;
+
+    var trungId = (d.customerId && d.customerId === sId) || (d.userId && d.userId === sId);
+    var trungEmail = (d.email && d.email.toLowerCase() === (user.email || '').toLowerCase());
+    var trungSdt = (d.phone && d.phone === user.phone);
+
+    if (trungId || trungEmail || trungSdt) {
+      donCuaUser.push(d);
+    }
+  }
+
+  // Cập nhật số lượng đơn lên thẻ thống kê ở Tab 1
+  var theSoDon = document.querySelector('[data-order-count]');
+  if (theSoDon) {
+    theSoDon.textContent = donCuaUser.length;
+  }
+
+  // Nếu không có đơn nào
+  if (donCuaUser.length === 0) {
+    hopChua.innerHTML = '<p class="dev5-muted">Bạn chưa có đơn hàng nào.</p>';
+    return;
+  }
+
+  // Vẽ danh sách đơn hàng
+  var danhSachBuoc = ['Đặt hàng', 'Xác nhận', 'Đang giao', 'Đã giao'];
+  var html = '';
+
+  for (var j = 0; j < donCuaUser.length; j++) {
+    var don = donCuaUser[j];
+    var maDon = don.orderId || don.id || ('ĐH-' + (j + 1));
+    var ngayDat = don.date || 'Hôm nay';
+    var trangThai = don.status || 'Mới đặt';
+    var tongTien = don.total || 0;
+
+    // Lấy tên món hàng trong đơn
+    var tenMon = 'Sản phẩm thể thao';
+    if (don.items && don.items.length > 0) {
+      var monDau = don.items[0];
+      var tenSanPham = monDau.name || monDau.productName || 'Sản phẩm';
+      if (don.items.length > 1) {
+        tenMon = tenSanPham + ' (+' + (don.items.length - 1) + ' món khác)';
+      } else {
+        tenMon = tenSanPham;
       }
     }
-    return allOrders.filter(function (ord) {
-      var sId = currentSession.customerId || currentSession.id;
-      return (ord.customerId && ord.customerId === sId) ||
-             (ord.userId && ord.userId === sId) ||
-             (ord.email && ord.email.toLowerCase() === (currentSession.email || '').toLowerCase()) ||
-             (ord.phone && ord.phone === currentSession.phone);
-    }).map(function (ord) {
-      var itemCount = Array.isArray(ord.items) ? ord.items.length : 1;
-      var firstItem = Array.isArray(ord.items) && ord.items[0];
-      var itemName = firstItem ? (firstItem.name || firstItem.productName || 'Sản phẩm thể thao') : 'Sản phẩm thể thao';
-      var itemsDesc = itemName + (itemCount > 1 ? ' (+' + (itemCount - 1) + ' món khác)' : '');
-      var progress = ord.status === 'Đã giao' ? 4 : (ord.status === 'Đang giao' ? 3 : (ord.status === 'Đã xử lý' ? 2 : 1));
 
-      return {
-        id: ord.orderId || ord.id || ('ORD-' + Date.now()),
-        date: ord.date || new Date().toISOString().split('T')[0],
-        items: itemsDesc,
-        status: ord.status || 'Mới đặt',
-        total: ord.total || 0,
-        progress: progress
-      };
-    });
+    // Xác định số bước hoàn thành
+    var buocDaXong = 1; // Mặc định bước 1: Đặt hàng
+    if (trangThai === 'Đã giao') {
+      buocDaXong = 4;
+    } else if (trangThai === 'Đang giao') {
+      buocDaXong = 3;
+    } else if (trangThai === 'Đã xử lý' || trangThai === 'Đã xác nhận') {
+      buocDaXong = 2;
+    }
+
+    // Vẽ thanh 4 bước tiến trình
+    var chuoiTienTrinh = '';
+    for (var k = 0; k < danhSachBuoc.length; k++) {
+      var classXong = (k < buocDaXong) ? 'is-done' : '';
+      chuoiTienTrinh += '<span class="dev5-step ' + classXong + '">' + danhSachBuoc[k] + '</span>';
+    }
+
+    // Nối vào chuỗi HTML
+    html += '<article class="dev5-order-card">';
+    html += '  <div class="dev5-order-top">';
+    html += '    <div>';
+    html += '      <strong>' + maDon + '</strong>';
+    html += '      <div class="dev5-muted">' + ngayDat + ' · ' + tenMon + '</div>';
+    html += '    </div>';
+    html += '    <span class="dev5-status">' + trangThai + '</span>';
+    html += '  </div>';
+    html += '  <strong style="color: #059669; font-size: 1.1rem; display: block; margin: 10px 0;">' + formatMoney(tongTien) + '</strong>';
+    html += '  <div class="dev5-timeline">' + chuoiTienTrinh + '</div>';
+    html += '</article>';
   }
 
-  // Nạp địa chỉ nhận hàng ĐỘNG của khách hàng từ data store
-  function getCustomerAddressesFromStore(currentSession) {
-    var addresses = [];
-    var allCustomers = [];
-    try {
-      allCustomers = JSON.parse(localStorage.getItem('sport_customers') || '[]');
-    } catch (e) {}
-    if (!allCustomers || allCustomers.length === 0) {
-      if (typeof customers !== 'undefined' && Array.isArray(customers)) {
-        allCustomers = customers;
+  hopChua.innerHTML = html;
+}
+
+function layDanhSachDiaChi() {
+  var user = layUserHienTai();
+  if (!user) return [];
+
+  var key = 'sport_addresses_' + (user.id || user.customerId || 'user');
+  var list = [];
+  try {
+    list = JSON.parse(localStorage.getItem(key)) || [];
+  } catch (e) {
+    list = [];
+  }
+
+  // Nếu chưa có địa chỉ nào, lấy địa chỉ mặc định trong hồ sơ
+  if (list.length === 0 && user.address && user.address !== 'Chưa cập nhật') {
+    list.push({
+      recipient: user.name || 'Người nhận',
+      phone: user.phone || '',
+      line: user.address,
+      district: '',
+      city: '',
+      isDefault: true
+    });
+    localStorage.setItem(key, JSON.stringify(list));
+  }
+  return list;
+}
+
+function hienThiDiaChi() {
+  var user = layUserHienTai();
+  var hopChua = document.querySelector('[data-addresses]');
+  if (!hopChua) return;
+
+  var danhSach = layDanhSachDiaChi();
+
+  // Cập nhật số lượng địa chỉ lên Tab 1
+  var theSoDiaChi = document.querySelector('[data-address-count]');
+  if (theSoDiaChi) {
+    theSoDiaChi.textContent = danhSach.length;
+  }
+
+  if (danhSach.length === 0) {
+    hopChua.innerHTML = '<p class="dev5-muted">Bạn chưa lưu địa chỉ nhận hàng nào. Bấm nút "+ Thêm địa chỉ" ở trên để tạo.</p>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < danhSach.length; i++) {
+    var dc = danhSach[i];
+    var nhanMacDinh = dc.isDefault ? ' <span style="color:#059669; font-size:0.85rem;">(Mặc định)</span>' : '';
+    var diaChiChiTiet = dc.line;
+    if (dc.district) diaChiChiTiet += ', ' + dc.district;
+    if (dc.city) diaChiChiTiet += ', ' + dc.city;
+
+    html += '<article class="dev5-address-card" style="margin-bottom: 12px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px;">';
+    html += '  <div class="dev5-address-top">';
+    html += '    <strong>Địa chỉ ' + (i + 1) + nhanMacDinh + '</strong>';
+    html += '  </div>';
+    html += '  <div class="dev5-address-line" style="margin-top: 8px; line-height: 1.6;">';
+    html += '    <div><strong>Người nhận:</strong> ' + (dc.recipient || user.name) + '</div>';
+    html += '    <div><strong>Số điện thoại:</strong> ' + (dc.phone || user.phone) + '</div>';
+    html += '    <div><strong>Địa chỉ:</strong> ' + diaChiChiTiet + '</div>';
+    html += '  </div>';
+    html += '  <div style="margin-top: 10px;">';
+    html += '    <button class="dev5-secondary-button" type="button" onclick="xoaDiaChi(' + i + ')">Xóa địa chỉ này</button>';
+    html += '  </div>';
+    html += '</article>';
+  }
+
+  hopChua.innerHTML = html;
+}
+
+function moFormThemDiaChi() {
+  var form = document.querySelector('[data-address-form]');
+  if (form) {
+    form.reset();
+    var user = layUserHienTai();
+    if (user) {
+      if (form.querySelector('[name="recipient"]')) form.querySelector('[name="recipient"]').value = user.name || '';
+      if (form.querySelector('[name="phone"]')) form.querySelector('[name="phone"]').value = user.phone || '';
+    }
+    form.classList.remove('dev5-hidden');
+  }
+}
+
+function dongFormDiaChi() {
+  var form = document.querySelector('[data-address-form]');
+  if (form) {
+    form.classList.add('dev5-hidden');
+  }
+}
+
+function luuDiaChi(event) {
+  event.preventDefault();
+
+  var form = document.querySelector('[data-address-form]');
+  if (!form) return;
+
+  var user = layUserHienTai();
+  if (!user) return;
+
+  var danhSach = layDanhSachDiaChi();
+  var diaChiMoi = {
+    recipient: form.querySelector('[name="recipient"]').value,
+    phone: form.querySelector('[name="phone"]').value,
+    line: form.querySelector('[name="line"]').value,
+    district: form.querySelector('[name="district"]').value,
+    city: form.querySelector('[name="city"]').value,
+    isDefault: (danhSach.length === 0)
+  };
+
+  danhSach.push(diaChiMoi);
+  var key = 'sport_addresses_' + (user.id || user.customerId || 'user');
+  localStorage.setItem(key, JSON.stringify(danhSach));
+
+  alert('Đã thêm địa chỉ giao hàng thành công!');
+  dongFormDiaChi();
+  hienThiDiaChi();
+}
+
+function xoaDiaChi(viTriCanXoa) {
+  if (!confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) return;
+
+  var user = layUserHienTai();
+  if (!user) return;
+
+  var danhSach = layDanhSachDiaChi();
+  var danhSachMoi = [];
+  for (var i = 0; i < danhSach.length; i++) {
+    if (i !== viTriCanXoa) {
+      danhSachMoi.push(danhSach[i]);
+    }
+  }
+
+  var key = 'sport_addresses_' + (user.id || user.customerId || 'user');
+  localStorage.setItem(key, JSON.stringify(danhSachMoi));
+
+  hienThiDiaChi();
+}
+
+// ------------------------------------------------------------------------------
+// 5. TAB 4: SẢN PHẨM YÊU THÍCH
+// ------------------------------------------------------------------------------
+function layDanhSachYeuThich() {
+  var list = [];
+  try {
+    list = JSON.parse(localStorage.getItem('sport_wishlist')) || [];
+  } catch (e) {
+    list = [];
+  }
+
+  // Nếu rỗng, tạo sẵn 2 sản phẩm mẫu từ kho hàng products.js để giao diện không bị trống
+  if (list.length === 0 && typeof products !== 'undefined' && products.length >= 2) {
+    list = [
+      {
+        id: products[0].id,
+        name: products[0].name,
+        price: products[0].price,
+        tag: products[0].category || 'Thể thao',
+        image: products[0].image || products[0].img
+      },
+      {
+        id: products[1].id,
+        name: products[1].name,
+        price: products[1].price,
+        tag: products[1].category || 'Thể thao',
+        image: products[1].image || products[1].img
+      }
+    ];
+    localStorage.setItem('sport_wishlist', JSON.stringify(list));
+  }
+  return list;
+}
+
+function hienThiYeuThich() {
+  var hopChua = document.querySelector('[data-wishlist]');
+  if (!hopChua) return;
+
+  var danhSach = layDanhSachYeuThich();
+
+  // Cập nhật số lượng lên Tab 1
+  var theSoYeuThich = document.querySelector('[data-wishlist-count]');
+  if (theSoYeuThich) {
+    theSoYeuThich.textContent = danhSach.length;
+  }
+
+  if (danhSach.length === 0) {
+    hopChua.innerHTML = '<p class="dev5-muted">Danh sách yêu thích của bạn đang trống.</p>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < danhSach.length; i++) {
+    var sp = danhSach[i];
+    var linkAnh = sp.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400';
+
+    html += '<article class="dev5-wishlist-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; background: #fff;">';
+    html += '  <img src="' + linkAnh + '" alt="' + sp.name + '" style="width: 100%; height: 160px; object-fit: cover; border-radius: 6px; margin-bottom: 8px;">';
+    html += '  <span class="dev5-muted" style="font-size: 0.85rem; color: #64748b;">' + (sp.tag || 'Sản phẩm') + '</span>';
+    html += '  <h3 style="font-size: 1rem; margin: 6px 0; color: #1e293b;">' + sp.name + '</h3>';
+    html += '  <div class="dev5-price" style="font-weight: bold; color: #dc2626; margin-bottom: 10px;">' + formatMoney(sp.price) + '</div>';
+    html += '  <button class="dev5-secondary-button" type="button" onclick="xoaYeuThich(' + sp.id + ')">Xóa yêu thích</button>';
+    html += '</article>';
+  }
+
+  hopChua.innerHTML = html;
+}
+
+function xoaYeuThich(idCanXoa) {
+  var danhSach = layDanhSachYeuThich();
+  var danhSachMoi = [];
+  for (var i = 0; i < danhSach.length; i++) {
+    if (danhSach[i].id != idCanXoa) {
+      danhSachMoi.push(danhSach[i]);
+    }
+  }
+  localStorage.setItem('sport_wishlist', JSON.stringify(danhSachMoi));
+  hienThiYeuThich();
+}
+
+// ------------------------------------------------------------------------------
+// 6. TAB 5: FAQ & BẢO HÀNH (BẤM CÂU HỎI ĐỂ MỞ/ĐÓNG TRẢ LỜI)
+// ------------------------------------------------------------------------------
+function hienThiFaq() {
+  var hopChua = document.querySelector('[data-faq]');
+  if (!hopChua) return;
+
+  var danhSachFaq = [];
+  if (typeof faqs !== 'undefined' && Array.isArray(faqs)) {
+    danhSachFaq = faqs;
+  }
+
+  if (danhSachFaq.length === 0) {
+    hopChua.innerHTML = '<p class="dev5-muted">Chưa có câu hỏi hỗ trợ nào.</p>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < danhSachFaq.length; i++) {
+    var cauHoi = danhSachFaq[i].question || danhSachFaq[i].q || '';
+    var traLoi = danhSachFaq[i].answer || danhSachFaq[i].a || '';
+    var classMo = (i === 0) ? 'is-open' : ''; // Mặc định mở câu hỏi đầu tiên
+
+    html += '<article class="dev5-faq-item ' + classMo + '">';
+    html += '  <button class="dev5-faq-question" type="button" onclick="dongMoFaq(this)">';
+    html += '    <span>' + cauHoi + '</span>';
+    html += '    <span>＋</span>';
+    html += '  </button>';
+    html += '  <div class="dev5-faq-answer">' + traLoi + '</div>';
+    html += '</article>';
+  }
+
+  hopChua.innerHTML = html;
+}
+
+// Hàm bật / tắt câu trả lời FAQ
+function dongMoFaq(nutBam) {
+  var theCha = nutBam.parentElement;
+  if (theCha) {
+    theCha.classList.toggle('is-open');
+  }
+}
+
+// ------------------------------------------------------------------------------
+// 7. ĐĂNG XUẤT / ĐỔI TÀI KHOẢN
+// ------------------------------------------------------------------------------
+function dangXuat() {
+  if (confirm('Bạn có chắc chắn muốn đăng xuất hoặc đổi tài khoản?')) {
+    localStorage.removeItem('sport_user');
+    localStorage.removeItem('admin_logged_in');
+    window.location.reload();
+  }
+}
+
+// ------------------------------------------------------------------------------
+// 8. HÀM CHÍNH KHỞI TẠO TẤT CẢ DỮ LIỆU KHI TẢI TRANG
+// ------------------------------------------------------------------------------
+function renderUserProfile() {
+  hienThiThongTinUser();
+  hienThiDonHang();
+  hienThiDiaChi();
+  hienThiYeuThich();
+  hienThiFaq();
+}
+
+// Tự động chạy khi DOM sẵn sàng
+document.addEventListener('DOMContentLoaded', function () {
+  renderUserProfile();
+});
+// ====
+
+
+
+function layUserHienTai() {
+  var chuoiUser = localStorage.getItem("sport_user");
+  if (!chuoiUser) {
+    return null;
+  }
+  return JSON.parse(chuoiUser);
+}
+
+function chuyenTab(tenTab) {
+
+  var cacNutTab = document.querySelectorAll(".dev5-tab");
+  for (var i = 0; i < cacNutTab.length; i++) {
+    cacNutTab[i].classList.remove("is-active");
+  }
+
+  var cacKhungNoiDung = document.querySelectorAll(".dev5-content .dev5-panel");
+  for (var j = 0; j < cacKhungNoiDung.length; j++) {
+    cacKhungNoiDung[j].classList.remove("is-active");
+  }
+
+  // 3. Đánh dấu nút vừa bấm là active
+  var nutDuocChon = document.querySelector('.dev5-tab[data-tab="' + tenTab + '"]');
+  if (nutDuocChon) {
+    nutDuocChon.classList.add("is-active");
+  }
+
+  // 4. Hiển thị khung nội dung của tab vừa bấm
+  var khungDuocChon = document.querySelector('.dev5-panel[data-panel="' + tenTab + '"]');
+  if (khungDuocChon) {
+    khungDuocChon.classList.add("is-active");
+  }
+}
+
+function hienThiThongTinUser() {
+  var user = layUserHienTai();
+  if (!user) return;
+
+  // Điền tên vào tất cả các thẻ có thuộc tính data-user-name
+  var cacTheTen = document.querySelectorAll("[data-user-name]");
+  for (var i = 0; i < cacTheTen.length; i++) {
+    cacTheTen[i].textContent = user.name || "Hội viên";
+  }
+
+  // Điền Email
+  var theEmail = document.querySelector("[data-user-email]");
+  if (theEmail) {
+    theEmail.textContent = "Email: " + (user.email || "Chưa cập nhật");
+  }
+
+  // Điền Số điện thoại
+  var thePhone = document.querySelector("[data-user-phone]");
+  if (thePhone) {
+    thePhone.textContent = "SĐT: " + (user.phone || "Chưa cập nhật");
+  }
+
+  // Điền Hạng thành viên (Standard / VIP / Gold...)
+  var theTier = document.querySelector("[data-user-tier]");
+  if (theTier) {
+    theTier.textContent = user.tier || "Standard";
+  }
+
+  var theBadge = document.querySelector("[data-user-role]");
+  if (theBadge) {
+    theBadge.textContent = "Thành viên " + (user.tier || "Standard");
+  }
+
+  // Cho phép hiện nút Chỉnh sửa hồ sơ
+  var nutSua = document.querySelector("[data-edit-profile-btn]");
+  if (nutSua) {
+    nutSua.classList.remove("dev5-hidden");
+  }
+}
+
+function moFormSuaHoSo() {
+  var form = document.querySelector("[data-profile-form]");
+  if (!form) return;
+
+  var user = layUserHienTai();
+  if (user) {
+    if (form.querySelector('[name="profileName"]')) {
+      form.querySelector('[name="profileName"]').value = user.name || "";
+    }
+    if (form.querySelector('[name="profilePhone"]')) {
+      form.querySelector('[name="profilePhone"]').value = user.phone || "";
+    }
+    if (form.querySelector('[name="profileEmail"]')) {
+      form.querySelector('[name="profileEmail"]').value = user.email || "";
+    }
+  }
+
+  // Bỏ class ẩn để form hiện lên
+  form.classList.remove("dev5-hidden");
+}
+
+function dongFormSuaHoSo() {
+  var form = document.querySelector("[data-profile-form]");
+  if (form) {
+    form.classList.add("dev5-hidden");
+  }
+}
+
+function luuHoSo(event) {
+  event.preventDefault();
+
+  var form = document.querySelector("[data-profile-form]");
+  if (!form) return;
+
+  var user = layUserHienTai();
+  if (!user) return;
+
+  // Lấy dữ liệu mới từ các ô input
+  user.name = form.querySelector('[name="profileName"]').value;
+  user.phone = form.querySelector('[name="profilePhone"]').value;
+  user.email = form.querySelector('[name="profileEmail"]').value;
+
+  var matKhauMoi = form.querySelector('[name="profilePassword"]').value;
+  if (matKhauMoi && matKhauMoi.trim() !== "") {
+    user.password = matKhauMoi;
+  }
+
+  // Lưu đè lại vào LocalStorage
+  localStorage.setItem("sport_user", JSON.stringify(user));
+
+  showToast("Đã cập nhật thông tin cá nhân thành công!" , "success");
+  dongFormSuaHoSo();
+  hienThiThongTinUser();
+}
+
+function hienThiDonHang() {
+
+  var user = layUserHienTai();
+  var khungDonHang = document.querySelector("[data-orders]");
+
+  if (!khungDonHang) return;
+  if (!user) {
+    khungDonHang.innerHTML = '<p class="dev5-muted">Vui lòng đăng nhập để xem đơn hàng.</p>';
+    return;
+  }
+
+  // 1. Đọc danh sách tất cả đơn hàng từ LocalStorage
+  var tatCaDon = [];
+  var chuoiDon = localStorage.getItem("sport_orders");
+  if (chuoiDon) {
+    tatCaDon = JSON.parse(chuoiDon);
+  } else if (typeof orders !== "undefined") {
+    tatCaDon = orders;
+  }
+
+  // 2.lọc đơn hàng của đúng user đang đăng nhập
+  var donCuaToi = [];
+  for (var i = 0; i < tatCaDon.length; i++) {
+    var d = tatCaDon[i];
+    var sId = user.id || user.customerId;
+    var trungId = (d.customerId && d.customerId === sId) || (d.userId && d.userId === sId);
+    var trungEmail = (d.email && d.email.toLowerCase() === (user.email || "").toLowerCase());
+    var trungSdt = (d.phone && d.phone === user.phone);
+    if (trungId || trungEmail || trungSdt) {
+      donCuaToi.push(d);
+    }
+  }
+
+  // 3. Cập nhật số lượng đơn hàng lên ô thống kê ở Tab 1
+  var theDemDon = document.querySelector("[data-order-count]");
+  if (theDemDon) {
+    theDemDon.textContent = donCuaToi.length;
+  }
+
+  // 4. Nếu chưa có đơn nào
+  if (donCuaToi.length === 0) {
+    khungDonHang.innerHTML = '<p class="dev5-muted">Bạn chưa có đơn hàng nào.</p>';
+    return;
+  }
+
+  var cacBuoc = ["Đặt hàng", "Xác nhận", "Đang giao", "Đã giao"];
+  var html = "";
+
+  for (var j = 0; j < donCuaToi.length; j++) {
+    var don = donCuaToi[j];
+    var maDon = don.orderId || don.id || ("DH-" + (j + 1));
+    var ngayDat = don.date || "Hôm nay";
+    var trangThai = don.status || "Mới đặt";
+    var tongTien = don.total || 0;
+
+    // Tên các món trong đơn
+    var tenMon = "Trang bị thể thao";
+    if (don.items && don.items.length > 0) {
+      var monDau = don.items[0];
+      var tenSanPham = monDau.name || monDau.productName || "Sản phẩm";
+      if (don.items.length > 1) {
+        tenMon = tenSanPham + " (+" + (don.items.length - 1) + " món khác)";
+      } else {
+        tenMon = tenSanPham;
       }
     }
-    var sId = currentSession.customerId || currentSession.id;
-    var cust = allCustomers.find(function (c) {
-      return (c.customerId && c.customerId === sId) ||
-             c.id === sId ||
-             (c.email && c.email.toLowerCase() === (currentSession.email || '').toLowerCase()) ||
-             (c.phone && c.phone === currentSession.phone);
-    });
 
-    var addrText = (cust && cust.address) || currentSession.address;
-    if (addrText && addrText !== 'Chưa cập nhật') {
-      addresses.push({
-        id: 'address-' + (currentSession.id || 'default'),
-        label: 'Địa chỉ mặc định',
-        recipient: (cust && cust.name) || currentSession.name,
-        phone: (cust && cust.phone) || currentSession.phone,
-        line: addrText,
-        district: '',
-        city: '',
-        detail: addrText,
-        isDefault: true
-      });
-    }
-    return addresses;
-  }
-
-  function getUserData() {
-    var currentSession = getSession();
-
-    if (!currentSession) {
-      return {
-        orders: [],
-        addresses: [],
-        wishlist: []
-      };
+    // Tính số bước đã hoàn thành
+    var soBuocXong = 1;
+    if (trangThai === "Đã giao") {
+      soBuocXong = 4;
+    } else if (trangThai === "Đang giao") {
+      soBuocXong = 3;
+    } else if (trangThai === "Đã xử lý" || trangThai === "Xác nhận") {
+      soBuocXong = 2;
     }
 
-    var storageKey = USER_DATA_PREFIX + currentSession.id;
+    // Vẽ 4 ô tiến trình
+    var mauVienVaNen = "";
+    var mauHuyHieu = "";
+    var mauGiaTien = "#059669";
+    var chuoiTienTrinh = "";
 
-    try {
-      var savedData = JSON.parse(localStorage.getItem(storageKey) || 'null');
-      if (savedData && (savedData.orders.length > 0 || savedData.addresses.length > 0)) {
-        return {
-          orders: Array.isArray(savedData.orders) ? savedData.orders : [],
-          addresses: Array.isArray(savedData.addresses) ? savedData.addresses : [],
-          wishlist: Array.isArray(savedData.wishlist) ? savedData.wishlist : []
-        };
+    // 1. NẾU LÀ ĐƠN BỊ HỦY -> ĐỎ TOÀN BỘ Ô
+    if (trangThai === "Đã hủy" || trangThai === "cancelled") {
+      // Đỏ toàn bộ khung: nền đỏ nhạt + viền đỏ + bóng đỏ nhẹ
+      mauVienVaNen = 'style="background: #fff5f5; border: 1.5px solid #f87171; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.08);"';
+      // Nhãn "Đã hủy" màu đỏ
+      mauHuyHieu = 'style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5;"';
+      // Giá tiền màu đỏ
+      mauGiaTien = "#dc2626";
+      // Thanh thông báo đơn bị hủy
+      chuoiTienTrinh = '<span class="dev5-step" style="background: #fee2e2; color: #b91c1c; border-color: #fca5a5; width: 100%; font-size: 12px; font-weight: 700;">❌ Đơn hàng này đã bị hủy</span>';
+    }
+    // 2. NẾU LÀ ĐƠN BÌNH THƯỜNG -> CHẠY 4 BƯỚC TIẾN TRÌNH XANH
+    else {
+      var soBuocXong = 1;
+      if (trangThai === "Đã giao") {
+        soBuocXong = 4;
+      } else if (trangThai === "Đang giao") {
+        soBuocXong = 3;
+      } else if (trangThai === "Đã xử lý" || trangThai === "Xác nhận") {
+        soBuocXong = 2;
       }
-    } catch (error) {
-      localStorage.removeItem(storageKey);
-    }
-
-    // Nạp ĐỘNG theo tài khoản thực tế từ store
-    var initialData = {
-      orders: getCustomerOrdersFromStore(currentSession),
-      addresses: getCustomerAddressesFromStore(currentSession),
-      wishlist: []
-    };
-
-    localStorage.setItem(storageKey, JSON.stringify(initialData));
-    return initialData;
-  }
-
-  function renderUserProfile() {
-    var currentSession = getSession();
-    if (!currentSession) return;
-
-    var userName = currentSession.name || 'Hội viên';
-    var userEmail = document.querySelector('[data-user-email]');
-    var userPhone = document.querySelector('[data-user-phone]');
-    var userRole = document.querySelector('[data-user-role]');
-    var userTier = document.querySelector('[data-user-tier]');
-    var editProfileBtn = document.querySelector('[data-edit-profile-btn]');
-    var isAdmin = (currentSession && currentSession.role === 'admin') ||
-      localStorage.getItem('admin_logged_in') === 'true';
-
-    document.querySelectorAll('[data-user-name]').forEach(function (element) {
-      element.textContent = userName;
-    });
-
-    if (userEmail) {
-      userEmail.textContent = currentSession.email || '';
-    }
-
-    var registeredUsers = [];
-    try { registeredUsers = JSON.parse(localStorage.getItem('sportstore_registered_users') || '[]'); } catch(e){}
-    var regUser = registeredUsers.find(function(u) { return currentSession && (u.id === currentSession.id || u.email === currentSession.email); });
-    var phone = (currentSession && currentSession.phone) || (regUser && regUser.phone) || '';
-    if (userPhone) {
-      userPhone.textContent = phone ? 'SĐT: ' + phone : '';
-    }
-
-    if (userRole) {
-      userRole.textContent = isAdmin
-        ? 'Quản trị viên'
-        : 'Thành viên ' + (currentSession.tier || 'Gold');
-    }
-
-    if (userTier) {
-      userTier.textContent = currentSession.tier || (isAdmin ? 'Administrator' : 'Gold');
-    }
-
-    if (editProfileBtn) {
-      editProfileBtn.classList.remove('dev5-hidden');
-    }
-  }
-
-  function renderOverview() {
-    document.querySelector('[data-order-count]').textContent = userData.orders.length;
-    document.querySelector('[data-address-count]').textContent = userData.addresses.length;
-    document.querySelector('[data-wishlist-count]').textContent = userData.wishlist.length;
-  }
-
-  function renderOrders() {
-    var orderContainer = document.querySelector('[data-orders]');
-    var timelineSteps = ['Đặt hàng', 'Xác nhận', 'Đang giao', 'Đã giao'];
-
-    if (!userData.orders.length) {
-      orderContainer.innerHTML = '<p class="dev5-muted">Bạn chưa có đơn hàng nào.</p>';
-      return;
-    }
-
-    orderContainer.innerHTML = userData.orders.map(function (order) {
-      var timeline = timelineSteps.map(function (step, index) {
-        var completedClass = index < order.progress ? 'is-done' : '';
-        return '<span class="dev5-step ' + completedClass + '">' + step + '</span>';
-      }).join('');
-
-      return [
-        '<article class="dev5-order-card">',
-        '  <div class="dev5-order-top">',
-        '    <div>',
-        '      <strong>' + order.id + '</strong>',
-        '      <div class="dev5-muted">' + order.date + ' · ' + order.items + '</div>',
-        '    </div>',
-        '    <span class="dev5-status">' + order.status + '</span>',
-        '  </div>',
-        '  <strong>' + formatMoney(order.total) + '</strong>',
-        '  <div class="dev5-timeline">' + timeline + '</div>',
-        '</article>'
-      ].join('');
-    }).join('');
-  }
-
-  function renderAddresses() {
-    var addressContainer = document.querySelector('[data-addresses]');
-    var editButton = document.querySelector('[data-edit-address]');
-    var addButton = document.querySelector('[data-add-address]');
-    var addresses = userData.addresses;
-    var currentSession = getSession();
-
-    if (!currentSession) {
-      addressContainer.innerHTML = '<p class="dev5-private-message">Vui lòng đăng nhập để xem sổ địa chỉ.</p>';
-      if (addButton) addButton.classList.add('dev5-hidden');
-      if (editButton) editButton.classList.add('dev5-hidden');
-      return;
-    }
-
-    if (addButton) {
-      addButton.classList.toggle('dev5-hidden', addresses.length > 0);
-    }
-    if (editButton) {
-      editButton.classList.toggle('dev5-hidden', addresses.length === 0);
-    }
-
-    addressContainer.innerHTML = addresses.length
-      ? addresses.map(function (address) {
-      var defaultLabel = address.isDefault ? ' · Mặc định' : '';
-      var fullAddress = address.detail || [address.line, address.district, address.city].filter(Boolean).join(', ') || 'Chưa cập nhật địa chỉ';
-      var addressLabel = address.label || address.title || 'Địa chỉ nhận hàng';
-
-      return [
-        '<article class="dev5-address-card">',
-        '  <div class="dev5-address-top">',
-        '    <strong>' + addressLabel + defaultLabel + '</strong>',
-        '  </div>',
-        '  <div class="dev5-address-line">',
-        '    <span>' + (address.recipient || currentSession.name) + '</span>',
-        '    <span>' + (address.phone || currentSession.phone) + '</span>',
-        '    <span>' + fullAddress + '</span>',
-        '  </div>',
-        '</article>'
-      ].join('');
-        }).join('')
-      : '<p class="dev5-muted">Bạn chưa lưu địa chỉ giao hàng nào.</p>';
-  }
-
-  function renderWishlist() {
-    var wishlistContainer = document.querySelector('[data-wishlist]');
-    var currentSession = getSession();
-
-    if (!currentSession) {
-      wishlistContainer.innerHTML = '<p class="dev5-private-message">Vui lòng đăng nhập để xem Wishlist.</p>';
-      return;
-    }
-
-    wishlistContainer.innerHTML = userData.wishlist.length
-      ? userData.wishlist.map(function (item) {
-      return [
-        '<article class="dev5-wishlist-item">',
-        '  <div class="dev5-wishlist-icon"></div>',
-        '  <span class="dev5-muted">' + item.tag + '</span>',
-        '  <h3>' + item.name + '</h3>',
-        '  <span class="dev5-price">' + item.price + '</span>',
-        '  <button class="dev5-secondary-button" type="button" data-wishlist-remove="' + item.id + '">Xóa</button>',
-        '</article>'
-      ].join('');
-        }).join('')
-      : '<p class="dev5-muted">Wishlist của bạn đang trống.</p>';
-  }
-
-  function renderFaq() {
-    var faqContainer = document.querySelector('[data-faq]');
-    var faqItems = [];
-
-    // Nạp ĐỘNG từ data/store/faqs.js
-    if (typeof faqs !== 'undefined' && Array.isArray(faqs)) {
-      faqItems = faqs;
-    } else if (typeof MOCK_FAQS !== 'undefined' && Array.isArray(MOCK_FAQS)) {
-      faqItems = MOCK_FAQS;
-    }
-
-    try {
-      var savedFaqs = JSON.parse(localStorage.getItem('sport_faqs') || 'null');
-      if (Array.isArray(savedFaqs) && savedFaqs.length > 0) faqItems = savedFaqs;
-    } catch (e) {}
-
-    faqContainer.innerHTML = faqItems.map(function (faq, index) {
-      var openClass = index === 0 ? 'is-open' : '';
-      var question = faq.question || faq.q || '';
-      var answer = faq.answer || faq.a || '';
-
-      return [
-        '<article class="dev5-faq-item ' + openClass + '">',
-        '  <button class="dev5-faq-question" type="button">',
-        '    ' + question + '<span>＋</span>',
-        '  </button>',
-        '  <div class="dev5-faq-answer">' + answer + '</div>',
-        '</article>'
-      ].join('');
-    }).join('');
-  }
-
-  function setActiveTab(tabName) {
-    if (!tabName) return;
-    var targetTabBtn = document.querySelector('[data-tab="' + tabName + '"]');
-    var targetPanel = document.querySelector('[data-panel="' + tabName + '"]');
-    if (!targetTabBtn || !targetPanel) return;
-
-    document.querySelectorAll('[data-tab]').forEach(function (btn) {
-      btn.classList.remove('is-active');
-    });
-    document.querySelectorAll('[data-panel]').forEach(function (panel) {
-      panel.classList.remove('is-active');
-    });
-
-    targetTabBtn.classList.add('is-active');
-    targetPanel.classList.add('is-active');
-  }
-
-  function bindTabEvents() {
-    document.querySelectorAll('[data-tab]').forEach(function (button) {
-      button.onclick = function () {
-        setActiveTab(button.dataset.tab);
-      };
-    });
-
-    // Lắng nghe sự kiện click trên các mục Dropdown Shopee (Tài khoản của tôi, Đơn mua)
-    document.querySelectorAll('[data-action-tab]').forEach(function (link) {
-      link.onclick = function (e) {
-        var tab = this.getAttribute('data-action-tab');
-        if (tab) {
-          e.preventDefault();
-          setActiveTab(tab);
-          if (window.history && window.history.replaceState) {
-            window.history.replaceState(null, '', 'dev5_user.html?tab=' + tab);
-          }
-        }
-      };
-    });
-
-    // Tự động kích hoạt tab dựa theo tham số ?tab=orders hoặc ?tab=overview trên URL
-    try {
-      var urlParams = new URLSearchParams(window.location.search);
-      var tabFromUrl = urlParams.get('tab');
-      if (tabFromUrl) {
-        setActiveTab(tabFromUrl);
+      for (var k = 0; k < cacBuoc.length; k++) {
+        var classXong = (k < soBuocXong) ? "is-done" : "";
+        chuoiTienTrinh += '<span class="dev5-step ' + classXong + '">' + cacBuoc[k] + '</span>';
       }
-    } catch (e) {}
+    }
+
+    html += '<article class="dev5-order-card">';
+    html += '  <div class="dev5-order-top">';
+    html += '    <div>';
+    html += '      <strong>' + maDon + '</strong>';
+    html += '      <div class="dev5-muted">' + ngayDat + ' · ' + tenMon + '</div>';
+    html += '    </div>';
+    html += '    <span class="dev5-status">' + trangThai + '</span>';
+    html += '  </div>';
+    html += '  <div style="display: flex; justify-content: space-between; align-items: center; margin: 12px 0;">';
+    html += '    <strong class="dev5-order-price" style="font-size: 1.15rem; color:' +  ';">' + formatMoney(tongTien) + '</strong>';
+    html += '    <button type="button" class="dev5-secondary-button" style="padding: 6px 14px; font-size: 13px;" onclick="xemChiTietDon(\'' + maDon + '\')">🔍 Xem chi tiết</button>';
+    html += '  </div>';
+    html += '  <div class="dev5-timeline">' + chuoiTienTrinh + '</div>';
+    html += '</article>';
+  }
+  khungDonHang.innerHTML = html;
+}
+
+function xemChiTietDon(maDon) {
+  //Lấy tất cả đơn hàng từ LocalStorage
+  var tatCaDon = [];
+  var chuoiDon = localStorage.getItem("sport_orders");
+  if (chuoiDon) {
+    tatCaDon = JSON.parse(chuoiDon);
+  } else if (typeof orders !== "undefined") {
+    tatCaDon = orders;
   }
 
-  function bindFaqEvents() {
-    document.querySelector('[data-faq]').onclick = function (event) {
-      var question = event.target.closest('.dev5-faq-question');
+  //Tìm đúng đơn hàng có mã trùng khớp bằng vòng lặp for
+  var don = null;
+  for (var i = 0; i < tatCaDon.length; i++) {
+    var idDon = tatCaDon[i].orderId || tatCaDon[i].id;
+    if (idDon === maDon) {
+      don = tatCaDon[i];
+      console.log("don");
+      break;
+    }
+  }
 
-      if (question) {
-        question.parentElement.classList.toggle('is-open');
+  if (!don) {
+    showToast("Không tìm thấy thông tin đơn hàng này!" , "danger");
+    return;
+  }
+
+  //Điền thông tin vào Popup
+  if (document.getElementById("modal-order-title")) {
+    document.getElementById("modal-order-title").textContent = "Chi Tiết Đơn Hàng #" + (don.orderId || don.id);
+  }
+  if (document.getElementById("order-detail-customer")) {
+    var tenKhach = (don.customer && don.customer.name) ? don.customer.name : (don.customer || "Khách hàng");
+    document.getElementById("order-detail-customer").textContent = tenKhach + " (" + (don.customer.phone || "") + ")";
+  }
+  if (document.getElementById("order-detail-email")) {
+    document.getElementById("order-detail-email").textContent = don.customer.email || "Chưa cập nhật";
+  }
+  if (document.getElementById("order-detail-address")) {
+    document.getElementById("order-detail-address").textContent = don.address || "Nhận tại cửa hàng";
+  }
+  if (document.getElementById("order-detail-date")) {
+    document.getElementById("order-detail-date").textContent = don.date || "Hôm nay";
+  }
+  if (document.getElementById("order-detail-payment")) {
+    document.getElementById("order-detail-payment").textContent = don.paymentMethod || don.payment || "Tiền mặt";
+  }
+  if (document.getElementById("order-detail-status")) {
+    document.getElementById("order-detail-status").textContent = don.status || "Mới đặt";
+  }
+  if (document.getElementById("order-detail-note")) {
+    document.getElementById("order-detail-note").textContent = don.note || "Không có";
+  }
+  if (document.getElementById("order-detail-total")) {
+    document.getElementById("order-detail-total").textContent = formatMoney(don.total);
+  }
+
+  //Vẽ danh sách các món đồ khách đã mua trong đơn này
+  var khungMon = document.getElementById("order-detail-items-list");
+  if (khungMon) {
+    var htmlMon = "";
+    if (don.items && don.items.length > 0) {
+      for (var j = 0; j < don.items.length; j++) {
+        var m = don.items[j];
+        var anh = m.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100";
+        var gia = m.price || 0;
+        var sl = m.quantity || 1;
+        var tongTienMon = m.total || (gia * sl);
+
+        htmlMon += '<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0;">';
+        htmlMon += '  <div style="display:flex; align-items:center; gap:12px;">';
+        htmlMon += '    <img src="' + anh + '" style="width:48px; height:48px; object-fit:cover; border-radius:6px;">';
+        htmlMon += '    <div>';
+        htmlMon += '      <div style="font-weight:600; font-size:14px; color:#1e293b;">' + (m.name || "Sản phẩm") + '</div>';
+        htmlMon += '      <div style="font-size:12px; color:#64748b;">Số lượng: x' + sl + ' | Đơn giá: ' + formatMoney(gia) + '</div>';
+        htmlMon += '    </div>';
+        htmlMon += '  </div>';
+        htmlMon += '  <div style="font-weight:700; color:#0f172a;">' + formatMoney(tongTienMon) + '</div>';
+        htmlMon += '</div>';
       }
-    };
+    } else {
+      htmlMon = "<p style='padding:15px; color:#64748b; text-align:center;'>Không có thông tin chi tiết từng mặt hàng.</p>";
+    }
+    khungMon.innerHTML = htmlMon;
   }
 
-  function bindAddressEvents() {
-    var addressForm = document.querySelector('[data-address-form]');
-    var editButton = document.querySelector('[data-edit-address]');
+  //Mở Popup hiển thị lên màn hình
+  var modal = document.getElementById("modal-order-detail");
+  if (modal) {
+    modal.classList.add("show");
+  }
+}
 
-    document.querySelector('[data-add-address]').onclick = function () {
-      addressForm.classList.remove('dev5-hidden');
-    };
+function layDanhSachDiaChiUser() {
+  var user = layUserHienTai();
+  if (!user) return [];
 
-    editButton.onclick = function () {
-      var address = userData.addresses[0];
-      if (!address) return;
+  var key = "sport_addresses_" + (user.id || user.customerId || "user");
+  var chuoi = localStorage.getItem(key);
+  var danhSach = chuoi ? JSON.parse(chuoi) : [];
 
-      Object.keys(address).forEach(function (field) {
-        if (addressForm.elements[field]) {
-          addressForm.elements[field].value = address[field] || '';
-        }
-      });
-      addressForm.classList.remove('dev5-hidden');
-    };
+  // Nếu trong danh sách chưa có gì nhưng trong hồ sơ user có địa chỉ, lấy làm mặc định
+  if (danhSach.length === 0 && user.address && user.address !== "Chưa cập nhật") {
+    danhSach.push({
+      recipient: user.name || "Người nhận",
+      phone: user.phone || "",
+      line: user.address,
+      district: "",
+      city: "",
+      isDefault: true
+    });
+    localStorage.setItem(key, JSON.stringify(danhSach));
+  }
+  return danhSach;
+}
 
-    document.querySelector('[data-cancel-address]').onclick = function () {
-      addressForm.reset();
-      addressForm.classList.add('dev5-hidden');
-    };
+function hienThiDiaChi() {
+  var khung = document.querySelector("[data-addresses]");
+  if (!khung) return;
 
-    var saveAddressBtn = addressForm.querySelector('button[type="submit"]');
-    if (saveAddressBtn) {
-      saveAddressBtn.onclick = function (event) {
-        event.preventDefault();
+  var danhSach = layDanhSachDiaChiUser();
 
-      var values = new FormData(addressForm);
-      var addresses = userData.addresses;
+  // Cập nhật số lượng địa chỉ lên Tab 1
+  var theDemDiaChi = document.querySelector("[data-address-count]");
+  if (theDemDiaChi) {
+    theDemDiaChi.textContent = danhSach.length;
+  }
 
-      var address = {
-        id: 'address-' + Date.now(),
-        label: 'Địa chỉ mới',
-        recipient: values.get('recipient'),
-        phone: values.get('phone'),
-        line: values.get('line'),
-        district: values.get('district'),
-        city: values.get('city'),
-        isDefault: true
-      };
+  // Nếu rỗng, hiển thị đúng thông báo như Ảnh 3 của bạn
+  if (danhSach.length === 0) {
+    khung.innerHTML = '<p class="dev5-muted">Bạn chưa lưu địa chỉ nhận hàng nào. Bấm nút "+ Thêm địa chỉ" ở trên để tạo.</p>';
+    return;
+  }
 
-      userData.addresses = [address];
-      localStorage.setItem(
-        USER_DATA_PREFIX + getSession().id,
-        JSON.stringify(userData)
-      );
-      // Đồng bộ sổ địa chỉ dùng chung cho module Checkout (Dev 4)
-      localStorage.setItem('sport_address', JSON.stringify(address));
-      addressForm.reset();
-      addressForm.classList.add('dev5-hidden');
-      renderAddresses();
-      renderOverview();
-      };
+  var html = "";
+  for (var i = 0; i < danhSach.length; i++) {
+    var dc = danhSach[i];
+    var diaChiChiTiet = dc.line;
+    if (dc.district) diaChiChiTiet += ", " + dc.district;
+    if (dc.city) diaChiChiTiet += ", " + dc.city;
+
+    html += '<article class="dev5-address-card" style="margin-bottom:12px; padding:16px; border:1px solid #e2e8f0; border-radius:8px;">';
+    html += '  <div class="dev5-address-top">';
+    html += '    <strong>Địa chỉ nhận hàng ' + (i + 1) + '</strong>';
+    html += '  </div>';
+    html += '  <div class="dev5-address-line" style="margin-top:8px; line-height:1.6;">';
+    html += '    <div><strong>Người nhận:</strong> ' + dc.recipient + '</div>';
+    html += '    <div><strong>SĐT:</strong> ' + dc.phone + '</div>';
+    html += '    <div><strong>Địa chỉ:</strong> ' + diaChiChiTiet + '</div>';
+    html += '  </div>';
+    html += '  <div style="margin-top:10px;">';
+    html += '    <button class="dev5-secondary-button" type="button" onclick="xoaDiaChi(' + i + ')">Xóa địa chỉ này</button>';
+    html += '  </div>';
+    html += '</article>';
+  }
+
+  khung.innerHTML = html;
+}
+
+function moFormThemDiaChi() {
+  var form = document.querySelector("[data-address-form]");
+  if (form) {
+    form.reset();
+    var user = layUserHienTai();
+    if (user) {
+      if (form.querySelector('[name="recipient"]')) form.querySelector('[name="recipient"]').value = user.name || "";
+      if (form.querySelector('[name="phone"]')) form.querySelector('[name="phone"]').value = user.phone || "";
+    }
+    form.classList.remove("dev5-hidden");
+  }
+}
+
+function dongFormDiaChi() {
+  var form = document.querySelector("[data-address-form]");
+  if (form) {
+    form.classList.add("dev5-hidden");
+  }
+}
+
+function luuDiaChi(event) {
+  event.preventDefault();
+  var form = document.querySelector("[data-address-form]");
+  if (!form) return;
+
+  var user = layUserHienTai();
+  if (!user) return;
+
+  var danhSach = layDanhSachDiaChiUser();
+  var diaChiMoi = {
+    recipient: form.querySelector('[name="recipient"]').value,
+    phone: form.querySelector('[name="phone"]').value,
+    line: form.querySelector('[name="line"]').value,
+    district: form.querySelector('[name="district"]').value,
+    city: form.querySelector('[name="city"]').value,
+    isDefault: (danhSach.length === 0)
+  };
+
+  danhSach.push(diaChiMoi);
+  var key = "sport_addresses_" + (user.id || user.customerId || "user");
+  localStorage.setItem(key, JSON.stringify(danhSach));
+
+  alert("Đã lưu địa chỉ nhận hàng thành công!");
+  dongFormDiaChi();
+  hienThiDiaChi();
+}
+
+function xoaDiaChi(viTri) {
+  if (!confirm("Bạn có chắc chắn muốn xóa địa chỉ này?")) return;
+
+  var user = layUserHienTai();
+  if (!user) return;
+
+  var danhSach = layDanhSachDiaChiUser();
+  var danhSachMoi = [];
+  for (var i = 0; i < danhSach.length; i++) {
+    if (i !== viTri) {
+      danhSachMoi.push(danhSach[i]);
     }
   }
 
-  function bindProfileEvents() {
-    var editBtn = document.querySelector('[data-edit-profile-btn]');
-    var cancelBtn = document.querySelector('[data-cancel-profile]');
-    var form = document.querySelector('[data-profile-form]');
+  var key = "sport_addresses_" + (user.id || user.customerId || "user");
+  localStorage.setItem(key, JSON.stringify(danhSachMoi));
+  hienThiDiaChi();
+}
 
-    if (!editBtn || !form) return;
+function layDanhSachWishlist() {
+  var chuoi = localStorage.getItem("sport_wishlist");
+  if (!chuoi) return [];
+  return JSON.parse(chuoi);
+}
 
-// Đã loại bỏ oninput, kiểm tra số khi click
+function hienThiYeuThich() {
+  var khung = document.querySelector("[data-wishlist]");
+  if (!khung) return;
 
-    editBtn.onclick = function () {
-      var currentSession = getSession();
-      if (!currentSession) return;
+  var danhSach = layDanhSachWishlist();
 
-      var registeredUsers = [];
-      try { registeredUsers = JSON.parse(localStorage.getItem('sportstore_registered_users') || '[]'); } catch(e){}
-      var regUser = registeredUsers.find(function(u) { return u.id === currentSession.id || u.email === currentSession.email; });
-      var phone = currentSession.phone || (regUser && regUser.phone) || '';
+  // Cập nhật số lượng yêu thích lên ô thống kê ở Tab 1
+  var theDemWishlist = document.querySelector("[data-wishlist-count]");
+  if (theDemWishlist) {
+    theDemWishlist.textContent = danhSach.length;
+  }
 
-      form.elements.profileName.value = currentSession.name || '';
-      form.elements.profileEmail.value = currentSession.email || '';
-      form.elements.profilePhone.value = phone;
-      form.elements.profilePassword.value = '';
+  // Nếu chưa có món yêu thích nào
+  if (danhSach.length === 0) {
+    khung.innerHTML = '<p class="dev5-muted">Danh sách yêu thích của bạn đang trống.</p>';
+    return;
+  }
 
-      form.classList.remove('dev5-hidden');
-    };
+  var html = "";
+  for (var i = 0; i < danhSach.length; i++) {
+    var sp = danhSach[i];
+    var hinhAnh = sp.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400";
 
-    if (cancelBtn) {
-      cancelBtn.onclick = function () {
-        form.reset();
-        form.classList.add('dev5-hidden');
-      };
-    }
+    html += '<article class="dev5-wishlist-item" style="border:1px solid #e2e8f0; border-radius:10px; padding:12px; background:#fff;">';
+    html += '  <img src="' + hinhAnh + '" alt="' + sp.name + '" style="width:100%; height:160px; object-fit:cover; border-radius:8px; margin-bottom:10px;">';
+    html += '  <span class="dev5-muted" style="font-size:0.85rem; color:#64748b;">' + (sp.category || sp.tag || "Thể thao") + '</span>';
+    html += '  <h3 style="font-size:1rem; margin:6px 0; color:#1e293b;">' + sp.name + '</h3>';
+    html += '  <div class="dev5-price" style="font-weight:bold; color:#dc2626; margin-bottom:10px;">' + formatMoney(sp.price) + '</div>';
+    html += '  <button class="dev5-secondary-button" type="button" onclick="xoaYeuThich(' + sp.id + ')">Xóa yêu thích</button>';
+    html += '</article>';
+  }
 
-    var saveProfileBtn = form.querySelector('button[type="submit"]');
-    if (saveProfileBtn) {
-      saveProfileBtn.onclick = function (e) {
-        e.preventDefault();
-      var currentSession = getSession();
-      if (!currentSession) return;
+  khung.innerHTML = html;
+}
 
-      var newName = form.elements.profileName.value.trim();
-      var newEmail = form.elements.profileEmail.value.trim();
-      var newPhone = form.elements.profilePhone.value.trim();
-      var newPass = form.elements.profilePassword.value;
+function xoaYeuThich(idCanXoa) {
+  var danhSach = layDanhSachWishlist();
+  var danhSachMoi = [];
 
-      currentSession.name = newName;
-      currentSession.email = newEmail;
-      currentSession.phone = newPhone;
-
-      // Cập nhật session
-      localStorage.setItem('sportstore_auth', JSON.stringify(currentSession));
-
-      // Cập nhật trong danh sách đăng ký nếu có
-      try {
-        var registered = JSON.parse(localStorage.getItem('sportstore_registered_users') || '[]');
-        var foundReg = registered.find(function (u) { return u.id === currentSession.id || u.email === currentSession.email; });
-        if (foundReg) {
-          foundReg.name = newName;
-          foundReg.email = newEmail;
-          foundReg.phone = newPhone;
-          if (newPass) foundReg.password = newPass;
-          localStorage.setItem('sportstore_registered_users', JSON.stringify(registered));
-        }
-      } catch (err) {}
-
-      // Cập nhật giao diện
-      renderUserProfile();
-      if (window.sportStoreAuth && typeof window.sportStoreAuth.updateButtons === 'function') {
-        window.sportStoreAuth.updateButtons();
-      }
-
-      form.classList.add('dev5-hidden');
-        showToast("Đã cập nhật thông tin cá nhân thành công!", "success");
-      };
+  // Vòng lặp for lọc bỏ sản phẩm có id trùng
+  for (var i = 0; i < danhSach.length; i++) {
+    if (danhSach[i].id != idCanXoa) {
+      danhSachMoi.push(danhSach[i]);
     }
   }
 
-  function bindWishlistEvents() {
-    document.querySelector('[data-wishlist]').onclick = function (event) {
-      var removeButton = event.target.closest('[data-wishlist-remove]');
-      if (!removeButton) return;
+  localStorage.setItem("sport_wishlist", JSON.stringify(danhSachMoi));
+  hienThiYeuThich();
+}
 
-      userData.wishlist = userData.wishlist.filter(function (item) {
-        return item.id !== removeButton.dataset.wishlistRemove;
-      });
-      localStorage.setItem(
-        USER_DATA_PREFIX + getSession().id,
-        JSON.stringify(userData)
-      );
-      renderWishlist();
-      renderOverview();
-    };
+function hienThiFaq() {
+  var khung = document.querySelector("[data-faq]");
+  if (!khung) return;
+
+  var dsFaq = [];
+  if (typeof faqs !== "undefined" && Array.isArray(faqs)) {
+    dsFaq = faqs;
+  } else {
+    var raw = localStorage.getItem("sport_faqs");
+    if (raw) dsFaq = JSON.parse(raw);
   }
 
-  function initializePage() {
-    var currentSession = getSession();
-    var authGuard = document.querySelector('[data-auth-guard]');
-    var authContent = document.querySelector('[data-authorized-content]');
-
-    // KHÓA TRANG NẾU KHÁCH CHƯA ĐĂNG NHẬP
-    if (!currentSession) {
-      if (authGuard) authGuard.classList.remove('dev5-hidden');
-      if (authContent) authContent.classList.add('dev5-hidden');
-
-      setTimeout(function () {
-        if (window.sportStoreAuth && typeof window.sportStoreAuth.openModal === 'function') {
-          window.sportStoreAuth.openModal('login');
-        }
-      }, 100);
-      return;
-    }
-
-    // ĐÃ ĐĂNG NHẬP: Mở khóa và hiển thị toàn bộ giao diện thành viên
-    if (authGuard) authGuard.classList.add('dev5-hidden');
-    if (authContent) authContent.classList.remove('dev5-hidden');
-
-    userData = getUserData();
-
-    renderUserProfile();
-    renderOverview();
-    renderOrders();
-    renderAddresses();
-    renderWishlist();
-    renderFaq();
-
-    bindTabEvents();
-    bindFaqEvents();
-    bindAddressEvents();
-    bindWishlistEvents();
-    bindProfileEvents();
+  // Nếu không có câu hỏi nào (hiển thị đúng như Ảnh 5 của bạn)
+  if (!dsFaq || dsFaq.length === 0) {
+    khung.innerHTML = '<p class="dev5-muted">Chưa có câu hỏi hỗ trợ nào.</p>';
+    return;
   }
 
-  // Khởi động trang trực tiếp từ dữ liệu động của hệ thống
-  initializePage();
-}());
+  var html = "";
+  for (var i = 0; i < dsFaq.length; i++) {
+    var cauHoi = dsFaq[i].question || dsFaq[i].q || "";
+    var cauTraLoi = dsFaq[i].answer || dsFaq[i].a || "";
+    var classMo = (i === 0) ? "is-open" : ""; // Mặc định mở câu đầu tiên
+
+    html += '<article class="dev5-faq-item ' + classMo + '">';
+    html += '  <button class="dev5-faq-question" type="button" onclick="dongMoFaq(this)">';
+    html += '    <span>' + cauHoi + '</span>';
+    html += '    <span>＋</span>';
+    html += '  </button>';
+    html += '  <div class="dev5-faq-answer">' + cauTraLoi + '</div>';
+    html += '</article>';
+  }
+
+  khung.innerHTML = html;
+}
+
+function dongMoFaq(nutBam) {
+  var theCha = nutBam.parentElement;
+  if (theCha) {
+    theCha.classList.toggle("is-open");
+  }
+}
+
+function renderUserProfile() {
+  hienThiThongTinUser();
+  hienThiDonHang();
+  hienThiDiaChi();
+  hienThiYeuThich();
+  hienThiFaq();
+}
+// Tự động chạy khi DOM sẵn sàng
+document.addEventListener("DOMContentLoaded", function () {
+  renderUserProfile();
+});

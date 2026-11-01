@@ -94,9 +94,7 @@ function changeOrderStatus(orderId, newStatus) {
     }
   }
   setStorage(STORAGE_KEYS.ORDERS, orders);
-  alert(
-    "Đã cập nhật tình trạng đơn hàng [#" + orderId + "] thành: " + newStatus,
-  );
+  showToast("Đã cập nhật tình trạng đơn hàng [#" + orderId + "] thành: " + newStatus , "success");
   renderOrderTable();
 }
 
