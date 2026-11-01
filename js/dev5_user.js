@@ -798,7 +798,6 @@ function xemChiTietDon(maDon) {
     var idDon = tatCaDon[i].orderId || tatCaDon[i].id;
     if (idDon === maDon) {
       don = tatCaDon[i];
-      console.log("don");
       break;
     }
   }
