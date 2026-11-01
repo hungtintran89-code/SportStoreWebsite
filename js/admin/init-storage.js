@@ -32,11 +32,24 @@ function initSportStorage() {
   if (!localStorage.getItem(STORAGE_KEYS.CUSTOMERS) && typeof customers !== "undefined") {
     setStorage(STORAGE_KEYS.CUSTOMERS, customers);
   }
+  if (!localStorage.getItem(STORAGE_KEYS.IMPORTS) && typeof imports !== "undefined") {
+    setStorage(STORAGE_KEYS.IMPORTS, imports);
+  }
 }
 
 // 5. Hàm tiện ích đổi số thành tiền Việt (ví dụ: 5000000 -> 5.000.000 đ)
 function formatVND(number) {
   return (Number(number) || 0).toLocaleString("vi-VN") + " đ";
+}
+
+// 6. Hàm tiện ích định dạng ngày Việt Nam (YYYY-MM-DD -> DD/MM/YYYY)
+function formatDateVN(dateStr) {
+  if (!dateStr) return "";
+  var parts = String(dateStr).split("-");
+  if (parts.length === 3) {
+    return parts[2] + "/" + parts[1] + "/" + parts[0];
+  }
+  return dateStr;
 }
 
 // Tự động chạy khi nạp file

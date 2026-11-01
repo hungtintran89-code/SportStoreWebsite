@@ -72,24 +72,32 @@ function switchTab(tabName, btnElement) {
 }
 
 function updateSidebarBadges() {
-
   var danhSachLoaiSP = typeof getStorage === "function" ? getStorage("sport_categories") : [];
   var danhSachSP = typeof getStorage === "function" ? getStorage("sport_products") : [];
   var danhSachPhieuNhap = typeof getStorage === "function" ? getStorage("sport_imports") : [];
   var danhSachDonHang = typeof getStorage === "function" ? getStorage("sport_orders") : [];
   var danhSachKhachHang = typeof getStorage === "function" ? getStorage("sport_customers") : [];
 
-  var badgeLoaiSP = document.getElementById("badge-count-categories");
-  var badgeSP = document.getElementById("badge-count-products");
-  var badgePhieuNhap = document.getElementById("badge-count-imports");
-  var badgeDonHang = document.getElementById("badge-count-orders");
-  var badgeKhachHang = document.getElementById("badge-count-customers");
+  var badgeConfigs = [
+    { el: document.getElementById("badge-count-categories"), count: danhSachLoaiSP.length },
+    { el: document.getElementById("badge-count-products"), count: danhSachSP.length },
+    { el: document.getElementById("badge-count-imports"), count: danhSachPhieuNhap.length },
+    { el: document.getElementById("badge-count-orders"), count: danhSachDonHang.length },
+    { el: document.getElementById("badge-count-customers"), count: danhSachKhachHang.length }
+  ];
 
-  if (badgeLoaiSP) badgeLoaiSP.textContent = danhSachLoaiSP.length;
-  if (badgeSP) badgeSP.textContent = danhSachSP.length;
-  if (badgePhieuNhap) badgePhieuNhap.textContent = danhSachPhieuNhap.length;
-  if (badgeDonHang) badgeDonHang.textContent = danhSachDonHang.length;
-  if (badgeKhachHang) badgeKhachHang.textContent = danhSachKhachHang.length;
+  // Dùng vòng for truyền thống duyệt cập nhật từng badge
+  for (var i = 0; i < badgeConfigs.length; i++) {
+    var cfg = badgeConfigs[i];
+    if (cfg.el) {
+      if (cfg.count <= 0) {
+        cfg.el.style.display = "none";
+      } else {
+        cfg.el.style.display = "inline-flex";
+        cfg.el.textContent = cfg.count > 99 ? "99+" : cfg.count;
+      }
+    }
+  }
 }
 
 

@@ -212,7 +212,7 @@ function saveProduct() {
   if (currentEditingProductId === -1) {
     // Thêm mới
     var newId = Date.now();
-    products.unshift({
+    var newProduct = {
       id: newId,
       code: code || "SP-" + newId.toString().slice(-4),
       name: name,
@@ -229,7 +229,12 @@ function saveProduct() {
       status: "active",
       isHot: isHot,
       isNew: isNew,
-    });
+    };
+    var danhSachMoi = [newProduct];
+    for (var i = 0; i < products.length; i++) {
+      danhSachMoi.push(products[i]);
+    }
+    products = danhSachMoi;
     alert("Đã thêm mới sản phẩm [" + name + "] thành công!");
   } else {
     // Cập nhật sản phẩm cũ
