@@ -240,7 +240,7 @@ function chonPhuongThuc(loai) {
 
 // --- 7. KIỂM TRA LỖI VÀ ĐẶT HÀNG ---
 function datHang(e) {
-  if (e) e.preventDefault(); // Ngăn trình duyệt tự load lại trang khi bấm submit form
+  if (e) e.preventDefault();
 
   let nguoiDung = getCurrentUser();
   if (!nguoiDung) {
@@ -270,25 +270,25 @@ function datHang(e) {
   let coLoi = false;
 
   // Kiểm tra Họ tên
-  if (hoTen.length < 2) {
+  if (hoTen.length === 0) {
     document.getElementById("err-fullName").textContent = "Vui lòng nhập họ tên đầy đủ!";
     coLoi = true;
   }
 
-  // Kiểm tra Số điện thoại (phải 10 số và bắt đầu bằng số 0)
+  // Kiểm tra Số điện thoại
   if (sdt.length !== 10 || sdt.charAt(0) !== "0" || isNaN(sdt)) {
     document.getElementById("err-phone").textContent = "Số điện thoại phải đủ 10 số và bắt đầu bằng số 0!";
     coLoi = true;
   }
 
   // Kiểm tra Email
-  if (email.length < 5 || email.indexOf("@") === -1) {
+  if (email.length < 5 || email.indexOf("@gmail.com") === -1) {
     document.getElementById("err-email").textContent = "Email chưa đúng định dạng!";
     coLoi = true;
   }
 
   // Kiểm tra Địa chỉ
-  if (diaChi.length < 5) {
+  if (diaChi.length === 0) {
     document.getElementById("err-address").textContent = "Vui lòng nhập địa chỉ cụ thể!";
     coLoi = true;
   }
@@ -326,12 +326,11 @@ function datHang(e) {
   // Nếu có bất kỳ ô nào nhập sai -> Báo lỗi và dừng lại
   if (coLoi) {
     showToast("Vui lòng kiểm tra lại các thông tin màu đỏ!", "danger");
-    // Nếu đang ở chế độ địa chỉ có sẵn mà bị lỗi, chuyển sang ô nhập mới để người dùng sửa
     chonCheDoDiaChi("new");
     return;
   }
 
-  // --- TẠO ĐƠN HÀNG MỚI NẾU KHÔNG CÓ LỖI ---
+
   let tongTien = tinhTongTien();
   let danhSachDonHang = readJson("sport_orders", []);
   if (!Array.isArray(danhSachDonHang)) {
@@ -340,28 +339,37 @@ function datHang(e) {
 
   // Tạo mã đơn hàng tự động tăng, ví dụ: DH-0001, DH-0002...
   let maDonMoi = "DH-" + String(danhSachDonHang.length + 1).padStart(4, "0");
-  let maKhachHang = nguoiDung.customerId || nguoiDung.id || "KHACH";
+
+  // Tạo orderItem list
+  let orderItemList = []
+  for( let i = 0 ; i < danhSachGioHang.length  ;i++){
+    orderItemList.push({
+      id : i + 1 ,
+      orderItemId : maDonMoi +`-${i+1}` ,
+      orderId : maDonMoi ,
+      productId : danhSachGioHang[i].productId ,
+      code: "SP-" + danhSachGioHang[i].productId,
+      name : danhSachGioHang[i].name ,
+      color : danhSachGioHang[i].color ,
+      quantity : danhSachGioHang[i].quantity ,
+      size : danhSachGioHang[i].size ,
+      price : danhSachGioHang[i].price ,
+      total : danhSachGioHang[i].total ,
+      image : danhSachGioHang[i].image
+    })
+  }
 
   let donHangMoi = {
     orderId: maDonMoi,
     id: maDonMoi,
-    customerId: maKhachHang,
+    customerId: nguoiDung.id ,
+    customer: nguoiDung ,
     createdAt: new Date().toISOString(),
+    paymentMethod: phuongThucThanhToan ,
     status: "pending",
-    items: danhSachGioHang,
-    subtotal: tongTien,
-    discount: 0,
-    shippingFee: 0,
     total: tongTien,
-    paymentMethod: phuongThucThanhToan,
-    customer: {
-      fullName: hoTen,
-      phone: sdt,
-      email: email,
-      province: tinhThanh,
-      address: diaChi,
-      note: ghiChu
-    }
+    note : ghiChu ,
+    items: orderItemList,
   };
 
   // Lưu đơn vào mảng đơn hàng trong localStorage
@@ -464,14 +472,6 @@ function khoiTaoTrang() {
   let btnSuaDiaChi = document.getElementById("d4EditAddr");
   if (btnSuaDiaChi) {
     btnSuaDiaChi.onclick = function() { chonCheDoDiaChi("new"); };
-  }
-
-  // Gắn sự kiện click cho các nút chọn phương thức thanh toán
-  let danhSachRadioThanhToan = document.querySelectorAll('#d4PayList input[name="payment"]');
-  for (let i = 0; i < danhSachRadioThanhToan.length; i++) {
-    danhSachRadioThanhToan[i].onclick = function() {
-      chonPhuongThuc(this.value);
-    };
   }
 
   // Gắn sự kiện submit form khi người dùng bấm nút "Xác nhận đặt hàng"

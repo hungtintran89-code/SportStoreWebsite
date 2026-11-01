@@ -129,7 +129,7 @@ function saveCategory() {
   var profit = Number(document.getElementById("cat-profit").value) || 25;
 
   if ( !name || !icon || !desc || !profit) {
-    alert("Vui lòng nhập đầy đủ thông tin!");
+    showToast("Vui lòng nhập đầy đủ thông tin!", "danger");
     return;
   }
 
@@ -139,7 +139,7 @@ function saveCategory() {
 
     for (var i = 0; i < categories.length; i++) {
       if (categories[i].id === id) {
-        alert("Mã loại [" + id + "] đã tồn tại! Vui lòng chọn mã khác.");
+        showToast("Mã loại [" + id + "] đã tồn tại! Vui lòng chọn mã khác.", "danger");
         return;
       }
     }
@@ -151,7 +151,8 @@ function saveCategory() {
       profitPercent: profit,
       status: "active",
     });
-    alert("Đã thêm mới loại sản phẩm [" + name + "] thành công!");
+    showToast("Đã thêm mới loại sản phẩm [" + name + "] thành công!", "success");
+
   } else {
     // Cập nhật loại cũ
     for (var j = 0; j < categories.length; j++) {
@@ -163,7 +164,7 @@ function saveCategory() {
         break;
       }
     }
-    alert("Đã cập nhật loại sản phẩm thành công!");
+    showToast("Đã cập nhật loại sản phẩm thành công!", "success");
   }
 
   setStorage(STORAGE_KEYS.CATEGORIES, categories);
@@ -187,7 +188,7 @@ function deleteCategory(catId) {
   }
 
   setStorage(STORAGE_KEYS.CATEGORIES, newCats);
-  alert("Đã xóa loại sản phẩm [" + catId + "]!");
+  showToast("Đã xóa loại sản phẩm [" + catId + "]!", "success");
   renderCategoryTable();
   updateSidebarBadges();
 }

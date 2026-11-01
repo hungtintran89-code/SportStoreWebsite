@@ -526,7 +526,7 @@ body.admin-body {
 .admin-content {
   flex: 1;
   height: 100%;
-  padding: 24px 30px 14px 30px;
+  padding: 24px;
   overflow: hidden; /* Cố định 100% khung content, không sinh thanh cuộn toàn trang */
   background-color: var(--admin-body-bg);
   display: flex;
@@ -778,6 +778,13 @@ body.admin-body {
   vertical-align: middle;
 }
 
+/* Canh lề phải cho tiêu đề và ô ở cột cuối cùng */
+.admin-table th:last-child,
+.admin-table td:last-child {
+  text-align: center;
+}
+
+
 .admin-table tr:last-child td {
   border-bottom: none;
 }
@@ -807,6 +814,7 @@ body.admin-body {
 .table-actions {
   display: flex;
   align-items: center;
+  justify-content : center ;
   gap: 8px;
 }
 
