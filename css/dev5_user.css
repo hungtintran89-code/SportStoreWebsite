@@ -1,9 +1,686 @@
+/* ==========================================================================
+   DEV 5 MODULE: TRANG TAI KHOAN HOI VIEN
+   Phong cach: Trang - xanh the thao, gon gang va de chinh sua
+   Chi su dung cac thuoc tinh CSS thong dung cho khu vuc hoi vien
+   ========================================================================== */
+
+/* ================== KHUNG TRANG ================== */
 .dev5-user-wrapper {
   min-height: calc(100vh - 70px);
-  padding: 42px 0 72px;
-  background: linear-gradient(145deg, #f8fafc, #eff6ff);
+  padding: 32px 0 72px;
+  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 55%, #f0f9ff 100%);
 }
 
+.dev5-user-wrapper button,
+.dev5-user-wrapper input {
+  font-family: inherit;
+}
+
+.dev5-muted {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.dev5-eyebrow {
+  color: #0ea5e9;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+/* ================== HERO ================== */
+.dev5-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 38px 42px;
+  margin-bottom: 26px;
+  border-radius: 22px;
+  color: #ffffff;
+  background: linear-gradient(120deg, #075985 0%, #0284c7 60%, #0ea5e9 100%);
+  box-shadow: 0 16px 32px rgba(2, 132, 199, 0.22);
+}
+
+.dev5-hero h1 {
+  margin: 8px 0 10px;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.dev5-hero h1 [data-user-name] {
+  color: #e0f2fe;
+}
+
+.dev5-hero p {
+  margin: 0;
+  color: #e0f2fe;
+  font-size: 14px;
+}
+
+.dev5-hero .dev5-eyebrow {
+  color: #bae6fd;
+}
+
+.dev5-role-badge,
+.dev5-tier {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dev5-hero .dev5-role-badge {
+  padding: 10px 17px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* ================== BO CUC 2 COT ================== */
+.dev5-layout {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  gap: 26px;
+  align-items: start;
+}
+
+.dev5-content {
+  min-width: 0;
+}
+
+.dev5-sidebar,
+.dev5-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+/* ================== SIDEBAR ================== */
+.dev5-sidebar {
+  position: sticky;
+  top: 92px;
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+}
+
+.dev5-sidebar-title {
+  padding: 7px 12px 10px;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.dev5-tab {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.dev5-tab:hover {
+  background: #f0f9ff;
+  color: #0369a1;
+}
+
+.dev5-tab.is-active {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.dev5-tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  font-size: 17px;
+}
+
+.dev5-tab.is-active .dev5-tab-icon {
+  background: #ffffff;
+}
+
+/* ================== PANEL NOI DUNG ================== */
+.dev5-panel {
+  display: none;
+  padding: 30px;
+}
+
+.dev5-panel.is-active {
+  display: block;
+}
+
+.dev5-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-bottom: 19px;
+  margin-bottom: 23px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dev5-panel-heading .dev5-eyebrow {
+  display: block;
+}
+
+.dev5-panel-heading h2 {
+  margin: 4px 0 0;
+  color: #0f172a;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.dev5-heading-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ================== THONG TIN HOI VIEN ================== */
+.dev5-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 25px;
+  border: 1px solid #bae6fd;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 85%);
+}
+
+.dev5-avatar {
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 2px #7dd3fc;
+}
+
+.dev5-profile-info {
+  min-width: 0;
+}
+
+.dev5-profile-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.dev5-profile-name-row h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.dev5-tier {
+  padding: 5px 10px;
+}
+
+.dev5-profile-line {
+  margin-top: 5px;
+  color: #475569;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.dev5-line-email,
+.dev5-line-phone {
+  padding-left: 2px;
+}
+
+/* ================== THONG KE NHANH ================== */
+.dev5-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin-top: 22px;
+}
+
+.dev5-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.dev5-stat-card:hover {
+  transform: translateY(-3px);
+  border-color: #7dd3fc;
+  box-shadow: 0 10px 22px rgba(2, 132, 199, 0.1);
+}
+
+.dev5-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: #e0f2fe;
+  font-size: 21px;
+}
+
+.dev5-stat-text strong {
+  display: block;
+  color: #0284c7;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.dev5-stat-text span {
+  display: block;
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ================== DON MUA ================== */
+.dev5-order-card,
+.dev5-address-card {
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.035);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.dev5-order-card:hover,
+.dev5-address-card:hover {
+  border-color: #7dd3fc;
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.08);
+}
+
+.dev5-order-top,
+.dev5-address-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dev5-order-top strong {
+  color: #0f172a;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+
+.dev5-order-top .dev5-muted {
+  margin-top: 4px;
+}
+
+.dev5-order-card > strong {
+  display: block;
+  padding-top: 13px;
+  margin-top: 13px;
+  border-top: 1px dashed #e2e8f0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.dev5-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #d1fae5;
+  color: #047857;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Tien trinh don hang: cac buoc dang the don gian */
+.dev5-timeline {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.dev5-step {
+  flex: 1;
+  padding: 9px 5px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.dev5-step.is-done {
+  border-color: #bae6fd;
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* ================== SO DIA CHI ================== */
+.dev5-address-card {
+  border-left: 4px solid #0284c7;
+}
+
+.dev5-address-top strong {
+  display: inline-block;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dev5-address-line {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  color: #334155;
+  font-size: 14px;
+}
+
+.dev5-address-line span {
+  overflow-wrap: anywhere;
+}
+
+/* ================== SAN PHAM YEU THICH ================== */
+.dev5-wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
+}
+
+.dev5-wishlist-item {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.035);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.dev5-wishlist-item:hover {
+  transform: translateY(-3px);
+  border-color: #7dd3fc;
+  box-shadow: 0 9px 20px rgba(2, 132, 199, 0.1);
+}
+
+.dev5-wishlist-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 118px;
+  margin-bottom: 12px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+  font-size: 42px;
+}
+
+.dev5-wishlist-item h3 {
+  margin: 6px 0;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.dev5-price {
+  color: #0284c7;
+  font-weight: 800;
+}
+
+.dev5-wishlist-item .dev5-secondary-button {
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 7px 12px;
+  font-size: 12px;
+}
+
+/* ================== TRANG THAI CHUA CO DU LIEU ================== */
+[data-orders] > .dev5-muted,
+[data-addresses] > .dev5-muted,
+.dev5-wishlist-grid > .dev5-muted,
+.dev5-private-message {
+  display: block;
+  padding: 38px 20px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ================== FAQ ================== */
+.dev5-faq-item {
+  margin-bottom: 11px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 13px;
+  background: #ffffff;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.dev5-faq-item:hover,
+.dev5-faq-item.is-open {
+  border-color: #7dd3fc;
+}
+
+.dev5-faq-item.is-open {
+  background: #f8fcff;
+}
+
+.dev5-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 15px 18px;
+  border: 0;
+  background: transparent;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dev5-faq-question:hover {
+  color: #0284c7;
+}
+
+.dev5-faq-question span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 16px;
+}
+
+.dev5-faq-item.is-open .dev5-faq-question span {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.dev5-faq-answer {
+  display: none;
+  padding: 0 18px 17px;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.dev5-faq-item.is-open .dev5-faq-answer {
+  display: block;
+}
+
+/* ================== NUT BAM ================== */
+.dev5-primary-button,
+.dev5-secondary-button,
+.dev5-link-button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+
+.dev5-primary-button {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+}
+
+.dev5-primary-button:hover {
+  background: #0369a1;
+  box-shadow: 0 6px 14px rgba(2, 132, 199, 0.25);
+}
+
+.dev5-secondary-button {
+  border: 1px solid #e2e8f0;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.dev5-secondary-button:hover {
+  background: #e2e8f0;
+}
+
+.dev5-link-button {
+  background: transparent;
+  color: #0284c7;
+}
+
+.dev5-link-button:hover {
+  color: #0369a1;
+  text-decoration: underline;
+}
+
+/* ================== FORM HO SO VA DIA CHI ================== */
+.dev5-address-form {
+  padding: 23px;
+  margin-top: 21px;
+  border: 1px solid #bae6fd;
+  border-radius: 16px;
+  background: #f8fcff;
+}
+
+.dev5-form-title {
+  margin: 0 0 15px;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.dev5-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.dev5-form-grid label {
+  display: grid;
+  gap: 6px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dev5-form-grid input {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 14px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.dev5-form-grid input:focus {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+}
+
+.dev5-form-wide {
+  grid-column: 1 / -1;
+}
+
+.dev5-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 19px;
+}
+
+/* ================== HEADER PROFILE ================== */
 .dev5-header-profile {
   display: inline-flex;
   align-items: center;
@@ -21,550 +698,46 @@
   object-fit: cover;
 }
 
-.dev5-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 32px;
-  margin-bottom: 26px;
-  background: linear-gradient(120deg, #075985, #0284c7);
-  border-radius: 20px;
-  color: #fff;
-  box-shadow: 0 16px 32px #0284c72e;
-}
-
-.dev5-hero h1 {
-  margin: 6px 0;
-  font-size: clamp(28px, 4vw, 42px);
-}
-
-.dev5-hero p {
-  margin: 0;
-  color: #dbeafe;
-}
-
-.dev5-eyebrow {
-  color: #38bdf8;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.8px;
-}
-
-.dev5-hero .dev5-eyebrow {
-  color: #bae6fd;
-}
-
-.dev5-role-badge,
-.dev5-tier {
-  display: inline-flex;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: #e0f2fe;
-  color: #0369a1;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.dev5-hero .dev5-role-badge {
-  background: #ffffff29;
-  color: #fff;
-}
-
-.dev5-layout {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 24px;
-  align-items: start;
-}
-
-.dev5-sidebar,
-.dev5-panel {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 5px 18px #0f172a0d;
-}
-
-.dev5-sidebar {
-  display: grid;
-  gap: 4px;
-  padding: 10px;
-}
-
-.dev5-tab {
-  padding: 13px 14px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: #64748b;
-  font-weight: 700;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dev5-tab:hover,
-.dev5-tab.is-active {
-  background: #e0f2fe;
-  color: #0369a1;
-}
-
-.dev5-panel {
-  display: none;
-  padding: 28px;
-}
-
-.dev5-panel.is-active {
+/* ================== CUON TRANG KHACH HANG ================== */
+html.dev5-scroll-page {
+  height: auto;
+  max-height: none;
+  overflow-y: auto;
   display: block;
 }
 
-.dev5-panel-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.dev5-panel-heading h2 {
-  margin: 3px 0;
-  font-size: 23px;
-}
-
-.dev5-profile-card {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 20px;
-  border-radius: 14px;
-  background: #f8fafc;
-}
-
-.dev5-avatar {
-  width: 76px;
-  height: 76px;
-  border: 4px solid #bae6fd;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.dev5-profile-card h3 {
-  margin: 0 0 4px;
-}
-
-.dev5-profile-card p {
-  margin: 0 0 10px;
-  color: #64748b;
-}
-
-.dev5-stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-top: 18px;
-}
-
-.dev5-stat-grid div {
-  padding: 18px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-}
-
-.dev5-stat-grid strong,
-.dev5-stat-grid span {
-  display: block;
-}
-
-.dev5-stat-grid strong {
-  color: #0284c7;
-  font-size: 25px;
-}
-
-.dev5-stat-grid span,
-.dev5-muted {
-  color: #64748b;
-  font-size: 13px;
-}
-
-.dev5-order-card,
-.dev5-address-card {
-  padding: 18px;
-  margin-bottom: 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-}
-
-.dev5-order-top,
-.dev5-address-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-
-}
-
-.dev5-address-line {
-  display: grid;
-  gap: 4px;
-  margin-top: 10px;
-  color: #0f172a;
-}
-
-
-.dev5-address-line span {
-  min-width: 0;
-}
-
-.dev5-status {
-  color: #059669;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.dev5-timeline {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 18px;
-}
-
-.dev5-step {
-  position: relative;
-  flex: 1;
-  padding-top: 19px;
-  color: #94a3b8;
-  font-size: 12px;
-  text-align: center;
-}
-
-.dev5-step::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: calc(50% - 6px);
-  z-index: 1;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #cbd5e1;
-}
-
-.dev5-step:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  width: 100%;
-  height: 2px;
-  background: #e2e8f0;
-}
-
-.dev5-step.is-done {
-  color: #0284c7;
-  font-weight: 700;
-}
-
-.dev5-step.is-done::before,
-.dev5-step.is-done::after {
-  background: #0284c7;
-}
-
-.dev5-wishlist-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 14px;
-}
-
-.dev5-wishlist-item {
-  padding: 18px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-}
-
-.dev5-wishlist-icon {
-  display: grid;
-  place-items: center;
-  height: 105px;
-  margin-bottom: 12px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #e0f2fe, #dbeafe);
-  font-size: 40px;
-}
-
-.dev5-wishlist-item h3 {
-  margin: 0 0 7px;
-  font-size: 15px;
-}
-
-.dev5-wishlist-item .dev5-secondary-button {
-  margin-top: 12px;
-  padding: 7px 10px;
-  font-size: 12px;
-}
-
-.dev5-price {
-  color: #0284c7;
-  font-weight: 800;
-}
-
-.dev5-faq-item {
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.dev5-faq-question {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 17px 0;
-  border: 0;
-  background: transparent;
-  font-weight: 800;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dev5-faq-answer {
-  display: none;
-  padding: 0 0 17px;
-  color: #64748b;
-}
-
-.dev5-faq-item.is-open .dev5-faq-answer {
-  display: block;
-}
-
-.dev5-primary-button,
-.dev5-secondary-button,
-.dev5-link-button {
-  padding: 10px 14px;
-  border: 0;
-  border-radius: 8px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.dev5-primary-button {
-  background: #0284c7;
-  color: #fff;
-}
-
-.dev5-secondary-button {
-  background: #e2e8f0;
-  color: #334155;
-}
-
-.dev5-link-button {
-  background: transparent;
-  color: #0284c7;
-}
-
-.dev5-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.dev5-form-grid label {
-  display: grid;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.dev5-form-grid input {
-  padding: 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-}
-
-.dev5-form-wide {
-  grid-column: 1 / -1;
-}
-
-.dev5-form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.dev5-hidden {
-  display: none !important;
-}
-
-.dev5-auth-modal {
-  display: none;
-  place-items: center;
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  padding: 20px;
-  background: #0f172a99;
-}
-
-.dev5-auth-modal.is-open {
-  display: grid;
-}
-
-.dev5-auth-box {
-  position: relative;
-  width: min(100%, 420px);
-  padding: 30px;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 20px 50px #0f172a55;
-}
-
-.dev5-auth-box h2 {
-  margin: 5px 0 18px;
-}
-
-.dev5-auth-box label {
-  display: grid;
-  gap: 6px;
-  margin: 12px 0;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.dev5-auth-box input {
-  padding: 11px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-}
-
-.dev5-auth-tabs {
-  display: flex;
-  border-bottom: 2px solid #e2e8f0;
-  margin-bottom: 16px;
-}
-
-.dev5-auth-tab {
-  flex: 1;
-  padding: 10px 8px;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #64748b;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.dev5-auth-tab.is-active {
-  color: #0284c7;
-  border-bottom-color: #0284c7;
-}
-
-.dev5-auth-btn-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.dev5-auth-btn-row .dev5-primary-button {
-  flex: 1;
-  margin-top: 0;
-}
-
-.dev5-demo-button {
-  flex: 1.2;
-  padding: 10px 10px;
-  background: #f8fafc;
-  color: #0369a1;
-  border: 1px dashed #0284c7;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.dev5-demo-button:hover {
-  background: #f0f9ff;
-  border-color: #0369a1;
-}
-
-.dev5-demo-options {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
-  padding: 10px;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-}
-
-.dev5-demo-choice {
-  padding: 8px 12px;
-  text-align: left;
-  background: #fff;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #1e293b;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.dev5-demo-choice:hover {
-  background: #f0f9ff;
-  border-color: #0284c7;
-  color: #0284c7;
-}
-
-.dev5-auth-box .dev5-primary-button {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.dev5-auth-close {
-  position: absolute;
-  top: 8px;
-  right: 14px;
-  border: 0;
-  background: transparent;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.dev5-auth-message {
-  min-height: 20px;
-  color: #dc2626;
-  font-size: 13px;
-}
-
-.dev5-auth-switch {
-  color: #64748b;
-  font-size: 12px;
-  line-height: 1.7;
-  text-align: center;
-}
-
-.dev5-auth-switch button {
-  border: 0;
-  background: none;
-  color: #0284c7;
-  font-weight: 800;
-  cursor: pointer;
-}
-
+/* ================== RESPONSIVE ================== */
 @media (max-width: 800px) {
   .dev5-layout {
     grid-template-columns: 1fr;
   }
 
   .dev5-sidebar {
-    grid-template-columns: repeat(2, 1fr);
+    position: static;
+    display: flex;
+    gap: 7px;
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  .dev5-sidebar-title {
+    display: none;
+  }
+
+  .dev5-tab {
+    flex-shrink: 0;
+    width: auto;
+    white-space: nowrap;
   }
 
   .dev5-hero {
     align-items: flex-start;
     flex-direction: column;
+    padding: 28px 25px;
+  }
+
+  .dev5-panel {
+    padding: 22px 18px;
   }
 
   .dev5-form-grid {
@@ -576,10 +749,44 @@
   }
 }
 
+@media (max-width: 560px) {
+  .dev5-user-wrapper {
+    padding-top: 20px;
+  }
 
-/* ==========================================================================
-   DEV 5 - GIAO DIỆN CỔNG ĐĂNG NHẬP ADMIN ĐỒNG BỘ VỚI MÀU KHÁCH HÀNG
-   Tông màu: Trắng + Xanh thể thao (White & Sky Blue #0284c7)
+  .dev5-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dev5-profile-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dev5-order-top {
+    flex-direction: column;
+  }
+
+  .dev5-timeline {
+    flex-wrap: wrap;
+  }
+
+  .dev5-step {
+    min-width: 42%;
+  }
+
+  .dev5-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .dev5-form-actions button {
+    width: 100%;
+  }
+}
+
+/* ========================================================================== 
+   DEV 5 - GIAO DIEN CONG DANG NHAP ADMIN DONG BO VOI MAU KHACH HANG
+   GIU NGUYEN THEO YEU CAU: KHONG CHINH SUA KHOI CSS NAY.
    ========================================================================== */
 body.admin-login-body {
   min-height: 100vh;
@@ -591,7 +798,9 @@ body.admin-login-body {
   padding: 20px;
   margin: 0;
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
 }
 
 .admin-login-card {
@@ -601,7 +810,9 @@ body.admin-login-body {
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 36px 32px;
-  box-shadow: 0 20px 45px -10px rgba(2, 132, 199, 0.18), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 45px -10px rgba(2, 132, 199, 0.18),
+    0 4px 6px -2px rgba(0, 0, 0, 0.04);
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -782,4 +993,3 @@ body.admin-login-body {
   color: #0369a1;
   text-decoration: underline;
 }
-
