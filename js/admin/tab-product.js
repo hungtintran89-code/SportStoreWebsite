@@ -126,12 +126,11 @@ function openModalAddProduct() {
   document.getElementById("prod-name").value = "";
   document.getElementById("prod-code").value =
     "SP-" + Date.now().toString().slice(-4);
-  // document.getElementById("prod-brand").value = "Nike";
-  // document.getElementById("prod-cost").value = "1000000";
-  // document.getElementById("prod-price").value = "1350000";
-  // document.getElementById("prod-stock").value = "0";
-  // document.getElementById("prod-image").value = "";
-  // document.getElementById("prod-desc").value = "";
+
+  var hotCheck = document.getElementById("prod-is-hot") ;
+  var newCheck = document.getElementById("prod-is-new") ;
+  if (hotCheck) hotCheck.checked = false;
+  if (newCheck) newCheck.checked = false;
 
   openModal("modal-product");
 }
@@ -170,6 +169,10 @@ function editProduct(productId) {
     stockInput.value = target.stock || 0;
     stockInput.disabled = true;
   }
+  var hotCheck = document.getElementById("prod-is-hot");
+  var newCheck = document.getElementById("prod-is-new");
+  if (hotCheck) hotCheck.checked = target.isHot === true;
+  if (newCheck) newCheck.checked = target.isNew === true;
 
   openModal("modal-product");
 }
@@ -201,10 +204,15 @@ function saveProduct() {
 
   var products = getStorage(STORAGE_KEYS.PRODUCTS, []);
 
+  // Lấy giá trị cờ
+  var isHot = document.getElementById("prod-is-hot") ? document.getElementById("prod-is-hot").checked : false;
+  var isNew = document.getElementById("prod-is-new") ? document.getElementById("prod-is-new").checked : false;
+
+
   if (currentEditingProductId === -1) {
     // Thêm mới
     var newId = Date.now();
-    products.unshift({
+    var newProduct = {
       id: newId,
       code: code || "SP-" + newId.toString().slice(-4),
       name: name,
@@ -219,7 +227,14 @@ function saveProduct() {
         "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
       desc: desc,
       status: "active",
-    });
+      isHot: isHot,
+      isNew: isNew,
+    };
+    var danhSachMoi = [newProduct];
+    for (var i = 0; i < products.length; i++) {
+      danhSachMoi.push(products[i]);
+    }
+    products = danhSachMoi;
     alert("Đã thêm mới sản phẩm [" + name + "] thành công!");
   } else {
     // Cập nhật sản phẩm cũ
@@ -235,6 +250,9 @@ function saveProduct() {
         products[i].stock = stock;
         products[i].image = image;
         products[i].desc = desc;
+        products[i].isHot = isHot;
+        products[i].isNew = isNew;
+
         break;
       }
     }

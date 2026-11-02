@@ -160,7 +160,6 @@ function renderNXTReport(products) {
 
 /**
  * Nút nhập gấp: Tự động chuyển sang Tab Nhập hàng và mở modal với sản phẩm này
- * @param {number} productId 
  */
 function quickImportProduct(productId) {
   switchTab("import");

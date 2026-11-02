@@ -4,11 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="" />
+    <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/auth_modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/auth_modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev2_products.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev2_products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev4_checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev4_checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dev5_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev5_user.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,7 +55,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "TV1-clone",
+    "git-widget-placeholder": "testTV3",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/TaiLieuHoc/Project/SportStoreWebsite",
@@ -54,6 +67,13 @@
     "to.speed.mode.migration.done": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\TaiLieuHoc\Project\SportStoreWebsite\data\store" />
+      <recent name="C:\TaiLieuHoc\Project\SportStoreWebsite\pages" />
+      <recent name="C:\TaiLieuHoc\Project\SportStoreWebsite\js\admin" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="SportStoreWebsite" />
@@ -79,5 +99,16 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

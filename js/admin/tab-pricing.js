@@ -114,7 +114,6 @@ function recalculatePriceRow(productId, costPrice) {
 
 /**
  * Lưu giá bán mới cho từng sản phẩm đơn lẻ
- * @param {number} productId
  */
 function applySingleProductPrice(productId) {
   var inputProfit = document.getElementById("profit-input-" + productId);

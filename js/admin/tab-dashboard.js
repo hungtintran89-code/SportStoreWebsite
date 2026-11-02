@@ -1,12 +1,3 @@
-/**
- * ==============================================================================
- * SPORTSTORE - TAB 1: BẢNG ĐIỀU KHIỂN TỔNG QUAN (TAB-DASHBOARD.JS)
- * ==============================================================================
- * Nhiệm vụ:
- *  - Tính toán và hiển thị 4 thẻ KPI (Doanh thu, Đơn hàng, Hội viên, Tồn kho)
- *  - Vẽ biểu đồ cột CSS doanh số theo từng bộ môn thể thao
- *  - Hiển thị danh sách 4 đơn hàng gần nhất cần xử lý
- */
 
 function renderDashboard() {
   var orders = getStorage(STORAGE_KEYS.ORDERS, []);
