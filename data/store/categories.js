@@ -5,11 +5,12 @@ var categories = [
     icon: "👟",
     name: "Chạy Bộ",
     slug: "chay-bo",
-    desc: "Giày chạy marathon đệm carbon siêu nhẹ, trang phục thoáng khí Dri-FIT, đai nước và phụ kiện chạy bộ đường dài",
-    profitPercent: 30,
-    itemCount: 8,
+    desc: "Giày chạy bộ Running marathon đệm carbon, quần áo thoáng khí, đồng hồ GPS và phụ kiện chạy đường dài",
+    profitPercent: 25,
+    itemCount: 21,
     status: "active",
-    banner: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&auto=format&fit=crop&q=80"
+    banner:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&auto=format&fit=crop&q=80",
   },
   {
     id: "CAT-FOOTBALL",
@@ -17,11 +18,12 @@ var categories = [
     icon: "⚽",
     name: "Bóng Đá",
     slug: "bong-da",
-    desc: "Giày đinh thi đấu sân cỏ tự nhiên FG / sân cỏ nhân tạo TF, bóng tiêu chuẩn FIFA Quality Pro, găng tay thủ môn",
+    desc: "Giày đá bóng sân cỏ tự nhiên FG, cỏ nhân tạo TF, Futsal, bóng thi đấu FIFA, găng tay thủ môn và áo đấu",
     profitPercent: 25,
-    itemCount: 7,
+    itemCount: 20,
     status: "active",
-    banner: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=1200&auto=format&fit=crop&q=80"
+    banner:
+      "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=1200&auto=format&fit=crop&q=80",
   },
   {
     id: "CAT-RACKET",
@@ -29,11 +31,12 @@ var categories = [
     icon: "🏸",
     name: "Cầu Lông - Tennis",
     slug: "cau-long-tennis",
-    desc: "Vợt carbon trợ lực siêu nảy, quả cầu lông ba sao tiêu chuẩn thi đấu, bóng tennis chịu áp lực và túi đựng vợt",
-    profitPercent: 28,
-    itemCount: 6,
+    desc: "Vợt cầu lông, tennis, pickleball, bóng bàn, giày chuyên dụng, bao vợt, cước đan và quấn cán chính hãng",
+    profitPercent: 25,
+    itemCount: 25,
     status: "active",
-    banner: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1200&auto=format&fit=crop&q=80"
+    banner:
+      "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1200&auto=format&fit=crop&q=80",
   },
   {
     id: "CAT-GYM",
@@ -41,11 +44,12 @@ var categories = [
     icon: "🏋️",
     name: "Gym & Fitness",
     slug: "gym-fitness",
-    desc: "Trang phục bó cơ Pro Compression, đai lưng deadlift da bò, găng tay thể hình, con lăn giãn cơ và bình giữ nhiệt",
-    profitPercent: 35,
-    itemCount: 6,
+    desc: "Quần áo tập Gym, Yoga, giày Training, đai lưng bảo hộ, thảm tập, dây nhảy, bình giữ nhiệt và túi trống",
+    profitPercent: 30,
+    itemCount: 19,
     status: "active",
-    banner: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1200&auto=format&fit=crop&q=80"
+    banner:
+      "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1200&auto=format&fit=crop&q=80",
   },
   {
     id: "CAT-BASKET",
@@ -53,12 +57,13 @@ var categories = [
     icon: "🏀",
     name: "Bóng Rổ & Ngoài Trời",
     slug: "bong-ro-ngoai-troi",
-    desc: "Giày bóng rổ cổ cao Air Zoom bám sàn gỗ, quả bóng rổ thi đấu FIBA, kính bơi chống đọng sương và cầu mây",
-    profitPercent: 32,
-    itemCount: 3,
+    desc: "Giày bóng rổ, bóng chuyền, quả bóng thi đấu, balo thể thao, kính bơi, vớ chống trượt và băng bảo hộ",
+    profitPercent: 30,
+    itemCount: 15,
     status: "active",
-    banner: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&auto=format&fit=crop&q=80"
-  }
+    banner:
+      "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&auto=format&fit=crop&q=80",
+  },
 ];
 
 var MOCK_CATEGORIES = categories;
