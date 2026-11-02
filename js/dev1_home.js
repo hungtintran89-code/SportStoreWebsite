@@ -7,12 +7,6 @@
 var slideHienTai = 0;
 var timerChaySlide = null;
 
-// Hàm đổi số thành tiền Việt (VD: 5290000 -> 5.290.000 đ)
-function formatTien(so) {
-  if (!so) so = 0;
-  return Number(so).toLocaleString("vi-VN") + " đ";
-}
-
 // ==============================================================================
 // 1. KHỐI BANNER SLIDER (CHUYỂN ẢNH)
 // ==============================================================================
@@ -163,8 +157,8 @@ function hienThiSanPhamFlashSale() {
           <div class="dev1-card-cat">${sp.category}</div>
           <h3 class="dev1-card-title">${sp.name}</h3>
           <div class="dev1-price-row">
-            <span class="dev1-sale-price">${formatTien(sp.salePrice)}</span>
-            <span class="dev1-old-price">${formatTien(sp.price)}</span>
+            <span class="dev1-sale-price">${formatMoney(sp.salePrice)}</span>
+            <span class="dev1-old-price">${formatMoney(sp.price)}</span>
           </div>
           <div class="dev1-progress-bar">
             <div class="dev1-progress-fill" style="width: ${phanTramDaBan}%"></div>
@@ -199,7 +193,7 @@ function hienThiDanhMucTieuBieu() {
   // Lấy 4 danh mục đầu tiên
   for (var i = 0; i < dsDanhMuc.length && i < 4; i++) {
     var c = dsDanhMuc[i];
-    // Gắn trực tiếp ?cat= mã_danh_mục để trang dev2_products.html tự lọc
+
     html += `
       <a href="pages/dev2_products.html?cat=${c.id}" class="dev1-cat-card">
         <div class="dev1-cat-icon">${c.icon || "🏅"}</div>
@@ -284,7 +278,7 @@ function veLuoiSanPhamXuHuong(danhSach) {
           <div class="dev1-card-cat">${sp.category || "Thể Thao"}</div>
           <h3 class="dev1-card-title">${sp.name}</h3>
           <div class="dev1-price-row">
-            <span class="dev1-sale-price">${formatTien(giaHienThi)}</span>
+            <span class="dev1-sale-price">${formatMoney(giaHienThi)}</span>
             <span class="dev1-rating-star">⭐ ${sp.rating || 5.0}</span>
           </div>
           <div class="dev1-card-btn-row">

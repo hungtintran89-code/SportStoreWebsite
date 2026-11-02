@@ -496,9 +496,6 @@ function dongMoFaq(nutBam) {
   }
 }
 
-// ------------------------------------------------------------------------------
-// 7. ĐĂNG XUẤT / ĐỔI TÀI KHOẢN
-// ------------------------------------------------------------------------------
 function dangXuat() {
   if (confirm('Bạn có chắc chắn muốn đăng xuất hoặc đổi tài khoản?')) {
     localStorage.removeItem('sport_user');
@@ -506,25 +503,6 @@ function dangXuat() {
     window.location.reload();
   }
 }
-
-// ------------------------------------------------------------------------------
-// 8. HÀM CHÍNH KHỞI TẠO TẤT CẢ DỮ LIỆU KHI TẢI TRANG
-// ------------------------------------------------------------------------------
-function renderUserProfile() {
-  hienThiThongTinUser();
-  hienThiDonHang();
-  hienThiDiaChi();
-  hienThiYeuThich();
-  hienThiFaq();
-}
-
-// Tự động chạy khi DOM sẵn sàng
-document.addEventListener('DOMContentLoaded', function () {
-  renderUserProfile();
-});
-// ====
-
-
 
 function layUserHienTai() {
   var chuoiUser = localStorage.getItem("sport_user");
@@ -702,7 +680,7 @@ function hienThiDonHang() {
   var cacBuoc = ["Đặt hàng", "Xác nhận", "Đang giao", "Đã giao"];
   var html = "";
 
-  for (var j = 0; j < donCuaToi.length; j++) {
+  for (var j = donCuaToi.length - 1; j >= 0 ; j-- ) {
     var don = donCuaToi[j];
     var maDon = don.orderId || don.id || ("DH-" + (j + 1));
     var ngayDat = don.date || "Hôm nay";
@@ -1105,13 +1083,17 @@ function dongMoFaq(nutBam) {
 }
 
 function renderUserProfile() {
+
+  let tab =
+
   hienThiThongTinUser();
   hienThiDonHang();
   hienThiDiaChi();
   hienThiYeuThich();
   hienThiFaq();
 }
+
 // Tự động chạy khi DOM sẵn sàng
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
   renderUserProfile();
 });

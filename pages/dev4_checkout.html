@@ -193,7 +193,7 @@
                 <button type="button"
                         onclick="xoaTatCaGioHang()"
                         style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                  🗑️ Xóa tất cả
+                  Xóa tất cả
                 </button>
               </h2>
 
@@ -225,7 +225,17 @@
               novalidate
               aria-labelledby="d4HShip"
             >
-              <h2 id="d4HShip">Thông tin nhận hàng</h2>
+              <!-- Tiêu đề kèm nút Mở Sổ Địa Chỉ -->
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 id="d4HShip" style="margin: 0;">Thông tin nhận hàng</h2>
+
+                <button type="button"
+                        onclick="moPopupChonDiaChi()"
+                        style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; padding: 7px 14px; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                  Chọn từ sổ địa chỉ
+                </button>
+              </div>
+
 
               <!-- Chọn địa chỉ từ tài khoản hoặc nhập mới -->
               <div
@@ -541,6 +551,31 @@
         </section>
       </div>
     </main>
+    <!-- ============================================================== -->
+    <!-- POPUP DANH SÁCH SỔ ĐỊA CHỈ NHẬN HÀNG -->
+    <!-- ============================================================== -->
+    <div id="modal-chon-dia-chi" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 9999; align-items: center; justify-content: center;">
+      <div style="background: #ffffff; border-radius: 12px; width: 560px; max-width: 92%; max-height: 85vh; overflow-y: auto; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);">
+
+        <!-- Tiêu đề Popup & Nút X đóng -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #0f172a;">📍 Chọn Địa Chỉ Từ Sổ Địa Chỉ</h3>
+          <button type="button" onclick="dongPopupChonDiaChi()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b; line-height: 1;">&times;</button>
+        </div>
+
+        <!-- Khung chứa danh sách các thẻ địa chỉ (Render bằng JS) -->
+        <div id="danh-sach-dia-chi-popup"></div>
+
+        <!-- Nút Đóng phía dưới -->
+        <div style="margin-top: 16px; text-align: right; border-top: 1px solid #e2e8f0; padding-top: 12px;">
+          <button type="button" onclick="dongPopupChonDiaChi()" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 8px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+            Đóng
+          </button>
+        </div>
+
+      </div>
+    </div>
+
 
     <!-- ============================================================================== -->
     <!-- 2. FOOTER DÙNG CHUNG SPORTSTORE (PHIÊN BẢN PAGES/) -->

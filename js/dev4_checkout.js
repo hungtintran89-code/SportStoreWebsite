@@ -500,6 +500,121 @@ function xoaTatCaGioHang(){
   }
 }
 
+// Biến lưu danh sách địa chỉ đang nạp từ tài khoản
+var danhSachDiaChiPopup = [];
+
+function moPopupChonDiaChi() {
+  var nguoiDung = getCurrentUser();
+  if (!nguoiDung) {
+    showToast("Vui lòng đăng nhập để xem sổ địa chỉ!", "danger");
+    return;
+  }
+
+  // Lấy đúng danh sách địa chỉ đã lưu ở trang cá nhân (dev5_user.js)
+  var key = "sport_addresses_" + (nguoiDung.id || nguoiDung.customerId || "user");
+  var chuoi = localStorage.getItem(key);
+  danhSachDiaChiPopup = chuoi ? JSON.parse(chuoi) : [];
+
+  var khungChua = document.getElementById("danh-sach-dia-chi-popup");
+  if (!khungChua) return;
+
+  // Nếu người dùng chưa có địa chỉ nào trong sổ
+  if (danhSachDiaChiPopup.length === 0) {
+    khungChua.innerHTML = `
+      <div style="text-align: center; padding: 24px; color: #64748b;">
+        <p>Bạn chưa lưu địa chỉ nhận hàng nào trong sổ địa chỉ.</p>
+        <a href="dev5_user.html#addresses" style="color: #0284c7; font-weight: 600; text-decoration: none;">
+          👉 Đến trang Quản lý tài khoản để thêm địa chỉ
+        </a>
+      </div>
+    `;
+  } else {
+    // Có địa chỉ: Dùng vòng lặp for vẽ từng thẻ địa chỉ kèm nút "Dùng địa chỉ này"
+    var html = "";
+    for (var i = 0; i < danhSachDiaChiPopup.length; i++) {
+      var dc = danhSachDiaChiPopup[i];
+      var diaChiDayDu = dc.line || "";
+      if (dc.district) diaChiDayDu += ", " + dc.district;
+      if (dc.city) diaChiDayDu += ", " + dc.city;
+
+      html += `
+        <div style="border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #f8fafc;">
+          <div style="line-height: 1.6;">
+            <div style="font-size: 12px; font-weight: 700; color: #0284c7; text-transform: uppercase;">Địa chỉ ${i + 1}</div>
+            <div><strong>Người nhận:</strong> ${dc.recipient || "Chưa đặt tên"} • <strong>SĐT:</strong> ${dc.phone || "Chưa có SĐT"}</div>
+            <div style="color: #475569;"><strong>Địa chỉ:</strong> ${diaChiDayDu}</div>
+          </div>
+          <button type="button" 
+                  onclick="chonDiaChiNay(${i})" 
+                  style="flex-shrink: 0; background: #0284c7; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">
+            ✓ Dùng địa chỉ này
+          </button>
+        </div>
+      `;
+    }
+    khungChua.innerHTML = html;
+  }
+
+  // Hiển thị Popup lên màn hình
+  var modal = document.getElementById("modal-chon-dia-chi");
+  if (modal) modal.style.display = "flex";
+}
+
+function dongPopupChonDiaChi() {
+  var modal = document.getElementById("modal-chon-dia-chi");
+  if (modal) modal.style.display = "none";
+}
+
+function chonDiaChiNay(viTri) {
+  var dc = danhSachDiaChiPopup[viTri];
+  if (!dc) return;
+
+  // 1. Tự điền Họ và tên người nhận
+  if (document.getElementById("fullName")) {
+    document.getElementById("fullName").value = dc.recipient || "";
+  }
+
+  // 2. Tự điền Số điện thoại
+  if (document.getElementById("phone")) {
+    document.getElementById("phone").value = dc.phone || "";
+  }
+
+  // 3. Tự điền Địa chỉ chi tiết
+  var diaChiDayDu = dc.line || "";
+  if (dc.district) diaChiDayDu += ", " + dc.district;
+  if (dc.city) diaChiDayDu += ", " + dc.city;
+  if (document.getElementById("address")) {
+    document.getElementById("address").value = diaChiDayDu;
+  }
+
+  // 4. Tự nhận diện Tỉnh / Thành phố để chọn đúng vào ô Select
+  var thanhPho = (dc.city || "").toLowerCase();
+  var oChonTinh = document.getElementById("province");
+  if (oChonTinh) {
+    if (thanhPho.indexOf("hcm") !== -1 || thanhPho.indexOf("hồ chí minh") !== -1) {
+      oChonTinh.value = "hcm";
+    } else if (thanhPho.indexOf("hà nội") !== -1 || thanhPho.indexOf("ha noi") !== -1) {
+      oChonTinh.value = "hn";
+    } else if (thanhPho.indexOf("đà nẵng") !== -1 || thanhPho.indexOf("da nang") !== -1) {
+      oChonTinh.value = "dn";
+    } else {
+      oChonTinh.value = "other";
+    }
+  }
+
+  // 5. Xóa sạch các thông báo báo lỗi màu đỏ (nếu trước đó có bị báo)
+  if (document.getElementById("err-fullName")) document.getElementById("err-fullName").textContent = "";
+  if (document.getElementById("err-phone")) document.getElementById("err-phone").textContent = "";
+  if (document.getElementById("err-address")) document.getElementById("err-address").textContent = "";
+
+  // 6. Đóng Popup và thông báo thành công
+  dongPopupChonDiaChi();
+  showToast("Đã nạp địa chỉ nhận hàng thành công!", "success");
+}
+
+
+
+
 // Chạy khởi tạo ngay khi tải xong file JavaScript
 khoiTaoTrang();
 
