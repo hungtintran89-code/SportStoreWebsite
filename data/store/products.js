@@ -1122,6 +1122,7 @@ var products = [
     costPrice: 550000,
     profitPercent: 30,
     price: 715000,
+    originalPrice: 800000,
     stock: 34,
     sold: 112,
     image:
@@ -1776,6 +1777,7 @@ var products = [
     costPrice: 450000,
     profitPercent: 30,
     price: 585000,
+    originalPrice: 700000,
     stock: 20,
     sold: 52,
     image:
@@ -2008,6 +2010,7 @@ var products = [
     costPrice: 180000,
     profitPercent: 35,
     price: 243000,
+    originalPrice: 300000,
     stock: 55,
     sold: 190,
     image:
@@ -2029,7 +2032,6 @@ var products = [
     costPrice: 1800000,
     profitPercent: 25,
     price: 2250000,
-    originalPrice: 2550000,
     stock: 20,
     sold: 82,
     image:
@@ -2072,7 +2074,6 @@ var products = [
     costPrice: 2600000,
     profitPercent: 25,
     price: 3250000,
-    originalPrice: 3590000,
     stock: 3,
     sold: 95,
     image:
@@ -2115,6 +2116,7 @@ var products = [
     costPrice: 650000,
     profitPercent: 30,
     price: 845000,
+    originalPrice: 900000,
     stock: 28,
     sold: 73,
     image:
@@ -2136,7 +2138,6 @@ var products = [
     costPrice: 900000,
     profitPercent: 30,
     price: 1170000,
-    originalPrice: 1350000,
     stock: 22,
     sold: 88,
     image:
@@ -2158,6 +2159,7 @@ var products = [
     costPrice: 1300000,
     profitPercent: 30,
     price: 1690000,
+    originalPrice: 2000000,
     stock: 15,
     sold: 49,
     image:
