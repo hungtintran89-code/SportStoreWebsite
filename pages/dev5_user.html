@@ -33,8 +33,9 @@
 
       <!-- Cụm Hành Động Góc Phải -->
       <div class="sport-nav-actions header-actions">
-        <a href="admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden"
-          data-admin-link title="Truy cập Bảng Quản Trị Admin">
+
+        <a href="dev5_user.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden"
+           data-admin-link title="Truy cập Bảng Quản Trị Admin">
           ⚙️ Admin
         </a>
 
@@ -43,44 +44,36 @@
           🛒
           <span class="badge-pill" id="header-cart-badge-count">0</span>
         </a>
-
-        <!-- KHỐI TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP -->
-        <div class="dev5-header-user-wrapper dev5-hidden" data-auth-profile-wrap>
-          <div class="sport-user-logged-pill dev5-user-pill-btn" data-auth-profile title="Hồ sơ tài khoản">
-            <img data-header-avatar alt="Avatar" style="
-                  width: 24px;
-                  height: 24px;
-                  border-radius: 50%;
-                  object-fit: cover;
-                " />
-            <span data-header-name>Tài khoản</span>
+        <!-- CỤM TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP -->
+        <div class="dev5-header-user-wrapper dev5-hidden" id="header-user-wrap">
+          <div class="sport-user-logged-pill dev5-user-pill-btn">
+            <img id="header-user-avatar" alt="Avatar" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;" />
+            <span id="header-user-name">Tài khoản</span>
             <span class="dev5-caret-down">▾</span>
           </div>
           <!-- Menu thả xuống Shopee -->
           <div class="dev5-shopee-dropdown">
             <div class="dev5-shopee-arrow"></div>
-            <a href="dev5_user.html?tab=overview" class="dev5-shopee-item" data-action-tab="overview">
+            <a href="dev5_user.html?tab=overview" class="dev5-shopee-item" id="header-link-profile">
               Tài Khoản Của Tôi
             </a>
-            <a href="dev5_user.html?tab=orders" class="dev5-shopee-item" data-action-tab="orders">
+            <a href="dev5_user.html?tab=orders" class="dev5-shopee-item" id="header-link-orders">
               Đơn Mua
             </a>
-            <button type="button" class="dev5-shopee-item dev5-shopee-logout" data-auth-action="logout"
-              onclick="dangXuat()">
+            <button type="button" class="dev5-shopee-item dev5-shopee-logout" id="header-btn-logout" onclick="dangXuat()">
               Đăng Xuất
             </button>
           </div>
         </div>
 
         <!-- KHỐI KHI CHƯA ĐĂNG NHẬP -->
-        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login"
-          id="sport-btn-open-login" title="Đăng nhập tài khoản" onclick="moModalAuth('login')">
+        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" id="sport-btn-open-login" title="Đăng nhập tài khoản" onclick="moModalAuth('login')">
           Đăng Nhập
         </button>
-        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register"
-          id="sport-btn-open-register" title="Đăng ký thành viên" onclick="moModalAuth('register')">
+        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" id="sport-btn-open-register" title="Đăng ký thành viên" onclick="moModalAuth('register')">
           Đăng Ký
         </button>
+
       </div>
     </div>
   </header>

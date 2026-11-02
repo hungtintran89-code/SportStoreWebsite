@@ -99,32 +99,36 @@ function capNhatHeaderAuth() {
   var nutAdmin = document.getElementById("header-nav-admin-btn");
   var linkTrangCaNhan = document.getElementById("header-link-profile");
   var linkDonMua = document.getElementById("header-link-orders");
+
   // ==========================================================
   // TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP
   // ==========================================================
   if (user) {
+
     // Ẩn 2 nút Đăng nhập / Đăng ký
     if (nutDangNhap) nutDangNhap.classList.add("dev5-hidden");
     if (nutDangKy) nutDangKy.classList.add("dev5-hidden");
+
     // Hiện cụm tài khoản và nút Đăng xuất
     if (cumThongTinUser) cumThongTinUser.classList.remove("dev5-hidden");
     if (nutDangXuat) nutDangXuat.classList.remove("dev5-hidden");
+
     // Điền tên và ảnh đại diện
     if (theTenUser) theTenUser.textContent = user.name || "Tài khoản";
     if (theAvatarUser) theAvatarUser.src = user.avatar || "https://i.pravatar.cc/80?img=47";
-    // --- PHÂN BIỆT ADMIN VÀ KHÁCH HÀNG ---
+
     if (laAdmin) {
-      // 1. Hiện nút Admin trên Navbar và trỏ vào trang dev5_user.html
+      // 1. Hiện nút Admin và trỏ vào trang dev5_user.html
       if (nutAdmin) {
         nutAdmin.classList.remove("dev5-hidden");
         nutAdmin.href = layDuongDanTrang("dev5_user.html");
       }
-      // 2. Menu dòng 1: Đổi thành "⚙️ Trang Quản Trị"
+
       if (linkTrangCaNhan) {
         linkTrangCaNhan.textContent = "⚙️ Trang Quản Trị";
         linkTrangCaNhan.href = layDuongDanTrang("dev5_user.html");
       }
-      // 3. Menu dòng 2: Ẩn mục "Đơn Mua" đi
+
       if (linkDonMua) {
         linkDonMua.classList.add("dev5-hidden");
       }
