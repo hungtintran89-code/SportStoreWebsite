@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SportStore | Đỉnh Cao Trang Bị Thể Thao Chính Hãng 2026</title>
-  <meta name="description" content="Hệ thống bán lẻ trang bị thể thao hàng đầu Việt Nam: Giày chạy bộ marathon, bóng đá, cầu lông, tennis và gym fitness chính hãng Nike, Adidas, Yonex.">
+  <meta name="description"
+    content="Hệ thống bán lẻ trang bị thể thao hàng đầu Việt Nam: Giày chạy bộ marathon, bóng đá, cầu lông, tennis và gym fitness chính hãng Nike, Adidas, Yonex.">
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/dev1_home.css">
 </head>
+
 <body>
 
   <!-- ============================================================================== -->
@@ -26,7 +29,8 @@
       </ul>
       <div class="sport-nav-actions">
         <!-- Nút truy cập Bảng Quản Trị Admin SGU (Phân quyền: Mặc định ẩn, chỉ hiện khi đăng nhập tài khoản Admin) -->
-        <a href="pages/admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden" data-admin-link title="Truy cập Bảng Quản Trị Admin">
+        <a href="pages/admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden"
+          data-admin-link title="Truy cập Bảng Quản Trị Admin">
           ⚙️ Admin
         </a>
         <!-- Nút Giỏ Hàng -->
@@ -50,18 +54,21 @@
             <a href="pages/dev5_user.html?tab=orders" class="dev5-shopee-item" data-action-tab="orders">
               Đơn Mua
             </a>
-            <button type="button" class="dev5-shopee-item dev5-shopee-logout" data-auth-action="logout">
+            <button onclick="dangXuat()" type="button" class="dev5-shopee-item dev5-shopee-logout"
+              data-auth-action="logout">
               Đăng Xuất
             </button>
           </div>
         </div>
 
-        <!-- KHỐI KHI CHƯA ĐĂNG NHẬP (Tự động ẩn đi khi đã đăng nhập) -->
-        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login" id="sport-btn-open-login" title="Đăng nhập tài khoản">
-           Đăng Nhập
+        <!-- KHỐI KHI CHƯA ĐĂNG NHẬP -->
+        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login"
+          id="sport-btn-open-login" title="Đăng nhập tài khoản" onclick="moModalAuth('login')">
+          Đăng Nhập
         </button>
-        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register" id="sport-btn-open-register" title="Đăng ký thành viên">
-           Đăng Ký
+        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register"
+          id="sport-btn-open-register" title="Đăng ký thành viên" onclick="moModalAuth('register')">
+          Đăng Ký
         </button>
       </div>
     </div>
@@ -72,14 +79,14 @@
   <!-- ============================================================================== -->
   <div class="dev1-home-wrapper">
     <div class="sport-container">
-      
+
       <!-- HERO CAROUSEL SLIDER -->
       <section class="dev1-hero-carousel" id="dev1-carousel">
         <div class="dev1-carousel-slides" id="dev1-carousel-slides">
           <!-- Render tự động bởi js/dev1_home.js -->
           <div class="dev1-slide-skeleton">Đang nạp dữ liệu Banner thể thao...</div>
         </div>
-        
+
         <!-- Controls Carousel -->
         <!-- Thêm onclick="luiSlide()" và onclick="toiSlide()" -->
         <button class="dev1-carousel-btn dev1-btn-prev" id="dev1-prev-slide" onclick="luiSlide()">&#10094;</button>
@@ -148,7 +155,8 @@
         <div class="dev1-nl-content">
           <span class="sport-badge badge-emerald">SPORT CLUB MEMBER</span>
           <h2>Đăng Ký Nhận Bản Tin & Mã Ưu Đãi 20%</h2>
-          <p>Nhận thông báo sớm nhất về các đợt phát hành phiên bản giới hạn và quà tặng sinh nhật dành riêng cho vận động viên.</p>
+          <p>Nhận thông báo sớm nhất về các đợt phát hành phiên bản giới hạn và quà tặng sinh nhật dành riêng cho vận
+            động viên.</p>
           <form class="dev1-nl-form" id="dev1-nl-form" onsubmit="dangKyNhanTin(event)">
             <input type="email" id="dev1-email-input" placeholder="Nhập địa chỉ email của bạn..." required>
             <button type="submit" class="btn-sport btn-accent">ĐĂNG KÝ NGAY</button>
@@ -174,7 +182,8 @@
             <div class="logo-icon">⚡</div>
             <div>SPORT<span class="accent">STORE</span></div>
           </div>
-          <p>Hệ thống bán lẻ trang bị thể thao hàng đầu với bảo hành chính hãng và chính sách đổi trả 30 ngày tiện lợi.</p>
+          <p>Hệ thống bán lẻ trang bị thể thao hàng đầu với bảo hành chính hãng và chính sách đổi trả 30 ngày tiện lợi.
+          </p>
         </div>
         <div class="sport-footer-col">
           <h4>Điều Hướng Nhanh</h4>
@@ -226,4 +235,5 @@
   <script src="js/dev2_products.js"></script>
 
 </body>
+
 </html>
