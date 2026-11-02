@@ -133,8 +133,10 @@ function capNhatHeaderAuth() {
         linkDonMua.classList.add("dev5-hidden");
       }
     } else {
+
       // Là Khách hàng bình thường:
       if (nutAdmin) nutAdmin.classList.add("dev5-hidden");
+
       if (linkTrangCaNhan) {
         linkTrangCaNhan.textContent = "Tài Khoản Của Tôi";
         linkTrangCaNhan.href = layDuongDanTrang("dev5_user.html?tab=overview");
@@ -145,13 +147,12 @@ function capNhatHeaderAuth() {
       }
     }
   }
-      // ==========================================================
-      // TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP (KHÁCH VÃNG LAI)
-  // ==========================================================
   else {
+
     // Hiện nút Đăng nhập / Đăng ký
     if (nutDangNhap) nutDangNhap.classList.remove("dev5-hidden");
     if (nutDangKy) nutDangKy.classList.remove("dev5-hidden");
+
     // Ẩn cụm tài khoản, nút Đăng xuất và nút Admin
     if (cumThongTinUser) cumThongTinUser.classList.add("dev5-hidden");
     if (nutDangXuat) nutDangXuat.classList.add("dev5-hidden");
