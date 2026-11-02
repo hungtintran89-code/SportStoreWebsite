@@ -324,7 +324,7 @@
           <ul aria-labelledby="admin-group-overview" style="list-style: none; padding: 0; margin: 0">
             <li>
               <button type="button" class="admin-nav-item active" id="nav-dashboard"
-                onclick="switchTab('dashboard', this)" aria-current="page" title="Bảng điều khiển">
+                onclick="chuyenTabAdmin('dashboard', this)" aria-current="page" title="Bảng điều khiển">
                 <div class="nav-left">
                   <span class="nav-icon">📊</span>
                   <span>Bảng điều khiển</span>
@@ -339,7 +339,7 @@
           <div class="admin-menu-title" id="admin-group-inventory">Kho và sản phẩm</div>
           <ul aria-labelledby="admin-group-inventory" style="list-style: none; padding: 0; margin: 0">
             <li>
-              <button type="button" class="admin-nav-item" id="nav-category" onclick="switchTab('category', this)"
+              <button type="button" class="admin-nav-item" id="nav-category" onclick="chuyenTabAdmin('category', this)"
                 title="Loại sản phẩm">
                 <div class="nav-left">
                   <span class="nav-icon">🏷️</span>
@@ -350,7 +350,7 @@
             </li>
 
             <li>
-              <button type="button" class="admin-nav-item" id="nav-product" onclick="switchTab('product', this)"
+              <button type="button" class="admin-nav-item" id="nav-product" onclick="chuyenTabAdmin('product', this)"
                 title="Sản phẩm">
                 <div class="nav-left">
                   <span class="nav-icon">📦</span>
@@ -361,7 +361,7 @@
             </li>
 
             <li>
-              <button type="button" class="admin-nav-item" id="nav-import" onclick="switchTab('import', this)"
+              <button type="button" class="admin-nav-item" id="nav-import" onclick="chuyenTabAdmin('import', this)"
                 title="Nhập hàng">
                 <div class="nav-left">
                   <span class="nav-icon">📥</span>
@@ -372,7 +372,7 @@
             </li>
 
             <li>
-              <button type="button" class="admin-nav-item" id="nav-pricing" onclick="switchTab('pricing', this)"
+              <button type="button" class="admin-nav-item" id="nav-pricing" onclick="chuyenTabAdmin('pricing', this)"
                 title="Giá bán">
                 <div class="nav-left">
                   <span class="nav-icon">💲</span>
@@ -388,7 +388,7 @@
           <div class="admin-menu-title" id="admin-group-sales">Bán hàng và khách hàng</div>
           <ul aria-labelledby="admin-group-sales" style="list-style: none; padding: 0; margin: 0">
             <li>
-              <button type="button" class="admin-nav-item" id="nav-order" onclick="switchTab('order', this)"
+              <button type="button" class="admin-nav-item" id="nav-order" onclick="chuyenTabAdmin('order', this)"
                 title="Đơn hàng">
                 <div class="nav-left">
                   <span class="nav-icon">📋</span>
@@ -399,7 +399,7 @@
             </li>
 
             <li>
-              <button type="button" class="admin-nav-item" id="nav-customer" onclick="switchTab('customer', this)"
+              <button type="button" class="admin-nav-item" id="nav-customer" onclick="chuyenTabAdmin('customer', this)"
                 title="Khách hàng">
                 <div class="nav-left">
                   <span class="nav-icon">👥</span>
@@ -416,7 +416,7 @@
           <div class="admin-menu-title" id="admin-group-reports">Báo cáo và thống kê</div>
           <ul aria-labelledby="admin-group-reports" style="list-style: none; padding: 0; margin: 0">
             <li>
-              <button type="button" class="admin-nav-item" id="nav-inventory" onclick="switchTab('inventory', this)"
+              <button type="button" class="admin-nav-item" id="nav-inventory" onclick="chuyenTabAdmin('inventory', this)"
                 title="Báo cáo tồn kho">
                 <div class="nav-left">
                   <span class="nav-icon">📊</span>
@@ -518,7 +518,7 @@
           <div class="admin-table-card dashboard-card">
             <div class="dashboard-card-header">
               <h3 class="dashboard-card-title">Đơn Hàng Gần Đây Cần Xử Lý</h3>
-              <a href="javascript:void(0)" onclick="switchTab('order')" class="dashboard-view-all">Xem tất cả →</a>
+              <a href="javascript:void(0)" onclick="chuyenTabAdmin('order')" class="dashboard-view-all">Xem tất cả →</a>
             </div>
             <div id="dashboard-recent-orders-list"></div>
           </div>
@@ -534,7 +534,7 @@
         </div>
         <div class="admin-filter-bar">
           <input type="text" id="customer-search-input" class="filter-input"
-            placeholder="Tìm kiếm theo tên, email, SĐT..." oninput="filterCustomers()" />
+            placeholder="Tìm kiếm theo tên, email, SĐT..." oninput="locKhachHangAdmin()" />
         </div>
         <div class="admin-table-card">
           <table class="admin-table">
@@ -560,13 +560,13 @@
           <div>
             <h1 class="admin-page-title">Quản Lý Phân Loại Sản Phẩm</h1>
           </div>
-          <button type="button" class="btn-sport btn-primary" onclick="openModalAddCategory()">
+          <button type="button" class="btn-sport btn-primary" onclick="moModalThemDanhMuc()">
             + Thêm Mới Loại SP
           </button>
         </div>
         <div class="admin-filter-bar">
           <input type="text" id="category-search-input" class="filter-input" placeholder="Tìm kiếm loại theo mã, tên..."
-            oninput="filterCategories()" />
+            oninput="locDanhMucAdmin()" />
         </div>
         <div class="admin-table-card">
           <table class="admin-table">
@@ -592,17 +592,17 @@
           <div>
             <h1 class="admin-page-title">Quản Lý Sản Phẩm & Trang Bị Thể Thao</h1>
           </div>
-          <button type="button" class="btn-sport btn-primary" onclick="openModalAddProduct()">
+          <button type="button" class="btn-sport btn-primary" onclick="moModalThemSanPham()">
             + Thêm Mới Sản Phẩm
           </button>
         </div>
         <div class="admin-filter-bar">
           <input type="text" id="product-search-input" class="filter-input"
-            placeholder="Tìm theo tên sản phẩm, mã SP, hãng..." oninput="filterProducts()" />
-          <select id="product-filter-category" class="filter-select" onchange="filterProducts()">
+            placeholder="Tìm theo tên sản phẩm, mã SP, hãng..." oninput="locSanPhamAdmin()" />
+          <select id="product-filter-category" class="filter-select" onchange="locSanPhamAdmin()">
             <option value="ALL">Tất cả môn thể thao</option>
           </select>
-          <select id="product-filter-brand" class="filter-select" onchange="filterProducts()">
+          <select id="product-filter-brand" class="filter-select" onchange="locSanPhamAdmin()">
             <option value="ALL">Tất cả thương hiệu</option>
             <option value="Nike">Nike</option>
             <option value="Adidas">Adidas</option>
@@ -637,18 +637,18 @@
           <div>
             <h1 class="admin-page-title">Quản Lý Phiếu Nhập Hàng Vào Kho</h1>
           </div>
-          <button type="button" class="btn-sport btn-primary" onclick="openModalAddImport()">
+          <button type="button" class="btn-sport btn-primary" onclick="moModalTaoPhieuNhap()">
             + Tạo Phiếu Nhập Hàng
           </button>
         </div>
         <div class="admin-filter-bar">
           <input type="text" id="import-search-input" class="filter-input"
-            placeholder="Tìm theo mã phiếu (PN-...), nhà cung cấp..." oninput="filterImports()" />
+            placeholder="Tìm theo mã phiếu (PN-...), nhà cung cấp..." oninput="locPhieuNhapHang()" />
           <label class="filter-label">Từ ngày:</label>
-          <input type="date" id="import-filter-from-date" class="filter-input filter-date" onchange="filterImports()" />
+          <input type="date" id="import-filter-from-date" class="filter-input filter-date" onchange="locPhieuNhapHang()" />
           <label class="filter-label">Đến ngày:</label>
-          <input type="date" id="import-filter-to-date" class="filter-input filter-date" onchange="filterImports()" />
-          <select id="import-filter-status" class="filter-select" onchange="filterImports()">
+          <input type="date" id="import-filter-to-date" class="filter-input filter-date" onchange="locPhieuNhapHang()" />
+          <select id="import-filter-status" class="filter-select" onchange="locPhieuNhapHang()">
             <option value="ALL">Tất cả trạng thái</option>
             <option value="Hoàn thành">Hoàn thành</option>
             <option value="Tạm lưu">Tạm lưu</option>
@@ -681,7 +681,7 @@
           </div>
         </div>
         <div class="admin-filter-bar">
-          <select id="pricing-filter-category" class="filter-select" onchange="filterPricing()">
+          <select id="pricing-filter-category" class="filter-select" onchange="locGiaBanAdmin()">
             <option value="ALL">Tất cả môn thể thao</option>
           </select>
         </div>
@@ -712,10 +712,10 @@
         </div>
         <div class="admin-filter-bar">
           <label class="filter-label">Từ ngày:</label>
-          <input type="date" id="order-filter-from-date" class="filter-input filter-date" onchange="filterOrders()" />
+          <input type="date" id="order-filter-from-date" class="filter-input filter-date" onchange="locDonHangAdmin()" />
           <label class="filter-label">Đến ngày:</label>
-          <input type="date" id="order-filter-to-date" class="filter-input filter-date" onchange="filterOrders()" />
-          <select id="order-filter-status" class="filter-select" onchange="filterOrders()">
+          <input type="date" id="order-filter-to-date" class="filter-input filter-date" onchange="locDonHangAdmin()" />
+          <select id="order-filter-status" class="filter-select" onchange="locDonHangAdmin()">
             <option value="ALL">Tất cả trạng thái</option>
             <option value="Mới đặt">Mới đặt</option>
             <option value="Đã xử lý">Đã xử lý</option>
@@ -829,7 +829,7 @@
     <div class="modal-box">
       <div class="modal-header">
         <h3 class="modal-title" id="modal-category-title">Thêm Mới Loại Sản Phẩm</h3>
-        <button type="button" class="modal-close-btn" onclick="closeModal('modal-category')">&times;</button>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-category')">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-row">
@@ -857,8 +857,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn-sport btn-outline" onclick="closeModal('modal-category')">Hủy Bỏ</button>
-        <button type="button" class="btn-sport btn-primary" onclick="saveCategory()">Lưu Loại SP</button>
+        <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-category')">Hủy Bỏ</button>
+        <button type="button" class="btn-sport btn-primary" onclick="luuDanhMucAdmin()">Lưu Loại SP</button>
       </div>
     </div>
   </div>
@@ -868,7 +868,7 @@
     <div class="modal-box">
       <div class="modal-header">
         <h3 class="modal-title" id="modal-product-title">Thêm Mới Sản Phẩm</h3>
-        <button type="button" class="modal-close-btn" onclick="closeModal('modal-product')">&times;</button>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-product')">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -930,8 +930,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn-sport btn-outline" onclick="closeModal('modal-product')">Hủy Bỏ</button>
-        <button type="button" class="btn-sport btn-primary" onclick="saveProduct()">Lưu Sản Phẩm</button>
+        <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-product')">Hủy Bỏ</button>
+        <button type="button" class="btn-sport btn-primary" onclick="luuSanPhamAdmin()">Lưu Sản Phẩm</button>
       </div>
     </div>
   </div>
@@ -941,7 +941,7 @@
     <div class="modal-box">
       <div class="modal-header">
         <h3 class="modal-title" id="modal-import-title">Tạo Phiếu Nhập Hàng Vào Kho</h3>
-        <button type="button" class="modal-close-btn" onclick="closeModal('modal-import')">&times;</button>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-import')">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-row">
@@ -985,8 +985,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn-sport btn-outline" onclick="closeModal('modal-import')">Hủy Bỏ</button>
-        <button type="button" class="btn-sport btn-primary" onclick="saveImport()">Lưu Phiếu Nhập</button>
+        <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-import')">Hủy Bỏ</button>
+        <button type="button" class="btn-sport btn-primary" onclick="luuPhieuNhapHang()">Lưu Phiếu Nhập</button>
       </div>
     </div>
   </div>
@@ -996,7 +996,7 @@
     <div class="modal-box">
       <div class="modal-header">
         <h3 class="modal-title" id="modal-order-title">Chi Tiết Đơn Hàng #SPORT-88234</h3>
-        <button type="button" class="modal-close-btn" onclick="closeModal('modal-order-detail')">&times;</button>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-order-detail')">&times;</button>
       </div>
       <div class="modal-body">
         <div class="order-info-card">
@@ -1018,7 +1018,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn-sport btn-primary" onclick="closeModal('modal-order-detail')">Đóng</button>
+        <button type="button" class="btn-sport btn-primary" onclick="dongModalAdmin('modal-order-detail')">Đóng</button>
       </div>
     </div>
   </div>
@@ -1028,13 +1028,13 @@
     <div class="modal-box">
       <div class="modal-header">
         <h3 class="modal-title">Cài Đặt Flash Sale</h3>
-        <button type="button" class="modal-close-btn" onclick="closeModal('modal-flash-sale')">&times;</button>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-flash-sale')">&times;</button>
       </div>
       <div class="modal-body">
         <!-- Form Flash Sale -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn-sport btn-outline" onclick="closeModal('modal-flash-sale')">Đóng</button>
+        <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-flash-sale')">Đóng</button>
       </div>
     </div>
   </div>
@@ -1094,16 +1094,7 @@
 
   <script src="../js/common.js"></script>
   <script src="../js/auth_modal.js"></script>
-  <script src="../js/admin/init-storage.js"></script>
-  <script src="../js/admin/admin-main.js"></script>
-  <script src="../js/admin/tab-dashboard.js"></script>
-  <script src="../js/admin/tab-customer.js"></script>
-  <script src="../js/admin/tab-category.js"></script>
-  <script src="../js/admin/tab-product.js"></script>
-  <script src="../js/admin/tab-import.js"></script>
-  <script src="../js/admin/tab-pricing.js"></script>
-  <script src="../js/admin/tab-order.js"></script>
-  <script src="../js/admin/tab-inventory.js"></script>
+  <script src="../js/init-storage.js"></script>
 
   <!-- LOGIC USER & ĐIỀU PHỐI THEO ROLE -->
   <script src="../js/dev5_user.js"></script>
@@ -1136,7 +1127,7 @@
         if (viewAdmin) viewAdmin.style.display = "flex";
         if (siteFooter) siteFooter.style.display = "none";
         if (typeof updateSidebarBadges === "function") updateSidebarBadges();
-        if (typeof switchTab === "function") switchTab("dashboard");
+        if (typeof chuyenTabAdmin === "function") chuyenTabAdmin("dashboard");
         return;
       }
       // 3. Khách hàng bình thường (role === 'user')
@@ -1183,7 +1174,7 @@
       if (viewAdmin) viewAdmin.style.display = "flex";
       if (siteFooter) siteFooter.style.display = "none";
       if (typeof updateSidebarBadges === "function") updateSidebarBadges();
-      if (typeof switchTab === "function") switchTab("dashboard");
+      if (typeof chuyenTabAdmin === "function") chuyenTabAdmin("dashboard");
       return;
     }
     // 3. Khách hàng bình thường (role === 'user')
