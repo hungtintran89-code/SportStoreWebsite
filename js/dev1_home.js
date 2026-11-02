@@ -134,47 +134,72 @@ function chayDongHoFlashSale() {
 // 3. KHỐI SẢN PHẨM FLASH SALE
 // ==============================================================================
 function hienThiSanPhamFlashSale() {
-  var dsSale = [];
-  if (typeof flashSale !== "undefined" && flashSale.items) {
-    dsSale = flashSale.items;
+  var khungFlashSale = document.getElementById("dev1-flash-grid");
+  if (!khungFlashSale) return;
+  khungFlashSale.innerHTML = "";
+
+  // Tận dụng hàm readJson() có sẵn trong common.js để đọc dữ liệu
+  var tatCaSanPham = readJson("sport_products", []);
+  if (!Array.isArray(tatCaSanPham) || tatCaSanPham.length === 0) {
+    tatCaSanPham = typeof products !== "undefined" ? products : [];
   }
 
-  var khungFlash = document.getElementById("dev1-flash-grid");
-  if (!khungFlash) return;
+  // Lọc ra tối đa 4 sản phẩm đang có giảm giá (originalPrice > price)
+  var dsSale = [];
+  for (var i = tatCaSanPham.length; i >= 0; i--) {
+    var sp = tatCaSanPham[i];
+    if (!sp || sp.status === "hidden") continue;
 
-  var html = "";
-  for (var i = 0; i < dsSale.length; i++) {
-    var sp = dsSale[i];
-    var phanTramDaBan = Math.round((sp.sold / sp.stock) * 100);
+    var giaBan = Number(sp.price || 0);
+    var giaGoc = Number(sp.originalPrice || 0);
 
-    html += `
-      <div class="dev1-flash-card">
-        <div class="dev1-card-media">
-          <img src="${sp.image}" alt="${sp.name}">
-          <span class="dev1-card-discount-badge">${sp.discount}</span>
+    if (giaGoc > giaBan) {
+      dsSale.push(sp);
+      if (dsSale.length === 4) break;
+    }
+  }
+
+  // Vẽ 4 sản phẩm Flash Sale và định dạng tiền bằng formatMoney() của common.js
+  for (var j = 0; j < dsSale.length; j++) {
+    var item = dsSale[j];
+    var giaHienThi = Number(item.price || 0);
+    var giaCu = Number(item.originalPrice || 0);
+    var phanTramGiam =
+      "-" + Math.round(((giaCu - giaHienThi) / giaCu) * 100) + "%";
+
+    var daBan = Number(item.sold || 50);
+    var tonKho = Number(item.stock || 0);
+    var phanTramDaBan = Math.min(
+      95,
+      Math.round((daBan / (daBan + tonKho)) * 100),
+    );
+
+    var cardDiv = document.createElement("div");
+    cardDiv.className = "dev1-flash-card";
+    cardDiv.innerHTML = `
+      <div class="dev1-card-media">
+        <img src="${item.image}" alt="${item.name}" loading="lazy">
+        <span class="dev1-card-discount-badge">${phanTramGiam}</span>
+      </div>
+      <div class="dev1-card-body">
+        <div class="dev1-card-cat">${item.category}</div>
+        <h3 class="dev1-card-title">${item.name}</h3>
+        <div class="dev1-price-row">
+          <span class="dev1-sale-price">${formatMoney(giaHienThi)}</span>
+          <span class="dev1-old-price">${formatMoney(giaCu)}</span>
         </div>
-        <div class="dev1-card-body">
-          <div class="dev1-card-cat">${sp.category}</div>
-          <h3 class="dev1-card-title">${sp.name}</h3>
-          <div class="dev1-price-row">
-            <span class="dev1-sale-price">${formatMoney(sp.salePrice)}</span>
-            <span class="dev1-old-price">${formatMoney(sp.price)}</span>
-          </div>
-          <div class="dev1-progress-bar">
-            <div class="dev1-progress-fill" style="width: ${phanTramDaBan}%"></div>
-          </div>
-          <div class="dev1-flash-progress-meta">
-            <span>Đã bán: ${sp.sold}</span>
-            <span>⭐ ${sp.rating}</span>
-          </div>
-          <!-- Bấm Săn sale ngay sẽ chuyển qua trang sản phẩm và mở popup món này -->
-          <a href="pages/dev2_products.html?id=${sp.id}" class="btn-sport btn-accent dev1-btn-flash-buy">Săn sale ngay</a>
+        <div class="dev1-progress-bar">
+          <div class="dev1-progress-fill" style="width: ${phanTramDaBan}%"></div>
         </div>
+        <div class="dev1-flash-progress-meta">
+          <span>Đã bán: ${daBan}</span>
+          <span>⭐ 5.0</span>
+        </div>
+        <a href="pages/dev2_products.html?id=${item.id}" class="btn-sport btn-accent dev1-btn-flash-buy">Săn sale ngay</a>
       </div>
     `;
+    khungFlashSale.appendChild(cardDiv);
   }
-
-  khungFlash.innerHTML = html;
 }
 
 // ==============================================================================
@@ -258,7 +283,8 @@ function veLuoiSanPhamXuHuong(danhSach) {
   if (!khung) return;
 
   if (danhSach.length === 0) {
-    khung.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:30px; color:#64748b;">Chưa có sản phẩm nào.</p>';
+    khung.innerHTML =
+      '<p style="grid-column:1/-1; text-align:center; padding:30px; color:#64748b;">Chưa có sản phẩm nào.</p>';
     return;
   }
 
@@ -321,7 +347,7 @@ function themVaoGioNhanh(idSanPham) {
     image: spChon.image,
     size: "Tiêu chuẩn",
     color: "Mặc định",
-    stock: spChon.stock || 50
+    stock: spChon.stock || 50,
   };
 
   // Gọi hàm addToCart chung của website (trong common.js)
@@ -349,7 +375,9 @@ function dangKyNhanTin(event) {
     return;
   }
 
-  alert("Đăng ký thành công! Mã ưu đãi SPORT2026 đã được gửi tới email: " + email);
+  alert(
+    "Đăng ký thành công! Mã ưu đãi SPORT2026 đã được gửi tới email: " + email,
+  );
   oEmail.value = "";
 }
 
