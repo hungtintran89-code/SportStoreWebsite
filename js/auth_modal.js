@@ -316,7 +316,7 @@ function xuLyDangKy(event) {
     tier: "Standard",
     points: 0,
     spent: 0,
-    avatar: "https://i.pravatar.cc/80?img=47",
+    avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm9Q68JFL7mPhXJ_iVmd1YbSogzz2bASKdTU4pt_NO9w&s",
     address: ""
   };
 

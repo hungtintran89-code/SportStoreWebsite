@@ -373,9 +373,6 @@ function xoaDiaChi(viTriCanXoa) {
   hienThiDiaChi();
 }
 
-// ------------------------------------------------------------------------------
-// 5. TAB 4: SẢN PHẨM YÊU THÍCH
-// ------------------------------------------------------------------------------
 function layDanhSachYeuThich() {
   var list = [];
   try {
@@ -453,9 +450,6 @@ function xoaYeuThich(idCanXoa) {
   hienThiYeuThich();
 }
 
-// ------------------------------------------------------------------------------
-// 6. TAB 5: FAQ & BẢO HÀNH (BẤM CÂU HỎI ĐỂ MỞ/ĐÓNG TRẢ LỜI)
-// ------------------------------------------------------------------------------
 function hienThiFaq() {
   var hopChua = document.querySelector('[data-faq]');
   if (!hopChua) return;
@@ -1093,7 +1087,6 @@ function renderUserProfile() {
   hienThiFaq();
 }
 
-// Tự động chạy khi DOM sẵn sàng
 document.addEventListener('DOMContentLoaded', function () {
   renderUserProfile();
 });
