@@ -130,7 +130,7 @@ function renderProducts() {
         let product = productsToDisplay[i];
         if (!isItemActive(product)) continue;
 
-        // Lấy mã sản phẩm (hỗ trợ cả code, id, productCode)
+        // Lấy mã sản phẩm
         let productCode = product.code || product.productCode || product.id;
 
         // Lấy ảnh hiển thị
@@ -173,7 +173,6 @@ function renderProducts() {
         grid.innerHTML += productCard;
 
     }
-
     renderPagination();
 }
 
@@ -375,6 +374,8 @@ function applyAdvancedFilters() {
     applySortLogic();
     currentPage = 1;
     renderProducts();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function triggerDirectSearch() {

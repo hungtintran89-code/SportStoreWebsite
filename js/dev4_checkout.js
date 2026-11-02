@@ -330,7 +330,32 @@ function datHang(e) {
     return;
   }
 
+  let tatCaSanPhamTrongKho = readJson("sport_products" , []);
+  for( let i = 0 ; i < danhSachGioHang.length ;i++){
 
+    let mon = danhSachGioHang[i];
+    let tonKhoHienTai = 0;
+
+    for( let j = 0 ; j < tatCaSanPhamTrongKho.length ;j++){
+      let spKho = tatCaSanPhamTrongKho[j];
+      if( spKho.id === mon.id  ){
+        tonKhoHienTai = spKho.stock || 0 ;
+        break;
+      }
+    }
+
+    // Trường hợp 1: Sản phẩm đã hết hẳn trong kho (tồn kho = 0)
+    if( tonKhoHienTai === 0 ){
+      showToast('Sản phẩm "' + mon.name + '" hiện đã HẾT HÀNG! Vui lòng xóa khỏi giỏ để đặt hàng.', "danger");
+      return;
+    }
+
+    // Trường hợp 2: Khách đặt số lượng nhiều hơn số lượng trong kho
+    if( tonKhoHienTai < mon.quantity ){
+      showToast('Sản phẩm "' + mon.name + '" trong kho chỉ còn ' + tonKhoHienTai + ' món (bạn đang đặt ' + mon.quantity + ' món). Vui lòng giảm số lượng!', "danger");
+      return;
+    }
+  }
   let tongTien = tinhTongTien();
   let danhSachDonHang = readJson("sport_orders", []);
   if (!Array.isArray(danhSachDonHang)) {
