@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportStore | Quản Lý Khách Hàng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <!-- thanh header trang admin -->
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <a href="../products.html" class="sport-brand-logo">
+                <div class="logo-icon">⚡</div>
+                <div>SPORT<span class="accent">STORE</span></div>
+            </a>
+            <span class="admin-badge-pill">ADMIN</span>
+        </div>
+
+        <div class="admin-header-right">
+            <a href="../products.html" class="btn-admin-store">🏪 Về Cửa Hàng</a>
+            <div class="admin-user-box">
+                <div class="admin-avatar-circle">👤</div>
+                <div class="admin-user-text">
+                    <strong>Quản Trị Viên</strong>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+            <a href="../products.html" class="btn-admin-logout-top">🚪 Đăng Xuất</a>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <!-- menu quản trị bên trái -->
+        <aside class="admin-sidebar">
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">TỔNG QUAN</div>
+                <ul class="admin-menu">
+                    <li><a href="dashboard.html"><span class="nav-ico">📊</span> Bảng Điều Khiển</a></li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">QUẢN LÝ KHO & SẢN PHẨM</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="categories.html">
+                            <span><span class="nav-ico">🏷️</span> Quản Lý Loại SP</span>
+                            <span class="nav-count-badge">8</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products_admin.html">
+                            <span><span class="nav-ico">👟</span> Quản Lý Sản Phẩm</span>
+                            <span class="nav-count-badge">501</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="imports.html">
+                            <span><span class="nav-ico">📥</span> Quản Lý Nhập Hàng</span>
+                            <span class="nav-count-badge badge-green">30</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pricing.html">
+                            <span><span class="nav-ico">💲</span> Quản Lý Giá Bán</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁN HÀNG & KHÁCH HÀNG</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="orders.html">
+                            <span><span class="nav-ico">📦</span> Quản Lý Đơn Hàng</span>
+                            <span class="nav-count-badge badge-amber">31</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="customers.html" class="active">
+                            <span><span class="nav-ico">👥</span> Quản Lý Khách Hàng</span>
+                            <span class="nav-count-badge">32</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁO CÁO & THỐNG KÊ</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="inventory.html">
+                            <span><span class="nav-ico">📈</span> Báo Cáo Tồn Kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- khung nội dung bên phải -->
+        <main class="admin-content">
+            <div class="content-header">
+                <h2>Quản Lý Khách Hàng</h2>
+                <button class="btn-primary btn-admin-add">+ Thêm Khách Hàng</button>
+            </div>
+
+            <!-- thẻ tóm tắt số liệu gọn gàng -->
+            <div class="admin-summary-grid">
+                <div class="admin-summary-card">
+                    <div class="summary-card-left">
+                        <span class="summary-card-title">Tổng Khách Hàng</span>
+                        <span class="summary-card-value">32</span>
+                    </div>
+                </div>
+
+                <div class="admin-summary-card">
+                    <div class="summary-card-left">
+                        <span class="summary-card-title">Đang Hoạt Động</span>
+                        <span class="summary-card-value">30</span>
+                    </div>
+                </div>
+
+                <div class="admin-summary-card">
+                    <div class="summary-card-left">
+                        <span class="summary-card-title">Đang Bị Khóa</span>
+                        <span class="summary-card-value val-danger">2</span>
+                    </div>
+                </div>
+
+                <div class="admin-summary-card">
+                    <div class="summary-card-left">
+                        <span class="summary-card-title">MK Mặc Định</span>
+                        <span class="summary-card-value val-default-pw">Sport@123</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- thanh tìm kiếm và lọc -->
+            <div class="admin-filter-bar">
+                <input type="text" placeholder="Tìm theo tên, email, SĐT...">
+                <select>
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active">Đang hoạt động</option>
+                    <option value="locked">Đang bị khóa</option>
+                </select>
+                <select>
+                    <option value="">Sắp xếp</option>
+                    <option value="newest">Mới nhất</option>
+                    <option value="name">Tên A-Z</option>
+                </select>
+            </div>
+
+            <!-- danh sách khách hàng dạng div -->
+            <div class="admin-table-wrap">
+                <div class="div-table">
+                    <!-- tiêu đề các cột -->
+                    <div class="div-table-header">
+                        <div class="div-cell">MÃ KH</div>
+                        <div class="div-cell">HỌ TÊN</div>
+                        <div class="div-cell">EMAIL</div>
+                        <div class="div-cell">SỐ ĐIỆN THOẠI</div>
+                        <div class="div-cell">NGÀY TẠO</div>
+                        <div class="div-cell">TRẠNG THÁI</div>
+                        <div class="div-cell cell-actions">THAO TÁC</div>
+                    </div>
+
+                    <!-- danh sách hàng dữ liệu dạng div -->
+                    <div class="div-table-body">
+                        <!-- Khách hàng 1 -->
+                        <div class="div-table-row">
+                            <div class="div-cell"><span class="badge-category-pill">KH001</span></div>
+                            <div class="div-cell"><strong>Nguyễn Văn An</strong></div>
+                            <div class="div-cell">an.nguyen92@gmail.com</div>
+                            <div class="div-cell">0903.111.222</div>
+                            <div class="div-cell">15/01/2026</div>
+                            <div class="div-cell col-status"><span class="badge-status badge-success">Hoạt động</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-reset-pw">Reset MK</button>
+                                    <button class="btn-action btn-lock">Khóa</button>
+                                    <button class="btn-action btn-edit">Sửa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Khách hàng 2 -->
+                        <div class="div-table-row">
+                            <div class="div-cell"><span class="badge-category-pill">KH002</span></div>
+                            <div class="div-cell"><strong>Lê Thị Bích Ngọc</strong></div>
+                            <div class="div-cell">bichngoc.sport@gmail.com</div>
+                            <div class="div-cell">0918.333.444</div>
+                            <div class="div-cell">02/02/2026</div>
+                            <div class="div-cell col-status"><span class="badge-status badge-success">Hoạt động</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-reset-pw">Reset MK</button>
+                                    <button class="btn-action btn-lock">Khóa</button>
+                                    <button class="btn-action btn-edit">Sửa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Khách hàng 3 -->
+                        <div class="div-table-row">
+                            <div class="div-cell"><span class="badge-category-pill">KH003</span></div>
+                            <div class="div-cell"><strong>Trần Minh Đức</strong></div>
+                            <div class="div-cell">minhduc.runner@gmail.com</div>
+                            <div class="div-cell">0982.555.666</div>
+                            <div class="div-cell">18/03/2026</div>
+                            <div class="div-cell col-status"><span class="badge-status badge-success">Hoạt động</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-reset-pw">Reset MK</button>
+                                    <button class="btn-action btn-lock">Khóa</button>
+                                    <button class="btn-action btn-edit">Sửa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Khách hàng 4 -->
+                        <div class="div-table-row">
+                            <div class="div-cell"><span class="badge-category-pill">KH004</span></div>
+                            <div class="div-cell"><strong>Hoàng Thu Thảo</strong></div>
+                            <div class="div-cell">thuthao.badminton@gmail.com</div>
+                            <div class="div-cell">0975.777.888</div>
+                            <div class="div-cell">25/04/2026</div>
+                            <div class="div-cell col-status"><span class="badge-status badge-success">Hoạt động</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-reset-pw">Reset MK</button>
+                                    <button class="btn-action btn-lock">Khóa</button>
+                                    <button class="btn-action btn-edit">Sửa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Khách hàng 5 -->
+                        <div class="div-table-row">
+                            <div class="div-cell"><span class="badge-category-pill">KH005</span></div>
+                            <div class="div-cell"><strong>Ngô Thanh Tùng</strong></div>
+                            <div class="div-cell">thanhtung.sport@gmail.com</div>
+                            <div class="div-cell">0929.888.777</div>
+                            <div class="div-cell">10/05/2026</div>
+                            <div class="div-cell col-status"><span class="badge-status badge-danger">Đang khóa</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-reset-pw">Reset MK</button>
+                                    <button class="btn-action btn-unlock">Mở khóa</button>
+                                    <button class="btn-action btn-edit">Sửa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Khách hàng 6 -->
+                        <div class="div-table-row">
+                            <div class="div-cell"><span class="badge-category-pill">KH006</span></div>
+                            <div class="div-cell"><strong>Võ Hoàng Hải</strong></div>
+                            <div class="div-cell">hoanghai.vo@gmail.com</div>
+                            <div class="div-cell">0941.666.999</div>
+                            <div class="div-cell">05/06/2026</div>
+                            <div class="div-cell col-status"><span class="badge-status badge-danger">Đang khóa</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-reset-pw">Reset MK</button>
+                                    <button class="btn-action btn-unlock">Mở khóa</button>
+                                    <button class="btn-action btn-edit">Sửa</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- popup reset mật khẩu khách hàng -->
+    <div id="resetPwModal" class="modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3>Reset Mật Khẩu</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="reset-dialog-desc">
+                    Đặt lại mật khẩu cho tài khoản: <strong id="resetTargetUser" class="val-blue">Nguyễn Văn An (KH001)</strong>?
+                </p>
+                <div class="reset-pw-box">
+                    <div class="reset-pw-label">Mật khẩu mới:</div>
+                    <div class="reset-pw-val">Sport@123</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action btn-modal-cancel">Hủy</button>
+                <button class="btn-primary btn-modal-save">Xác Nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup thêm / sửa khách hàng -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <h3>Thông Tin Khách Hàng</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Mã KH:</label>
+                    <input type="text" value="KH033" readonly class="input-readonly">
+                </div>
+                <div class="form-group">
+                    <label>Họ và tên:</label>
+                    <input type="text" placeholder="Nhập họ tên...">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại:</label>
+                    <input type="text" placeholder="Nhập SĐT...">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" placeholder="Nhập email...">
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái:</label>
+                    <select>
+                        <option value="active">Hoạt động</option>
+                        <option value="locked">Bị khóa</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action btn-modal-cancel">Hủy</button>
+                <button class="btn-primary btn-modal-save">Lưu</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

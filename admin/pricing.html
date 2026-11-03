@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportStore | Quản Lý Giá Bán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <!-- thanh header trang admin -->
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <a href="../products.html" class="sport-brand-logo">
+                <div class="logo-icon">⚡</div>
+                <div>SPORT<span class="accent">STORE</span></div>
+            </a>
+            <span class="admin-badge-pill">ADMIN</span>
+        </div>
+
+        <div class="admin-header-right">
+            <a href="../products.html" class="btn-admin-store">🏪 Về Cửa Hàng</a>
+            <div class="admin-user-box">
+                <div class="admin-avatar-circle">👤</div>
+                <div class="admin-user-text">
+                    <strong>Quản Trị Viên</strong>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+            <a href="../products.html" class="btn-admin-logout-top">🚪 Đăng Xuất</a>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <!-- menu quản trị bên trái -->
+        <aside class="admin-sidebar">
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">TỔNG QUAN</div>
+                <ul class="admin-menu">
+                    <li><a href="dashboard.html"><span class="nav-ico">📊</span> Bảng Điều Khiển</a></li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">QUẢN LÝ KHO & SẢN PHẨM</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="categories.html">
+                            <span><span class="nav-ico">🏷️</span> Quản Lý Loại SP</span>
+                            <span class="nav-count-badge">8</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products_admin.html">
+                            <span><span class="nav-ico">👟</span> Quản Lý Sản Phẩm</span>
+                            <span class="nav-count-badge">501</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="imports.html">
+                            <span><span class="nav-ico">📥</span> Quản Lý Nhập Hàng</span>
+                            <span class="nav-count-badge badge-green">30</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pricing.html" class="active">
+                            <span><span class="nav-ico">💲</span> Quản Lý Giá Bán</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁN HÀNG & KHÁCH HÀNG</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="orders.html">
+                            <span><span class="nav-ico">📦</span> Quản Lý Đơn Hàng</span>
+                            <span class="nav-count-badge badge-amber">31</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="customers.html">
+                            <span><span class="nav-ico">👥</span> Quản Lý Khách Hàng</span>
+                            <span class="nav-count-badge">32</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav-group">
+                <div class="admin-nav-label">BÁO CÁO & THỐNG KÊ</div>
+                <ul class="admin-menu">
+                    <li>
+                        <a href="inventory.html">
+                            <span><span class="nav-ico">📈</span> Báo Cáo Tồn Kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- khung nội dung bên phải -->
+        <main class="admin-content">
+            <div class="content-header">
+                <h2>Quản Lý Giá Bán</h2>
+                <button class="btn-primary btn-admin-add">Lưu Bảng Giá</button>
+            </div>
+
+            <!-- PHẦN 1: THEO LOẠI SẢN PHẨM -->
+            <div class="pricing-section-card">
+                <div class="section-header-row">
+                    <strong class="section-header-title">1. Tỉ lệ % lợi nhuận theo loại sản phẩm</strong>
+                    <button class="btn-action btn-edit">Áp dụng</button>
+                </div>
+
+                <div class="pricing-cat-grid">
+                    <div class="pricing-cat-item">
+                        <span class="pricing-cat-name">Giày Thể Thao</span>
+                        <div class="pricing-cat-input-wrap">
+                            <input type="number" value="25" min="0">%
+                        </div>
+                    </div>
+                    <div class="pricing-cat-item">
+                        <span class="pricing-cat-name">Quần Áo Thể Thao</span>
+                        <div class="pricing-cat-input-wrap">
+                            <input type="number" value="30" min="0">%
+                        </div>
+                    </div>
+                    <div class="pricing-cat-item">
+                        <span class="pricing-cat-name">Dụng Cụ & Vợt</span>
+                        <div class="pricing-cat-input-wrap">
+                            <input type="number" value="20" min="0">%
+                        </div>
+                    </div>
+                    <div class="pricing-cat-item">
+                        <span class="pricing-cat-name">Balo & Phụ Kiện</span>
+                        <div class="pricing-cat-input-wrap">
+                            <input type="number" value="25" min="0">%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHẦN 2: THEO TỪNG SẢN PHẨM -->
+            <div class="section-header-row mb-8">
+                <strong class="section-header-title">2. Tra cứu & sửa giá từng sản phẩm</strong>
+            </div>
+
+            <!-- thanh tìm kiếm và lọc -->
+            <div class="admin-filter-bar filter-bar-mb">
+                <input type="text" placeholder="Tìm theo tên sản phẩm, mã SP...">
+                <select id="pricingCatFilter">
+                    <option value="">Tất cả loại sản phẩm</option>
+                    <option value="Giày Thể Thao">Giày Thể Thao</option>
+                    <option value="Quần Áo Thể Thao">Quần Áo Thể Thao</option>
+                    <option value="Dụng Cụ & Vợt">Dụng Cụ & Vợt</option>
+                    <option value="Balo & Phụ Kiện">Balo & Phụ Kiện</option>
+                </select>
+            </div>
+
+            <!-- bảng hiển thị chi tiết giá vốn, % lợi nhuận, giá bán dạng DIV -->
+            <div class="admin-table-wrap">
+                <div class="div-table div-table-pricing">
+                    <div class="div-header-pricing">
+                        <div class="div-cell">MÃ SP</div>
+                        <div class="div-cell">TÊN SẢN PHẨM</div>
+                        <div class="div-cell">LOẠI SP</div>
+                        <div class="div-cell">GIÁ VỐN</div>
+                        <div class="div-cell">% LÃI</div>
+                        <div class="div-cell">GIÁ BÁN</div>
+                        <div class="div-cell">TIỀN LÃI</div>
+                        <div class="div-cell cell-actions">THAO TÁC</div>
+                    </div>
+
+                    <div class="div-table-body">
+                        <!-- SP001 -->
+                        <div class="div-row-pricing">
+                            <div class="div-cell"><span class="badge-category-pill">SP001</span></div>
+                            <div class="div-cell"><strong>Vợt Yonex Astrox 88D Pro</strong></div>
+                            <div class="div-cell col-cat">Dụng Cụ & Vợt</div>
+                            <div class="div-cell">3.200.000 đ</div>
+                            <div class="div-cell col-rate"><strong>25%</strong></div>
+                            <div class="div-cell col-price"><span class="admin-price-col">4.000.000 đ</span></div>
+                            <div class="div-cell col-profit"><span class="col-profit-text">+800.000 đ</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-edit">Sửa %</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SP002 -->
+                        <div class="div-row-pricing">
+                            <div class="div-cell"><span class="badge-category-pill">SP002</span></div>
+                            <div class="div-cell"><strong>Giày Nike ZoomX Vaporfly 3</strong></div>
+                            <div class="div-cell col-cat">Giày Thể Thao</div>
+                            <div class="div-cell">4.100.000 đ</div>
+                            <div class="div-cell col-rate"><strong>30%</strong></div>
+                            <div class="div-cell col-price"><span class="admin-price-col">5.330.000 đ</span></div>
+                            <div class="div-cell col-profit"><span class="col-profit-text">+1.230.000 đ</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-edit">Sửa %</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SP003 -->
+                        <div class="div-row-pricing">
+                            <div class="div-cell"><span class="badge-category-pill">SP003</span></div>
+                            <div class="div-cell"><strong>Vợt Yonex Nanoflare 1000Z</strong></div>
+                            <div class="div-cell col-cat">Dụng Cụ & Vợt</div>
+                            <div class="div-cell">3.400.000 đ</div>
+                            <div class="div-cell col-rate"><strong>25%</strong></div>
+                            <div class="div-cell col-price"><span class="admin-price-col">4.250.000 đ</span></div>
+                            <div class="div-cell col-profit"><span class="col-profit-text">+850.000 đ</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-edit">Sửa %</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SP004 -->
+                        <div class="div-row-pricing">
+                            <div class="div-cell"><span class="badge-category-pill">SP004</span></div>
+                            <div class="div-cell"><strong>Giày Yonex Cushion 65Z3</strong></div>
+                            <div class="div-cell col-cat">Giày Thể Thao</div>
+                            <div class="div-cell">1.950.000 đ</div>
+                            <div class="div-cell col-rate"><strong>25%</strong></div>
+                            <div class="div-cell col-price"><span class="admin-price-col">2.437.500 đ</span></div>
+                            <div class="div-cell col-profit"><span class="col-profit-text">+487.500 đ</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-edit">Sửa %</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SP005 -->
+                        <div class="div-row-pricing">
+                            <div class="div-cell"><span class="badge-category-pill">SP005</span></div>
+                            <div class="div-cell"><strong>Giày Nike Pegasus 40</strong></div>
+                            <div class="div-cell col-cat">Giày Thể Thao</div>
+                            <div class="div-cell">2.200.000 đ</div>
+                            <div class="div-cell col-rate"><strong>30%</strong></div>
+                            <div class="div-cell col-price"><span class="admin-price-col">2.860.000 đ</span></div>
+                            <div class="div-cell col-profit"><span class="col-profit-text">+660.000 đ</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-edit">Sửa %</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SP006 -->
+                        <div class="div-row-pricing">
+                            <div class="div-cell"><span class="badge-category-pill">SP006</span></div>
+                            <div class="div-cell"><strong>Giày Kamito TA11 Pro</strong></div>
+                            <div class="div-cell col-cat">Giày Thể Thao</div>
+                            <div class="div-cell">650.000 đ</div>
+                            <div class="div-cell col-rate"><strong>35%</strong></div>
+                            <div class="div-cell col-price"><span class="admin-price-col">877.500 đ</span></div>
+                            <div class="div-cell col-profit"><span class="col-profit-text">+227.500 đ</span></div>
+                            <div class="div-cell cell-actions">
+                                <div class="action-btn-group">
+                                    <button class="btn-action btn-edit">Sửa %</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- popup chỉnh sửa % lợi nhuận riêng cho 1 sản phẩm -->
+    <div id="singlePriceModal" class="modal">
+        <div class="modal-content modal-price">
+            <div class="modal-header">
+                <h3>Sửa % Lợi Nhuận</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Sản phẩm:</label>
+                    <input type="text" id="modalProdName" readonly class="input-readonly-bold">
+                </div>
+                <div class="form-group">
+                    <label>Giá vốn:</label>
+                    <input type="text" id="modalCostPrice" readonly class="input-readonly">
+                </div>
+                <div class="form-group">
+                    <label>% Lợi nhuận:</label>
+                    <input type="number" id="modalProfitRate" value="25" min="0">
+                </div>
+                <div class="price-calc-box">
+                    <div class="price-calc-label">Giá bán tính toán:</div>
+                    <div id="modalCalculatedPrice" class="price-calc-val">4.000.000 đ</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action btn-modal-cancel">Hủy</button>
+                <button class="btn-primary btn-modal-save">Lưu Giá</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
