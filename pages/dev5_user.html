@@ -703,122 +703,88 @@
         </div>
       </div>
 
-      <!-- TAB 7: QUẢN LÝ ĐƠN HÀNG -->
-      <div id="tab-order" class="admin-tab-content">
-        <div class="admin-section-header">
-          <div>
-            <h1 class="admin-page-title">Quản Lý Đơn Đặt Hàng</h1>
-          </div>
-        </div>
-        <div class="admin-filter-bar">
-          <label class="filter-label">Từ ngày:</label>
-          <input type="date" id="order-filter-from-date" class="filter-input filter-date" onchange="locDonHangAdmin()" />
-          <label class="filter-label">Đến ngày:</label>
-          <input type="date" id="order-filter-to-date" class="filter-input filter-date" onchange="locDonHangAdmin()" />
-          <select id="order-filter-status" class="filter-select" onchange="locDonHangAdmin()">
-            <option value="ALL">Tất cả trạng thái</option>
-            <option value="Mới đặt">Mới đặt</option>
-            <option value="Đã xử lý">Đã xử lý</option>
-            <option value="Đang giao">Đang giao</option>
-            <option value="Đã giao">Đã giao</option>
-            <option value="Đã hủy">Đã hủy</option>
-          </select>
-        </div>
-        <div class="admin-table-card">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>MÃ ĐƠN</th>
-                <th>KHÁCH HÀNG</th>
-                <th>NGÀY ĐẶT</th>
-                <th>MẶT HÀNG</th>
-                <th>TỔNG TIỀN</th>
-                <th>THANH TOÁN</th>
-                <th>TÌNH TRẠNG</th>
-                <th>CHI TIẾT</th>
-              </tr>
-            </thead>
-            <tbody id="admin-orders-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- TAB 8: QUẢN LÝ TỒN KHO & BÁO CÁO N-X-T -->
+      <!-- TAB: BÁO CÁO TỒN KHO CHUẨN ĐỀ XUẤT -->
       <div id="tab-inventory" class="admin-tab-content">
-        <div class="admin-section-header">
-          <div>
-            <h1 class="admin-page-title">Báo Cáo Tồn Kho & Cảnh Báo Nhập Gấp</h1>
+        <!-- Header tiêu đề và 2 nút switch tab -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin: 0;">Báo Cáo Tồn Kho</h2>
+          <div class="inventory-tab-switch">
+            <button type="button" class="inventory-tab-btn active" id="tabBtnSnapshot" onclick="chuyenTabTonKho('snapshot')">Tồn Kho Theo Loại</button>
+            <button type="button" class="inventory-tab-btn" id="tabBtnMovement" onclick="chuyenTabTonKho('movement')">Nhập – Xuất – Tồn</button>
           </div>
         </div>
-        <div class="admin-kpi-grid inventory-kpi-grid">
-          <div class="admin-kpi-card kpi-compact kpi-red">
-            <div class="kpi-compact-info">
-              <span class="kpi-label">SẢN PHẨM CẢNH BÁO SẮP HẾT (≤ 5 MÓN)</span>
-              <div class="kpi-value text-danger" id="inventory-summary-low">
-                3 Sản Phẩm Cần Nhập
+
+        <!-- VIEW 1: TỒN KHO THEO LOẠI -->
+        <div id="viewSnapshotSection">
+          <!-- 4 Thẻ KPI Tóm Tắt -->
+          <div class="admin-summary-grid">
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Tổng Tồn Kho</span>
+                <span class="summary-card-value" id="summaryTotalStock">0</span>
               </div>
             </div>
-            <div class="kpi-compact-icon icon-red">⚠️</div>
-          </div>
-          <div class="admin-kpi-card kpi-compact kpi-blue">
-            <div class="kpi-compact-info">
-              <span class="kpi-label">TỔNG SỐ LƯỢNG MÓN ĐỒ TRONG KHO</span>
-              <div class="kpi-value text-primary" id="inventory-summary-total">
-                677 Món Đồ
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Còn Hàng</span>
+                <span class="summary-card-value val-success" id="summaryInStock" style="color: #16a34a;">0</span>
               </div>
             </div>
-            <div class="kpi-compact-icon icon-blue">📦</div>
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Cảnh Báo (Tồn ≤ 5)</span>
+                <span class="summary-card-value val-orange" id="summaryLowStock" style="color: #ea580c;">0</span>
+              </div>
+            </div>
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Đã Hết Hàng</span>
+                <span class="summary-card-value val-danger" id="summaryOutOfStock" style="color: #dc2626;">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thanh Lọc Tìm Kiếm -->
+          <div class="admin-filter-bar">
+            <div class="admin-filter-item">
+              <span>Ngày:</span>
+              <input type="date" id="snapshotDateInput" value="2026-10-31">
+            </div>
+            <div class="admin-filter-item">
+              <span>Loại SP:</span>
+              <select id="snapshotCategorySelect" onchange="hienThiBangTonKhoAdmin()">
+                <option value="">Tất cả (4 Loại)</option>
+                <option value="Giày Thể Thao">Giày Thể Thao</option>
+                <option value="Quần Áo Thể Thao">Quần Áo Thể Thao</option>
+                <option value="Dụng Cụ & Vợt">Dụng Cụ & Vợt</option>
+                <option value="Balo & Phụ Kiện">Balo & Phụ Kiện</option>
+              </select>
+            </div>
+            <input type="text" id="snapshotSearchInput" oninput="hienThiBangTonKhoAdmin()"
+                   placeholder="Tìm theo tên sản phẩm, mã SP..." style="flex: 1; min-width: 200px;">
+          </div>
+
+          <!-- Bảng Dữ Liệu Div Table -->
+          <!-- Đổi overflow:hidden thành overflow-x: auto -->
+          <div class="admin-table-wrap" style="background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow-x: auto;">
+            <div class="div-table div-table-inventory">
+              <div class="div-header-inventory">
+                <div>MÃ SP</div>
+                <div>TÊN SẢN PHẨM</div>
+                <div>LOẠI SP</div>
+                <div>GIÁ VỐN</div>
+                <div>TỒN KHO</div>
+                <div>TRẠNG THÁI</div>
+                <div style="text-align: right;">THAO TÁC</div>
+              </div>
+              <div class="div-table-body" id="admin-inventory-tbody"></div>
+            </div>
           </div>
         </div>
-        <div class="inventory-controls-bar">
-          <div class="inventory-subtabs">
-            <button type="button" class="subtab-btn active" id="btn-subtab-detail"
-              onclick="switchInventorySubTab('detail', this)">
-              📦 1. Tồn Kho Chi Tiết Theo Sản Phẩm
-            </button>
-            <button type="button" class="subtab-btn" id="btn-subtab-nxt" onclick="switchInventorySubTab('nxt', this)">
-              📈 2. Báo Cáo Nhập - Xuất - Tồn (N-X-T)
-            </button>
-          </div>
-          <div class="inventory-filter-wrap" id="wrap-inventory-filter">
-            <select id="inventory-filter-category" class="filter-select" onchange="filterInventory()">
-              <option value="ALL">Tất cả phân loại</option>
-            </select>
-          </div>
-        </div>
-        <div id="inventory-section-detail" class="inventory-section">
-          <div class="admin-table-card">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>ẢNH</th>
-                  <th>TÊN TRANG BỊ</th>
-                  <th>PHÂN LOẠI</th>
-                  <th>GIÁ VỐN</th>
-                  <th>TỒN KHO HIỆN TẠI</th>
-                  <th>HÀNH ĐỘNG</th>
-                </tr>
-              </thead>
-              <tbody id="admin-inventory-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-        <div id="inventory-section-nxt" class="inventory-section" style="display: none">
-          <div class="admin-table-card">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>MÃ SP</th>
-                  <th>TÊN SẢN PHẨM</th>
-                  <th class="text-center">TỒN ĐẦU KỲ</th>
-                  <th class="text-center">NHẬP TRONG KỲ</th>
-                  <th class="text-center">XUẤT BÁN KỲ</th>
-                  <th class="text-center">TỒN CUỐI KỲ</th>
-                </tr>
-              </thead>
-              <tbody id="admin-nxt-tbody"></tbody>
-            </table>
-          </div>
+
+        <!-- VIEW 2: NHẬP XUẤT TỒN -->
+        <div id="viewMovementSection" style="display: none;">
+          <p style="padding: 20px; color: #64748b;">Nội dung Báo cáo Nhập - Xuất - Tồn theo kỳ...</p>
         </div>
       </div>
     </main>

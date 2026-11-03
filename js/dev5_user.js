@@ -1795,6 +1795,85 @@ function locTonKhoAdmin() {
   hienThiBangTonKhoAdmin();
 }
 
+function chuyenTabTonKho(tab) {
+  var snap = document.getElementById("viewSnapshotSection");
+  var move = document.getElementById("viewMovementSection");
+  var btnSnap = document.getElementById("tabBtnSnapshot");
+  var btnMove = document.getElementById("tabBtnMovement");
+  if (tab === "snapshot") {
+    snap.style.display = "block";
+    move.style.display = "none";
+    btnSnap.classList.add("active");
+    btnMove.classList.remove("active");
+    hienThiBangTonKhoAdmin();
+  } else {
+    snap.style.display = "none";
+    move.style.display = "block";
+    btnMove.classList.add("active");
+    btnSnap.classList.remove("active");
+  }
+}
+
+function phanLoaiChuan(sp) {
+  var str = ((sp.category || "") + " " + (sp.name || "")).toLowerCase();
+  if (str.includes("giày") || str.includes("shoes") || str.includes("vaporfly") || str.includes("predator")) return "Giày Thể Thao";
+  if (str.includes("áo") || str.includes("quần") || str.includes("dri-fit") || str.includes("gym")) return "Quần Áo Thể Thao";
+  if (str.includes("vợt") || str.includes("bóng") || str.includes("cầu lông") || str.includes("tennis")) return "Dụng Cụ & Vợt";
+  return "Balo & Phụ Kiện";
+}
+
+function hienThiBangTonKhoAdmin() {
+  var dsSp = layDuLieuAdmin("sport_products");
+  var tbody = document.getElementById("admin-inventory-tbody");
+  if (!tbody) return;
+
+  var loaiLoc = (document.getElementById("snapshotCategorySelect")?.value || "").toLowerCase();
+  var tuKhoa = (document.getElementById("snapshotSearchInput")?.value || "").toLowerCase().trim();
+
+  var tongTon = 0, soConHang = 0, soCanhBao = 0, soHetHang = 0;
+  var html = "";
+
+  for (var i = 0; i < dsSp.length; i++) {
+    var p = dsSp[i];
+    var maSP = p.code || ("SP-" + p.id);
+    var loaiSP = phanLoaiChuan(p);
+    var ton = Number(p.stock !== undefined ? p.stock : (p.quantity || 0));
+    var giaVon = Number(p.costPrice || (p.price ? p.price * 0.7 : 0));
+
+    tongTon += ton;
+    if (ton === 0) soHetHang++;
+    else if (ton <= 5) soCanhBao++;
+    else soConHang++;
+
+    if (loaiLoc && loaiSP.toLowerCase() !== loaiLoc) continue;
+    if (tuKhoa && !maSP.toLowerCase().includes(tuKhoa) && !p.name.toLowerCase().includes(tuKhoa)) continue;
+
+    var badgeTon = ton === 0 ? `<strong style="color:#dc2626;">0</strong>` : (ton <= 5 ? `<strong style="color:#ea580c;">${ton}</strong>` : `<strong>${ton}</strong>`);
+    var statusBadge = ton === 0 ? `<span class="badge-status badge-danger">Hết hàng</span>` : (ton <= 5 ? `<span class="badge-status badge-warning">Cảnh báo</span>` : `<span class="badge-status badge-success">Bình thường</span>`);
+    var btnAction = (ton <= 5) ? `<button type="button" class="btn-action" style="background:#fee2e2; color:#dc2626; border:none; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="moModalTaoPhieuNhap()">+ Nhập</button>` : `<button type="button" class="btn-action" style="background:#e0f2fe; color:#0284c7; border:none; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;">Xem</button>`;
+
+    html += `
+      <div class="div-row-inventory">
+        <div><span class="badge-code-pill">${maSP}</span></div>
+        <div><strong>${p.name}</strong></div>
+        <div style="color: #64748b;">${loaiSP}</div>
+        <div>${giaVon.toLocaleString("vi-VN")} đ</div>
+        <div>${badgeTon}</div>
+        <div>${statusBadge}</div>
+        <div style="text-align: right;">${btnAction}</div>
+      </div>
+    `;
+  }
+
+  tbody.innerHTML = html;
+
+  // Cập nhật 4 thẻ KPI
+  if (document.getElementById("summaryTotalStock")) document.getElementById("summaryTotalStock").textContent = tongTon.toLocaleString("vi-VN");
+  if (document.getElementById("summaryInStock")) document.getElementById("summaryInStock").textContent = soConHang;
+  if (document.getElementById("summaryLowStock")) document.getElementById("summaryLowStock").textContent = soCanhBao;
+  if (document.getElementById("summaryOutOfStock")) document.getElementById("summaryOutOfStock").textContent = soHetHang;
+}
+
 
 function renderUserProfile() {
   hienThiThongTinUser();
@@ -1813,3 +1892,4 @@ function renderUserProfile() {
 document.addEventListener('DOMContentLoaded', function () {
   renderUserProfile();
 });
+
