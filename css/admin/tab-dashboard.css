@@ -564,3 +564,46 @@
     font-size: 0.75rem;
   }
 }
+
+@media (max-width: 480px) {
+  .admin-kpi-card {
+    padding: 10px 14px;
+  }
+
+  .kpi-value {
+    font-size: 19px;
+  }
+
+  .dashboard-card {
+    padding: 14px 12px;
+  }
+
+  .chart-col {
+    width: 44px;
+  }
+
+  .chart-bar-track {
+    width: 26px;
+  }
+
+  .chart-grid-line span {
+    font-size: 9px;
+    padding: 0 2px;
+  }
+
+  .recent-order-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .recent-order-meta {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 6px;
+    margin-top: 2px;
+  }
+}
