@@ -139,7 +139,7 @@ function capNhatHeaderAuth() {
 
       if (linkTrangCaNhan) {
         linkTrangCaNhan.textContent = "Tài Khoản Của Tôi";
-        linkTrangCaNhan.href = layDuongDanTrang("dev5_user.html?tab=overview");
+        linkTrangCaNhan.href = layDuongDanTrang("dev5_user.html");
       }
       if (linkDonMua) {
         linkDonMua.classList.remove("dev5-hidden");
@@ -364,9 +364,6 @@ function dangXuat() {
   }
 }
 
-// ==============================================================================
-// 8. HÀM KHỞI TẠO KHUNG HTML CỦA MODAL (Nạp tự động 1 lần, có sẵn onclick)
-// ==============================================================================
 function khoiTaoKhungModalNeuChuaCo() {
   if (document.getElementById("dev5-modal-auth-root")) return;
 

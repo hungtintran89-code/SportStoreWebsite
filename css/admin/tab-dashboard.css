@@ -1,136 +1,199 @@
-/* ===================================================
-   GIAO DIỆN TAB BẢNG ĐIỀU KHIỂN (DASHBOARD)
-   =================================================== */
+/* ==============================================================================
+   GIAO DIỆN TAB BẢNG ĐIỀU KHIỂN (DASHBOARD - SPORTSTORE)
+   - Tối ưu layout 24px padding & gap đồng đều
+   - Thanh cuộn mỏng (scrollbar-width: thin)
+   - 4 Card KPI thống kê đổ bóng nhẹ, hover nâng lên
+   - Biểu đồ thể thao full chiều cao card, đường kẻ mờ, giá trị trên đầu cột,
+     cột cao nhất xanh đậm, tooltip + hover
+   - 2 Card phía dưới kéo dãn bằng nhau (align-items: stretch)
+   - Danh sách đơn hàng cuộn mượt bên trong card, không bị cắt đáy
+   - Badge trạng thái đơn hàng tròn đều, màu sắc chuẩn
+   ============================================================================== */
+
+/* 1. Layout tổng thể Tab Dashboard */
+#tab-dashboard {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  box-sizing: border-box;
+}
+
+#tab-dashboard.active {
+  display: flex;
+}
+
+#tab-dashboard::-webkit-scrollbar {
+  width: 6px;
+}
+
+#tab-dashboard::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#tab-dashboard::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+#tab-dashboard::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 #tab-dashboard .admin-section-header {
+  margin: 0;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
 }
 
-/* Lưới hiển thị các thẻ KPI thống kê */
+#tab-dashboard .admin-page-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+/* 2. Lưới 4 Thẻ KPI Thống Kê (Thiết kế gọn gàng, giảm chiều cao để vừa màn hình) */
 .admin-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 16px;
   width: 100%;
-  padding: 20px;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
 
 .admin-kpi-card {
   background-color: #ffffff;
-  min-height: 140px;
-  border-radius: 14px;
-  padding: 20px;
-  font-size: 13px;
+  min-height: 94px;
+  border-radius: 12px;
+  padding: 12px 18px;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
   cursor: pointer;
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease;
 }
+
 .admin-kpi-card:hover {
-  border-color: #60a5fa;
-
-  /* 2. Hiệu ứng nhấc nhẹ thẻ lên trên 3px */
   transform: translateY(-3px);
-
-  /* 3. Đổ bóng sâu hơn một chút kèm ánh viền xanh cực nhẹ */
-  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.12);
-}
-
-.admin-kpi-card > div {
-  margin-bottom: 8px;
+  box-shadow: 0 8px 16px -3px rgba(15, 23, 42, 0.08), 0 3px 5px -3px rgba(15, 23, 42, 0.03);
+  border-color: #93c5fd;
 }
 
 .kpi-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #64748b;
-  font-weight: bold;
+  margin-bottom: 2px;
 }
 
-.kpi-top :last-child {
-  height: 36px;
+.kpi-label {
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.4px;
+}
+
+.kpi-icon {
   width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
   border-radius: 8px;
-  background-color: #e0f2fe;
+  flex-shrink: 0;
 }
 
+/* Màu sắc từng khối KPI */
+.kpi-blue { border-left: 4px solid #0284c7; }
+.kpi-blue .kpi-icon { background-color: #e0f2fe; }
+
+.kpi-orange { border-left: 4px solid #ea580c; }
+.kpi-orange .kpi-icon { background-color: #ffedd5; }
+
+.kpi-green { border-left: 4px solid #16a34a; }
+.kpi-green .kpi-icon { background-color: #dcfce7; }
+
+.kpi-purple { border-left: 4px solid #9333ea; }
+.kpi-purple .kpi-icon { background-color: #f3e8ff; }
+
 .kpi-value {
-  font-size: 26px;
-  font-weight: bold;
-  color: #1e293b;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  margin: 4px 0 2px 0;
+  line-height: 1.15;
 }
 
 .kpi-trend {
-  font-size: 13px;
-  color: #64748b;
+  font-size: 0.78rem;
+  color: #334155;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .kpi-trend > span {
   color: #16a34a;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-/* Responsive cho KPI */
-@media (max-width: 1550px) {
-  .admin-kpi-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (max-width: 1100px) {
-  .admin-kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 750px) {
-  .admin-kpi-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Màu viền thẻ KPI */
-.kpi-blue { border-left: 4px solid #0284c7; }
-.kpi-orange { border-left: 4px solid #ea580c; }
-.kpi-green { border-left: 4px solid #16a34a; }
-.kpi-purple { border-left: 4px solid #9333ea; }
-.kpi-red { border-left: 4px solid #dc2626; }
-
-/* Grid 2 cột bảng điều khiển */
+/* 3. Lưới 2 Card phía dưới (Biểu đồ & Đơn hàng gần đây) */
 .dashboard-two-col {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 24px;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 16px;
+  align-items: stretch; /* Đảm bảo 2 card cao bằng nhau tuyệt đối */
+  width: 100%;
+  flex: 1; /* Chiếm trọn chiều cao còn lại của màn hình, lấp đầy khoảng trống đáy */
+  min-height: 350px; /* Đảm bảo khung không bị quá nhỏ trên màn hình thấp */
+  margin: 0;
+  box-sizing: border-box;
 }
 
-@media (max-width: 1024px) {
-  .dashboard-two-col {
-    grid-template-columns: 1fr;
-  }
-}
-
-.dashboard-card {
-  padding: 22px;
+.dashboard-card,
+.admin-table-card.dashboard-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0; /* Cho phép flex item con co dãn chuẩn trong CSS Grid */
+  box-sizing: border-box;
+  overflow: hidden; /* Ngăn card ngoài hiện thanh cuộn thừa */
 }
 
 .dashboard-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
 }
 
 .dashboard-card-title {
-  font-size: 1.1rem;
+  font-size: 1rem;
+  font-weight: 700;
   color: #0f172a;
   margin: 0;
 }
@@ -138,44 +201,463 @@
 .dashboard-view-all {
   color: #0284c7;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .dashboard-view-all:hover {
+  color: #0369a1;
   text-decoration: underline;
 }
 
-/* Biểu đồ cột thể thao bằng CSS */
-.chart-container {
+/* 4. Khung Biểu Đồ Doanh Số Theo Bộ Môn */
+.chart-wrapper {
+  position: relative;
+  flex: 1;
+  min-height: 0; /* Tự động dãn cao theo thẻ card mà không bị chặn */
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  padding-bottom: 4px;
+}
+
+/* Đường kẻ ngang mờ phân chia mốc tiền */
+.chart-grid-lines {
+  position: absolute;
+  top: 18px; /* Khớp với đỉnh của track cột ngay dưới mốc số tiền */
+  left: 0;
+  right: 0;
+  bottom: 34px; /* Khớp với đáy của track cột ngay trên nhãn bộ môn */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.chart-grid-line {
+  border-top: 1px dashed #e2e8f0;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.chart-grid-line span {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: -8px;
+  background: #ffffff;
+  padding: 0 4px;
+}
+
+.chart-grid-line.chart-grid-baseline {
+  border-top: 1.5px solid #cbd5e1;
+}
+
+/* Cụm chứa các cột */
+.chart-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: stretch;
   justify-content: space-around;
-  height: 180px;
-  padding-top: 20px;
-  border-bottom: 2px solid #e2e8f0;
+  flex: 1;
+  height: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
 }
 
 .chart-col {
-  text-align: center;
-  width: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 68px;
+  height: 100%;
 }
 
-.chart-bar {
-  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
-  border-radius: 6px 6px 0 0;
-  transition: height 0.3s ease;
-}
-
-.chart-bar-run { height: 140px; }
-.chart-bar-football { height: 110px; }
-.chart-bar-badminton { height: 90px; }
-.chart-bar-tennis { height: 70px; }
-.chart-bar-gym { height: 50px; }
-
-.chart-col-label {
-  font-size: 0.78rem;
+/* Giá trị hiển thị trên đầu cột */
+.chart-val-top {
+  font-size: 0.8rem;
   font-weight: 700;
-  margin-top: 6px;
+  color: #475569;
+  margin-bottom: 4px;
+  line-height: 1;
+  transition: all 0.3s ease;
 }
 
+.chart-col.is-highest .chart-val-top {
+  color: #0284c7;
+  font-weight: 800;
+}
+
+/* Khung ray trượt cột */
+.chart-bar-track {
+  flex: 1;
+  width: 42px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+}
+
+/* Cột biểu đồ */
+.chart-bar {
+  width: 100%;
+  border-radius: 7px 7px 0 0;
+  background: linear-gradient(180deg, #93c5fd 0%, #38bdf8 100%);
+  cursor: pointer;
+  position: relative;
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.3s ease,
+              transform 0.25s ease,
+              filter 0.25s ease;
+}
+
+/* Cột cao nhất: Tô xanh đậm nổi bật theo yêu cầu */
+.chart-bar-highest,
+.chart-col.is-highest .chart-bar {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
+}
+
+/* Hiệu ứng hover cho cột: đổi màu + tooltip */
+.chart-bar:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.chart-bar:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 20;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.chart-bar:hover::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0 5px;
+  border-style: solid;
+  border-color: #0f172a transparent transparent transparent;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Tên bộ môn phía dưới cột */
+.chart-col-label {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  text-align: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+/* 5. Danh Sách Đơn Hàng Gần Đây */
+#dashboard-recent-orders-list {
+  flex: 1;
+  min-height: 0;
+  max-height: none; /* Bỏ giới hạn cứng 250px để danh sách co dãn tự nhiên theo card */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  padding-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+#dashboard-recent-orders-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+#dashboard-recent-orders-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.recent-order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  gap: 10px;
+}
+
+.recent-order-item:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  transform: translateX(2px);
+}
+
+.recent-order-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.recent-order-title {
+  font-weight: 700;
+  color: #0284c7;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-order-customer {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.recent-order-summary {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-order-meta {
+  text-align: right;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.recent-order-total {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 0.88rem;
+}
+
+/* 6. Huy hiệu (Badge) trạng thái đơn hàng theo đúng yêu cầu */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* "Đang giao" = nền xanh dương nhạt, chữ xanh đậm */
+.badge-order-delivering {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+/* "Mới đặt" = nền cam nhạt, chữ cam đậm */
+.badge-order-new {
+  background-color: #ffedd5;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+/* "Đã xử lý" = nền xanh lá nhạt, chữ xanh lá đậm */
+.badge-order-processed {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Các trạng thái bổ sung */
+.badge-order-completed {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-order-cancelled {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+/* 7. Responsive theo yêu cầu:
+      Màn nhỏ thì 4 card thống kê thành 2 cột, 2 card dưới xếp dọc */
+@media (max-width: 1280px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-two-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: initial;
+    min-height: auto;
+  }
+
+  .dashboard-card {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  .chart-wrapper {
+    height: 270px;
+    min-height: 270px;
+    flex: initial;
+  }
+
+  #dashboard-recent-orders-list {
+    max-height: 380px;
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 640px) {
+  #tab-dashboard {
+    gap: 12px;
+  }
+
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .dashboard-two-col {
+    gap: 12px;
+  }
+
+  .dashboard-card {
+    padding: 14px 14px;
+  }
+
+  .chart-wrapper {
+    height: 250px;
+    min-height: 250px;
+  }
+
+  .chart-col {
+    width: 48px;
+  }
+
+  .chart-bar-track {
+    width: 28px;
+  }
+
+  .chart-col-label {
+    font-size: 0.72rem;
+    height: 32px;
+  }
+
+  .chart-val-top {
+    font-size: 0.74rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-content {
+    padding: 12px 8px;
+  }
+
+  .admin-kpi-card {
+    padding: 10px 14px;
+  }
+
+  .kpi-value {
+    font-size: 19px;
+  }
+
+  .dashboard-card {
+    padding: 12px 10px;
+  }
+
+  .dashboard-card-header {
+    margin-bottom: 10px;
+  }
+
+  .dashboard-card-title {
+    font-size: 0.88rem;
+  }
+
+  .chart-wrapper {
+    height: 230px;
+    min-height: 230px;
+  }
+
+  .chart-grid-lines {
+    top: 16px;
+    bottom: 28px;
+  }
+
+  .chart-col {
+    width: 42px;
+  }
+
+  .chart-bar-track {
+    width: 22px;
+  }
+
+  .chart-col-label {
+    font-size: 0.68rem;
+    height: 28px;
+    padding-top: 2px;
+  }
+
+  .chart-val-top {
+    font-size: 0.7rem;
+  }
+
+  .chart-grid-line span {
+    font-size: 9px;
+    padding: 0 1px;
+  }
+
+  .recent-order-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .recent-order-meta {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 6px;
+    margin-top: 2px;
+  }
+}

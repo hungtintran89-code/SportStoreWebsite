@@ -54,7 +54,7 @@
           <!-- Menu thả xuống Shopee -->
           <div class="dev5-shopee-dropdown">
             <div class="dev5-shopee-arrow"></div>
-            <a href="dev5_user.html?tab=overview" class="dev5-shopee-item" id="header-link-profile">
+            <a href="dev5_user.html" class="dev5-shopee-item" id="header-link-profile">
               Tài Khoản Của Tôi
             </a>
             <a href="dev5_user.html?tab=orders" class="dev5-shopee-item" id="header-link-orders">
@@ -664,7 +664,7 @@
                 <th>SỐ LƯỢNG</th>
                 <th>TỔNG TIỀN VỐN</th>
                 <th>NGƯỜI TẠO</th>
-                <th>TRẠNG THÁI</th>
+                <th>CHI TIẾT</th>
                 <th>THAO TÁC</th>
               </tr>
             </thead>
@@ -702,8 +702,7 @@
           </table>
         </div>
       </div>
-
-      <!-- TAB 7: QUẢN LÝ ĐƠN HÀNG -->
+      <!-- TAB 7: QUẢN LÝ ĐƠN HÀNG (KHÔI PHỤC LẠI) -->
       <div id="tab-order" class="admin-tab-content">
         <div class="admin-section-header">
           <div>
@@ -727,101 +726,183 @@
         <div class="admin-table-card">
           <table class="admin-table">
             <thead>
-              <tr>
-                <th>MÃ ĐƠN</th>
-                <th>KHÁCH HÀNG</th>
-                <th>NGÀY ĐẶT</th>
-                <th>MẶT HÀNG</th>
-                <th>TỔNG TIỀN</th>
-                <th>THANH TOÁN</th>
-                <th>TÌNH TRẠNG</th>
-                <th>CHI TIẾT</th>
-              </tr>
+            <tr>
+              <th>MÃ ĐƠN</th>
+              <th>KHÁCH HÀNG</th>
+              <th>NGÀY ĐẶT</th>
+              <th>MẶT HÀNG</th>
+              <th>TỔNG TIỀN</th>
+              <th>THANH TOÁN</th>
+              <th>TÌNH TRẠNG</th>
+              <th>CHI TIẾT</th>
+            </tr>
             </thead>
             <tbody id="admin-orders-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- TAB 8: QUẢN LÝ TỒN KHO & BÁO CÁO N-X-T -->
+      <!-- TAB: BÁO CÁO TỒN KHO CHUẨN ĐỀ XUẤT -->
       <div id="tab-inventory" class="admin-tab-content">
-        <div class="admin-section-header">
-          <div>
-            <h1 class="admin-page-title">Báo Cáo Tồn Kho & Cảnh Báo Nhập Gấp</h1>
+        <!-- Header tiêu đề và 2 nút switch tab -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin: 0;">Báo Cáo Tồn Kho</h2>
+          <div class="inventory-tab-switch">
+            <button type="button" class="inventory-tab-btn active" id="tabBtnSnapshot" onclick="chuyenTabTonKho('snapshot')">Tồn Kho Theo Loại</button>
+            <button type="button" class="inventory-tab-btn" id="tabBtnMovement" onclick="chuyenTabTonKho('movement')">Nhập – Xuất – Tồn</button>
           </div>
         </div>
-        <div class="admin-kpi-grid inventory-kpi-grid">
-          <div class="admin-kpi-card kpi-compact kpi-red">
-            <div class="kpi-compact-info">
-              <span class="kpi-label">SẢN PHẨM CẢNH BÁO SẮP HẾT (≤ 5 MÓN)</span>
-              <div class="kpi-value text-danger" id="inventory-summary-low">
-                3 Sản Phẩm Cần Nhập
+
+        <!-- VIEW 1: TỒN KHO THEO LOẠI -->
+        <div id="viewSnapshotSection">
+          <!-- 4 Thẻ KPI Tóm Tắt -->
+          <div class="admin-summary-grid">
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Tổng Tồn Kho</span>
+                <span class="summary-card-value" id="summaryTotalStock">0</span>
               </div>
             </div>
-            <div class="kpi-compact-icon icon-red">⚠️</div>
-          </div>
-          <div class="admin-kpi-card kpi-compact kpi-blue">
-            <div class="kpi-compact-info">
-              <span class="kpi-label">TỔNG SỐ LƯỢNG MÓN ĐỒ TRONG KHO</span>
-              <div class="kpi-value text-primary" id="inventory-summary-total">
-                677 Món Đồ
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Còn Hàng</span>
+                <span class="summary-card-value val-success" id="summaryInStock" style="color: #16a34a;">0</span>
               </div>
             </div>
-            <div class="kpi-compact-icon icon-blue">📦</div>
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Cảnh Báo (Tồn ≤ 5)</span>
+                <span class="summary-card-value val-orange" id="summaryLowStock" style="color: #ea580c;">0</span>
+              </div>
+            </div>
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Đã Hết Hàng</span>
+                <span class="summary-card-value val-danger" id="summaryOutOfStock" style="color: #dc2626;">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thanh Lọc Tìm Kiếm -->
+          <div class="admin-filter-bar">
+            <div class="admin-filter-item">
+              <span>Ngày:</span>
+              <input type="date" id="snapshotDateInput" value="2026-10-31">
+            </div>
+            <div class="admin-filter-item">
+              <span>Loại SP:</span>
+              <select id="snapshotCategorySelect" onchange="hienThiBangTonKhoAdmin()">
+                <option value="">Tất cả (4 Loại)</option>
+                <option value="Giày Thể Thao">Giày Thể Thao</option>
+                <option value="Quần Áo Thể Thao">Quần Áo Thể Thao</option>
+                <option value="Dụng Cụ & Vợt">Dụng Cụ & Vợt</option>
+                <option value="Balo & Phụ Kiện">Balo & Phụ Kiện</option>
+              </select>
+            </div>
+            <input type="text" id="snapshotSearchInput" oninput="hienThiBangTonKhoAdmin()"
+                   placeholder="Tìm theo tên sản phẩm, mã SP..." style="flex: 1; min-width: 200px;">
+          </div>
+
+          <!-- Bảng Dữ Liệu Div Table -->
+          <!-- Đổi overflow:hidden thành overflow-x: auto -->
+          <div class="admin-table-wrap" style="background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow-x: auto;">
+            <div class="div-table div-table-inventory">
+              <div class="div-header-inventory">
+                <div>MÃ SP</div>
+                <div>TÊN SẢN PHẨM</div>
+                <div>LOẠI SP</div>
+                <div>GIÁ VỐN</div>
+                <div>TỒN KHO</div>
+                <div>TRẠNG THÁI</div>
+                <div style="text-align: right;">THAO TÁC</div>
+              </div>
+              <div class="div-table-body" id="admin-inventory-tbody"></div>
+            </div>
           </div>
         </div>
-        <div class="inventory-controls-bar">
-          <div class="inventory-subtabs">
-            <button type="button" class="subtab-btn active" id="btn-subtab-detail"
-              onclick="switchInventorySubTab('detail', this)">
-              📦 1. Tồn Kho Chi Tiết Theo Sản Phẩm
-            </button>
-            <button type="button" class="subtab-btn" id="btn-subtab-nxt" onclick="switchInventorySubTab('nxt', this)">
-              📈 2. Báo Cáo Nhập - Xuất - Tồn (N-X-T)
-            </button>
+
+        <!-- VIEW 2: NHẬP XUẤT TỒN -->
+        <!-- VIEW 2: NHẬP XUẤT TỒN (ĐÃ BỔ SUNG GIAO DIỆN) -->
+        <div id="viewMovementSection" style="display: none;">
+          <!-- Thanh bộ lọc của Tab 2 -->
+          <div class="admin-filter-bar">
+            <div class="admin-filter-item">
+              <span>Sản phẩm:</span>
+              <select id="movementProductSelect" onchange="hienThiNhapXuatTon()" style="min-width: 220px; padding: 7px 10px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                <option value="">Tất cả sản phẩm</option>
+              </select>
+            </div>
+            <div class="admin-filter-item">
+              <span>Từ:</span>
+              <input type="date" id="movementDateFrom" value="2026-10-01" onchange="hienThiNhapXuatTon()">
+              <span>Đến:</span>
+              <input type="date" id="movementDateTo" value="2026-10-31" onchange="hienThiNhapXuatTon()">
+            </div>
           </div>
-          <div class="inventory-filter-wrap" id="wrap-inventory-filter">
-            <select id="inventory-filter-category" class="filter-select" onchange="filterInventory()">
-              <option value="ALL">Tất cả phân loại</option>
-            </select>
+
+          <!-- 4 Thẻ thống kê số lượng Nhập Xuất Tồn -->
+          <div class="admin-summary-grid">
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Tồn Đầu Kỳ</span>
+                <span class="summary-card-value" id="movementBeginningStock">0</span>
+              </div>
+            </div>
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Tổng Nhập</span>
+                <span class="summary-card-value" id="movementTotalImport" style="color: #16a34a;">+0</span>
+              </div>
+            </div>
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Tổng Xuất</span>
+                <span class="summary-card-value" id="movementTotalExport" style="color: #ea580c;">-0</span>
+              </div>
+            </div>
+            <div class="admin-summary-card">
+              <div class="summary-card-left">
+                <span class="summary-card-title">Tồn Cuối Kỳ</span>
+                <span class="summary-card-value" id="movementEndingStock" style="color: #0f172a;">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bảng chi tiết Nhập - Xuất - Tồn -->
+          <div class="admin-table-wrap" style="background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow-x: auto;">
+            <div class="div-table div-table-movement">
+              <div class="div-header-movement" style="display: grid; grid-template-columns: 120px 140px 1.5fr 120px 120px 140px; padding: 12px 16px; background: #f8fafc; font-size: 11.5px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0;">
+                <div>NGÀY</div>
+                <div>CHỨNG TỪ</div>
+                <div>LOẠI GIAO DỊCH</div>
+                <div style="text-align: center;">SL NHẬP</div>
+                <div style="text-align: center;">SL XUẤT</div>
+                <div style="text-align: center;">TỒN KHO</div>
+              </div>
+              <div class="div-table-body" id="movementTableBody"></div>
+            </div>
           </div>
         </div>
-        <div id="inventory-section-detail" class="inventory-section">
-          <div class="admin-table-card">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>ẢNH</th>
-                  <th>TÊN TRANG BỊ</th>
-                  <th>PHÂN LOẠI</th>
-                  <th>GIÁ VỐN</th>
-                  <th>TỒN KHO HIỆN TẠI</th>
-                  <th>HÀNH ĐỘNG</th>
-                </tr>
-              </thead>
-              <tbody id="admin-inventory-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-        <div id="inventory-section-nxt" class="inventory-section" style="display: none">
-          <div class="admin-table-card">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>MÃ SP</th>
-                  <th>TÊN SẢN PHẨM</th>
-                  <th class="text-center">TỒN ĐẦU KỲ</th>
-                  <th class="text-center">NHẬP TRONG KỲ</th>
-                  <th class="text-center">XUẤT BÁN KỲ</th>
-                  <th class="text-center">TỒN CUỐI KỲ</th>
-                </tr>
-              </thead>
-              <tbody id="admin-nxt-tbody"></tbody>
-            </table>
-          </div>
-        </div>
+
+
       </div>
     </main>
+  </div>
+
+  <!-- POPUP XEM CHI TIẾT TỒN KHO KHI BẤM NÚT XEM -->
+  <div id="modal-inventory-detail" class="modal-overlay">
+    <div class="modal-box" style="max-width: 460px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Thông Tin Tồn Kho</h3>
+        <button type="button" class="modal-close-btn" onclick="dongPopupChiTiet()">&times;</button>
+      </div>
+      <div class="modal-body" id="inv-detail-body">
+        <!-- Nội dung sẽ tự động điền bằng JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-sport btn-outline" onclick="dongPopupChiTiet()">Đóng</button>
+      </div>
+    </div>
   </div>
 
   <!-- MODAL 1: LOẠI SP -->
@@ -928,6 +1009,13 @@
           <textarea id="prod-desc" rows="3"
             placeholder="Chất liệu sợi, công nghệ đệm, hướng dẫn chọn size..."></textarea>
         </div>
+        <div class="form-group">
+          <label>Trạng thái sản phẩm:</label>
+          <select id="prod-status" class="filter-select" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+            <option value="active">Đang bán (Hiển thị ngoài cửa hàng)</option>
+            <option value="hidden">Đang ẩn (Tạm ẩn khỏi khách mua)</option>
+          </select>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-product')">Hủy Bỏ</button>
@@ -992,33 +1080,18 @@
   </div>
 
   <!-- MODAL 4: CHI TIẾT ĐƠN HÀNG -->
-  <div id="modal-order-detail" class="modal-overlay">
-    <div class="modal-box">
+  <!-- POPUP XEM CHI TIẾT SẢN PHẨM PHIẾU NHẬP -->
+  <div id="modal-import-detail" class="modal-overlay">
+    <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header">
-        <h3 class="modal-title" id="modal-order-title">Chi Tiết Đơn Hàng #SPORT-88234</h3>
-        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-order-detail')">&times;</button>
+        <h3 class="modal-title" id="import-detail-title">Chi Tiết Phiếu Nhập Hàng</h3>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-import-detail')">&times;</button>
       </div>
-      <div class="modal-body">
-        <div class="order-info-card">
-          <div><strong>Khách hàng:</strong> <span id="order-detail-customer">Trần Hùng Tín</span></div>
-          <div><strong>Email:</strong> <span id="order-detail-email">hungtintran89@gmail.com</span></div>
-          <div><strong>Địa chỉ giao:</strong> <span id="order-detail-address">273 An Dương Vương, Q.5, TP.HCM</span>
-          </div>
-          <div><strong>Ngày đặt:</strong> <span id="order-detail-date">08/10/2026</span></div>
-          <div><strong>Thanh toán:</strong> <span id="order-detail-payment">Ví MoMo</span></div>
-          <div><strong>Tình trạng:</strong> <span id="order-detail-status" class="nav-badge badge-blue">Đang giao</span>
-          </div>
-          <div><strong>Ghi chú:</strong> <span id="order-detail-note">Giao giờ hành chính</span></div>
-        </div>
-        <h4 class="order-items-heading">Danh Sách Mặt Hàng Trong Đơn:</h4>
-        <div id="order-detail-items-list"></div>
-        <div class="order-total-row">
-          <strong class="order-total-label">TỔNG TIỀN ĐƠN HÀNG:</strong>
-          <strong id="order-detail-total" class="order-total-value">5.290.000 đ</strong>
-        </div>
+      <div class="modal-body" id="import-detail-body">
+        <!-- Nội dung chi tiết sản phẩm sẽ tự điền bằng JavaScript -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn-sport btn-primary" onclick="dongModalAdmin('modal-order-detail')">Đóng</button>
+        <button type="button" class="btn-sport btn-primary" onclick="dongModalAdmin('modal-import-detail')">Đóng</button>
       </div>
     </div>
   </div>
@@ -1035,6 +1108,39 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-flash-sale')">Đóng</button>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL SỬA GIÁ BÁN & % LỢI NHUẬN RIÊNG BIỆT -->
+  <div id="modal-pricing" class="modal-overlay">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Điều Chỉnh Giá Bán & Lợi Nhuận</h3>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-pricing')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Tên sản phẩm:</label>
+          <input type="text" id="pricing-prod-name" readonly style="background:#f1f5f9; font-weight:700; cursor:not-allowed;" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Giá vốn (nhập kho):</label>
+            <input type="text" id="pricing-cost-price" readonly style="background:#f1f5f9; cursor:not-allowed;" />
+          </div>
+          <div class="form-group">
+            <label>% Lợi nhuận định mức:</label>
+            <input type="number" id="pricing-profit-percent" min="0" max="500" value="30" oninput="tinhGiaBanTuDong()" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Giá bán niêm yết (VNĐ):</label>
+          <input type="number" id="pricing-sale-price" style="font-size:16px; font-weight:800; color:#0284c7;" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-pricing')">Hủy Bỏ</button>
+        <button type="button" class="btn-sport btn-primary" onclick="luuGiaBanMoi()">Lưu Giá Bán</button>
       </div>
     </div>
   </div>

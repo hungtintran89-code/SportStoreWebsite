@@ -1,495 +1,3 @@
-
-function layUserHienTai() {
-  var user = null;
-  try {
-    user = JSON.parse(localStorage.getItem('sport_user'));
-  } catch (e) {
-    user = null;
-  }
-  // Nếu chưa đăng nhập nhưng có danh sách khách mẫu, lấy người đầu tiên để xem thử giao diện
-  if (!user && typeof customers !== 'undefined' && customers.length > 0) {
-    user = customers[0];
-  }
-  return user;
-}
-
-function chuyenTab(tenTab) {
-  // Bước 1: Bỏ kích hoạt ở tất cả các nút tab
-  var cacNut = document.querySelectorAll('.dev5-sidebar .dev5-tab');
-  for (var i = 0; i < cacNut.length; i++) {
-    cacNut[i].classList.remove('is-active');
-  }
-
-  // Bước 2: Ẩn tất cả các bảng nội dung tab
-  var cacBang = document.querySelectorAll('.dev5-content .dev5-panel');
-  for (var i = 0; i < cacBang.length; i++) {
-    cacBang[i].classList.remove('is-active');
-  }
-
-  // Bước 3: Đánh dấu nút vừa bấm là đang chọn
-  var nutChon = document.querySelector('.dev5-tab[data-tab="' + tenTab + '"]');
-  if (nutChon) {
-    nutChon.classList.add('is-active');
-  }
-
-  // Bước 4: Hiện bảng nội dung tương ứng
-  var bangChon = document.querySelector('.dev5-panel[data-panel="' + tenTab + '"]');
-  if (bangChon) {
-    bangChon.classList.add('is-active');
-  }
-}
-
-function hienThiThongTinUser() {
-  var user = layUserHienTai();
-  if (!user) return;
-
-  // Hiển thị tên lên trang
-  var cacTheTen = document.querySelectorAll('[data-user-name]');
-  for (var i = 0; i < cacTheTen.length; i++) {
-    cacTheTen[i].textContent = user.name || 'Hội viên';
-  }
-
-  // Hiển thị email
-  var theEmail = document.querySelector('[data-user-email]');
-  if (theEmail) {
-    theEmail.textContent = 'Email: ' + (user.email || 'Chưa cập nhật');
-  }
-
-  // Hiển thị số điện thoại
-  var theSdt = document.querySelector('[data-user-phone]');
-  if (theSdt) {
-    theSdt.textContent = 'SĐT: ' + (user.phone || 'Chưa cập nhật');
-  }
-
-  // Hiển thị hạng thành viên
-  var theTier = document.querySelector('[data-user-tier]');
-  if (theTier) {
-    theTier.textContent = user.tier || 'Gold Elite';
-  }
-
-  var theRole = document.querySelector('[data-user-role]');
-  if (theRole) {
-    theRole.textContent = 'Thành viên ' + (user.tier || 'Gold Elite');
-  }
-
-  // Đảm bảo nút "Chỉnh sửa hồ sơ" hiển thị
-  var nutSua = document.querySelector('[data-edit-profile-btn]');
-  if (nutSua) {
-    nutSua.classList.remove('dev5-hidden');
-  }
-}
-
-function moFormSuaHoSo() {
-  var form = document.querySelector('[data-profile-form]');
-  if (!form) return;
-
-  var user = layUserHienTai();
-  if (user) {
-    if (form.querySelector('[name="profileName"]')) {
-      form.querySelector('[name="profileName"]').value = user.name || '';
-    }
-    if (form.querySelector('[name="profilePhone"]')) {
-      form.querySelector('[name="profilePhone"]').value = user.phone || '';
-    }
-    if (form.querySelector('[name="profileEmail"]')) {
-      form.querySelector('[name="profileEmail"]').value = user.email || '';
-    }
-  }
-  form.classList.remove('dev5-hidden');
-}
-
-function dongFormSuaHoSo() {
-  var form = document.querySelector('[data-profile-form]');
-  if (form) {
-    form.classList.add('dev5-hidden');
-  }
-}
-
-function luuHoSo(event) {
-  event.preventDefault(); // Chặn trang web tải lại khi submit form
-
-  var form = document.querySelector('[data-profile-form]');
-  if (!form) return;
-
-  var user = layUserHienTai() || {};
-  user.name = form.querySelector('[name="profileName"]').value;
-  user.phone = form.querySelector('[name="profilePhone"]').value;
-  user.email = form.querySelector('[name="profileEmail"]').value;
-
-  var matKhauMoi = form.querySelector('[name="profilePassword"]').value;
-  if (matKhauMoi && matKhauMoi.trim() !== '') {
-    user.password = matKhauMoi;
-  }
-
-  // Lưu thông tin mới vào LocalStorage
-  localStorage.setItem('sport_user', JSON.stringify(user));
-
-  alert('Cập nhật thông tin cá nhân thành công!');
-  dongFormSuaHoSo();
-  hienThiThongTinUser();
-}
-
-function hienThiDonHang() {
-  var user = layUserHienTai();
-  var hopChua = document.querySelector('[data-orders]');
-  if (!hopChua) return;
-
-  if (!user) {
-    hopChua.innerHTML = '<p class="dev5-muted">Vui lòng đăng nhập để xem đơn hàng.</p>';
-    return;
-  }
-
-  // Lấy đơn hàng từ LocalStorage hoặc file orders.js
-  var tatCaDon = [];
-  try {
-    tatCaDon = JSON.parse(localStorage.getItem('sport_orders')) || [];
-  } catch (e) {
-    tatCaDon = [];
-  }
-  if (tatCaDon.length === 0 && typeof orders !== 'undefined') {
-    tatCaDon = orders;
-  }
-
-  // Tìm các đơn hàng của riêng người này bằng vòng lặp for
-  var donCuaUser = [];
-  for (var i = 0; i < tatCaDon.length; i++) {
-    var d = tatCaDon[i];
-    var sId = user.customerId ;
-
-    var trungId = (d.customerId && d.customerId === sId) || (d.userId && d.userId === sId);
-    var trungEmail = (d.email && d.email.toLowerCase() === (user.email || '').toLowerCase());
-    var trungSdt = (d.phone && d.phone === user.phone);
-
-    if (trungId || trungEmail || trungSdt) {
-      donCuaUser.push(d);
-    }
-  }
-
-  // Cập nhật số lượng đơn lên thẻ thống kê ở Tab 1
-  var theSoDon = document.querySelector('[data-order-count]');
-  if (theSoDon) {
-    theSoDon.textContent = donCuaUser.length;
-  }
-
-  // Nếu không có đơn nào
-  if (donCuaUser.length === 0) {
-    hopChua.innerHTML = '<p class="dev5-muted">Bạn chưa có đơn hàng nào.</p>';
-    return;
-  }
-
-  // Vẽ danh sách đơn hàng
-  var danhSachBuoc = ['Đặt hàng', 'Xác nhận', 'Đang giao', 'Đã giao'];
-  var html = '';
-
-  for (var j = 0; j < donCuaUser.length; j++) {
-    var don = donCuaUser[j];
-    var maDon = don.orderId || don.id || ('ĐH-' + (j + 1));
-    var ngayDat = don.date || 'Hôm nay';
-    var trangThai = don.status || 'Mới đặt';
-    var tongTien = don.total || 0;
-
-    // Lấy tên món hàng trong đơn
-    var tenMon = 'Sản phẩm thể thao';
-    if (don.items && don.items.length > 0) {
-      var monDau = don.items[0];
-      var tenSanPham = monDau.name || monDau.productName || 'Sản phẩm';
-      if (don.items.length > 1) {
-        tenMon = tenSanPham + ' (+' + (don.items.length - 1) + ' món khác)';
-      } else {
-        tenMon = tenSanPham;
-      }
-    }
-
-    // Xác định số bước hoàn thành
-    var buocDaXong = 1; // Mặc định bước 1: Đặt hàng
-    if (trangThai === 'Đã giao') {
-      buocDaXong = 4;
-    } else if (trangThai === 'Đang giao') {
-      buocDaXong = 3;
-    } else if (trangThai === 'Đã xử lý' || trangThai === 'Đã xác nhận') {
-      buocDaXong = 2;
-    }
-
-    // Vẽ thanh 4 bước tiến trình
-    var chuoiTienTrinh = '';
-    for (var k = 0; k < danhSachBuoc.length; k++) {
-      var classXong = (k < buocDaXong) ? 'is-done' : '';
-      chuoiTienTrinh += '<span class="dev5-step ' + classXong + '">' + danhSachBuoc[k] + '</span>';
-    }
-
-    // Nối vào chuỗi HTML
-    html += '<article class="dev5-order-card">';
-    html += '  <div class="dev5-order-top">';
-    html += '    <div>';
-    html += '      <strong>' + maDon + '</strong>';
-    html += '      <div class="dev5-muted">' + ngayDat + ' · ' + tenMon + '</div>';
-    html += '    </div>';
-    html += '    <span class="dev5-status">' + trangThai + '</span>';
-    html += '  </div>';
-    html += '  <strong style="color: #059669; font-size: 1.1rem; display: block; margin: 10px 0;">' + formatMoney(tongTien) + '</strong>';
-    html += '  <div class="dev5-timeline">' + chuoiTienTrinh + '</div>';
-    html += '</article>';
-  }
-
-  hopChua.innerHTML = html;
-}
-
-function layDanhSachDiaChi() {
-  var user = layUserHienTai();
-  if (!user) return [];
-
-  var key = 'sport_addresses_' + (user.id || user.customerId || 'user');
-  var list = [];
-  try {
-    list = JSON.parse(localStorage.getItem(key)) || [];
-  } catch (e) {
-    list = [];
-  }
-
-  // Nếu chưa có địa chỉ nào, lấy địa chỉ mặc định trong hồ sơ
-  if (list.length === 0 && user.address && user.address !== 'Chưa cập nhật') {
-    list.push({
-      recipient: user.name || 'Người nhận',
-      phone: user.phone || '',
-      line: user.address,
-      district: '',
-      city: '',
-      isDefault: true
-    });
-    localStorage.setItem(key, JSON.stringify(list));
-  }
-  return list;
-}
-
-function hienThiDiaChi() {
-  var user = layUserHienTai();
-  var hopChua = document.querySelector('[data-addresses]');
-  if (!hopChua) return;
-
-  var danhSach = layDanhSachDiaChi();
-
-  // Cập nhật số lượng địa chỉ lên Tab 1
-  var theSoDiaChi = document.querySelector('[data-address-count]');
-  if (theSoDiaChi) {
-    theSoDiaChi.textContent = danhSach.length;
-  }
-
-  if (danhSach.length === 0) {
-    hopChua.innerHTML = '<p class="dev5-muted">Bạn chưa lưu địa chỉ nhận hàng nào. Bấm nút "+ Thêm địa chỉ" ở trên để tạo.</p>';
-    return;
-  }
-
-  var html = '';
-  for (var i = 0; i < danhSach.length; i++) {
-    var dc = danhSach[i];
-    var nhanMacDinh = dc.isDefault ? ' <span style="color:#059669; font-size:0.85rem;">(Mặc định)</span>' : '';
-    var diaChiChiTiet = dc.line;
-    if (dc.district) diaChiChiTiet += ', ' + dc.district;
-    if (dc.city) diaChiChiTiet += ', ' + dc.city;
-
-    html += '<article class="dev5-address-card" style="margin-bottom: 12px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px;">';
-    html += '  <div class="dev5-address-top">';
-    html += '    <strong>Địa chỉ ' + (i + 1) + nhanMacDinh + '</strong>';
-    html += '  </div>';
-    html += '  <div class="dev5-address-line" style="margin-top: 8px; line-height: 1.6;">';
-    html += '    <div><strong>Người nhận:</strong> ' + (dc.recipient || user.name) + '</div>';
-    html += '    <div><strong>Số điện thoại:</strong> ' + (dc.phone || user.phone) + '</div>';
-    html += '    <div><strong>Địa chỉ:</strong> ' + diaChiChiTiet + '</div>';
-    html += '  </div>';
-    html += '  <div style="margin-top: 10px;">';
-    html += '    <button class="dev5-secondary-button" type="button" onclick="xoaDiaChi(' + i + ')">Xóa địa chỉ này</button>';
-    html += '  </div>';
-    html += '</article>';
-  }
-
-  hopChua.innerHTML = html;
-}
-
-function moFormThemDiaChi() {
-  var form = document.querySelector('[data-address-form]');
-  if (form) {
-    form.reset();
-    var user = layUserHienTai();
-    if (user) {
-      if (form.querySelector('[name="recipient"]')) form.querySelector('[name="recipient"]').value = user.name || '';
-      if (form.querySelector('[name="phone"]')) form.querySelector('[name="phone"]').value = user.phone || '';
-    }
-    form.classList.remove('dev5-hidden');
-  }
-}
-
-function dongFormDiaChi() {
-  var form = document.querySelector('[data-address-form]');
-  if (form) {
-    form.classList.add('dev5-hidden');
-  }
-}
-
-function luuDiaChi(event) {
-  event.preventDefault();
-
-  var form = document.querySelector('[data-address-form]');
-  if (!form) return;
-
-  var user = layUserHienTai();
-  if (!user) return;
-
-  var danhSach = layDanhSachDiaChi();
-  var diaChiMoi = {
-    recipient: form.querySelector('[name="recipient"]').value,
-    phone: form.querySelector('[name="phone"]').value,
-    line: form.querySelector('[name="line"]').value,
-    district: form.querySelector('[name="district"]').value,
-    city: form.querySelector('[name="city"]').value,
-    isDefault: (danhSach.length === 0)
-  };
-
-  danhSach.push(diaChiMoi);
-  var key = 'sport_addresses_' + (user.id || user.customerId || 'user');
-  localStorage.setItem(key, JSON.stringify(danhSach));
-
-  alert('Đã thêm địa chỉ giao hàng thành công!');
-  dongFormDiaChi();
-  hienThiDiaChi();
-}
-
-function xoaDiaChi(viTriCanXoa) {
-  if (!confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) return;
-
-  var user = layUserHienTai();
-  if (!user) return;
-
-  var danhSach = layDanhSachDiaChi();
-  var danhSachMoi = [];
-  for (var i = 0; i < danhSach.length; i++) {
-    if (i !== viTriCanXoa) {
-      danhSachMoi.push(danhSach[i]);
-    }
-  }
-
-  var key = 'sport_addresses_' + (user.id || user.customerId || 'user');
-  localStorage.setItem(key, JSON.stringify(danhSachMoi));
-
-  hienThiDiaChi();
-}
-
-function layDanhSachYeuThich() {
-  var list = [];
-  try {
-    list = JSON.parse(localStorage.getItem('sport_wishlist')) || [];
-  } catch (e) {
-    list = [];
-  }
-
-  // Nếu rỗng, tạo sẵn 2 sản phẩm mẫu từ kho hàng products.js để giao diện không bị trống
-  if (list.length === 0 && typeof products !== 'undefined' && products.length >= 2) {
-    list = [
-      {
-        id: products[0].id,
-        name: products[0].name,
-        price: products[0].price,
-        tag: products[0].category || 'Thể thao',
-        image: products[0].image || products[0].img
-      },
-      {
-        id: products[1].id,
-        name: products[1].name,
-        price: products[1].price,
-        tag: products[1].category || 'Thể thao',
-        image: products[1].image || products[1].img
-      }
-    ];
-    localStorage.setItem('sport_wishlist', JSON.stringify(list));
-  }
-  return list;
-}
-
-function hienThiYeuThich() {
-  var hopChua = document.querySelector('[data-wishlist]');
-  if (!hopChua) return;
-
-  var danhSach = layDanhSachYeuThich();
-
-  // Cập nhật số lượng lên Tab 1
-  var theSoYeuThich = document.querySelector('[data-wishlist-count]');
-  if (theSoYeuThich) {
-    theSoYeuThich.textContent = danhSach.length;
-  }
-
-  if (danhSach.length === 0) {
-    hopChua.innerHTML = '<p class="dev5-muted">Danh sách yêu thích của bạn đang trống.</p>';
-    return;
-  }
-
-  var html = '';
-  for (var i = 0; i < danhSach.length; i++) {
-    var sp = danhSach[i];
-    var linkAnh = sp.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400';
-
-    html += '<article class="dev5-wishlist-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; background: #fff;">';
-    html += '  <img src="' + linkAnh + '" alt="' + sp.name + '" style="width: 100%; height: 160px; object-fit: cover; border-radius: 6px; margin-bottom: 8px;">';
-    html += '  <span class="dev5-muted" style="font-size: 0.85rem; color: #64748b;">' + (sp.tag || 'Sản phẩm') + '</span>';
-    html += '  <h3 style="font-size: 1rem; margin: 6px 0; color: #1e293b;">' + sp.name + '</h3>';
-    html += '  <div class="dev5-price" style="font-weight: bold; color: #dc2626; margin-bottom: 10px;">' + formatMoney(sp.price) + '</div>';
-    html += '  <button class="dev5-secondary-button" type="button" onclick="xoaYeuThich(' + sp.id + ')">Xóa yêu thích</button>';
-    html += '</article>';
-  }
-
-  hopChua.innerHTML = html;
-}
-
-function xoaYeuThich(idCanXoa) {
-  var danhSach = layDanhSachYeuThich();
-  var danhSachMoi = [];
-  for (var i = 0; i < danhSach.length; i++) {
-    if (danhSach[i].id != idCanXoa) {
-      danhSachMoi.push(danhSach[i]);
-    }
-  }
-  localStorage.setItem('sport_wishlist', JSON.stringify(danhSachMoi));
-  hienThiYeuThich();
-}
-
-function hienThiFaq() {
-  var hopChua = document.querySelector('[data-faq]');
-  if (!hopChua) return;
-
-  var danhSachFaq = [];
-  if (typeof faqs !== 'undefined' && Array.isArray(faqs)) {
-    danhSachFaq = faqs;
-  }
-
-  if (danhSachFaq.length === 0) {
-    hopChua.innerHTML = '<p class="dev5-muted">Chưa có câu hỏi hỗ trợ nào.</p>';
-    return;
-  }
-
-  var html = '';
-  for (var i = 0; i < danhSachFaq.length; i++) {
-    var cauHoi = danhSachFaq[i].question || danhSachFaq[i].q || '';
-    var traLoi = danhSachFaq[i].answer || danhSachFaq[i].a || '';
-    var classMo = (i === 0) ? 'is-open' : ''; // Mặc định mở câu hỏi đầu tiên
-
-    html += '<article class="dev5-faq-item ' + classMo + '">';
-    html += '  <button class="dev5-faq-question" type="button" onclick="dongMoFaq(this)">';
-    html += '    <span>' + cauHoi + '</span>';
-    html += '    <span>＋</span>';
-    html += '  </button>';
-    html += '  <div class="dev5-faq-answer">' + traLoi + '</div>';
-    html += '</article>';
-  }
-
-  hopChua.innerHTML = html;
-}
-
-// Hàm bật / tắt câu trả lời FAQ
-function dongMoFaq(nutBam) {
-  var theCha = nutBam.parentElement;
-  if (theCha) {
-    theCha.classList.toggle('is-open');
-  }
-}
-
 function dangXuat() {
   if (confirm('Bạn có chắc chắn muốn đăng xuất hoặc đổi tài khoản?')) {
     localStorage.removeItem('sport_user');
@@ -529,6 +37,7 @@ function chuyenTab(tenTab) {
   if (khungDuocChon) {
     khungDuocChon.classList.add("is-active");
   }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function hienThiThongTinUser() {
@@ -1327,13 +836,12 @@ function hienThiBangKhachHangAdmin() {
         <td>${email}</td>
         <td>${sdt}</td>
         <td><span class="sport-badge badge-blue">${hang}</span></td>
-        <td>
-          <span class="nav-badge ${daKhoa ? "badge-red" : "badge-green"}">
-            ${daKhoa ? "🔒 Đã khóa" : "✓ Hoạt động"}
-          </span>
-        </td>
-        <td>
-          <button type="button" onclick="khoaMoTaiKhoanKhach('${maKhach}')" style="cursor:pointer; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #cbd5e1; background:${daKhoa ? '#dcfce7' : '#fee2e2'}; color:${daKhoa ? '#15803d' : '#b91c1c'};">
+        <td>${trangThai}</td>
+        <td style="display: flex; gap: 6px;">
+          <button type="button" class="btn-action btn-reset" onclick="resetMatKhauKhach('${maKhach}')" style="background:#f3e8ff; color:#7e22ce; border:none; padding:5px 8px; border-radius:6px; font-weight:600; cursor:pointer;">
+            Reset MK
+          </button>
+          <button type="button" onclick="khoaMoTaiKhoanKhach('${maKhach}')" style="cursor:pointer; padding:5px 8px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #cbd5e1; background:${daKhoa ? '#dcfce7' : '#fee2e2'}; color:${daKhoa ? '#15803d' : '#b91c1c'};">
             ${daKhoa ? "Mở Khóa" : "Khóa TK"}
           </button>
         </td>
@@ -1360,6 +868,19 @@ function khoaMoTaiKhoanKhach(maKhach) {
   }
   luuDuLieuAdmin("sport_customers", dsKhach);
   hienThiBangKhachHangAdmin();
+}
+
+function resetMatKhauKhach(maKhach) {
+  if (!confirm("Bạn có chắc chắn muốn đặt lại mật khẩu về mặc định (Sport@123) cho tài khoản #" + maKhach + " không?")) return;
+  var dsKhach = layDuLieuAdmin("sport_customers");
+  for (var i = 0; i < dsKhach.length; i++) {
+    if (dsKhach[i].customerId === maKhach || dsKhach[i].id === maKhach) {
+      dsKhach[i].password = "Sport@123";
+      showToast("Đã reset mật khẩu của " + dsKhach[i].name + " về mặc định: Sport@123", "success");
+      break;
+    }
+  }
+  luuDuLieuAdmin("sport_customers", dsKhach);
 }
 
 function locKhachHangAdmin() {
@@ -1522,20 +1043,35 @@ function hienThiBangSanPhamAdmin() {
     if (locLoai && locLoai !== "ALL" && p.categoryId !== locLoai && p.category !== locLoai) continue;
     if (locHang && locHang !== "ALL" && p.brand !== locHang) continue;
 
+    // js/dev5_user.js (khoảng dòng 1526 - 1543)
     var ton = Number(p.stock) || 0;
     var canhBaoTon = ton <= 5 ? `<span style="color:#ef4444; font-weight:700;">⚠️ ${ton}</span>` : `<strong>${ton}</strong>`;
 
+    // 1. Kiểm tra trạng thái động
+    if( p.stock <= 0 ) p.status = "hidden" ;
+    var laDangAn = p.status === "hidden";
+
+    var badgeTrangThai = laDangAn
+        ? `<span class="nav-badge badge-gray" style="background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1;">Đang ẩn</span>`
+        : `<span class="nav-badge badge-green">Đang bán</span>`;
+
+    // 2. Nút bấm đổi trạng thái nhanh
+    var nutDoiTrangThai = laDangAn
+        ? `<button type="button" class="btn-action" style="background:#dcfce7; color:#15803d;" onclick="doiTrangThaiSanPhamAdmin(${p.id})">Hiện</button>`
+        : `<button type="button" class="btn-action btn-lock" onclick="doiTrangThaiSanPhamAdmin(${p.id})">Ẩn</button>`;
+
     html += `
-      <tr>
+      <tr style="${laDangAn ? 'opacity: 0.65; background-color: #f8fafc;' : ''}">
         <td><img src="${p.image || ''}" style="width:44px; height:44px; object-fit:cover; border-radius:6px;"></td>
         <td><strong>${p.name}</strong></td>
         <td>${p.category || p.categoryId || "Khác"}</td>
         <td>${p.brand || "Sport"}</td>
         <td><strong style="color:#0284c7;">${formatMoney(p.price)}</strong></td>
         <td>${canhBaoTon}</td>
-        <td><span class="nav-badge badge-green">Đang bán</span></td>
+        <td>${badgeTrangThai}</td>
         <td>
           <button type="button" class="btn-action btn-edit" onclick="moModalSuaSanPham(${p.id})">Sửa</button>
+          ${nutDoiTrangThai}
           <button type="button" class="btn-action btn-delete" onclick="xoaSanPhamAdmin(${p.id})">Xóa</button>
         </td>
       </tr>
@@ -1557,6 +1093,7 @@ function moModalThemSanPham() {
   if (document.getElementById("prod-stock")) document.getElementById("prod-stock").value = 50;
   if (document.getElementById("prod-image")) document.getElementById("prod-image").value = "";
   if (document.getElementById("prod-desc")) document.getElementById("prod-desc").value = "";
+  if (document.getElementById("prod-status")) document.getElementById("prod-status").value = "active";
   moModalAdmin("modal-product");
 }
 
@@ -1583,6 +1120,7 @@ function moModalSuaSanPham(maSp) {
   if (document.getElementById("prod-stock")) document.getElementById("prod-stock").value = p.stock || 0;
   if (document.getElementById("prod-image")) document.getElementById("prod-image").value = p.image || "";
   if (document.getElementById("prod-desc")) document.getElementById("prod-desc").value = p.desc || p.description || "";
+  if (document.getElementById("prod-status")) document.getElementById("prod-status").value = p.status || "active";
   moModalAdmin("modal-product");
 }
 
@@ -1609,7 +1147,10 @@ function luuSanPhamAdmin() {
   var catId = document.getElementById("prod-category").value;
   var anh = document.getElementById("prod-image").value.trim() || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400";
   var desc = document.getElementById("prod-desc").value.trim();
-
+  var trangThai = "active";
+  if (document.getElementById("prod-status")) {
+    trangThai = document.getElementById("prod-status").value;
+  }
   var dsSp = layDuLieuAdmin("sport_products");
 
   if (maSpDangSua === -1) {
@@ -1626,6 +1167,7 @@ function luuSanPhamAdmin() {
         dsSp[i].categoryId = catId;
         dsSp[i].image = anh;
         dsSp[i].desc = desc;
+        dsSp[i].status = trangThai
         break;
       }
     }
@@ -1656,36 +1198,43 @@ function locSanPhamAdmin() {
   hienThiBangSanPhamAdmin();
 }
 
-// 8. TAB 6: QUẢN LÝ NHẬP HÀNG (IMPORT)
-function hienThiBangNhapHang() {
-  var dsNhap = layDuLieuAdmin("sport_imports");
-  var tbody = document.getElementById("admin-imports-tbody");
-  if (!tbody) return;
 
-  var html = "";
-  for (var i = dsNhap.length - 1; i >= 0; i--) {
-    var p = dsNhap[i];
-    html += `
-      <tr>
-        <td><strong>#${p.id || p.slipId}</strong></td>
-        <td>${p.supplier || "Nhà Phân Phối Thể Thao"}</td>
-        <td>${p.date || "Hôm nay"}</td>
-        <td><strong>${p.totalQuantity || p.items ? p.items.length : 1} món</strong></td>
-        <td><strong style="color:#0284c7;">${formatMoney(p.totalCost || 0)}</strong></td>
-        <td>${p.creator || "Admin"}</td>
-        <td><span class="nav-badge badge-green">Hoàn thành</span></td>
-        <td>
-          <button type="button" class="btn-action btn-edit" onclick="alert('Phiếu nhập #' + (p.id || p.slipId) + ' gồm ' + (p.totalQuantity || 1) + ' món hàng.')">Xem</button>
-        </td>
-      </tr>
-    `;
+function moModalTaoPhieuNhap(maSpChon) {
+  var dsSp = layDuLieuAdmin("sport_products");
+  var selectEl = document.getElementById("import-product-select");
+  if (selectEl) {
+    var html = '<option value="">-- Chọn sản phẩm cần nhập --</option>';
+    for (var i = 0; i < dsSp.length; i++) {
+      var sp = dsSp[i];
+      var ma = sp.code || ("SP-" + sp.id);
+      var giaGoc = sp.costPrice || sp.cost || Math.round(sp.price * 0.7);
+      html += '<option value="' + sp.id + '" data-cost="' + giaGoc + '">' + ma + ' - ' + sp.name + '</option>';
+    }
+    selectEl.innerHTML = html;
+
+    // Nếu có truyền mã sản phẩm cần nhập vào
+    if (maSpChon) {
+      selectEl.value = maSpChon;
+      if (typeof onImportProductChange === "function") {
+        onImportProductChange();
+      }
+    }
   }
-  if (html === "") html = `<tr><td colspan="8" style="text-align:center; padding:20px; color:#64748b;">Chưa có phiếu nhập hàng nào.</td></tr>`;
-  tbody.innerHTML = html;
+  moModalAdmin("modal-import");
+}
+function chuyenSangNhapHang(maSp) {
+  chuyenTabAdmin("import");
+  moModalTaoPhieuNhap(maSp);
 }
 
-function moModalTaoPhieuNhap() {
-  moModalAdmin("modal-import");
+// Tự động điền đơn giá vốn khi người dùng chọn sản phẩm
+function onImportProductChange() {
+  var selectEl = document.getElementById("import-product-select");
+  var opt = selectEl.options[selectEl.selectedIndex];
+  if (opt && opt.dataset.cost) {
+    var oGia = document.getElementById("import-unit-price");
+    if (oGia) oGia.value = opt.dataset.cost;
+  }
 }
 
 function themDongMatHangNhap() {
@@ -1706,34 +1255,326 @@ function xoaDongMatHangNhap(nut) {
   if (tr) tr.remove();
 }
 
+// 8. TAB 6: QUẢN LÝ NHẬP HÀNG (IMPORT)
+function hienThiBangNhapHang() {
+  var dsNhap = layDuLieuAdmin("sport_imports");
+  var tbody = document.getElementById("admin-imports-tbody");
+  if (!tbody) return;
+
+  // Lấy các giá trị bộ lọc tìm kiếm
+  var tuKhoa = document.getElementById("import-search-input") ? document.getElementById("import-search-input").value.trim().toLowerCase() : "";
+  var tuNgay = document.getElementById("import-filter-from-date") ? document.getElementById("import-filter-from-date").value : "";
+  var denNgay = document.getElementById("import-filter-to-date") ? document.getElementById("import-filter-to-date").value : "";
+  var locTrangThai = document.getElementById("import-filter-status") ? document.getElementById("import-filter-status").value : "ALL";
+
+  var html = "";
+  for (var i = dsNhap.length - 1; i >= 0; i--) {
+    var p = dsNhap[i];
+    var maPhieu = p.id || p.slipId || ("PN-" + (i + 1));
+    var nhaCc = p.supplier || "Nhà Phân Phối Thể Thao";
+    var ngayNhap = p.date || "Hôm nay";
+    var trangThai = p.status || "Hoàn thành";
+    var soLuongHienThi = p.totalQuantity ? p.totalQuantity : (p.items ? p.items.length : 1);
+    var tongTien = p.totalCost || 0;
+
+    // Bộ lọc theo từ khóa, ngày và trạng thái
+    if (tuKhoa && !maPhieu.toLowerCase().includes(tuKhoa) && !nhaCc.toLowerCase().includes(tuKhoa)) continue;
+    if (tuNgay && ngayNhap < tuNgay) continue;
+    if (denNgay && ngayNhap > denNgay) continue;
+    if (locTrangThai !== "ALL" && trangThai !== locTrangThai) continue;
+
+    // 1. Phân biệt màu sắc nhãn Trạng thái
+    // 1. Phân biệt nhãn cột TRẠNG THÁI (Chờ duyệt vs Hoàn thành)
+    var badgeTrangThai = "";
+    if (trangThai === "Tạm lưu") {
+      badgeTrangThai = '<span class="badge-status" style="background:#fef3c7; color:#d97706; padding:4px 10px; border-radius:12px; font-weight:700; font-size:12px;">Chờ duyệt</span>';
+    } else {
+      badgeTrangThai = '<span class="badge-status" style="background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:12px; font-weight:700; font-size:12px;">Hoàn thành</span>';
+    }
+
+    // 2. Phân biệt nút cột THAO TÁC: "Duyệt" (bấm được) vs "Đã duyệt" (bị khóa, không bấm được)
+    var nutThaoTac = "";
+    if (trangThai === "Tạm lưu") {
+      // Chưa duyệt: Nút màu xanh lá nổi bật, click được để mở xác nhận
+      nutThaoTac = '<button type="button" class="btn-action" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:6px 14px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xacNhanPhieuNhap(\'' + maPhieu + '\')">Duyệt</button>';
+    } else {
+      // Đã duyệt: Nút màu xám nhạt, có thuộc tính disabled và cursor: not-allowed (không click được)
+      nutThaoTac = '<button type="button" class="btn-action" disabled style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; padding:6px 14px; border-radius:6px; font-weight:700; cursor:not-allowed;">Đã duyệt</button>';
+    }
+
+    html += `
+      <tr>
+        <td><strong>#${maPhieu}</strong></td>
+        <td>${nhaCc}</td>
+        <td>${ngayNhap}</td>
+        <td><strong>${soLuongHienThi} món</strong></td>
+        <td><strong style="color:#0284c7;">${formatMoney(tongTien)}</strong></td>
+        <td>${p.creator || "Admin"}</td>
+        <td>
+            <button type="button" class="btn-action" style="background:#e0f2fe; color:#0284c7; border:1px solid #bae6fd; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xemChiTietPhieuNhap('${maPhieu}')">Chi tiết</button>
+        </td>
+        <td>${nutThaoTac}</td>
+      </tr>
+    `;
+  }
+
+  if (html === "") {
+    html = `<tr><td colspan="8" style="text-align:center; padding:20px; color:#64748b;">Chưa có phiếu nhập hàng nào.</td></tr>`;
+  }
+  tbody.innerHTML = html;
+}
+
+function xemChiTietPhieuNhap(maPhieu) {
+  // 1. Tìm phiếu nhập theo mã phiếu
+  var dsNhap = layDuLieuAdmin("sport_imports");
+  var phieu = null;
+  for (var i = 0; i < dsNhap.length; i++) {
+    if (String(dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
+      phieu = dsNhap[i];
+      break;
+    }
+  }
+
+  if (!phieu) {
+    alert("Không tìm thấy thông tin phiếu nhập này!");
+    return;
+  }
+
+  // 2. Tìm thông tin chi tiết của sản phẩm đó trong sport_products
+  var dsSp = layDuLieuAdmin("sport_products");
+  var sp = null;
+  if (phieu.productId) {
+    for (var j = 0; j < dsSp.length; j++) {
+      if (String(dsSp[j].id) === String(phieu.productId)) {
+        sp = dsSp[j];
+        break;
+      }
+    }
+  }
+
+  // Lấy các dữ liệu chi tiết
+  var tenSp = sp ? sp.name : (phieu.productName || "Lô dụng cụ thể thao");
+  var maSp = sp ? (sp.code || ("SP-" + sp.id)) : (phieu.productId ? ("SP-" + phieu.productId) : "SP-CHUNG");
+  var anhSp = sp ? (sp.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200") : "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200";
+  var hangSp = sp ? (sp.brand || "Chính hãng") : "Chính hãng";
+  var tonKho = sp ? Number(sp.stock !== undefined ? sp.stock : (sp.quantity || 0)) : "—";
+  var soLuongNhap = Number(phieu.totalQuantity || 1);
+  var donGiaNhap = Number(phieu.unitPrice || (phieu.totalCost ? phieu.totalCost / soLuongNhap : 0));
+  var tongTien = Number(phieu.totalCost || (soLuongNhap * donGiaNhap));
+  var trangThai = phieu.status || "Hoàn thành";
+
+  var nhanTrangThai = trangThai === "Tạm lưu"
+      ? '<span class="badge-status" style="background:#fef3c7; color:#d97706; padding:3px 8px; border-radius:10px; font-weight:700;">Chờ duyệt</span>'
+      : '<span class="badge-status" style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:10px; font-weight:700;">Đã hoàn thành</span>';
+
+  // 3. Đổ dữ liệu vào Modal chi tiết
+  var modalTitle = document.getElementById("import-detail-title");
+  if (modalTitle) {
+    modalTitle.textContent = "Chi Tiết Phiếu Nhập #" + (phieu.id || phieu.slipId);
+  }
+
+  var modalBody = document.getElementById("import-detail-body");
+  if (modalBody) {
+    modalBody.innerHTML = `
+      <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+        <img src="${anhSp}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <div>
+          <h4 style="margin: 0 0 4px 0; font-size: 15px; color: #1e293b;">${tenSp}</h4>
+          <span class="badge-code-pill" style="margin-right: 6px;">${maSp}</span>
+          <span style="color:#64748b; font-size:12px;">Hãng: <strong>${hangSp}</strong></span>
+        </div>
+      </div>
+      <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Mã phiếu:</td><td style="text-align: right; font-weight: 700;">#${phieu.id || phieu.slipId}</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Nhà cung cấp:</td><td style="text-align: right; font-weight: 600;">${phieu.supplier || "Tổng Kho Thể Thao"}</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Ngày nhập:</td><td style="text-align: right;">${phieu.date || "Hôm nay"}</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Số lượng nhập:</td><td style="text-align: right; font-weight: 800; color: #0284c7;">+${soLuongNhap} món</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Đơn giá vốn:</td><td style="text-align: right; font-weight: 600;">${donGiaNhap.toLocaleString("vi-VN")} đ</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Tổng tiền vốn:</td><td style="text-align: right; font-weight: 800; color: #dc2626;">${tongTien.toLocaleString("vi-VN")} đ</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Tồn kho hiện tại:</td><td style="text-align: right; font-weight: 700; color: #16a34a;">${tonKho} cái</td></tr>
+        <tr><td style="padding: 7px 0; color:#64748b;">Trạng thái phiếu:</td><td style="text-align: right;">${nhanTrangThai}</td></tr>
+      </table>
+    `;
+  }
+
+  // 4. Mở popup
+  moModalAdmin("modal-import-detail");
+}
+
 function luuPhieuNhapHang() {
+  // 1. Lấy thông tin từ form popup
+  var maSpChon = document.getElementById("import-product-select") ? document.getElementById("import-product-select").value : "";
+  var soLuongNhap = Number(document.getElementById("import-qty") ? document.getElementById("import-qty").value : 0);
+  var donGiaNhap = Number(document.getElementById("import-unit-price") ? document.getElementById("import-unit-price").value : 0);
+  var nhaCungCap = document.getElementById("import-supplier") ? document.getElementById("import-supplier").value.trim() : "Tổng Kho Thể Thao";
+  var ngayNhap = document.getElementById("import-date") ? document.getElementById("import-date").value : "";
+  var trangThai = document.getElementById("import-status") ? document.getElementById("import-status").value : "Tạm lưu";
+  var ghiChu = document.getElementById("import-note") ? document.getElementById("import-note").value.trim() : "";
+
+  // 2. Kiểm tra dữ liệu hợp lệ
+  if (!maSpChon) {
+    alert("Vui lòng chọn sản phẩm cần nhập kho!");
+    return;
+  }
+  if (soLuongNhap <= 0) {
+    alert("Số lượng nhập phải lớn hơn 0!");
+    return;
+  }
+
+  var dsSp = layDuLieuAdmin("sport_products");
+  var tenSanPham = "";
+  for (var i = 0; i < dsSp.length; i++) {
+    if (String(dsSp[i].id) === String(maSpChon)) {
+      tenSanPham = dsSp[i].name;
+      break;
+    }
+  }
+
+  // 3. NẾU CHỌN "Hoàn thành" THÌ MỚI CỘNG VÀO KHO SẢN PHẨM
+  if (trangThai === "Hoàn thành") {
+    for (var j = 0; j < dsSp.length; j++) {
+      if (String(dsSp[j].id) === String(maSpChon)) {
+        var tonHienTai = Number(dsSp[j].stock !== undefined ? dsSp[j].stock : (dsSp[j].quantity || 0));
+        dsSp[j].stock = tonHienTai + soLuongNhap;
+
+        if (donGiaNhap > 0) {
+          dsSp[j].costPrice = donGiaNhap;
+          dsSp[j].cost = donGiaNhap;
+        }
+
+        // Nếu sản phẩm từng bị ẩn do hết hàng thì mở bán lại
+        if (dsSp[j].status === "hidden" && dsSp[j].stock > 0) {
+          dsSp[j].status = "active";
+        }
+        break;
+      }
+    }
+    luuDuLieuAdmin("sport_products", dsSp);
+  }
+
+  // 4. LƯU PHIẾU NHẬP VÀO sport_imports
   var dsNhap = layDuLieuAdmin("sport_imports");
   var maMoi = "PN-00" + (dsNhap.length + 1);
-  var nhaCc = document.getElementById("import-supplier") ? document.getElementById("import-supplier").value.trim() : "Tổng Kho Thể Thao";
+  var tongTien = soLuongNhap * donGiaNhap;
 
   dsNhap.push({
     id: maMoi,
     slipId: maMoi,
-    supplier: nhaCc || "Tổng Kho Thể Thao",
-    date: new Date().toISOString().split("T")[0],
-    totalQuantity: 20,
-    totalCost: 15000000,
+    productId: maSpChon,
+    productName: tenSanPham,
+    supplier: nhaCungCap || "Tổng Kho Thể Thao",
+    date: ngayNhap || new Date().toISOString().split("T")[0],
+    totalQuantity: soLuongNhap,
+    unitPrice: donGiaNhap,
+    totalCost: tongTien,
+    note: ghiChu,
     creator: "Admin",
-    status: "Hoàn thành"
+    status: trangThai
   });
-
   luuDuLieuAdmin("sport_imports", dsNhap);
   dongModalAdmin("modal-import");
   hienThiBangNhapHang();
+  hienThiBangSanPhamAdmin();
+  if (typeof hienThiBangTonKhoAdmin === "function") {
+    hienThiBangTonKhoAdmin();
+  }
   capNhatSoDemMenuAdmin();
-  if (typeof showToast === "function") showToast("Đã tạo phiếu nhập kho: " + maMoi, "success");
+
+  // Thông báo theo từng trạng thái
+  if (trangThai === "Hoàn thành") {
+    if (typeof showToast === "function") {
+      showToast("Đã nhập thêm " + soLuongNhap + " cái cho " + tenSanPham + " (Hoàn thành)!", "success");
+    } else {
+      alert("Đã nhập thêm " + soLuongNhap + " cái cho " + tenSanPham + " (Hoàn thành)!");
+    }
+  } else {
+    if (typeof showToast === "function") {
+      showToast("Đã lưu tạm phiếu nhập #" + maMoi + " (chưa cộng vào kho)!", "warning");
+    } else {
+      alert("Đã lưu tạm phiếu nhập #" + maMoi + " (chưa cộng vào kho)!");
+    }
+  }
+}
+
+function xacNhanPhieuNhap(maPhieu) {
+  // 1. Hỏi người dùng xác nhận
+  var dongY = confirm("Bạn có chắc chắn muốn duyệt phiếu nhập #" + maPhieu + " và cộng số lượng vào kho ngay không?");
+  if (!dongY) {
+    return;
+  }
+
+  // 2. Tìm phiếu nhập trong danh sách sport_imports
+  var dsNhap = layDuLieuAdmin("sport_imports");
+  var phieu = null;
+
+  for (var i = 0; i < dsNhap.length; i++) {
+    if (String(dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
+      phieu = dsNhap[i];
+      break;
+    }
+  }
+
+  if (!phieu) {
+    alert("Không tìm thấy thông tin phiếu nhập!");
+    return;
+  }
+
+  if (phieu.status === "Hoàn thành") {
+    alert("Phiếu nhập này đã được hoàn thành trước đó rồi!");
+    return;
+  }
+
+  // 3. Tiến hành CỘNG DỒN SỐ LƯỢNG VÀO KHO trong sport_products
+  var dsSp = layDuLieuAdmin("sport_products");
+  var maSp = phieu.productId;
+  var soLuong = Number(phieu.totalQuantity || 1);
+  var donGia = Number(phieu.unitPrice || 0);
+  var tenSp = phieu.productName || "";
+
+  for (var j = 0; j < dsSp.length; j++) {
+    if (String(dsSp[j].id) === String(maSp)) {
+      var tonCu = Number(dsSp[j].stock !== undefined ? dsSp[j].stock : (dsSp[j].quantity || 0));
+      dsSp[j].stock = tonCu + soLuong;
+
+      if (donGia > 0) {
+        dsSp[j].costPrice = donGia;
+        dsSp[j].cost = donGia;
+      }
+
+      // Mở bán lại nếu sản phẩm từng bị ẩn vì hết hàng
+      if (dsSp[j].status === "hidden" && dsSp[j].stock > 0) {
+        dsSp[j].status = "active";
+      }
+
+      tenSp = dsSp[j].name;
+      break;
+    }
+  }
+  luuDuLieuAdmin("sport_products", dsSp);
+
+  // 4. Chuyển trạng thái phiếu nhập sang "Hoàn thành"
+  phieu.status = "Hoàn thành";
+  luuDuLieuAdmin("sport_imports", dsNhap);
+
+  // 5. Cập nhật lại giao diện các trang
+  hienThiBangNhapHang();
+  hienThiBangSanPhamAdmin();
+  if (typeof hienThiBangTonKhoAdmin === "function") {
+    hienThiBangTonKhoAdmin();
+  }
+  capNhatSoDemMenuAdmin();
+
+  if (typeof showToast === "function") {
+    showToast("Đã duyệt phiếu #" + maPhieu + "! Đã cộng thêm " + soLuong + " cái vào kho.", "success");
+  } else {
+    alert("Đã duyệt phiếu #" + maPhieu + "! Đã cộng thêm " + soLuong + " cái vào kho.");
+  }
 }
 
 function locPhieuNhapHang() {
   hienThiBangNhapHang();
 }
 
-// 9. TAB 7: QUẢN LÝ GIÁ BÁN & TAB 8: TỒN KHO
 function hienThiBangGiaBanAdmin() {
   var dsSp = layDuLieuAdmin("sport_products");
   var tbody = document.getElementById("admin-pricing-tbody");
@@ -1751,61 +1592,431 @@ function hienThiBangGiaBanAdmin() {
         <td><strong>30%</strong></td>
         <td><strong style="color:#0284c7;">${formatMoney(p.price)}</strong></td>
         <td>
-          <button type="button" class="btn-action btn-edit" onclick="moModalSuaSanPham(${p.id})">Sửa Giá</button>
+          <button type="button" class="btn-action btn-edit" onclick="moModalSuaGiaBan(${p.id})">Sửa Giá</button>
         </td>
       </tr>
     `;
   }
   tbody.innerHTML = html;
+}
+
+// ==============================================================================
+// XỬ LÝ SỬA GIÁ BÁN & % LỢI NHUẬN RIÊNG BIỆT
+// ==============================================================================
+var maSpDangSuaGia = -1;
+var giaVonHienTai = 0;
+
+// 1. Mở popup Sửa Giá và điền dữ liệu sản phẩm
+function moModalSuaGiaBan(maSp) {
+  maSpDangSuaGia = maSp;
+  var dsSp = layDuLieuAdmin("sport_products");
+  var p = null;
+  for (var i = 0; i < dsSp.length; i++) {
+    if (dsSp[i].id === maSp) {
+      p = dsSp[i];
+      break;
+    }
+  }
+  if (!p) return;
+
+  // Lấy giá vốn và % lợi nhuận
+  giaVonHienTai = Number(p.costPrice || p.cost || Math.round(p.price * 0.7));
+  var phanTram = Number(p.profitPercent !== undefined ? p.profitPercent : 30);
+
+  document.getElementById("pricing-prod-name").value = p.name;
+  document.getElementById("pricing-cost-price").value = giaVonHienTai.toLocaleString("vi-VN") + " ₫";
+  document.getElementById("pricing-profit-percent").value = phanTram;
+  document.getElementById("pricing-sale-price").value = p.price;
+
+  moModalAdmin("modal-pricing");
+}
+
+// 2. Tự động nhảy lại giá bán khi người dùng thay đổi % lợi nhuận
+function tinhGiaBanTuDong() {
+  var percent = Number(document.getElementById("pricing-profit-percent").value) || 0;
+  var giaMoi = Math.round(giaVonHienTai * (1 + percent / 100));
+  // Làm tròn đến hàng nghìn (ví dụ 4.550.000)
+  giaMoi = Math.round(giaMoi / 1000) * 1000;
+  document.getElementById("pricing-sale-price").value = giaMoi;
+}
+
+// 3. Lưu giá bán mới vào danh sách sản phẩm
+function luuGiaBanMoi() {
+  var giaMoi = Number(document.getElementById("pricing-sale-price").value) || 0;
+  var percentMoi = Number(document.getElementById("pricing-profit-percent").value) || 0;
+
+  if (giaMoi <= 0) {
+    alert("Vui lòng nhập giá bán hợp lệ!");
+    return;
+  }
+
+  var dsSp = layDuLieuAdmin("sport_products");
+  for (var i = 0; i < dsSp.length; i++) {
+    if (dsSp[i].id === maSpDangSuaGia) {
+      dsSp[i].price = giaMoi;
+      dsSp[i].profitPercent = percentMoi;
+      break;
+    }
+  }
+
+  luuDuLieuAdmin("sport_products", dsSp);
+  dongModalAdmin("modal-pricing");
+  hienThiBangGiaBanAdmin(); // Vẽ lại bảng giá bán ngay lập tức
+  if (typeof showToast === "function") {
+    showToast("Đã cập nhật giá bán thành công: " + giaMoi.toLocaleString("vi-VN") + " ₫", "success");
+  }
 }
 
 function locGiaBanAdmin() {
   hienThiBangGiaBanAdmin();
 }
 
+function phanLoaiChuan(sp) {
+  var str = ((sp.category || "") + " " + (sp.name || "")).toLowerCase();
+  if (str.includes("giày") || str.includes("shoes") || str.includes("vaporfly") || str.includes("predator")) return "Giày Thể Thao";
+  if (str.includes("áo") || str.includes("quần") || str.includes("dri-fit") || str.includes("gym")) return "Quần Áo Thể Thao";
+  if (str.includes("vợt") || str.includes("bóng") || str.includes("cầu lông") || str.includes("tennis")) return "Dụng Cụ & Vợt";
+  return "Balo & Phụ Kiện";
+}
+
+
 function hienThiBangTonKhoAdmin() {
   var dsSp = layDuLieuAdmin("sport_products");
   var tbody = document.getElementById("admin-inventory-tbody");
   if (!tbody) return;
 
+  var loaiLoc = (document.getElementById("snapshotCategorySelect")?.value || "").toLowerCase();
+  var tuKhoa = (document.getElementById("snapshotSearchInput")?.value || "").toLowerCase().trim();
+
+  var tongTon = 0, soConHang = 0, soCanhBao = 0, soHetHang = 0;
   var html = "";
+
   for (var i = 0; i < dsSp.length; i++) {
     var p = dsSp[i];
-    var ton = Number(p.stock) || 0;
-    var canhBao = ton <= 5 ? `<span style="color:#ef4444; font-weight:700;">🚨 Hết hàng / Nhập gấp</span>` : `<span style="color:#16a34a; font-weight:600;">✓ An toàn</span>`;
+    var maSP = p.code || ("SP-" + p.id);
+    var loaiSP = phanLoaiChuan(p);
+    var ton = Number(p.stock !== undefined ? p.stock : (p.quantity || 0));
+    var giaVon = Number(p.costPrice || (p.price ? p.price * 0.7 : 0));
 
+    tongTon += ton;
+    if (ton === 0) soHetHang++;
+    else if (ton <= 5) soCanhBao++;
+    else soConHang++;
+
+    if (loaiLoc && loaiSP.toLowerCase() !== loaiLoc) continue;
+    if (tuKhoa && !maSP.toLowerCase().includes(tuKhoa) && !p.name.toLowerCase().includes(tuKhoa)) continue;
+
+    var badgeTon = ton === 0 ? `<strong style="color:#dc2626;">0</strong>` : (ton <= 5 ? `<strong style="color:#ea580c;">${ton}</strong>` : `<strong>${ton}</strong>`);
+    var statusBadge = ton === 0 ? `<span class="badge-status badge-danger">Hết hàng</span>` : (ton <= 5 ? `<span class="badge-status badge-warning">Cảnh báo</span>` : `<span class="badge-status badge-success">Bình thường</span>`);
+// Nếu tồn kho <= 5 thì hiện nút "+ Nhập", ngược lại hiện nút "Xem"
+    var nutThaoTac = "";
+
+    if (ton <= 5) {
+      // Bấm + Nhập: Gọi hàm chuyenSangNhapHang() và truyền mã sản phẩm
+      nutThaoTac = '<button type="button" class="btn-action" style="background:#fee2e2; color:#dc2626; border:none; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="chuyenSangNhapHang(\'' + p.id + '\')">+ Nhập</button>';
+    } else {
+      // Bấm Xem: Gọi hàm xemChiTietTonKho() và truyền mã sản phẩm
+      nutThaoTac = '<button type="button" class="btn-action" style="background:#e0f2fe; color:#0284c7; border:none; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xemChiTietTonKho(\'' + p.id + '\')">Xem</button>';
+    }
     html += `
-      <tr>
-        <td><img src="${p.image || ''}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
-        <td><strong>${p.name}</strong></td>
-        <td>${p.category || p.categoryId || "Khác"}</td>
-        <td><strong>${ton}</strong></td>
-        <td>${canhBao}</td>
-        <td>
-          <button type="button" class="btn-action btn-edit" onclick="moModalTaoPhieuNhap()">+ Nhập Thêm</button>
-        </td>
-      </tr>
+      <div class="div-row-inventory">
+        <div><span class="badge-code-pill">${maSP}</span></div>
+        <div><strong>${p.name}</strong></div>
+        <div style="color: #64748b;">${loaiSP}</div>
+        <div>${giaVon.toLocaleString("vi-VN")} đ</div>
+        <div>${badgeTon}</div>
+        <div>${statusBadge}</div>
+        <div style="text-align: right;">${nutThaoTac}</div>
+      </div>
     `;
   }
+
   tbody.innerHTML = html;
+
+  // Cập nhật 4 thẻ KPI
+  if (document.getElementById("summaryTotalStock")) document.getElementById("summaryTotalStock").textContent = tongTon.toLocaleString("vi-VN");
+  if (document.getElementById("summaryInStock")) document.getElementById("summaryInStock").textContent = soConHang;
+  if (document.getElementById("summaryLowStock")) document.getElementById("summaryLowStock").textContent = soCanhBao;
+  if (document.getElementById("summaryOutOfStock")) document.getElementById("summaryOutOfStock").textContent = soHetHang;
 }
 
-function locTonKhoAdmin() {
-  hienThiBangTonKhoAdmin();
+function doiTrangThaiSanPhamAdmin(maSp) {
+  var dsSp = layDuLieuAdmin("sport_products");
+  var tenSp = "";
+  var trangThaiMoi = "active";
+  var duocHien = true ;
+
+  for (var i = 0; i < dsSp.length; i++) {
+    if (dsSp[i].id === maSp) {
+      tenSp = dsSp[i].name;
+      if( dsSp[i].stock <= 0 ){
+        dsSp[i].status = "hidden";
+        duocHien = false ;
+      }else{
+        dsSp[i].status = dsSp[i].status === "hidden" ? "active" : "hidden";
+      }
+      trangThaiMoi = dsSp[i].status;
+      break;
+    }
+  }
+
+  // Lưu lại vào LocalStorage và vẽ lại bảng
+  luuDuLieuAdmin("sport_products", dsSp);
+  hienThiBangSanPhamAdmin();
+
+  if (typeof showToast === "function") {
+    if (trangThaiMoi === "active") {
+      showToast(`Đã mở bán lại sản phẩm "${tenSp}"!`, "success");
+    } else {
+      if( duocHien ){
+        showToast(`Đã ẩn sản phẩm "${tenSp}" khỏi cửa hàng!`, "warning");
+      }else{
+        showToast(`Số lượng sản phẩm "${tenSp}" trong kho không đủ!`, "warning");
+      }
+    }
+  }
 }
 
+
+// ==============================================================================
+// 1. HÀM CHUYỂN QUA LẠI GIỮA 2 TAB (BẤM NÚT TRÊN ĐẦU TRANG)
+// ==============================================================================
+function chuyenTabTonKho(tenTab) {
+  var khungTab1 = document.getElementById("viewSnapshotSection");
+  var khungTab2 = document.getElementById("viewMovementSection");
+  var nutTab1 = document.getElementById("tabBtnSnapshot");
+  var nutTab2 = document.getElementById("tabBtnMovement");
+
+  if (tenTab === "snapshot") {
+    // Mở Tab 1: Tồn kho theo loại
+    khungTab1.style.display = "block";
+    khungTab2.style.display = "none";
+    nutTab1.classList.add("active");
+    nutTab2.classList.remove("active");
+    hienThiBangTonKhoAdmin();
+  } else {
+    // Mở Tab 2: Nhập - Xuất - Tồn
+    khungTab1.style.display = "none";
+    khungTab2.style.display = "block";
+    nutTab1.classList.remove("active");
+    nutTab2.classList.add("active");
+    hienThiNhapXuatTon();
+  }
+}
+
+// ==============================================================================
+// 3. CÁC THAO TÁC CỦA TAB 1 (XEM CHI TIẾT & NHẬP HÀNG NHANH)
+// ==============================================================================
+function xemChiTietTonKho(maSp) {
+  var dsSp = layDuLieuAdmin("sport_products");
+  var sp = null;
+  for (var i = 0; i < dsSp.length; i++) {
+    if (String(dsSp[i].id) === String(maSp)) {
+      sp = dsSp[i];
+      break;
+    }
+  }
+  if (!sp) return;
+
+  var ton = Number(sp.stock !== undefined ? sp.stock : 0);
+  var giaVon = Number(sp.costPrice || sp.cost || Math.round(sp.price * 0.7));
+
+  var modalBody = document.getElementById("inv-detail-body");
+  if (modalBody) {
+    modalBody.innerHTML = `
+      <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 14px;">
+        <img src="${sp.image || ''}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <div>
+          <h4 style="margin: 0 0 4px 0; font-size: 14px;">${sp.name}</h4>
+          <span class="badge-code-pill">${sp.code || ('SP-' + sp.id)}</span>
+          <span style="color:#64748b; font-size:12px; margin-left:8px;">Hãng: ${sp.brand || 'Chính hãng'}</span>
+        </div>
+      </div>
+      <table style="width: 100%; font-size: 13px;">
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 6px 0; color:#64748b;">Giá vốn:</td><td style="text-align: right; font-weight: 700;">${giaVon.toLocaleString('vi-VN')} đ</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 6px 0; color:#64748b;">Giá bán niêm yết:</td><td style="text-align: right; font-weight: 700; color: #0284c7;">${Number(sp.price || 0).toLocaleString('vi-VN')} đ</td></tr>
+        <tr><td style="padding: 6px 0; color:#64748b;">Tồn kho hiện tại:</td><td style="text-align: right; font-weight: 800; font-size: 15px; color: ${ton <= 5 ? '#dc2626' : '#16a34a'};">${ton} cái</td></tr>
+      </table>
+    `;
+  }
+
+  var modal = document.getElementById("modal-inventory-detail");
+  if (modal) modal.style.display = "flex";
+}
+
+function dongPopupChiTiet() {
+  var modal = document.getElementById("modal-inventory-detail");
+  if (modal) modal.style.display = "none";
+}
+
+// ==============================================================================
+// 4. HÀM HIỂN THỊ TAB 2: NHẬP – XUẤT – TỒN (ẢNH 2)
+// ==============================================================================
+function napDanhSachSanPhamVaoSelect() {
+  var selectSP = document.getElementById("movementProductSelect");
+  if (!selectSP) return;
+
+  if (selectSP.options.length <= 1) {
+    var dsSp = layDuLieuAdmin("sport_products");
+    var html = '<option value="">Tất cả sản phẩm</option>';
+    for (var i = 0; i < dsSp.length; i++) {
+      var sp = dsSp[i];
+      var ma = sp.code || ("SP-" + sp.id);
+      html += '<option value="' + sp.id + '">' + ma + ' - ' + sp.name + '</option>';
+    }
+    selectSP.innerHTML = html;
+  }
+}
+
+function hienThiNhapXuatTon() {
+  napDanhSachSanPhamVaoSelect();
+
+  var selectSP = document.getElementById("movementProductSelect");
+  var oTuNgay = document.getElementById("movementDateFrom");
+  var oDenNgay = document.getElementById("movementDateTo");
+
+  var maSPChon = selectSP ? selectSP.value.trim() : "";
+  var tuNgay = oTuNgay && oTuNgay.value ? oTuNgay.value : "2026-10-01";
+  var denNgay = oDenNgay && oDenNgay.value ? oDenNgay.value : "2026-10-31";
+
+  var dsSp = layDuLieuAdmin("sport_products");
+  var dsNhap = layDuLieuAdmin("sport_imports");
+  var dsDon = layDuLieuAdmin("sport_orders");
+
+  // 1. Tính tổng tồn kho hiện tại
+  var tonHienTai = 0;
+  for (var i = 0; i < dsSp.length; i++) {
+    var p = dsSp[i];
+    if (maSPChon === "" || String(p.id) === String(maSPChon)) {
+      tonHienTai = tonHienTai + Number(p.stock !== undefined ? p.stock : 0);
+    }
+  }
+
+  // 2. Thu thập danh sách các phiếu nhập
+  var danhSachGD = [];
+  for (var j = 0; j < dsNhap.length; j++) {
+    var phieu = dsNhap[j];
+    var ngayPhieu = phieu.date || "2026-10-15";
+    var maPhieu = phieu.id || phieu.slipId || ("PN-" + (j + 1));
+    var soLuongNhap = Number(phieu.totalQuantity || phieu.quantity || 15);
+
+    if (maSPChon === "" || String(phieu.productId) === String(maSPChon)) {
+      danhSachGD.push({
+        ngay: ngayPhieu,
+        ma: maPhieu,
+        loai: "Nhập kho",
+        slNhap: soLuongNhap,
+        slXuat: 0
+      });
+    }
+  }
+
+  // 3. Thu thập danh sách các đơn hàng xuất bán
+  for (var k = 0; k < dsDon.length; k++) {
+    var don = dsDon[k];
+    if (don.status !== "Đã hủy") {
+      var ngayDon = (don.createdAt ? don.createdAt.split("T")[0] : don.date) || "2026-10-20";
+      var maDon = don.orderId || don.id || ("DH-" + (k + 1));
+      var slXuat = 1;
+
+      if (maSPChon === "") {
+        slXuat = 1;
+      }
+
+      danhSachGD.push({
+        ngay: ngayDon,
+        ma: maDon,
+        loai: "Xuất bán",
+        slNhap: 0,
+        slXuat: slXuat
+      });
+    }
+  }
+
+  // 4. Lọc các giao dịch nằm trong khoảng từ ngày -> đến ngày
+  var tongNhap = 0;
+  var tongXuat = 0;
+  var gdTrongKy = [];
+
+  for (var n = 0; n < danhSachGD.length; n++) {
+    var gd = danhSachGD[n];
+    if (gd.ngay >= tuNgay && gd.ngay <= denNgay) {
+      gdTrongKy.push(gd);
+      tongNhap = tongNhap + gd.slNhap;
+      tongXuat = tongXuat + gd.slXuat;
+    }
+  }
+
+  var tonCuoiKy = tonHienTai;
+  var tonDauKy = tonCuoiKy - tongNhap + tongXuat;
+  if (tonDauKy < 0) tonDauKy = 0;
+
+  // Hiển thị lên 4 thẻ tóm tắt của Tab 2
+  if (document.getElementById("movementBeginningStock")) document.getElementById("movementBeginningStock").textContent = tonDauKy.toLocaleString("vi-VN");
+  if (document.getElementById("movementTotalImport")) document.getElementById("movementTotalImport").textContent = "+" + tongNhap.toLocaleString("vi-VN");
+  if (document.getElementById("movementTotalExport")) document.getElementById("movementTotalExport").textContent = "-" + tongXuat.toLocaleString("vi-VN");
+  if (document.getElementById("movementEndingStock")) document.getElementById("movementEndingStock").textContent = tonCuoiKy.toLocaleString("vi-VN");
+
+  // 5. Vẽ bảng danh sách ra màn hình
+  var bang = document.getElementById("movementTableBody");
+  if (!bang) return;
+
+  var htmlBang = "";
+  var tonLuyKe = tonDauKy;
+
+  htmlBang += '<div style="display: grid; grid-template-columns: 120px 140px 1.5fr 120px 120px 140px; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; background: #fffbeb; font-weight: 700; align-items: center; font-size: 13px;">';
+  htmlBang += '  <div>' + tuNgay + '</div>';
+  htmlBang += '  <div><span class="badge-code-pill" style="background:#fef3c7; color:#d97706;">ĐẦU KỲ</span></div>';
+  htmlBang += '  <div>Tồn ban đầu</div>';
+  htmlBang += '  <div style="text-align: center; color:#94a3b8;">—</div>';
+  htmlBang += '  <div style="text-align: center; color:#94a3b8;">—</div>';
+  htmlBang += '  <div style="text-align: center; font-weight: 800;">' + tonDauKy + ' cái</div>';
+  htmlBang += '</div>';
+
+  for (var r = 0; r < gdTrongKy.length; r++) {
+    var row = gdTrongKy[r];
+    tonLuyKe = tonLuyKe + row.slNhap - row.slXuat;
+
+    var cotNhap = row.slNhap > 0 ? ('<strong style="color:#16a34a;">+' + row.slNhap + '</strong>') : '<span style="color:#cbd5e1;">—</span>';
+    var cotXuat = row.slXuat > 0 ? ('<strong style="color:#ea580c;">-' + row.slXuat + '</strong>') : '<span style="color:#cbd5e1;">—</span>';
+
+    htmlBang += '<div style="display: grid; grid-template-columns: 120px 140px 1.5fr 120px 120px 140px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; align-items: center; font-size: 13px;">';
+    htmlBang += '  <div>' + row.ngay + '</div>';
+    htmlBang += '  <div><span class="badge-code-pill">' + row.ma + '</span></div>';
+    htmlBang += '  <div>' + row.loai + '</div>';
+    htmlBang += '  <div style="text-align: center;">' + cotNhap + '</div>';
+    htmlBang += '  <div style="text-align: center;">' + cotXuat + '</div>';
+    htmlBang += '  <div style="text-align: center; font-weight: 700;">' + tonLuyKe + ' cái</div>';
+    htmlBang += '</div>';
+  }
+
+  htmlBang += '<div style="display: grid; grid-template-columns: 120px 140px 1.5fr 120px 120px 140px; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; background: #f0fdf4; font-weight: 700; align-items: center; font-size: 13px;">';
+  htmlBang += '  <div>' + denNgay + '</div>';
+  htmlBang += '  <div><span class="badge-code-pill" style="background:#dcfce7; color:#15803d;">CUỐI KỲ</span></div>';
+  htmlBang += '  <div>Tồn cuối kỳ</div>';
+  htmlBang += '  <div style="text-align: center; color:#16a34a;">+' + tongNhap + '</div>';
+  htmlBang += '  <div style="text-align: center; color:#ea580c;">-' + tongXuat + '</div>';
+  htmlBang += '  <div style="text-align: center; font-weight: 800; color:#15803d;">' + tonCuoiKy + ' cái</div>';
+  htmlBang += '</div>';
+
+  bang.innerHTML = htmlBang;
+}
 
 function renderUserProfile() {
-
-  let tab =
-
   hienThiThongTinUser();
   hienThiDonHang();
   hienThiDiaChi();
   hienThiYeuThich();
   hienThiFaq();
+  chuyenTab("overview");
+  let params = new URLSearchParams(window.location.search) ;
+  let tab = params.get("tab") ;
+  if( tab ){
+    chuyenTab("orders");
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
   renderUserProfile();
 });
+

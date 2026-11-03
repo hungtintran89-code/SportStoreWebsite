@@ -121,9 +121,9 @@ function addToCart(product, quantityToAdd = 1) {
       (item.size || "Mặc định") === size &&
       (item.color || "Tiêu chuẩn") === color,
   );
-  const soLuongDangCo = existingItem ? existingItem.quantity : 1 ;
+  const soLuongDangCo = existingItem ? existingItem.quantity : 0 ;
   if( soLuongDangCo + addQty > product.stock ){
-    showToast("Không thể thêm! Trong kho chỉ còn " + tonKho + " món (bạn đã có " + soLuongDangCo + " món trong giỏ).",  "danger");
+    showToast("Không thể thêm! Trong kho chỉ còn " + product.stock + " món (bạn đã có " + soLuongDangCo + " món trong giỏ).",  "danger");
     return false;
   }
 
