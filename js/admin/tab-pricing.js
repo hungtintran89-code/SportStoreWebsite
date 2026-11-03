@@ -195,6 +195,9 @@ function applyBatchCategoryPricing() {
 /**
  * Lọc bảng giá khi thay đổi dropdown danh mục
  */
-function filterPricing() {
+function filterPricing(shouldScroll) {
   renderPricingTable();
+  if (shouldScroll !== false && typeof scrollToAdminTable === "function") {
+    scrollToAdminTable("tab-pricing");
+  }
 }

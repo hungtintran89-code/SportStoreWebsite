@@ -92,8 +92,11 @@ function renderImportTable() {
 /**
  * 2. Lọc danh sách phiếu nhập khi người dùng nhập từ khóa / chọn ngày
  */
-function filterImports() {
+function filterImports(shouldScroll) {
   renderImportTable();
+  if (shouldScroll !== false && typeof scrollToAdminTable === "function") {
+    scrollToAdminTable("tab-import");
+  }
 }
 
 /**

@@ -114,7 +114,7 @@ function renderNXTReport(products) {
     for (var m = 0; m < imports.length; m++) {
       if (imports[m].status === "Hoàn thành" && imports[m].items) {
         for (var k = 0; k < imports[m].items.length; k++) {
-          if (imports[m].items[k].productId === p.id) {
+          if (String(imports[m].items[k].productId) === String(p.id)) {
             importedQty += Number(imports[m].items[k].quantity || 0);
           }
         }
@@ -126,7 +126,7 @@ function renderNXTReport(products) {
     for (var o = 0; o < orders.length; o++) {
       if (orders[o].status !== "Đã hủy" && orders[o].items) {
         for (var n = 0; n < orders[o].items.length; n++) {
-          if (orders[o].items[n].productId === p.id) {
+          if (String(orders[o].items[n].productId) === String(p.id)) {
             exportedQty += Number(orders[o].items[n].quantity || 0);
           }
         }
@@ -181,8 +181,11 @@ function exportInventoryReport() {
 /**
  * Lọc bảng tồn kho khi đổi loại sản phẩm
  */
-function filterInventory() {
+function filterInventory(shouldScroll) {
   renderInventoryTable();
+  if (shouldScroll !== false && typeof scrollToAdminTable === "function") {
+    scrollToAdminTable("tab-inventory");
+  }
 }
 
 /**
@@ -211,6 +214,11 @@ function switchInventorySubTab(mode, btnElement) {
     if (secDetail) secDetail.style.display = "none";
     if (secNXT) secNXT.style.display = "flex";
     if (filterWrap) filterWrap.style.display = "none";
+  }
+
+  // Tự động cuộn mượt xuống tiêu đề bảng dữ liệu khi đổi tab con trên mobile
+  if (typeof scrollToAdminTable === "function") {
+    scrollToAdminTable("tab-inventory");
   }
 }
 

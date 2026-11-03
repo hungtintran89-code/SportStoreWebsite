@@ -79,6 +79,7 @@ function openModalAddCategory() {
 
   currentEditingCategoryId = "";
 
+  var categories = getStorage(STORAGE_KEYS.CATEGORIES, []);
   document.getElementById("modal-category-title").textContent = "Thêm Mới Loại Sản Phẩm";
 
   document.getElementById("cat-id").value =  "CAT-" + (categories.length + 1);
@@ -212,6 +213,9 @@ function toggleHideCategory(catId) {
 /**
  * Lọc loại sản phẩm khi tìm kiếm
  */
-function filterCategories() {
+function filterCategories(shouldScroll) {
   renderCategoryTable();
+  if (shouldScroll && typeof scrollToAdminTable === "function") {
+    scrollToAdminTable("tab-category");
+  }
 }

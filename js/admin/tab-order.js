@@ -38,14 +38,25 @@ function renderOrderTable() {
       if (o.status !== statusFilter) continue;
     }
 
-    // Lọc theo khoảng ngày
-    if (fromDate && o.date < fromDate) continue;
-    if (toDate && o.date > toDate) continue;
+    // Lọc theo khoảng ngày (hỗ trợ cả date và createdAt)
+    var orderDateRaw = o.date || (o.createdAt ? o.createdAt.substring(0, 10) : "");
+    if (fromDate && orderDateRaw < fromDate) continue;
+    if (toDate && orderDateRaw > toDate) continue;
 
     var productSummary =
       o.items && o.items.length > 0
         ? `${o.items[0].name} (x${o.items[0].quantity})`
         : "Trang bị thể thao";
+
+    // Chuẩn hóa tên khách hàng an toàn (xử lý cả dạng chuỗi và đối tượng)
+    var customerDisplayName = "Khách hàng";
+    if (typeof o.customer === "string" && o.customer.length > 0) {
+      customerDisplayName = o.customer;
+    } else if (o.customer && typeof o.customer === "object") {
+      customerDisplayName = o.customer.name || o.customer.fullName || o.customer.username || "Khách hàng";
+    }
+
+    var displayDateVN = orderDateRaw ? (typeof formatDateVN === "function" ? formatDateVN(orderDateRaw) : orderDateRaw) : "---";
 
     // Dropdown chuyển trạng thái đơn hàng trực tiếp
     var statusSelectHtml = `
@@ -62,10 +73,10 @@ function renderOrderTable() {
     tr.innerHTML = `
       <td><strong class="text-primary">#${o.orderId}</strong></td>
       <td>
-        <div class="item-title">${o.customer.name}</div>
-        <div class="item-code">SĐT: ${o.phone}</div>
+        <div class="item-title">${customerDisplayName}</div>
+        <div class="item-code">SĐT: ${o.phone || "---"}</div>
       </td>
-      <td>${formatDateVN(o.createdAt)}</td>
+      <td>${displayDateVN}</td>
       <td class="col-summary">
         <div>${productSummary}</div>
       </td>
@@ -112,19 +123,26 @@ function viewOrderDetail(orderId) {
   }
   if (!target) return;
 
+  var custName = "Khách hàng";
+  if (typeof target.customer === "string" && target.customer.length > 0) {
+    custName = target.customer;
+  } else if (target.customer && typeof target.customer === "object") {
+    custName = target.customer.name || target.customer.fullName || target.customer.username || "Khách hàng";
+  }
+
+  var targetDateRaw = target.date || (target.createdAt ? target.createdAt.substring(0, 10) : "");
+
   document.getElementById("modal-order-title").textContent =
     "Chi Tiết Đơn Hàng #" + target.orderId;
   document.getElementById("order-detail-customer").textContent =
-    target.customer + " (" + target.phone + ")";
+    custName + " (" + (target.phone || "---") + ")";
   document.getElementById("order-detail-email").textContent =
-    target.email || "Chưa cập nhật";
+    target.email || (target.customer && target.customer.email ? target.customer.email : "Chưa cập nhật");
   document.getElementById("order-detail-address").textContent =
     target.address || "Nhận tại cửa hàng";
-  document.getElementById("order-detail-date").textContent = formatDateVN(
-    target.date,
-  );
+  document.getElementById("order-detail-date").textContent = targetDateRaw ? (typeof formatDateVN === "function" ? formatDateVN(targetDateRaw) : targetDateRaw) : "---";
   document.getElementById("order-detail-payment").textContent =
-    target.payment || "COD";
+    target.payment || target.paymentMethod || "COD (Tiền mặt)";
   document.getElementById("order-detail-status").textContent = target.status;
   document.getElementById("order-detail-note").textContent =
     target.note || "Không có";
@@ -164,6 +182,9 @@ function viewOrderDetail(orderId) {
 /**
  * Lọc danh sách đơn hàng khi đổi khoảng ngày hoặc trạng thái
  */
-function filterOrders() {
+function filterOrders(shouldScroll) {
   renderOrderTable();
+  if (shouldScroll !== false && typeof scrollToAdminTable === "function") {
+    scrollToAdminTable("tab-order");
+  }
 }

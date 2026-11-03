@@ -39,8 +39,13 @@ function switchTab(tabName, btnElement) {
     tabCanHien.classList.add("active");
   }
 
-  if( btnElement ){
+  if (btnElement) {
     btnElement.classList.add("active");
+  } else {
+    var matchingNav = document.querySelector(".admin-nav-item[onclick*=\"switchTab('" + tabName + "'\"]");
+    if (matchingNav) {
+      matchingNav.classList.add("active");
+    }
   }
 
   if (tabName === "dashboard") {
@@ -114,6 +119,53 @@ function closeModal(modalId) {
   if (hopThoai) {
     hopThoai.classList.remove("show");
   }
+}
+
+/**
+ * 4. Tự động cuộn mượt tới tiêu đề bảng dữ liệu khi tra cứu/lọc xong trên Mobile
+ */
+function scrollToAdminTable(tabId) {
+  // Chỉ xử lý khi ở màn hình nhỏ / mobile
+  if (window.innerWidth > 1024) return;
+  var tabEl = document.getElementById(tabId);
+  if (!tabEl) return;
+
+  // Với tab tồn kho hoặc các tab có nhiều sub-section, ưu tiên lấy table-card đang hiển thị
+  var allCards = tabEl.querySelectorAll(".admin-table-card");
+  var tableTarget = null;
+  for (var i = 0; i < allCards.length; i++) {
+    var card = allCards[i];
+    var parentSec = card.closest(".inventory-section");
+    if (!parentSec || parentSec.style.display !== "none") {
+      tableTarget = card;
+      break;
+    }
+  }
+  if (!tableTarget) {
+    tableTarget = tabEl.querySelector(".admin-table-card") || tabEl.querySelector(".admin-table");
+  }
+  if (!tableTarget) return;
+
+  setTimeout(function () {
+    // 1. Đóng băng: Đảm bảo bảng bên trong luôn hiển thị từ đầu với thead cố định
+    if (typeof tableTarget.scrollTo === "function") {
+      tableTarget.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      tableTarget.scrollTop = 0;
+    }
+
+    // 2. Kiểm tra nếu bảng đã nằm trong tầm nhìn thì đóng băng giữ nguyên, không trượt toàn trang
+    var tabRect = tabEl.getBoundingClientRect();
+    var targetRect = tableTarget.getBoundingClientRect();
+
+    // Chỉ cuộn container nếu tiêu đề bảng bị khuất dưới đáy màn hình
+    if (targetRect.top > tabRect.bottom - 70) {
+      var offset = targetRect.top - tabRect.top + tabEl.scrollTop - 6;
+      if (offset > 0 && typeof tabEl.scrollTo === "function") {
+        tabEl.scrollTo({ top: offset, behavior: "smooth" });
+      }
+    }
+  }, 100);
 }
 
 

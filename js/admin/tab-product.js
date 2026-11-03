@@ -126,6 +126,16 @@ function openModalAddProduct() {
   document.getElementById("prod-name").value = "";
   document.getElementById("prod-code").value =
     "SP-" + Date.now().toString().slice(-4);
+  document.getElementById("prod-cost").value = "0";
+  document.getElementById("prod-price").value = "0";
+  document.getElementById("prod-image").value = "";
+  document.getElementById("prod-desc").value = "";
+
+  var stockInput = document.getElementById("prod-stock");
+  if (stockInput) {
+    stockInput.value = "0";
+    stockInput.disabled = false;
+  }
 
   var hotCheck = document.getElementById("prod-is-hot") ;
   var newCheck = document.getElementById("prod-is-new") ;
@@ -305,6 +315,9 @@ function toggleHideProduct(productId) {
 /**
  * Lọc danh sách sản phẩm khi thay đổi ô input hoặc dropdown
  */
-function filterProducts() {
+function filterProducts(shouldScroll) {
   renderProductTable();
+  if (shouldScroll && typeof scrollToAdminTable === "function") {
+    scrollToAdminTable("tab-product");
+  }
 }

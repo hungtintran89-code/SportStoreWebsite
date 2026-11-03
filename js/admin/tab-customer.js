@@ -135,6 +135,9 @@ function toggleLockUser(customerId) {
 /**
  * Tìm kiếm khách hàng khi nhập ký tự vào ô search
  */
-function filterCustomers() {
+function filterCustomers(shouldScroll) {
   renderCustomerTable();
+  if (shouldScroll && typeof scrollToAdminTable === "function") {
+    scrollToAdminTable("tab-customer");
+  }
 }
