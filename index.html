@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SportStore | Trang Bị Thể Thao Chính Hãng</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/dev1_home.css">
+</head>
+<body>
+
+  <!-- Header chung -->
+  <header class="sport-navbar">
+    <div class="sport-container sport-navbar-inner">
+      <a href="index.html" class="sport-brand-logo">
+        <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div>SPORT<span class="accent">STORE</span></div>
+      </a>
+      <ul class="sport-nav-menu">
+        <li><a href="index.html" class="active">Trang Chủ</a></li>
+        <li><a href="pages/dev2_products.html">Sản Phẩm</a></li>
+        <li><a href="pages/dev4_checkout.html">Giỏ Hàng</a></li>
+      </ul>
+      <div class="sport-nav-actions">
+        <a href="pages/dev5_user.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden" data-admin-link title="Trang quản trị">
+          <i class="fa-solid fa-gear"></i> Admin
+        </a>
+        <a href="pages/dev4_checkout.html" class="nav-badge-btn" title="Xem giỏ hàng">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge-pill" id="header-cart-badge-count">0</span>
+        </a>
+
+        <div class="dev5-header-user-wrapper dev5-hidden" data-auth-profile-wrap>
+          <div class="sport-user-logged-pill dev5-user-pill-btn" data-auth-profile title="Hồ sơ tài khoản">
+            <img data-header-avatar alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+            <span data-header-name>Tài khoản</span>
+            <span class="dev5-caret-down"><i class="fa-solid fa-angle-down"></i></span>
+          </div>
+          <div class="dev5-shopee-dropdown">
+            <div class="dev5-shopee-arrow"></div>
+            <a href="pages/dev5_user.html?tab=overview" class="dev5-shopee-item" data-action-tab="overview">
+              Tài Khoản Của Tôi
+            </a>
+            <a href="pages/dev5_user.html?tab=orders" class="dev5-shopee-item" data-action-tab="orders">
+              Đơn Mua
+            </a>
+            <button type="button" class="dev5-shopee-item dev5-shopee-logout" data-auth-action="logout">
+              Đăng Xuất
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" data-auth-action="login" id="sport-btn-open-login">
+          <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
+        </button>
+        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" data-auth-action="register" id="sport-btn-open-register">
+          <i class="fa-solid fa-user-plus"></i> Đăng Ký
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nội dung trang chủ -->
+  <div class="dev1-home-wrapper">
+    <div class="sport-container">
+      
+      <!-- Banner đầu trang -->
+      <section class="dev1-hero-carousel" id="dev1-carousel">
+        <div class="dev1-carousel-slides" id="dev1-carousel-slides">
+          <div class="dev1-slide-skeleton">Đang tải banner...</div>
+        </div>
+        
+        <button class="dev1-carousel-btn dev1-btn-prev" id="dev1-prev-slide" aria-label="Slide trước"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="dev1-carousel-btn dev1-btn-next" id="dev1-next-slide" aria-label="Slide tiếp theo"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="dev1-carousel-dots" id="dev1-carousel-dots"></div>
+      </section>
+
+      <!-- 4 ô dịch vụ tiện ích -->
+      <section class="dev1-service-strip">
+        <div class="dev1-service-item">
+          <div class="dev1-service-icon"><i class="fa-solid fa-truck-fast"></i></div>
+          <div>
+            <div class="dev1-service-title">Vận chuyển toàn quốc</div>
+            <div class="dev1-service-sub">Giao nhanh nội thành, kiểm tra hàng trước khi nhận</div>
+          </div>
+        </div>
+        <div class="dev1-service-item">
+          <div class="dev1-service-icon"><i class="fa-solid fa-medal"></i></div>
+          <div>
+            <div class="dev1-service-title">Cam kết 100% chính hãng</div>
+            <div class="dev1-service-sub">Hơn 1.280+ sản phẩm thật thuộc 8 bộ môn thể thao</div>
+          </div>
+        </div>
+        <div class="dev1-service-item">
+          <div class="dev1-service-icon"><i class="fa-solid fa-credit-card"></i></div>
+          <div>
+            <div class="dev1-service-title">Ưu đãi & Thanh toán linh hoạt</div>
+            <div class="dev1-service-sub">Giảm giá giờ vàng, hỗ trợ COD & chuyển khoản</div>
+          </div>
+        </div>
+        <div class="dev1-service-item">
+          <div class="dev1-service-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+          <div>
+            <div class="dev1-service-title">Đổi trả dễ dàng 30 ngày</div>
+            <div class="dev1-service-sub">Hỗ trợ đổi size giày, quần áo & bảo hành vợt uy tín</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Khung Flash Sale -->
+      <section class="dev1-flash-sale-section">
+        <div class="dev1-flash-header">
+          <div class="dev1-flash-title-box">
+            <span class="dev1-flash-icon"><i class="fa-solid fa-bolt-lightning"></i></span>
+            <div>
+              <h2 class="dev1-section-title">GIỜ VÀNG FLASH SALE ĐA MÔN</h2>
+              <p class="dev1-section-sub">Ưu đãi giảm giá từ Cầu Lông, Pickleball, Tennis đến Bóng Đá, Chạy Bộ, Bóng Rổ, Bóng Chuyền & Gym</p>
+            </div>
+          </div>
+          <div class="dev1-countdown-box">
+            <span class="dev1-countdown-label">KẾT THÚC SAU:</span>
+            <div class="dev1-timer-digits">
+              <span class="dev1-digit" id="dev1-hours">08</span><span class="dev1-sep">:</span>
+              <span class="dev1-digit" id="dev1-minutes">45</span><span class="dev1-sep">:</span>
+              <span class="dev1-digit" id="dev1-seconds">27</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dev1-flash-grid" id="dev1-flash-grid"></div>
+      </section>
+
+      <!-- Danh sách 8 môn thể thao -->
+      <section class="dev1-categories-section">
+        <div class="dev1-section-heading-center">
+          <span class="sport-badge badge-cyan">DANH MỤC 8 BỘ MÔN</span>
+          <h2 class="dev1-section-title">KHÁM PHÁ THEO MÔN THỂ THAO</h2>
+        </div>
+        <div class="dev1-cat-grid" id="dev1-cat-grid"></div>
+      </section>
+
+      <!-- Sản phẩm nổi bật theo tab -->
+      <section class="dev1-trending-section">
+        <div class="dev1-trending-header">
+          <div>
+            <span class="sport-badge badge-orange">SẢN PHẨM NỔI BẬT</span>
+            <h2 class="dev1-section-title">TRANG BỊ XU HƯỚNG 2026</h2>
+          </div>
+          <div class="dev1-tab-buttons" id="dev1-tab-buttons"></div>
+        </div>
+
+        <div class="dev1-trending-grid" id="dev1-trending-grid"></div>
+      </section>
+
+      <!-- Form nhận tin khuyến mãi -->
+      <section class="dev1-newsletter-card">
+        <div class="dev1-nl-content">
+          <span class="sport-badge badge-emerald">THÀNH VIÊN SPORTSTORE</span>
+          <h2>Đăng Ký Nhận Bản Tin & Mã Ưu Đãi 20%</h2>
+          <p>Nhận thông báo sớm về các đợt khuyến mãi và sản phẩm thể thao mới.</p>
+          <form class="dev1-nl-form" id="dev1-nl-form">
+            <input type="email" id="dev1-email-input" placeholder="Nhập địa chỉ email của bạn..." required>
+            <button type="submit" class="btn-sport btn-accent">ĐĂNG KÝ NGAY</button>
+          </form>
+          <p class="dev1-nl-note">Bảo mật thông tin khách hàng &bull; Hủy đăng ký bất kỳ lúc nào.</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="sport-toast-container" id="sport-toast-container"></div>
+
+  <!-- Footer chung -->
+  <footer class="sport-footer">
+    <div class="sport-container">
+      <div class="sport-footer-grid">
+        <div class="sport-footer-col">
+          <div class="sport-brand-logo">
+            <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div>SPORT<span class="accent">STORE</span></div>
+          </div>
+          <p>Hệ thống bán lẻ dụng cụ và trang phục thể thao chính hãng với chính sách đổi trả 30 ngày tiện lợi.</p>
+        </div>
+        <div class="sport-footer-col">
+          <h4>Điều Hướng Nhanh</h4>
+          <ul>
+            <li><a href="index.html">Trang Chủ</a></li>
+            <li><a href="pages/dev2_products.html">Xem Danh Mục Sản Phẩm</a></li>
+            <li><a href="pages/dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
+            <li><a href="pages/dev5_user.html">Tài Khoản & Trợ Giúp</a></li>
+          </ul>
+        </div>
+        <div class="sport-footer-col">
+          <h4>Phân Công Nhóm</h4>
+          <p>Thực hiện: <strong>Nhóm 8 LTW&UD</strong></p>
+          <p>TV1 : Trang Chủ & Admin</p>
+          <p>TV2 : Sản Phẩm & Bộ Lọc</p>
+          <p>TV3 : Giỏ Hàng & Thanh Toán</p>
+          <p>TV4 : Tài Khoản & Đơn Mua</p>
+        </div>
+        <div class="sport-footer-col">
+          <h4>Hotline & Hỗ Trợ</h4>
+          <p><i class="fa-solid fa-phone" style="color:#0284c7; margin-right:6px;"></i> 1900 8888 (8h00 - 22h00)</p>
+          <p><i class="fa-solid fa-location-dot" style="color:#0284c7; margin-right:6px;"></i> 273 An Dương Vương Q5 TPHCM</p>
+          <p><i class="fa-solid fa-envelope" style="color:#0284c7; margin-right:6px;"></i> support@sportstore.vn</p>
+        </div>
+      </div>
+      <div class="sport-footer-bottom">
+        <div>© 2026 SportStore. Cửa hàng dụng cụ và trang phục thể thao chính hãng.</div>
+        <div>Đồ án môn Lập Trình Web & Ứng Dụng</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- File dữ liệu và script trang chủ -->
+  <script src="data/store/banners.js"></script>
+  <script src="data/store/flash_sale.js"></script>
+  <script src="data/store/categories.js"></script>
+  <script src="data/store/products.js"></script>
+  <script src="data/store/imports.js"></script>
+  <script src="data/store/orders.js"></script>
+  <script src="data/store/customers.js"></script>
+  <script src="js/admin/init-storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/auth_modal.js"></script>
+  <script src="js/dev1_home.js"></script>
+
+</body>
+</html>
