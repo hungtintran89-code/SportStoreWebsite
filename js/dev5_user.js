@@ -1583,13 +1583,17 @@ function hienThiBangGiaBanAdmin() {
   var html = "";
   for (var i = 0; i < dsSp.length; i++) {
     var p = dsSp[i];
+    // Lấy đúng giá vốn gốc từ costPrice (không bị phụ thuộc vào price)
+    var giaVon = Number(p.costPrice || p.cost || (p.price ? Math.round(p.price * 0.7) : 0));
+    var phanTram = Number(p.profitPercent !== undefined ? p.profitPercent : 25);
+
     html += `
       <tr>
         <td><img src="${p.image || ''}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
         <td><strong>${p.name}</strong></td>
         <td>${p.category || p.categoryId || "Khác"}</td>
-        <td>${formatMoney(p.cost || p.price * 0.7)}</td>
-        <td><strong>30%</strong></td>
+        <td>${formatMoney(giaVon)}</td>
+        <td><strong>${phanTram}%</strong></td>
         <td><strong style="color:#0284c7;">${formatMoney(p.price)}</strong></td>
         <td>
           <button type="button" class="btn-action btn-edit" onclick="moModalSuaGiaBan(${p.id})">Sửa Giá</button>
@@ -1599,7 +1603,6 @@ function hienThiBangGiaBanAdmin() {
   }
   tbody.innerHTML = html;
 }
-
 // ==============================================================================
 // XỬ LÝ SỬA GIÁ BÁN & % LỢI NHUẬN RIÊNG BIỆT
 // ==============================================================================
@@ -1619,14 +1622,14 @@ function moModalSuaGiaBan(maSp) {
   }
   if (!p) return;
 
-  // Lấy giá vốn và % lợi nhuận
+  // Cố định giá vốn gốc
   giaVonHienTai = Number(p.costPrice || p.cost || Math.round(p.price * 0.7));
-  var phanTram = Number(p.profitPercent !== undefined ? p.profitPercent : 30);
+  var phanTram = Number(p.profitPercent !== undefined ? p.profitPercent : 25);
 
   document.getElementById("pricing-prod-name").value = p.name;
   document.getElementById("pricing-cost-price").value = giaVonHienTai.toLocaleString("vi-VN") + " ₫";
   document.getElementById("pricing-profit-percent").value = phanTram;
-  document.getElementById("pricing-sale-price").value = p.price;
+  document.getElementById("pricing-sale-price").value = Number(p.price).toLocaleString("vi-VN") + " ₫";
 
   moModalAdmin("modal-pricing");
 }
@@ -1634,34 +1637,33 @@ function moModalSuaGiaBan(maSp) {
 // 2. Tự động nhảy lại giá bán khi người dùng thay đổi % lợi nhuận
 function tinhGiaBanTuDong() {
   var percent = Number(document.getElementById("pricing-profit-percent").value) || 0;
+  // Công thức: Giá niêm yết = Giá vốn * (1 + % / 100)
   var giaMoi = Math.round(giaVonHienTai * (1 + percent / 100));
   // Làm tròn đến hàng nghìn (ví dụ 4.550.000)
   giaMoi = Math.round(giaMoi / 1000) * 1000;
-  document.getElementById("pricing-sale-price").value = giaMoi;
+  document.getElementById("pricing-sale-price").value = giaMoi.toLocaleString("vi-VN") + " ₫";
 }
 
 // 3. Lưu giá bán mới vào danh sách sản phẩm
 function luuGiaBanMoi() {
-  var giaMoi = Number(document.getElementById("pricing-sale-price").value) || 0;
   var percentMoi = Number(document.getElementById("pricing-profit-percent").value) || 0;
-
-  if (giaMoi <= 0) {
-    alert("Vui lòng nhập giá bán hợp lệ!");
-    return;
-  }
+  // Tính lại giá mới chính xác
+  var giaMoi = Math.round(giaVonHienTai * (1 + percentMoi / 100));
+  giaMoi = Math.round(giaMoi / 1000) * 1000;
 
   var dsSp = layDuLieuAdmin("sport_products");
   for (var i = 0; i < dsSp.length; i++) {
     if (dsSp[i].id === maSpDangSuaGia) {
       dsSp[i].price = giaMoi;
       dsSp[i].profitPercent = percentMoi;
+      dsSp[i].costPrice = giaVonHienTai; // Cố định vĩnh viễn giá vốn, không bao giờ bị đổi theo giá bán
       break;
     }
   }
 
   luuDuLieuAdmin("sport_products", dsSp);
   dongModalAdmin("modal-pricing");
-  hienThiBangGiaBanAdmin(); // Vẽ lại bảng giá bán ngay lập tức
+  hienThiBangGiaBanAdmin();
   if (typeof showToast === "function") {
     showToast("Đã cập nhật giá bán thành công: " + giaMoi.toLocaleString("vi-VN") + " ₫", "success");
   }

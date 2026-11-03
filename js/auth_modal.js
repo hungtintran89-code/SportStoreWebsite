@@ -26,6 +26,7 @@ function layDanhSachTatCaUser() {
     password: "admin",
     role: "admin",
     tier: "Administrator",
+    status: "active" ,
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"
   };
   danhSach.push(taiKhoanAdmin);
@@ -46,7 +47,8 @@ function layDanhSachTatCaUser() {
         role: "user",
         tier: k.tier || "Standard",
         avatar: k.avatar || "https://i.pravatar.cc/80?img=47",
-        address: k.address || ""
+        address: k.address || "" ,
+        status: k.status || "active"
       });
     }
   }
@@ -224,6 +226,11 @@ function xuLyDangNhap(event) {
     dongThongBao.style.color = "#dc2626";
     dongThongBao.textContent = "Tài khoản hoặc mật khẩu không chính xác!";
     return;
+  }
+  if (userHopLe.status === "locked" || userHopLe.status === "inactive") {
+    dongThongBao.style.color = "#dc2626";
+    dongThongBao.textContent = "🚫 Tài khoản của bạn đã bị Quản trị viên khóa! Vui lòng liên hệ Hotline 1900 8888.";
+    return; // Dừng lại ngay, không cho đăng nhập
   }
 
   // 4. Đăng nhập thành công -> Lưu vào LocalStorage
