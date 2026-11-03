@@ -1523,20 +1523,35 @@ function hienThiBangSanPhamAdmin() {
     if (locLoai && locLoai !== "ALL" && p.categoryId !== locLoai && p.category !== locLoai) continue;
     if (locHang && locHang !== "ALL" && p.brand !== locHang) continue;
 
+    // js/dev5_user.js (khoảng dòng 1526 - 1543)
     var ton = Number(p.stock) || 0;
     var canhBaoTon = ton <= 5 ? `<span style="color:#ef4444; font-weight:700;">⚠️ ${ton}</span>` : `<strong>${ton}</strong>`;
 
+    // 1. Kiểm tra trạng thái động
+    var laDangAn = p.status === "hidden";
+    if( p.stock <= 0 ) laDangAn = "hidden" ;
+
+    var badgeTrangThai = laDangAn
+        ? `<span class="nav-badge badge-gray" style="background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1;">Đang ẩn</span>`
+        : `<span class="nav-badge badge-green">Đang bán</span>`;
+
+    // 2. Nút bấm đổi trạng thái nhanh
+    var nutDoiTrangThai = laDangAn
+        ? `<button type="button" class="btn-action" style="background:#dcfce7; color:#15803d;" onclick="doiTrangThaiSanPhamAdmin(${p.id})">Hiện</button>`
+        : `<button type="button" class="btn-action btn-lock" onclick="doiTrangThaiSanPhamAdmin(${p.id})">Ẩn</button>`;
+
     html += `
-      <tr>
+      <tr style="${laDangAn ? 'opacity: 0.65; background-color: #f8fafc;' : ''}">
         <td><img src="${p.image || ''}" style="width:44px; height:44px; object-fit:cover; border-radius:6px;"></td>
         <td><strong>${p.name}</strong></td>
         <td>${p.category || p.categoryId || "Khác"}</td>
         <td>${p.brand || "Sport"}</td>
         <td><strong style="color:#0284c7;">${formatMoney(p.price)}</strong></td>
         <td>${canhBaoTon}</td>
-        <td><span class="nav-badge badge-green">Đang bán</span></td>
+        <td>${badgeTrangThai}</td>
         <td>
           <button type="button" class="btn-action btn-edit" onclick="moModalSuaSanPham(${p.id})">Sửa</button>
+          ${nutDoiTrangThai}
           <button type="button" class="btn-action btn-delete" onclick="xoaSanPhamAdmin(${p.id})">Xóa</button>
         </td>
       </tr>
@@ -1558,6 +1573,7 @@ function moModalThemSanPham() {
   if (document.getElementById("prod-stock")) document.getElementById("prod-stock").value = 50;
   if (document.getElementById("prod-image")) document.getElementById("prod-image").value = "";
   if (document.getElementById("prod-desc")) document.getElementById("prod-desc").value = "";
+  if (document.getElementById("prod-status")) document.getElementById("prod-status").value = "active";
   moModalAdmin("modal-product");
 }
 
@@ -1584,6 +1600,7 @@ function moModalSuaSanPham(maSp) {
   if (document.getElementById("prod-stock")) document.getElementById("prod-stock").value = p.stock || 0;
   if (document.getElementById("prod-image")) document.getElementById("prod-image").value = p.image || "";
   if (document.getElementById("prod-desc")) document.getElementById("prod-desc").value = p.desc || p.description || "";
+  if (document.getElementById("prod-status")) document.getElementById("prod-status").value = p.status || "active";
   moModalAdmin("modal-product");
 }
 
@@ -1610,6 +1627,7 @@ function luuSanPhamAdmin() {
   var catId = document.getElementById("prod-category").value;
   var anh = document.getElementById("prod-image").value.trim() || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400";
   var desc = document.getElementById("prod-desc").value.trim();
+  if (document.getElementById("prod-status")) document.getElementById("prod-status").value = p.status || "active";
 
   var dsSp = layDuLieuAdmin("sport_products");
 
@@ -1734,7 +1752,6 @@ function locPhieuNhapHang() {
   hienThiBangNhapHang();
 }
 
-// 9. TAB 7: QUẢN LÝ GIÁ BÁN & TAB 8: TỒN KHO
 function hienThiBangGiaBanAdmin() {
   var dsSp = layDuLieuAdmin("sport_products");
   var tbody = document.getElementById("admin-pricing-tbody");
@@ -1874,6 +1891,39 @@ function hienThiBangTonKhoAdmin() {
   if (document.getElementById("summaryOutOfStock")) document.getElementById("summaryOutOfStock").textContent = soHetHang;
 }
 
+function doiTrangThaiSanPhamAdmin(maSp) {
+  var dsSp = layDuLieuAdmin("sport_products");
+  var tenSp = "";
+  var trangThaiMoi = "active";
+  var duocHien = "" ;
+
+  for (var i = 0; i < dsSp.length; i++) {
+    if (dsSp[i].id === maSp) {
+      if( dsSp[i].stock <= 0 ) duocHien == false ;
+      tenSp = dsSp[i].name;
+      dsSp[i].status = dsSp[i].status === "hidden" ? "active" : "hidden";
+      trangThaiMoi = dsSp[i].status;
+      break;
+    }
+  }
+
+  // Lưu lại vào LocalStorage và vẽ lại bảng
+  luuDuLieuAdmin("sport_products", dsSp);
+  hienThiBangSanPhamAdmin();
+
+  if (typeof showToast === "function") {
+    if (trangThaiMoi === "hidden") {
+      showToast(`Đã ẩn sản phẩm "${tenSp}" khỏi cửa hàng!`, "warning");
+    } else {
+      if( duocHien ){
+        showToast(`Đã mở bán lại sản phẩm "${tenSp}"!`, "success");
+      }
+      else{
+        showToast(`Số lượng kho của sản phẩm "${tenSp}" không đủ!`, "danger");
+      }
+    }
+  }
+}
 
 function renderUserProfile() {
   hienThiThongTinUser();

@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/dev5_user.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/dev5_user.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/dev5_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dev5_user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/dev5_user.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/dev5_user.html" afterDir="false" />
     </list>
@@ -63,6 +62,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.editor",
     "to.speed.mode.migration.done": "true"
   }
 }]]></component>
