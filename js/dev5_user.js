@@ -1310,7 +1310,9 @@ function hienThiBangNhapHang() {
         <td><strong>${soLuongHienThi} món</strong></td>
         <td><strong style="color:#0284c7;">${formatMoney(tongTien)}</strong></td>
         <td>${p.creator || "Admin"}</td>
-        <td>${badgeTrangThai}</td>
+        <td>
+            <button type="button" class="btn-action" style="background:#e0f2fe; color:#0284c7; border:1px solid #bae6fd; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xemChiTietPhieuNhap('${maPhieu}')">Chi tiết</button>
+        </td>
         <td>${nutThaoTac}</td>
       </tr>
     `;
@@ -1322,6 +1324,82 @@ function hienThiBangNhapHang() {
   tbody.innerHTML = html;
 }
 
+function xemChiTietPhieuNhap(maPhieu) {
+  // 1. Tìm phiếu nhập theo mã phiếu
+  var dsNhap = layDuLieuAdmin("sport_imports");
+  var phieu = null;
+  for (var i = 0; i < dsNhap.length; i++) {
+    if (String(dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
+      phieu = dsNhap[i];
+      break;
+    }
+  }
+
+  if (!phieu) {
+    alert("Không tìm thấy thông tin phiếu nhập này!");
+    return;
+  }
+
+  // 2. Tìm thông tin chi tiết của sản phẩm đó trong sport_products
+  var dsSp = layDuLieuAdmin("sport_products");
+  var sp = null;
+  if (phieu.productId) {
+    for (var j = 0; j < dsSp.length; j++) {
+      if (String(dsSp[j].id) === String(phieu.productId)) {
+        sp = dsSp[j];
+        break;
+      }
+    }
+  }
+
+  // Lấy các dữ liệu chi tiết
+  var tenSp = sp ? sp.name : (phieu.productName || "Lô dụng cụ thể thao");
+  var maSp = sp ? (sp.code || ("SP-" + sp.id)) : (phieu.productId ? ("SP-" + phieu.productId) : "SP-CHUNG");
+  var anhSp = sp ? (sp.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200") : "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200";
+  var hangSp = sp ? (sp.brand || "Chính hãng") : "Chính hãng";
+  var tonKho = sp ? Number(sp.stock !== undefined ? sp.stock : (sp.quantity || 0)) : "—";
+  var soLuongNhap = Number(phieu.totalQuantity || 1);
+  var donGiaNhap = Number(phieu.unitPrice || (phieu.totalCost ? phieu.totalCost / soLuongNhap : 0));
+  var tongTien = Number(phieu.totalCost || (soLuongNhap * donGiaNhap));
+  var trangThai = phieu.status || "Hoàn thành";
+
+  var nhanTrangThai = trangThai === "Tạm lưu"
+      ? '<span class="badge-status" style="background:#fef3c7; color:#d97706; padding:3px 8px; border-radius:10px; font-weight:700;">Chờ duyệt</span>'
+      : '<span class="badge-status" style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:10px; font-weight:700;">Đã hoàn thành</span>';
+
+  // 3. Đổ dữ liệu vào Modal chi tiết
+  var modalTitle = document.getElementById("import-detail-title");
+  if (modalTitle) {
+    modalTitle.textContent = "Chi Tiết Phiếu Nhập #" + (phieu.id || phieu.slipId);
+  }
+
+  var modalBody = document.getElementById("import-detail-body");
+  if (modalBody) {
+    modalBody.innerHTML = `
+      <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+        <img src="${anhSp}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <div>
+          <h4 style="margin: 0 0 4px 0; font-size: 15px; color: #1e293b;">${tenSp}</h4>
+          <span class="badge-code-pill" style="margin-right: 6px;">${maSp}</span>
+          <span style="color:#64748b; font-size:12px;">Hãng: <strong>${hangSp}</strong></span>
+        </div>
+      </div>
+      <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Mã phiếu:</td><td style="text-align: right; font-weight: 700;">#${phieu.id || phieu.slipId}</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Nhà cung cấp:</td><td style="text-align: right; font-weight: 600;">${phieu.supplier || "Tổng Kho Thể Thao"}</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Ngày nhập:</td><td style="text-align: right;">${phieu.date || "Hôm nay"}</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Số lượng nhập:</td><td style="text-align: right; font-weight: 800; color: #0284c7;">+${soLuongNhap} món</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Đơn giá vốn:</td><td style="text-align: right; font-weight: 600;">${donGiaNhap.toLocaleString("vi-VN")} đ</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Tổng tiền vốn:</td><td style="text-align: right; font-weight: 800; color: #dc2626;">${tongTien.toLocaleString("vi-VN")} đ</td></tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 7px 0; color:#64748b;">Tồn kho hiện tại:</td><td style="text-align: right; font-weight: 700; color: #16a34a;">${tonKho} cái</td></tr>
+        <tr><td style="padding: 7px 0; color:#64748b;">Trạng thái phiếu:</td><td style="text-align: right;">${nhanTrangThai}</td></tr>
+      </table>
+    `;
+  }
+
+  // 4. Mở popup
+  moModalAdmin("modal-import-detail");
+}
 
 function luuPhieuNhapHang() {
   // 1. Lấy thông tin từ form popup
@@ -1923,8 +2001,6 @@ function hienThiNhapXuatTon() {
 
   bang.innerHTML = htmlBang;
 }
-
-
 
 function renderUserProfile() {
   hienThiThongTinUser();

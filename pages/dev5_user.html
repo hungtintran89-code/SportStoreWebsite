@@ -664,7 +664,7 @@
                 <th>SỐ LƯỢNG</th>
                 <th>TỔNG TIỀN VỐN</th>
                 <th>NGƯỜI TẠO</th>
-                <th>TRẠNG THÁI</th>
+                <th>CHI TIẾT</th>
                 <th>THAO TÁC</th>
               </tr>
             </thead>
@@ -1080,33 +1080,18 @@
   </div>
 
   <!-- MODAL 4: CHI TIẾT ĐƠN HÀNG -->
-  <div id="modal-order-detail" class="modal-overlay">
-    <div class="modal-box">
+  <!-- POPUP XEM CHI TIẾT SẢN PHẨM PHIẾU NHẬP -->
+  <div id="modal-import-detail" class="modal-overlay">
+    <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header">
-        <h3 class="modal-title" id="modal-order-title">Chi Tiết Đơn Hàng #SPORT-88234</h3>
-        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-order-detail')">&times;</button>
+        <h3 class="modal-title" id="import-detail-title">Chi Tiết Phiếu Nhập Hàng</h3>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-import-detail')">&times;</button>
       </div>
-      <div class="modal-body">
-        <div class="order-info-card">
-          <div><strong>Khách hàng:</strong> <span id="order-detail-customer">Trần Hùng Tín</span></div>
-          <div><strong>Email:</strong> <span id="order-detail-email">hungtintran89@gmail.com</span></div>
-          <div><strong>Địa chỉ giao:</strong> <span id="order-detail-address">273 An Dương Vương, Q.5, TP.HCM</span>
-          </div>
-          <div><strong>Ngày đặt:</strong> <span id="order-detail-date">08/10/2026</span></div>
-          <div><strong>Thanh toán:</strong> <span id="order-detail-payment">Ví MoMo</span></div>
-          <div><strong>Tình trạng:</strong> <span id="order-detail-status" class="nav-badge badge-blue">Đang giao</span>
-          </div>
-          <div><strong>Ghi chú:</strong> <span id="order-detail-note">Giao giờ hành chính</span></div>
-        </div>
-        <h4 class="order-items-heading">Danh Sách Mặt Hàng Trong Đơn:</h4>
-        <div id="order-detail-items-list"></div>
-        <div class="order-total-row">
-          <strong class="order-total-label">TỔNG TIỀN ĐƠN HÀNG:</strong>
-          <strong id="order-detail-total" class="order-total-value">5.290.000 đ</strong>
-        </div>
+      <div class="modal-body" id="import-detail-body">
+        <!-- Nội dung chi tiết sản phẩm sẽ tự điền bằng JavaScript -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn-sport btn-primary" onclick="dongModalAdmin('modal-order-detail')">Đóng</button>
+        <button type="button" class="btn-sport btn-primary" onclick="dongModalAdmin('modal-import-detail')">Đóng</button>
       </div>
     </div>
   </div>
