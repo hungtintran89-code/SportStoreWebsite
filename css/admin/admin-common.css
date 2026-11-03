@@ -526,7 +526,7 @@ body.admin-body {
 .admin-content {
   flex: 1;
   height: 100%;
-  padding: 24px 30px 14px 30px;
+  padding: 24px;
   overflow: hidden; /* Cố định 100% khung content, không sinh thanh cuộn toàn trang */
   background-color: var(--admin-body-bg);
   display: flex;
@@ -1730,5 +1730,315 @@ body.admin-body {
 
 .row-low-stock:hover {
   background-color: #fef2f2 !important;
+}
+
+/* ==============================================================================
+   9. RESPONSIVE TOÀN DIỆN CHO GIAO DIỆN ADMIN TRÊN TABLET & MOBILE
+   ============================================================================== */
+
+/* Màn hình Tablet & Mobile (<= 1024px) */
+@media (max-width: 1024px) {
+  .admin-content {
+    padding: 16px 14px;
+  }
+}
+
+/* Màn hình Mobile (<= 768px) */
+@media (max-width: 768px) {
+  /* 1. Header Topbar trên trang Admin */
+  body.admin-body .sport-navbar-inner {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  body.admin-body .nav-admin-btn {
+    display: none !important; /* Đang ở trong trang admin nên ẩn nút truy cập admin */
+  }
+
+  body.admin-body .sport-user-logged-pill span[data-header-name] {
+    display: none; /* Ẩn tên dài trên mobile, giữ ảnh avatar đại diện */
+  }
+
+  body.admin-body .sport-user-logged-pill {
+    padding: 4px 6px;
+    gap: 4px;
+  }
+
+  /* 2. Thanh Sidebar thu gọn tối ưu cho màn hình cảm ứng */
+  .admin-sidebar {
+    width: 56px !important;
+    padding: 10px 4px !important;
+  }
+
+  .admin-sidebar:hover {
+    width: 56px !important; /* Không tự bung rộng 264px khi chạm tay vào màn hình mobile */
+    box-shadow: none !important;
+  }
+
+  .admin-sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .admin-menu-group {
+    margin-top: 14px;
+    width: 100%;
+  }
+
+  .admin-menu-title {
+    display: none !important;
+  }
+
+  .admin-nav-item {
+    width: 100% !important;
+    height: 42px;
+    padding: 0 4px !important;
+    justify-content: center !important;
+    margin: 4px 0;
+  }
+
+  .admin-nav-item .nav-left {
+    justify-content: center !important;
+    gap: 0 !important;
+  }
+
+  .admin-nav-item .nav-icon {
+    font-size: 20px;
+    width: 24px;
+    margin: 0 auto;
+  }
+
+  .admin-nav-item .nav-left span:last-child {
+    display: none !important;
+  }
+
+  .admin-nav-item .nav-badge {
+    display: none !important; /* Ẩn badge số đếm trên sidebar siêu nhỏ */
+  }
+
+  /* 3. Vùng nội dung chính Admin */
+  .admin-content {
+    padding: 12px 10px;
+  }
+
+  /* Cho phép các Tab cuộn dọc toàn trang mượt mà trên Mobile */
+  .admin-tab-content {
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+    scroll-behavior: smooth;
+  }
+
+  .admin-section-header {
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+
+  .admin-page-title {
+    font-size: 1.15rem;
+  }
+
+  .admin-header-actions,
+  .admin-section-header > button.btn-sport {
+    width: 100%;
+  }
+
+  .admin-header-actions .btn-sport,
+  .admin-section-header > button.btn-sport {
+    width: 100%;
+    justify-content: center;
+    padding: 9px 14px;
+    font-size: 0.88rem;
+  }
+
+  /* 4. Thanh tìm kiếm và bộ lọc của các Tab */
+  .admin-filter-bar {
+    padding: 10px 12px;
+    gap: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .admin-filter-bar .filter-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #475569;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .filter-input {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 0.86rem;
+  }
+
+  .filter-input.filter-date {
+    width: auto !important;
+    flex: 1 1 calc(50% - 40px);
+    min-width: 110px;
+    font-size: 0.82rem;
+    padding: 6px 8px;
+  }
+
+  .filter-select {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 110px;
+    font-size: 0.82rem;
+    padding: 8px 8px;
+  }
+
+  /* 5. Thẻ bảng dữ liệu (Table Card) */
+  .admin-table-card {
+    border-radius: 10px;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 12px;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    max-height: calc(100vh - 210px); /* Giữ chiều cao khung bảng để thead luôn đóng băng cố định */
+    min-height: 260px;
+    flex: initial !important;
+    scroll-margin-top: 8px;
+  }
+
+  /* Đóng băng dòng tiêu đề cột của bảng (FREEZE / STICKY THEAD) */
+  .admin-table th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+    background: #f8fafc !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  .admin-table {
+    font-size: 0.82rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+
+  .admin-table th:first-child,
+  .admin-table td:first-child {
+    width: 46px;
+  }
+
+  .admin-table td img {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+
+  .btn-action,
+  .btn-edit,
+  .btn-delete,
+  .btn-lock,
+  .btn-action-view {
+    padding: 5px 8px;
+    font-size: 0.74rem;
+    border-radius: 5px;
+  }
+
+  /* 6. Tab Tồn kho (Inventory) */
+  .inventory-kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .inventory-controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .inventory-subtabs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .subtab-btn {
+    width: 100%;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+
+  .inventory-filter-wrap {
+    width: 100%;
+  }
+
+  .inventory-filter-wrap select {
+    width: 100%;
+  }
+
+  .inventory-section {
+    flex: initial !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .inventory-section .admin-table-card {
+    max-height: calc(100vh - 230px);
+    min-height: 260px;
+    flex: initial !important;
+  }
+
+  /* 7. Tab Giá bán (Pricing) */
+  .batch-pricing-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+
+  .batch-pricing-controls {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* Màn hình Điện thoại siêu nhỏ (<= 480px) */
+@media (max-width: 480px) {
+  .admin-content {
+    padding: 10px 6px;
+  }
+
+  .admin-page-title {
+    font-size: 1.05rem;
+  }
+
+  .admin-filter-bar {
+    padding: 8px 10px;
+  }
+
+  .filter-select {
+    flex: 1 1 100%; /* Dropdown chiếm trọn 1 dòng */
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 6px 8px;
+    font-size: 0.78rem;
+  }
 }
 
