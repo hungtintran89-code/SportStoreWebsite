@@ -168,7 +168,8 @@
   box-sizing: border-box;
 }
 
-.dashboard-card {
+.dashboard-card,
+.admin-table-card.dashboard-card {
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
@@ -520,17 +521,28 @@
 
 @media (max-width: 1024px) {
   .dashboard-two-col {
-    grid-template-columns: 1fr;
-    gap: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     flex: initial;
+    min-height: auto;
+  }
+
+  .dashboard-card {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
 
   .chart-wrapper {
-    min-height: 280px;
+    height: 270px;
+    min-height: 270px;
+    flex: initial;
   }
 
   #dashboard-recent-orders-list {
-    max-height: 360px;
+    max-height: 380px;
+    min-height: 180px;
   }
 }
 
@@ -545,27 +557,41 @@
   }
 
   .dashboard-two-col {
-    gap: 10px;
+    gap: 12px;
+  }
+
+  .dashboard-card {
+    padding: 14px 14px;
+  }
+
+  .chart-wrapper {
+    height: 250px;
+    min-height: 250px;
   }
 
   .chart-col {
-    width: 50px;
+    width: 48px;
   }
 
   .chart-bar-track {
-    width: 32px;
+    width: 28px;
   }
 
   .chart-col-label {
     font-size: 0.72rem;
+    height: 32px;
   }
 
   .chart-val-top {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
   }
 }
 
 @media (max-width: 480px) {
+  .admin-content {
+    padding: 12px 8px;
+  }
+
   .admin-kpi-card {
     padding: 10px 14px;
   }
@@ -575,20 +601,48 @@
   }
 
   .dashboard-card {
-    padding: 14px 12px;
+    padding: 12px 10px;
+  }
+
+  .dashboard-card-header {
+    margin-bottom: 10px;
+  }
+
+  .dashboard-card-title {
+    font-size: 0.88rem;
+  }
+
+  .chart-wrapper {
+    height: 230px;
+    min-height: 230px;
+  }
+
+  .chart-grid-lines {
+    top: 16px;
+    bottom: 28px;
   }
 
   .chart-col {
-    width: 44px;
+    width: 42px;
   }
 
   .chart-bar-track {
-    width: 26px;
+    width: 22px;
+  }
+
+  .chart-col-label {
+    font-size: 0.68rem;
+    height: 28px;
+    padding-top: 2px;
+  }
+
+  .chart-val-top {
+    font-size: 0.7rem;
   }
 
   .chart-grid-line span {
     font-size: 9px;
-    padding: 0 2px;
+    padding: 0 1px;
   }
 
   .recent-order-item {
