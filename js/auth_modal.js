@@ -364,9 +364,6 @@ function dangXuat() {
   }
 }
 
-// ==============================================================================
-// 8. HÀM KHỞI TẠO KHUNG HTML CỦA MODAL (Nạp tự động 1 lần, có sẵn onclick)
-// ==============================================================================
 function khoiTaoKhungModalNeuChuaCo() {
   if (document.getElementById("dev5-modal-auth-root")) return;
 
