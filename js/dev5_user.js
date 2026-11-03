@@ -529,6 +529,7 @@ function chuyenTab(tenTab) {
   if (khungDuocChon) {
     khungDuocChon.classList.add("is-active");
   }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function hienThiThongTinUser() {
@@ -1796,14 +1797,17 @@ function locTonKhoAdmin() {
 
 
 function renderUserProfile() {
-
-  let tab =
-
   hienThiThongTinUser();
   hienThiDonHang();
   hienThiDiaChi();
   hienThiYeuThich();
   hienThiFaq();
+  chuyenTab("overview");
+  let params = new URLSearchParams(window.location.search) ;
+  let tab = params.get("tab") ;
+  if( tab ){
+    chuyenTab("orders");
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function () {

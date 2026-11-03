@@ -139,7 +139,7 @@ function capNhatHeaderAuth() {
 
       if (linkTrangCaNhan) {
         linkTrangCaNhan.textContent = "Tài Khoản Của Tôi";
-        linkTrangCaNhan.href = layDuongDanTrang("dev5_user.html?tab=overview");
+        linkTrangCaNhan.href = layDuongDanTrang("dev5_user.html");
       }
       if (linkDonMua) {
         linkDonMua.classList.remove("dev5-hidden");

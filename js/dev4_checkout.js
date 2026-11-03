@@ -380,7 +380,7 @@ function datHang(e) {
       size : danhSachGioHang[i].size ,
       price : danhSachGioHang[i].price ,
       total : danhSachGioHang[i].total ,
-      image : danhSachGioHang[i].image
+      image : danhSachGioHang[i].image ,
     })
   }
 
@@ -391,10 +391,11 @@ function datHang(e) {
     customer: nguoiDung ,
     createdAt: new Date().toISOString(),
     paymentMethod: phuongThucThanhToan ,
-    status: "pending",
+    status: "Mới đặt",
     total: tongTien,
     note : ghiChu ,
     items: orderItemList,
+    address : diaChi + ", " + tinhThanh
   };
 
   // Lưu đơn vào mảng đơn hàng trong localStorage
