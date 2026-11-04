@@ -75,7 +75,12 @@
           🏪 Về Cửa Hàng
         </a>
         <button type="button" class="btn-sport btn-sm btn-admin-logout" onclick="dangXuatAdmin()">
-          🚪 Đăng Xuất
+          <svg class="admin-logout-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path class="icon-door" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline class="icon-arrow" points="16 17 21 12 16 7"></polyline>
+            <line class="icon-arrow" x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Đăng Xuất</span>
         </button>
       </div>
     </div>
@@ -319,8 +324,8 @@
               <th>EMAIL</th>
               <th>HẠNG HỘI VIÊN</th>
               <th>TRẠNG THÁI</th>
-              <th>CHI TIẾT</th>
-              <th>THAO TÁC</th>
+              <th class="table-align-center col-cust-detail">CHI TIẾT</th>
+              <th class="table-align-center col-cust-actions">THAO TÁC</th>
             </tr>
             </thead>
             <tbody id="customer-tbody"></tbody>
@@ -562,6 +567,16 @@
             <div class="admin-filter-item">
               <span>Ngày:</span>
               <input type="date" id="snapshotDateInput" value="2026-10-31">
+            </div>
+            <!-- Thêm bộ lọc Trạng thái vào đây -->
+            <div class="admin-filter-item">
+              <span>Trạng thái:</span>
+              <select id="snapshotStatusSelect" onchange="hienThiBangTonKhoAdmin()">
+                <option value="">Tất cả trạng thái</option>
+                <option value="normal">Bình thường (Còn hàng)</option>
+                <option value="warning">Cảnh báo (Tồn ≤ 5)</option>
+                <option value="danger">Hết hàng (Tồn = 0)</option>
+              </select>
             </div>
             <div class="admin-filter-item">
               <span>Loại SP:</span>

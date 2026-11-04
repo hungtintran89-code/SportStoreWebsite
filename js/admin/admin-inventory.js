@@ -94,6 +94,7 @@ function hienThiBangTonKhoAdmin() {
 
   var loaiLoc = (document.getElementById("snapshotCategorySelect")?.value || "").toLowerCase();
   var tuKhoa = (document.getElementById("snapshotSearchInput")?.value || "").toLowerCase().trim();
+  var trangThaiLoc = (document.getElementById("snapshotStatusSelect")?.value || "");
 
   var tongTon = 0, soConHang = 0, soCanhBao = 0, soHetHang = 0;
   var html = "";
@@ -112,6 +113,13 @@ function hienThiBangTonKhoAdmin() {
 
     if (loaiLoc && loaiSP.toLowerCase() !== loaiLoc) continue;
     if (tuKhoa && !maSP.toLowerCase().includes(tuKhoa) && !p.name.toLowerCase().includes(tuKhoa)) continue;
+
+    // Lọc theo trạng thái tồn kho
+    if (trangThaiLoc) {
+      if (trangThaiLoc === "danger" && ton !== 0) continue;              // Hết hàng (tồn = 0)
+      if (trangThaiLoc === "warning" && (ton === 0 || ton > 5)) continue; // Cảnh báo (1 <= tồn <= 5)
+      if (trangThaiLoc === "normal" && ton <= 5) continue;               // Bình thường (tồn > 5)
+    }
 
     var badgeTon = ton === 0 ? `<strong class="cell-danger">0</strong>` : (ton <= 5 ? `<strong class="cell-warning">${ton}</strong>` : `<strong>${ton}</strong>`);
     var statusBadge = ton === 0 ? `<span class="badge-status badge-danger">Hết hàng</span>` : (ton <= 5 ? `<span class="badge-status badge-warning">Cảnh báo</span>` : `<span class="badge-status badge-success">Bình thường</span>`);

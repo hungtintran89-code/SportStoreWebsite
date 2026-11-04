@@ -30,18 +30,33 @@ function hienThiBangKhachHangAdmin() {
         <td>${email}</td>
         <td><span class="sport-badge badge-blue">${hang}</span></td>
         <td><span class="${daKhoa ? 'cust-status-locked' : 'cust-status-active'}">${daKhoa ? "Bị khóa" : "Hoạt động"}</span></td>
-        <td>
-          <button type="button" class="btn-action btn-cust-detail" onclick="xemChiTietKhachHang('${maKhach}')">
-            Chi tiết
+        <td class="cust-detail-cell">
+          <button type="button" class="btn-cust-detail" onclick="xemChiTietKhachHang('${maKhach}')" title="Xem chi tiết khách hàng">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span>Chi tiết</span>
           </button>
         </td>
         <td class="cust-actions-cell">
-          <button type="button" class="btn-action btn-reset cust-btn-reset" onclick="resetMatKhauKhach('${maKhach}')">
-            Reset MK
-          </button>
-          <button type="button" onclick="khoaMoTaiKhoanKhach('${maKhach}')" class="${daKhoa ? 'cust-btn-unlock' : 'cust-btn-lock'}">
-            ${daKhoa ? "Mở Khóa" : "Khóa TK"}
-          </button>
+          <div class="cust-actions-wrap">
+            <button type="button" class="cust-btn-reset" onclick="resetMatKhauKhach('${maKhach}')" title="Đặt lại mật khẩu (123456)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              <span>Reset MK</span>
+            </button>
+            <button type="button" onclick="khoaMoTaiKhoanKhach('${maKhach}')" class="${daKhoa ? 'cust-btn-unlock' : 'cust-btn-lock'}" title="${daKhoa ? 'Mở khóa tài khoản' : 'Khóa tài khoản'}">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                ${daKhoa 
+                  ? '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path>'
+                  : '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>'
+                }
+              </svg>
+              <span>${daKhoa ? "Mở Khóa" : "Khóa TK"}</span>
+            </button>
+          </div>
         </td>
       </tr>
     `;
