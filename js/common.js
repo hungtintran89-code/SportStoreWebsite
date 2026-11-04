@@ -401,15 +401,48 @@ document.addEventListener("keydown", function (e) {
 
 
 /**
- * 12. HỆ THỐNG QUẢN LÝ SẢN PHẨM YÊU THÍCH (WISHLIST) DÙNG CHUNG
+ * 12. HỆ THỐNG QUẢN LÝ SẢN PHẨM YÊU THÍCH (WISHLIST) TÁCH BIỆT THEO TỪNG TÀI KHOẢN
  */
+function layKhoaWishlist() {
+  var user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("sport_user"));
+  } catch (e) {
+    user = null;
+  }
+  // Lấy ID hoặc Email để định danh giỏ yêu thích riêng biệt
+  var idNguoiDung = user ? (user.id || user.customerId || user.email) : null;
+  return idNguoiDung ? ("sport_wishlist_" + idNguoiDung) : "sport_wishlist_guest";
+}
+
 function layDanhSachWishlist() {
   try {
-    var chuoi = localStorage.getItem("sport_wishlist");
+    var khoa = layKhoaWishlist();
+    var chuoi = localStorage.getItem(khoa);
+
+    // Nếu tài khoản hiện tại chưa có dữ liệu riêng nhưng có dữ liệu cũ ở "sport_wishlist"
+    // -> Di chuyển dữ liệu cũ sang cho tài khoản hiện tại (tintin) và xóa khóa cũ đi
+    if (!chuoi && khoa !== "sport_wishlist_guest") {
+      var chuoiCu = localStorage.getItem("sport_wishlist");
+      if (chuoiCu) {
+        localStorage.setItem(khoa, chuoiCu);
+        localStorage.removeItem("sport_wishlist");
+        chuoi = chuoiCu;
+      }
+    }
+
     return chuoi ? JSON.parse(chuoi) : [];
   } catch (e) {
     return [];
   }
+}
+
+function luuDanhSachWishlist(danhSach) {
+  try {
+    var khoa = layKhoaWishlist();
+    localStorage.setItem(khoa, JSON.stringify(danhSach));
+    capNhatSoLuongWishlistBadge();
+  } catch (e) { }
 }
 
 function luuDanhSachWishlist(danhSach) {
