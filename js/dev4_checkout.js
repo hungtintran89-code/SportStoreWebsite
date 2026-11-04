@@ -387,15 +387,24 @@ function datHang(e) {
   let donHangMoi = {
     orderId: maDonMoi,
     id: maDonMoi,
-    customerId: nguoiDung.id ,
-    customer: nguoiDung ,
+    customerId: nguoiDung.id,
+    customer: {
+      id: nguoiDung.id,
+      name: hoTen,
+      fullName: hoTen,
+      phone: sdt,
+      email: email,
+      address: diaChi,
+      province: tinhThanh
+    },
     createdAt: new Date().toISOString(),
-    paymentMethod: phuongThucThanhToan ,
+    paymentMethod: phuongThucThanhToan,
     status: "Mới đặt",
+    subtotal: tongTien,
     total: tongTien,
-    note : ghiChu ,
+    note: ghiChu,
     items: orderItemList,
-    address : diaChi + ", " + tinhThanh
+    address: diaChi + ", " + tinhThanh
   };
 
   // Lưu đơn vào mảng đơn hàng trong localStorage
@@ -453,26 +462,17 @@ function datHang(e) {
 
   document.getElementById("d4OrderReview").innerHTML = `
     <h3>📋 Chi tiết đơn đặt hàng vừa mua</h3>
-    <div class="d4-review-info">
-      <strong>Người nhận:</strong> ${donHangMoi.customer.fullName} • <strong>SĐT:</strong> ${donHangMoi.customer.phone}<br>
-      <strong>Địa chỉ:</strong> ${donHangMoi.customer.address}, ${donHangMoi.customer.province}<br>
+        <div class="d4-review-info">
+      <strong>Người nhận:</strong> ${donHangMoi.customer.name || hoTen} • <strong>SĐT:</strong> ${donHangMoi.customer.phone || sdt}<br>
+      <strong>Địa chỉ:</strong> ${donHangMoi.address}<br>
       <strong>Hình thức thanh toán:</strong> ${donHangMoi.paymentMethod}
     </div>
     <div class="d4-review-items">${htmlTomTat}</div>
     <div class="d4-review-totals">
       <div class="d4-review-row">
-        <span>Tạm tính:</span>
-        <strong>${formatMoney(donHangMoi.subtotal)}</strong>
+        <span>Thành tiền:</span>
+        <strong>${formatMoney(donHangMoi.subtotal || donHangMoi.total)}</strong>
       </div>
-      <div class="d4-review-row">
-        <span>Phí vận chuyển:</span>
-        <strong>Miễn phí</strong>
-      </div>
-      <div class="d4-review-row grand">
-        <span>Tổng thanh toán:</span>
-        <strong>${formatMoney(donHangMoi.total)}</strong>
-      </div>
-    </div>
   `;
 }
 

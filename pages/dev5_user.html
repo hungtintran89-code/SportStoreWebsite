@@ -539,15 +539,15 @@
         <div class="admin-table-card">
           <table class="admin-table">
             <thead>
-              <tr>
-                <th>MÃ KH</th>
-                <th>HỌ TÊN KHÁCH HÀNG</th>
-                <th>EMAIL</th>
-                <th>SỐ ĐIỆN THOẠI</th>
-                <th>HẠNG HỘI VIÊN</th>
-                <th>TRẠNG THÁI</th>
-                <th>THAO TÁC</th>
-              </tr>
+            <tr>
+              <th>MÃ KH</th>
+              <th>HỌ TÊN KHÁCH HÀNG</th>
+              <th>EMAIL</th>
+              <th>HẠNG HỘI VIÊN</th>
+              <th>TRẠNG THÁI</th>
+              <th>CHI TIẾT</th>
+              <th>THAO TÁC</th>
+            </tr>
             </thead>
             <tbody id="customer-tbody"></tbody>
           </table>
@@ -1043,10 +1043,6 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Nhà cung cấp / Đối tác phân phối:</label>
-          <input type="text" id="import-supplier" placeholder="Nike Việt Nam Distribution..." />
-        </div>
-        <div class="form-group">
           <label>Chọn sản phẩm nhập vào kho:</label>
           <select id="import-product-select" onchange="onImportProductChange()"></select>
         </div>
@@ -1061,13 +1057,6 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Trạng thái phiếu nhập:</label>
-          <select id="import-status">
-            <option value="Tạm lưu">Tạm lưu (Cho phép sửa sau)</option>
-            <option value="Hoàn thành">Hoàn thành (Tự động cộng vào kho ngay)</option>
-          </select>
-        </div>
-        <div class="form-group">
           <label>Ghi chú nhập hàng:</label>
           <textarea id="import-note" rows="2" placeholder="Lô hàng thi đấu quý 4..."></textarea>
         </div>
@@ -1079,7 +1068,6 @@
     </div>
   </div>
 
-  <!-- MODAL 4: CHI TIẾT ĐƠN HÀNG -->
   <!-- MODAL 4: CHI TIẾT ĐƠN HÀNG -->
   <div id="modal-order-detail" class="modal-overlay">
     <div class="modal-box" style="max-width: 600px;">
@@ -1110,10 +1098,6 @@
     </div>
   </div>
 
-  <!-- POPUP XEM CHI TIẾT SẢN PHẨM PHIẾU NHẬP -->
-  <div id="modal-import-detail" class="modal-overlay">
-    ... (giữ nguyên modal nhập hàng của bạn) ...
-  </div>
   <!-- POPUP XEM CHI TIẾT SẢN PHẨM PHIẾU NHẬP -->
   <div id="modal-import-detail" class="modal-overlay">
     <div class="modal-box" style="max-width: 480px;">
@@ -1164,16 +1148,31 @@
           </div>
           <div class="form-group">
             <label>% Lợi nhuận định mức:</label>
-            <input type="number" id="pricing-profit-percent" min="0" max="500" value="30" oninput="tinhGiaBanTuDong()" />
+            <input type="number" id="pricing-profit-percent" readonly style="background:#f1f5f9; cursor:not-allowed;" />
           </div>
         </div>
         <div class="form-group">
           <label>Giá bán niêm yết (VNĐ):</label>
-          <input type="text" id="pricing-sale-price" readonly style="background:#f1f5f9; cursor:not-allowed; font-size:16px; font-weight:800; color:#0284c7;" />        </div>
-      </div>
+          <input type="number" id="pricing-sale-price" min="0" step="1000" placeholder="Nhập giá bán..." oninput="tinhPhanTramTuDong()" style="font-size:16px; font-weight:800; color:#0284c7;" />
+        </div>
       <div class="modal-footer">
         <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-pricing')">Hủy Bỏ</button>
         <button type="button" class="btn-sport btn-primary" onclick="luuGiaBanMoi()">Lưu Giá Bán</button>
+      </div>
+    </div>
+  </div>
+  <!-- POPUP XEM CHI TIẾT KHÁCH HÀNG -->
+  <div id="modal-customer-detail" class="modal-overlay">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Chi Tiết Khách Hàng</h3>
+        <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-customer-detail')">&times;</button>
+      </div>
+      <div class="modal-body" id="customer-detail-body">
+        <!-- Dữ liệu chi tiết sẽ được điền bằng JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-sport btn-primary" onclick="dongModalAdmin('modal-customer-detail')">Đóng</button>
       </div>
     </div>
   </div>

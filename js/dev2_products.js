@@ -23,7 +23,18 @@ let allCategories = loadAppCategories();
 
 function isItemActive(item) {
     if (!item) return false;
-    if ( item.status === "inactive") return false;
+    if (item.status === "hidden" || item.status === "inactive") return false;
+
+    if (item.categoryId || item.category) {
+        for (let i = 0; i < allCategories.length; i++) {
+            let cat = allCategories[i];
+            let catId = cat.id || cat.code;
+            if (catId === item.categoryId || cat.name === item.category) {
+                if (cat.status === "hidden" || cat.status === "inactive") return false;
+                break;
+            }
+        }
+    }
     return true;
 }
 
@@ -142,7 +153,7 @@ function renderProducts() {
         let originalPrice = getProductOriginalPrice(product);
         let hasDiscount = originalPrice > displayPrice;
         let originalPriceHtml = hasDiscount
-            ? `<span class="original-price" style="text-decoration: line-through; color: #94a3b8; font-size: 13px; margin-left: 6px;">${formatMoney(originalPrice)} ₫</span>`
+            ? `<span class="original-price" style="text-decoration: line-through; color: #94a3b8; font-size: 13px; margin-left: 6px;">${formatMoney(originalPrice)}</span>`
             : "";
 
         let productCard = `
@@ -522,6 +533,10 @@ function moChiTietSanPham( productId ){
             colorsBox.querySelectorAll(".qv-choice-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
             mauDuocChon = m;
+            var modalImg = document.getElementById("qv-main-img");
+            if (modalImg && sanPhamDangXem.gallery && sanPhamDangXem.gallery[index]) {
+                modalImg.src = sanPhamDangXem.gallery[index];
+            }
         };
         colorsBox.appendChild(btn);
     });
