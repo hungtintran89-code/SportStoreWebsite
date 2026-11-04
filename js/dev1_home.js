@@ -263,10 +263,22 @@ function chonTabXuHuong(loaiTab) {
   }
 
   // 3. Dùng vòng lặp for lọc theo tab
+  var dsLoai = readJson("sport_categories", []);
   var dsHienThi = [];
   for (var i = 0; i < tatCa.length; i++) {
     var p = tatCa[i];
     if (!p || p.status === "hidden" || p.status === "inactive") continue;
+
+    // Bỏ qua nếu danh mục của sản phẩm này đang bị ẩn
+    var loaiBiAn = false;
+    for (var k = 0; k < dsLoai.length; k++) {
+      if ((dsLoai[k].id === p.categoryId || dsLoai[k].name === p.category) && dsLoai[k].status === "hidden") {
+        loaiBiAn = true;
+        break;
+      }
+    }
+    if (loaiBiAn) continue;
+
     if (loaiTab === "bestseller" && p.isHot === true) {
       dsHienThi.push(p);
     } else if (loaiTab === "new" && p.isNew === true) {

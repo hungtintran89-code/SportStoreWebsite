@@ -23,7 +23,18 @@ let allCategories = loadAppCategories();
 
 function isItemActive(item) {
     if (!item) return false;
-    if ( item.status === "hidden") return false;
+    if (item.status === "hidden" || item.status === "inactive") return false;
+
+    if (item.categoryId || item.category) {
+        for (let i = 0; i < allCategories.length; i++) {
+            let cat = allCategories[i];
+            let catId = cat.id || cat.code;
+            if (catId === item.categoryId || cat.name === item.category) {
+                if (cat.status === "hidden" || cat.status === "inactive") return false;
+                break;
+            }
+        }
+    }
     return true;
 }
 

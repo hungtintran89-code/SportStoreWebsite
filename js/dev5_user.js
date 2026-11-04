@@ -960,16 +960,26 @@ function hienThiBangDanhMucAdmin() {
       if (dsSp[j].categoryId === ma || dsSp[j].category === ten) soSp++;
     }
 
+    var laDangAn = (c.status === "hidden" || c.status === "inactive");
+    var badgeTrangThai = laDangAn
+        ? `<span class="nav-badge badge-gray" style="background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1;">Đang ẩn</span>`
+        : `<span class="nav-badge badge-green">Đang áp dụng</span>`;
+
+    var nutDoiTrangThai = laDangAn
+        ? `<button type="button" class="btn-action" style="background:#dcfce7; color:#15803d; border:1px solid #bbf7d0;" onclick="doiTrangThaiDanhMucAdmin('${ma}')">Hiện</button>`
+        : `<button type="button" class="btn-action btn-lock" onclick="doiTrangThaiDanhMucAdmin('${ma}')">Ẩn</button>`;
+
     html += `
-      <tr>
+      <tr style="${laDangAn ? 'opacity: 0.65; background-color: #f8fafc;' : ''}">
         <td style="font-size:20px;">${c.icon || "🏷️"}</td>
         <td><strong>${ma}</strong></td>
         <td><strong>${ten}</strong></td>
         <td><span class="nav-badge badge-blue">${soSp} sản phẩm</span></td>
         <td><strong>${c.profitPercent || 25}%</strong></td>
-        <td><span class="nav-badge badge-green">Đang áp dụng</span></td>
+        <td>${badgeTrangThai}</td>
         <td>
           <button type="button" class="btn-action btn-edit" onclick="moModalSuaDanhMuc('${ma}')">Sửa</button>
+          ${nutDoiTrangThai}
           <button type="button" class="btn-action btn-delete" onclick="xoaDanhMucAdmin('${ma}')">Xóa</button>
         </td>
       </tr>
@@ -979,6 +989,32 @@ function hienThiBangDanhMucAdmin() {
   tbody.innerHTML = html;
 }
 
+function doiTrangThaiDanhMucAdmin(maLoai) {
+  var dsLoai = layDuLieuAdmin("sport_categories");
+  var tenLoai = "";
+  var trangThaiMoi = "active";
+
+  for (var i = 0; i < dsLoai.length; i++) {
+    if (dsLoai[i].id === maLoai || dsLoai[i].code === maLoai) {
+      tenLoai = dsLoai[i].name || maLoai;
+      dsLoai[i].status = (dsLoai[i].status === "hidden") ? "active" : "hidden";
+      trangThaiMoi = dsLoai[i].status;
+      break;
+    }
+  }
+
+  luuDuLieuAdmin("sport_categories", dsLoai);
+  hienThiBangDanhMucAdmin();
+  capNhatSoDemMenuAdmin();
+
+  if (typeof showToast === "function") {
+    if (trangThaiMoi === "active") {
+      showToast('Đã mở bán lại danh mục "' + tenLoai + '" và các sản phẩm liên kết!', "success");
+    } else {
+      showToast('Đã ẩn danh mục "' + tenLoai + '" và toàn bộ sản phẩm liên kết!', "warning");
+    }
+  }
+}
 function moModalThemDanhMuc() {
   maLoaiDangSua = "";
   var dsLoai = layDuLieuAdmin("sport_categories");
