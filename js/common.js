@@ -445,12 +445,6 @@ function luuDanhSachWishlist(danhSach) {
   } catch (e) { }
 }
 
-function luuDanhSachWishlist(danhSach) {
-  try {
-    localStorage.setItem("sport_wishlist", JSON.stringify(danhSach));
-    capNhatSoLuongWishlistBadge();
-  } catch (e) { }
-}
 
 function isYeuThich(idSanPham) {
   var ds = layDanhSachWishlist();
