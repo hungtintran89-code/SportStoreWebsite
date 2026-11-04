@@ -38,7 +38,7 @@ function khoiTaoBanner() {
           <h1 class="dev1-slide-title">${b.title}</h1>
           <p class="dev1-slide-sub">${b.subtitle}</p>
           <div class="dev1-slide-tag-row">
-            <a href="pages/dev2_products.html" class="btn-sport btn-primary">${b.btnText || "Khám Phá"}</a>
+            <a href="products.html" class="btn-sport btn-primary">${b.btnText || "Khám Phá"}</a>
             <span class="sport-badge badge-orange dev1-slide-tag-pill">${b.tag || "HOT"}</span>
           </div>
         </div>
@@ -190,9 +190,14 @@ function hienThiSanPhamFlashSale() {
     var daBan = Number(item.sold || 50);
     var tonKho = Number(item.stock || 0);
     var phanTramDaBan = Math.min(
+
       95,
       Math.round((daBan / (daBan + tonKho)) * 100),
     );
+
+    var daThichFlash = typeof isYeuThich === "function" ? isYeuThich(item.id) : false;
+    var heartIconFlash = daThichFlash ? "❤️" : "🤍";
+    var activeClassFlash = daThichFlash ? " active" : "";
 
     var cardDiv = document.createElement("div");
     cardDiv.className = "dev1-flash-card";
@@ -200,6 +205,9 @@ function hienThiSanPhamFlashSale() {
       <div class="dev1-card-media">
         <img src="${item.image}" alt="${item.name}" loading="lazy">
         <span class="dev1-card-discount-badge">${phanTramGiam}</span>
+        <button type="button" class="btn-card-wishlist${activeClassFlash}" data-wishlist-btn="${item.id}" onclick="event.stopPropagation(); toggleYeuThich('${item.id}', this)" title="${daThichFlash ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}">
+          <span>${heartIconFlash}</span>
+        </button>
       </div>
       <div class="dev1-card-body">
         <div class="dev1-card-cat">${item.category}</div>
@@ -215,7 +223,7 @@ function hienThiSanPhamFlashSale() {
           <span>Đã bán: ${daBan}</span>
           <span>⭐ 5.0</span>
         </div>
-        <a href="pages/dev2_products.html?id=${item.id}" class="btn-sport btn-accent dev1-btn-flash-buy">Săn sale ngay</a>
+        <a href="products.html?id=${item.id}" class="btn-sport btn-accent dev1-btn-flash-buy">Săn sale ngay</a>
       </div>
     `;
     khungFlashSale.appendChild(cardDiv);
@@ -242,7 +250,7 @@ function hienThiDanhMucTieuBieu() {
     if (!c || c.status === "hidden" || c.status === "inactive") continue;
 
     html += `
-      <a href="pages/dev2_products.html?cat=${c.id || c.code}" class="dev1-cat-card">
+      <a href="products.html?cat=${c.id || c.code}" class="dev1-cat-card">
         <div class="dev1-cat-icon">${c.icon || "🏅"}</div>
         <div>
           <div class="dev1-cat-title">${c.name}</div>
@@ -321,7 +329,7 @@ function veLuoiSanPhamXuHuong(danhSach) {
 
   if (danhSach.length === 0) {
     khung.innerHTML =
-      '<p style="grid-column:1/-1; text-align:center; padding:30px; color:#64748b;">Chưa có sản phẩm nào.</p>';
+      '<p class="empty-gear-text">Chưa có sản phẩm nào.</p>';
     return;
   }
 
@@ -331,11 +339,18 @@ function veLuoiSanPhamXuHuong(danhSach) {
     var sp = danhSach[i];
     var giaHienThi = sp.salePrice || sp.price || 0;
 
+    var daThichGear = typeof isYeuThich === "function" ? isYeuThich(sp.id) : false;
+    var heartIconGear = daThichGear ? "❤️" : "🤍";
+    var activeClassGear = daThichGear ? " active" : "";
+
     html += `
       <div class="dev1-gear-card">
         <div class="dev1-card-media">
           <img src="${sp.image}" alt="${sp.name}">
           <span class="sport-badge badge-cyan dev1-card-badge">${sp.badge || "HOT"}</span>
+          <button type="button" class="btn-card-wishlist${activeClassGear}" data-wishlist-btn="${sp.id}" onclick="event.stopPropagation(); toggleYeuThich('${sp.id}', this)" title="${daThichGear ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}">
+            <span>${heartIconGear}</span>
+          </button>
         </div>
         <div class="dev1-card-body">
           <div class="dev1-card-cat">${sp.category || "Thể Thao"}</div>
@@ -345,7 +360,7 @@ function veLuoiSanPhamXuHuong(danhSach) {
             <span class="dev1-rating-star">⭐ ${sp.rating || 5.0}</span>
           </div>
           <div class="dev1-card-btn-row">
-            <a href="pages/dev2_products.html?id=${sp.id}" class="btn-sport btn-outline dev1-card-btn-detail" style="text-decoration:none;">Chi Tiết</a>
+            <a href="products.html?id=${sp.id}" class="btn-sport btn-outline dev1-card-btn-detail">Chi Tiết</a>
             <button type="button" class="btn-sport btn-primary dev1-card-btn-cart" onclick="themVaoGioNhanh(${sp.id})">+ Giỏ</button>
           </div>
         </div>

@@ -547,9 +547,9 @@ function moPopupChonDiaChi() {
   // Nếu người dùng chưa có địa chỉ nào trong sổ
   if (danhSachDiaChiPopup.length === 0) {
     khungChua.innerHTML = `
-      <div style="text-align: center; padding: 24px; color: #64748b;">
+      <div class="addr-popup-empty">
         <p>Bạn chưa lưu địa chỉ nhận hàng nào trong sổ địa chỉ.</p>
-        <a href="dev5_user.html#addresses" style="color: #0284c7; font-weight: 600; text-decoration: none;">
+        <a href="user.html#addresses" class="addr-popup-link">
           👉 Đến trang Quản lý tài khoản để thêm địa chỉ
         </a>
       </div>
@@ -564,15 +564,15 @@ function moPopupChonDiaChi() {
       if (dc.city) diaChiDayDu += ", " + dc.city;
 
       html += `
-        <div style="border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #f8fafc;">
-          <div style="line-height: 1.6;">
-            <div style="font-size: 12px; font-weight: 700; color: #0284c7; text-transform: uppercase;">Địa chỉ ${i + 1}</div>
+        <div class="addr-card-item">
+          <div class="addr-card-left">
+            <div class="addr-card-badge">Địa chỉ ${i + 1}</div>
             <div><strong>Người nhận:</strong> ${dc.recipient || "Chưa đặt tên"} • <strong>SĐT:</strong> ${dc.phone || "Chưa có SĐT"}</div>
-            <div style="color: #475569;"><strong>Địa chỉ:</strong> ${diaChiDayDu}</div>
+            <div class="addr-card-text"><strong>Địa chỉ:</strong> ${diaChiDayDu}</div>
           </div>
           <button type="button" 
                   onclick="chonDiaChiNay(${i})" 
-                  style="flex-shrink: 0; background: #0284c7; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">
+                  class="btn-use-address">
             ✓ Dùng địa chỉ này
           </button>
         </div>
@@ -583,12 +583,18 @@ function moPopupChonDiaChi() {
 
   // Hiển thị Popup lên màn hình
   var modal = document.getElementById("modal-chon-dia-chi");
-  if (modal) modal.style.display = "flex";
+  if (modal) {
+    modal.classList.add("show");
+    modal.style.display = "flex";
+  }
 }
 
 function dongPopupChonDiaChi() {
   var modal = document.getElementById("modal-chon-dia-chi");
-  if (modal) modal.style.display = "none";
+  if (modal) {
+    modal.classList.remove("show");
+    modal.style.display = "none";
+  }
 }
 
 function chonDiaChiNay(viTri) {

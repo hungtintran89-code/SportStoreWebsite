@@ -86,13 +86,13 @@ function renderCategories() {
         }
 
         categoryBox.innerHTML += `
-            <div style="margin-bottom: 6px;">
-                <label style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13.5px; padding: 3px 0;">
-                    <span style="display: inline-flex; align-items: center; gap: 8px;">
-                        <input type="checkbox" class="cat-checkbox" value="${catId}" onchange="applyAdvancedFilters()" style="margin: 0; cursor: pointer;">
+            <div class="filter-cat-row">
+                <label class="filter-cat-label">
+                    <span class="filter-cat-left">
+                        <input type="checkbox" class="cat-checkbox filter-cat-input" value="${catId}" onchange="applyAdvancedFilters()">
                         ${cat.name}
                     </span>
-                    <span style="color: #64748b; font-size: 12px; font-weight: 500;">(${count})</span>
+                    <span class="filter-cat-count">(${count})</span>
                 </label>
             </div>
         `;
@@ -108,9 +108,9 @@ function updateFilterStatusSummary() {
     let kw = advKw || headerKw;
 
     if (kw !== "") {
-        summaryEl.innerHTML = 'Tìm thấy <strong style="color: #0284c7;">' + filteredList.length + '</strong> sản phẩm cho từ khóa <em>"' + kw + '"</em>';
+        summaryEl.innerHTML = 'Tìm thấy <strong class="highlight-count">' + filteredList.length + '</strong> sản phẩm cho từ khóa <em>"' + kw + '"</em>';
     } else {
-        summaryEl.innerHTML = 'Hiển thị <strong style="color: #0284c7;">' + filteredList.length + '</strong> sản phẩm thể thao chính hãng';
+        summaryEl.innerHTML = 'Hiển thị <strong class="highlight-count">' + filteredList.length + '</strong> sản phẩm thể thao chính hãng';
     }
 }
 
@@ -123,10 +123,10 @@ function renderProducts() {
 
     if (filteredList.length === 0) {
         grid.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: #fff; border-radius: 12px; border: 1px solid #e2e8f0;">
-                <i class="fa-solid fa-box-open" style="font-size: 44px; color: #0284c7; margin-bottom: 14px;"></i>
-                <p style="margin: 0 0 16px; font-size: 16px; font-weight: 600; color: #334155;">Không tìm thấy sản phẩm nào phù hợp với bộ lọc hiện tại.</p>
-                <button class="btn-primary" style="width: auto; padding: 10px 24px; cursor: pointer;" onclick="resetAllFilters()">Xóa bộ lọc & Xem tất cả</button>
+            <div class="empty-products-box">
+                <i class="fa-solid fa-box-open empty-products-icon"></i>
+                <p class="empty-products-text">Không tìm thấy sản phẩm nào phù hợp với bộ lọc hiện tại.</p>
+                <button class="btn-primary empty-products-btn" onclick="resetAllFilters()">Xóa bộ lọc & Xem tất cả</button>
             </div>
         `;
         renderPagination();
@@ -153,29 +153,36 @@ function renderProducts() {
         let originalPrice = getProductOriginalPrice(product);
         let hasDiscount = originalPrice > displayPrice;
         let originalPriceHtml = hasDiscount
-            ? `<span class="original-price" style="text-decoration: line-through; color: #94a3b8; font-size: 13px; margin-left: 6px;">${formatMoney(originalPrice)}</span>`
+            ? `<span class="original-price product-original-price">${formatMoney(originalPrice)}</span>`
             : "";
+
+        let daYeuThich = (typeof isYeuThich === "function") ? isYeuThich(product.id) : false;
+        let heartIcon = daYeuThich ? '❤️' : '🤍';
+        let activeClass = daYeuThich ? ' active' : '';
 
         let productCard = `
             <div class="product-card">
                 ${hasDiscount ? '<span class="sale-badge">SALE</span>' : ''}
+                <button type="button" class="btn-card-wishlist${activeClass}" data-wishlist-btn="${product.id}" onclick="event.stopPropagation(); toggleYeuThich('${product.id}', this)" title="${daYeuThich ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}">
+                    <span>${heartIcon}</span>
+                </button>
                 
                 <!-- Bấm vào ảnh hoặc tên sản phẩm sẽ mở Popup Chi Tiết ngay trên trang -->
-                <a href="javascript:void(0)" onclick="moChiTietSanPham('${product.id}')" style="text-decoration: none; color: inherit;">
+                <a href="javascript:void(0)" onclick="moChiTietSanPham('${product.id}')" class="product-card-link">
                     <img src="${cardImage}" alt="${product.name}">
                     <h4>${product.name}</h4>
                 </a>
                 
                 <div class="product-price">${formattedPrice}${originalPriceHtml}</div>
                 
-                <div style="display: flex; gap: 8px; margin-top: auto;">
+                <div class="product-card-bottom-actions">
                     <!-- Nút Xem chi tiết: Bật Popup Chi Tiết -->
-                    <button class="btn-primary" style="flex: 1;" onclick="moChiTietSanPham('${product.id}')">
+                    <button class="btn-primary btn-card-view-detail" onclick="moChiTietSanPham('${product.id}')">
                         Xem chi tiết
                     </button>
                     
                     <!-- Nút Thêm nhanh 1 món vào giỏ hàng -->
-                    <button class="btn-primary" style="width: 42px; padding: 10px 0; background-color: #0f172a;" onclick="themNhanhVaoGio('${product.id}')" title="Thêm vào giỏ hàng">
+                    <button class="btn-primary btn-quick-cart" onclick="themNhanhVaoGio('${product.id}')" title="Thêm vào giỏ hàng">
                         <i class="fa-solid fa-cart-plus"></i>
                     </button>
                 </div>
@@ -609,9 +616,34 @@ function moChiTietSanPham( productId ){
         }
     }
 
+    // Lưu biến toàn cục và cập nhật nút yêu thích trên modal
+    window.sanPhamDangXem = sanPhamDangXem;
+    var qvBtn = document.getElementById("qv-btn-wishlist");
+    if (qvBtn) {
+        var daThichModal = (typeof isYeuThich === "function") ? isYeuThich(sanPhamDangXem.id) : false;
+        if (daThichModal) {
+            qvBtn.classList.add("active");
+            qvBtn.innerHTML = "❤️ Đã Thích";
+            qvBtn.style.color = "#ef4444";
+            qvBtn.style.background = "#ffe4e6";
+            qvBtn.style.borderColor = "#fda4af";
+        } else {
+            qvBtn.classList.remove("active");
+            qvBtn.innerHTML = "🤍 Yêu Thích";
+            qvBtn.style.color = "#475569";
+            qvBtn.style.background = "#ffffff";
+            qvBtn.style.borderColor = "#e2e8f0";
+        }
+    }
+
     // Đặt lại số lượng về 1 và hiện Modal
     document.getElementById("qv-quantity-input").value = 1;
     document.getElementById("modal-quick-view").style.display = "flex";
+}
+
+function toggleYeuThichTuModal() {
+    if (!sanPhamDangXem) return;
+    toggleYeuThich(sanPhamDangXem.id);
 }
 
 function dongChiTietSanPham() {
@@ -663,7 +695,7 @@ function themVaoGioTuModal( muangay ){
     dongChiTietSanPham();
 
     if( muangay ){
-        window.location.href = "dev4_checkout.html";
+        window.location.href = "user.html?tab=checkout";
     }
 }
 
