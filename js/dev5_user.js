@@ -834,9 +834,13 @@ function hienThiBangKhachHangAdmin() {
         <td><strong>#${maKhach}</strong></td>
         <td>${ten}</td>
         <td>${email}</td>
-        <td>${sdt}</td>
         <td><span class="sport-badge badge-blue">${hang}</span></td>
-        <td>${trangThai}</td>
+        <td><span style="font-weight:600; color:${daKhoa ? '#dc2626' : '#16a34a'};">${daKhoa ? "Bị khóa" : "Hoạt động"}</span></td>
+        <td>
+          <button type="button" class="btn-action" style="background:#e0f2fe; color:#0284c7; border:none; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xemChiTietKhachHang('${maKhach}')">
+            Chi tiết
+          </button>
+        </td>
         <td style="display: flex; gap: 6px;">
           <button type="button" class="btn-action btn-reset" onclick="resetMatKhauKhach('${maKhach}')" style="background:#f3e8ff; color:#7e22ce; border:none; padding:5px 8px; border-radius:6px; font-weight:600; cursor:pointer;">
             Reset MK
@@ -868,6 +872,48 @@ function khoaMoTaiKhoanKhach(maKhach) {
   }
   luuDuLieuAdmin("sport_customers", dsKhach);
   hienThiBangKhachHangAdmin();
+}
+
+function xemChiTietKhachHang(maKhach) {
+  var dsKhach = layDuLieuAdmin("sport_customers");
+  var khach = null;
+  for (var i = 0; i < dsKhach.length; i++) {
+    var idHienTai = dsKhach[i].customerId || dsKhach[i].id;
+    if (String(idHienTai) === String(maKhach)) {
+      khach = dsKhach[i];
+      break;
+    }
+  }
+  if (!khach) return;
+
+  var modalBody = document.getElementById("customer-detail-body");
+  if (modalBody) {
+    var avatar = khach.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=60";
+    var daKhoa = (khach.status === "locked" || khach.status === "inactive");
+    var tongTien = (Number(khach.spent) || 0).toLocaleString("vi-VN") + " đ";
+    var diem = Number(khach.points) || 0;
+
+    modalBody.innerHTML = `
+      <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+        <img src="${avatar}" style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0;">
+        <div>
+          <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #1e293b;">${khach.name || "Khách hàng"}</h4>
+          <span style="font-size: 12px; background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 4px; font-weight: 600;">#${maKhach}</span>
+          <span class="sport-badge badge-blue" style="margin-left: 6px;">${khach.tier || "Standard"}</span>
+        </div>
+      </div>
+      <table style="width: 100%; font-size: 13px;">
+        <tr style="border-bottom: 1px solid #f8fafc;"><td style="color:#64748b; padding: 7px 0; width: 120px;">Email:</td><td style="font-weight: 600;">${khach.email || "Chưa có"}</td></tr>
+        <tr style="border-bottom: 1px solid #f8fafc;"><td style="color:#64748b; padding: 7px 0;">Số điện thoại:</td><td style="font-weight: 600; color: #0284c7;">${khach.phone || "Chưa có"}</td></tr>
+        <tr style="border-bottom: 1px solid #f8fafc;"><td style="color:#64748b; padding: 7px 0;">Địa chỉ:</td><td style="font-weight: 600;">${khach.address || "Chưa cập nhật"}</td></tr>
+        <tr style="border-bottom: 1px solid #f8fafc;"><td style="color:#64748b; padding: 7px 0;">Điểm tích lũy:</td><td style="font-weight: 700; color: #0284c7;">${diem} điểm</td></tr>
+        <tr style="border-bottom: 1px solid #f8fafc;"><td style="color:#64748b; padding: 7px 0;">Tổng chi tiêu:</td><td style="font-weight: 700; color: #16a34a;">${tongTien}</td></tr>
+        <tr><td style="color:#64748b; padding: 7px 0;">Trạng thái:</td><td style="font-weight: 700; color: ${daKhoa ? '#dc2626' : '#16a34a'};">${daKhoa ? "Bị khóa" : "Đang hoạt động"}</td></tr>
+      </table>
+    `;
+  }
+
+  moModalAdmin("modal-customer-detail");
 }
 
 function resetMatKhauKhach(maKhach) {
@@ -1484,7 +1530,6 @@ function luuPhieuNhapHang() {
   var donGiaNhap = Number(document.getElementById("import-unit-price") ? document.getElementById("import-unit-price").value : 0);
   var nhaCungCap = document.getElementById("import-supplier") ? document.getElementById("import-supplier").value.trim() : "Tổng Kho Thể Thao";
   var ngayNhap = document.getElementById("import-date") ? document.getElementById("import-date").value : "";
-  var trangThai = document.getElementById("import-status") ? document.getElementById("import-status").value : "Tạm lưu";
   var ghiChu = document.getElementById("import-note") ? document.getElementById("import-note").value.trim() : "";
 
   if (!maSpChon) {
@@ -1505,25 +1550,6 @@ function luuPhieuNhapHang() {
     }
   }
 
-  // 2. Nếu trạng thái là "Hoàn thành" -> Cộng hàng vào kho ngay
-  if (trangThai === "Hoàn thành") {
-    for (var j = 0; j < dsSp.length; j++) {
-      if (String(dsSp[j].id) === String(maSpChon)) {
-        var tonHienTai = Number(dsSp[j].stock !== undefined ? dsSp[j].stock : (dsSp[j].quantity || 0));
-        dsSp[j].stock = tonHienTai + soLuongNhap;
-        if (donGiaNhap > 0) {
-          dsSp[j].costPrice = donGiaNhap;
-          dsSp[j].cost = donGiaNhap;
-        }
-        if (dsSp[j].status === "hidden" && dsSp[j].stock > 0) {
-          dsSp[j].status = "active";
-        }
-        break;
-      }
-    }
-    luuDuLieuAdmin("sport_products", dsSp);
-  }
-
   // 3. Lưu vào danh sách phiếu nhập sport_imports
   var dsNhap = layDuLieuAdmin("sport_imports");
   var tongTien = soLuongNhap * donGiaNhap;
@@ -1540,7 +1566,7 @@ function luuPhieuNhapHang() {
         dsNhap[k].unitPrice = donGiaNhap;
         dsNhap[k].totalCost = tongTien;
         dsNhap[k].note = ghiChu;
-        dsNhap[k].status = trangThai;
+        dsNhap[k].status = "Tạm lưu";
         break;
       }
     }
@@ -1550,7 +1576,6 @@ function luuPhieuNhapHang() {
       alert("Đã cập nhật phiếu nhập #" + maPhieuDangSua);
     }
   } else {
-    // TẠO PHIẾU MỚI
     var maMoi = "PN-00" + (dsNhap.length + 1);
     dsNhap.push({
       id: maMoi,
@@ -1564,7 +1589,7 @@ function luuPhieuNhapHang() {
       totalCost: tongTien,
       note: ghiChu,
       creator: "Admin",
-      status: trangThai
+      status: "Tạm lưu"
     });
     if (typeof showToast === "function") {
       showToast("Đã tạo phiếu nhập kho: " + maMoi, "success");
