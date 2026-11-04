@@ -1,9 +1,3 @@
-function dangXuat() {
-  if (confirm('Bạn có chắc chắn muốn đăng xuất hoặc đổi tài khoản?')) {
-    localStorage.removeItem('sport_user');
-    window.location.reload();
-  }
-}
 
 function layUserHienTai() {
   var chuoiUser = localStorage.getItem("sport_user");

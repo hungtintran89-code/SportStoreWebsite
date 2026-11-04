@@ -31,6 +31,15 @@ function moModalSuaGiaBan(maSp) {
 }
 
 // 2. Tự động tính % lợi nhuận khi người dùng nhập/đổi giá bán niêm yết
+// 2b. Tự động tính giá bán khi người dùng nhập/đổi % lợi nhuận
+function tinhGiaBanTuDong() {
+  var phanTram = Number(document.getElementById("pricing-profit-percent").value) || 0;
+  if (giaVonHienTai > 0) {
+    var giaBan = Math.round(giaVonHienTai * (1 + phanTram / 100));
+    document.getElementById("pricing-sale-price").value = giaBan;
+  }
+}
+
 function tinhPhanTramTuDong() {
   var giaBan = Number(document.getElementById("pricing-sale-price").value) || 0;
   if (giaVonHienTai > 0 && giaBan > 0) {

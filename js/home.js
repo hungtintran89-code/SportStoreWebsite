@@ -160,15 +160,6 @@ function hienThiSanPhamFlashSale() {
       }
     }
     if (loaiBiAn) continue;
-    // Bỏ qua nếu danh mục của sản phẩm này đang bị ẩn
-    var loaiBiAn = false;
-    for (var k = 0; k < dsLoai.length; k++) {
-      if ((dsLoai[k].id === sp.categoryId || dsLoai[k].name === sp.category) && (dsLoai[k].status === "hidden" || dsLoai[k].status === "inactive")) {
-        loaiBiAn = true;
-        break;
-      }
-    }
-    if (loaiBiAn) continue;
 
     var giaBan = Number(sp.price || 0);
     var giaGoc = Number(sp.originalPrice || 0);

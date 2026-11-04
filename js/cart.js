@@ -1,7 +1,7 @@
 // --- 1. CÁC BIẾN DÙNG CHUNG ---
-let danhSachGioHang = [];
-let phuongThucThanhToan = "COD"; // Mặc định là thanh toán khi nhận hàng (COD)
-let diaChiMacDinh = null; // Chứa địa chỉ lấy từ tài khoản đã đăng nhập
+var danhSachGioHang = [];
+var phuongThucThanhToan = "COD"; // Mặc định là thanh toán khi nhận hàng (COD)
+var diaChiMacDinh = null; // Chứa địa chỉ lấy từ tài khoản đã đăng nhập
 
 // --- 2. HÀM TÍNH TỔNG TIỀN GIỎ HÀNG (DÙNG VÒNG LẶP FOR CƠ BẢN) ---
 function tinhTongTien() {
@@ -167,8 +167,9 @@ function napDiaChiTaiKhoan() {
   let nguoiDung = getCurrentUser();
   if (!nguoiDung) return;
 
-  let danhSachDiaChi = readJson(STORAGE_ADDR_KEY, []);
   let maNguoiDung = nguoiDung.customerId || nguoiDung.id;
+  let danhSachDiaChi = (typeof STORAGE_ADDR_KEY !== "undefined" ? readJson(STORAGE_ADDR_KEY, []) : []) || [];
+  if (danhSachDiaChi.length === 0) danhSachDiaChi = readJson("sport_addresses_" + maNguoiDung, []);
 
   let diaChiTimDuoc = null;
   if (Array.isArray(danhSachDiaChi)) {

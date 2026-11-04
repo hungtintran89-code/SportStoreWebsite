@@ -126,12 +126,12 @@ function xemChiTietKhachHang(maKhach) {
 }
 
 function resetMatKhauKhach(maKhach) {
-  if (!confirm("Bạn có chắc chắn muốn đặt lại mật khẩu về mặc định (Sport@123) cho tài khoản #" + maKhach + " không?")) return;
+  if (!confirm("Bạn có chắc chắn muốn đặt lại mật khẩu về mặc định (123456) cho tài khoản #" + maKhach + " không?")) return;
   var dsKhach = layDuLieuAdmin("sport_customers");
   for (var i = 0; i < dsKhach.length; i++) {
     if (dsKhach[i].customerId === maKhach || dsKhach[i].id === maKhach) {
-      dsKhach[i].password = "Sport@123";
-      showToast("Đã reset mật khẩu của " + dsKhach[i].name + " về mặc định: Sport@123", "success");
+      dsKhach[i].password = "123456";
+      showToast("Đã reset mật khẩu của " + dsKhach[i].name + " về mặc định: 123456", "success");
       break;
     }
   }

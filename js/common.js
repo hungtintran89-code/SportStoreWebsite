@@ -1,8 +1,8 @@
 
 // Tên khóa lưu trữ trong LocalStorage
-const STORAGE_CART_KEY = "sport_cart"; // Lưu mảng: [ { id: user.id, product: [...] } ]
-const STORAGE_USER_KEY = "sport_user"; // Khóa lưu thông tin đăng nhập
-const STORAGE_ADDR_KEY = "sport_address"; // Khóa lưu sổ địa chỉ nhận hàng
+var STORAGE_CART_KEY = "sport_cart"; // Lưu mảng: [ { id: user.id, product: [...] } ]
+var STORAGE_USER_KEY = "sport_user"; // Khóa lưu thông tin đăng nhập
+var STORAGE_ADDR_KEY = "sport_address"; // Khóa lưu sổ địa chỉ nhận hàng
 
 /**
  * 1. HÀM ĐỌC DỮ LIỆU JSON AN TOÀN TỪ LOCALSTORAGE

@@ -432,21 +432,3 @@ function onImportProductChange() {
   }
 }
 
-function themDongMatHangNhap() {
-  var bang = document.getElementById("import-items-tbody");
-  if (!bang) return;
-  var tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td><input type="text" placeholder="Tên trang bị nhập..." class="import-item-name-input"></td>
-    <td><input type="number" value="10" min="1" class="import-item-qty-input"></td>
-    <td><input type="number" value="500000" class="import-item-price-input"></td>
-    <td><button type="button" onclick="xoaDongMatHangNhap(this)" class="btn-import-item-del">✕</button></td>
-  `;
-  bang.appendChild(tr);
-}
-
-function xoaDongMatHangNhap(nut) {
-  var tr = nut.parentElement.parentElement;
-  if (tr) tr.remove();
-}
-
