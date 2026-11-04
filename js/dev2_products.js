@@ -23,7 +23,7 @@ let allCategories = loadAppCategories();
 
 function isItemActive(item) {
     if (!item) return false;
-    if ( item.status === "inactive") return false;
+    if ( item.status === "hidden") return false;
     return true;
 }
 

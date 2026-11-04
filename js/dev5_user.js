@@ -1283,23 +1283,24 @@ function hienThiBangNhapHang() {
     if (denNgay && ngayNhap > denNgay) continue;
     if (locTrangThai !== "ALL" && trangThai !== locTrangThai) continue;
 
-    // 1. Phân biệt màu sắc nhãn Trạng thái
-    // 1. Phân biệt nhãn cột TRẠNG THÁI (Chờ duyệt vs Hoàn thành)
-    var badgeTrangThai = "";
-    if (trangThai === "Tạm lưu") {
-      badgeTrangThai = '<span class="badge-status" style="background:#fef3c7; color:#d97706; padding:4px 10px; border-radius:12px; font-weight:700; font-size:12px;">Chờ duyệt</span>';
+    // 1. Phân biệt cột CHI TIẾT / SỬA:
+    // - Chưa hoàn thành -> Nút "Sửa"
+    // - Đã hoàn thành -> Nút "Chi tiết"
+    var nutChiTietHoacSua = "";
+    if (trangThai === "Hoàn thành") {
+      nutChiTietHoacSua = '<button type="button" class="btn-action" style="background:#e0f2fe; color:#0284c7; border:1px solid #bae6fd; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xemChiTietPhieuNhap(\'' + maPhieu + '\')">Chi tiết</button>';
     } else {
-      badgeTrangThai = '<span class="badge-status" style="background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:12px; font-weight:700; font-size:12px;">Hoàn thành</span>';
+      nutChiTietHoacSua = '<button type="button" class="btn-action" style="background:#fef3c7; color:#d97706; border:1px solid #fde68a; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="moModalSuaPhieuNhap(\'' + maPhieu + '\')">Sửa</button>';
     }
 
-    // 2. Phân biệt nút cột THAO TÁC: "Duyệt" (bấm được) vs "Đã duyệt" (bị khóa, không bấm được)
+    // 2. Phân biệt cột THAO TÁC:
+    // - Chưa hoàn thành -> Nút "Hoàn thành" (bấm được)
+    // - Đã hoàn thành -> Nút "Đã hoàn thành" (bị khóa, không bấm được)
     var nutThaoTac = "";
-    if (trangThai === "Tạm lưu") {
-      // Chưa duyệt: Nút màu xanh lá nổi bật, click được để mở xác nhận
-      nutThaoTac = '<button type="button" class="btn-action" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:6px 14px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xacNhanPhieuNhap(\'' + maPhieu + '\')">Duyệt</button>';
+    if (trangThai === "Hoàn thành") {
+      nutThaoTac = '<button type="button" class="btn-action" disabled style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; padding:6px 14px; border-radius:6px; font-weight:700; cursor:not-allowed;">Đã hoàn thành</button>';
     } else {
-      // Đã duyệt: Nút màu xám nhạt, có thuộc tính disabled và cursor: not-allowed (không click được)
-      nutThaoTac = '<button type="button" class="btn-action" disabled style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; padding:6px 14px; border-radius:6px; font-weight:700; cursor:not-allowed;">Đã duyệt</button>';
+      nutThaoTac = '<button type="button" class="btn-action" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:6px 14px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xacNhanPhieuNhap(\'' + maPhieu + '\')">Hoàn thành</button>';
     }
 
     html += `
@@ -1310,9 +1311,7 @@ function hienThiBangNhapHang() {
         <td><strong>${soLuongHienThi} món</strong></td>
         <td><strong style="color:#0284c7;">${formatMoney(tongTien)}</strong></td>
         <td>${p.creator || "Admin"}</td>
-        <td>
-            <button type="button" class="btn-action" style="background:#e0f2fe; color:#0284c7; border:1px solid #bae6fd; padding:5px 12px; border-radius:6px; font-weight:700; cursor:pointer;" onclick="xemChiTietPhieuNhap('${maPhieu}')">Chi tiết</button>
-        </td>
+        <td>${nutChiTietHoacSua}</td>
         <td>${nutThaoTac}</td>
       </tr>
     `;
@@ -1323,6 +1322,8 @@ function hienThiBangNhapHang() {
   }
   tbody.innerHTML = html;
 }
+
+
 
 function xemChiTietPhieuNhap(maPhieu) {
   // 1. Tìm phiếu nhập theo mã phiếu
@@ -1401,8 +1402,83 @@ function xemChiTietPhieuNhap(maPhieu) {
   moModalAdmin("modal-import-detail");
 }
 
+
+// Biến lưu mã phiếu đang sửa (nếu là null nghĩa là đang tạo phiếu mới)
+var maPhieuDangSua = null;
+
+// Hàm mở popup sửa phiếu nhập
+function moModalSuaPhieuNhap(maPhieu) {
+  var dsNhap = layDuLieuAdmin("sport_imports");
+  var phieu = null;
+  for (var i = 0; i < dsNhap.length; i++) {
+    if (String(dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
+      phieu = dsNhap[i];
+      break;
+    }
+  }
+
+  if (!phieu) {
+    alert("Không tìm thấy thông tin phiếu nhập!");
+    return;
+  }
+
+  // Đề bài: Chỉ được sửa trước khi hoàn thành
+  if (phieu.status === "Hoàn thành") {
+    alert("Phiếu này đã hoàn thành, không thể sửa!");
+    return;
+  }
+
+  maPhieuDangSua = maPhieu;
+
+  // Đổi tiêu đề popup
+  if (document.getElementById("modal-import-title")) {
+    document.getElementById("modal-import-title").textContent = "Chỉnh Sửa Phiếu Nhập #" + maPhieu;
+  }
+
+  // Nạp danh sách sản phẩm và chọn đúng sản phẩm của phiếu
+  var dsSp = layDuLieuAdmin("sport_products");
+  var selectEl = document.getElementById("import-product-select");
+  if (selectEl) {
+    var html = '<option value="">-- Chọn sản phẩm cần nhập --</option>';
+    for (var j = 0; j < dsSp.length; j++) {
+      var sp = dsSp[j];
+      var ma = sp.code || ("SP-" + sp.id);
+      var giaGoc = sp.costPrice || sp.cost || Math.round(sp.price * 0.7);
+      html += '<option value="' + sp.id + '" data-cost="' + giaGoc + '">' + ma + ' - ' + sp.name + '</option>';
+    }
+    selectEl.innerHTML = html;
+    selectEl.value = phieu.productId || "";
+  }
+
+  // Điền dữ liệu cũ vào các ô input
+  if (document.getElementById("import-id")) {
+    document.getElementById("import-id").value = phieu.id || phieu.slipId || maPhieu;
+    document.getElementById("import-id").disabled = true;
+  }
+  if (document.getElementById("import-date")) {
+    document.getElementById("import-date").value = phieu.date || "";
+  }
+  if (document.getElementById("import-supplier")) {
+    document.getElementById("import-supplier").value = phieu.supplier || "Tổng Kho Thể Thao";
+  }
+  if (document.getElementById("import-qty")) {
+    document.getElementById("import-qty").value = phieu.totalQuantity || 1;
+  }
+  if (document.getElementById("import-unit-price")) {
+    document.getElementById("import-unit-price").value = phieu.unitPrice || (phieu.totalCost ? Math.round(phieu.totalCost / (phieu.totalQuantity || 1)) : 0);
+  }
+  if (document.getElementById("import-status")) {
+    document.getElementById("import-status").value = phieu.status || "Tạm lưu";
+  }
+  if (document.getElementById("import-note")) {
+    document.getElementById("import-note").value = phieu.note || "";
+  }
+
+  moModalAdmin("modal-import");
+}
+
 function luuPhieuNhapHang() {
-  // 1. Lấy thông tin từ form popup
+  // 1. Lấy dữ liệu từ form
   var maSpChon = document.getElementById("import-product-select") ? document.getElementById("import-product-select").value : "";
   var soLuongNhap = Number(document.getElementById("import-qty") ? document.getElementById("import-qty").value : 0);
   var donGiaNhap = Number(document.getElementById("import-unit-price") ? document.getElementById("import-unit-price").value : 0);
@@ -1411,7 +1487,6 @@ function luuPhieuNhapHang() {
   var trangThai = document.getElementById("import-status") ? document.getElementById("import-status").value : "Tạm lưu";
   var ghiChu = document.getElementById("import-note") ? document.getElementById("import-note").value.trim() : "";
 
-  // 2. Kiểm tra dữ liệu hợp lệ
   if (!maSpChon) {
     alert("Vui lòng chọn sản phẩm cần nhập kho!");
     return;
@@ -1430,19 +1505,16 @@ function luuPhieuNhapHang() {
     }
   }
 
-  // 3. NẾU CHỌN "Hoàn thành" THÌ MỚI CỘNG VÀO KHO SẢN PHẨM
+  // 2. Nếu trạng thái là "Hoàn thành" -> Cộng hàng vào kho ngay
   if (trangThai === "Hoàn thành") {
     for (var j = 0; j < dsSp.length; j++) {
       if (String(dsSp[j].id) === String(maSpChon)) {
         var tonHienTai = Number(dsSp[j].stock !== undefined ? dsSp[j].stock : (dsSp[j].quantity || 0));
         dsSp[j].stock = tonHienTai + soLuongNhap;
-
         if (donGiaNhap > 0) {
           dsSp[j].costPrice = donGiaNhap;
           dsSp[j].cost = donGiaNhap;
         }
-
-        // Nếu sản phẩm từng bị ẩn do hết hàng thì mở bán lại
         if (dsSp[j].status === "hidden" && dsSp[j].stock > 0) {
           dsSp[j].status = "active";
         }
@@ -1452,25 +1524,55 @@ function luuPhieuNhapHang() {
     luuDuLieuAdmin("sport_products", dsSp);
   }
 
-  // 4. LƯU PHIẾU NHẬP VÀO sport_imports
+  // 3. Lưu vào danh sách phiếu nhập sport_imports
   var dsNhap = layDuLieuAdmin("sport_imports");
-  var maMoi = "PN-00" + (dsNhap.length + 1);
   var tongTien = soLuongNhap * donGiaNhap;
 
-  dsNhap.push({
-    id: maMoi,
-    slipId: maMoi,
-    productId: maSpChon,
-    productName: tenSanPham,
-    supplier: nhaCungCap || "Tổng Kho Thể Thao",
-    date: ngayNhap || new Date().toISOString().split("T")[0],
-    totalQuantity: soLuongNhap,
-    unitPrice: donGiaNhap,
-    totalCost: tongTien,
-    note: ghiChu,
-    creator: "Admin",
-    status: trangThai
-  });
+  if (maPhieuDangSua) {
+    // ĐANG SỬA PHIẾU CŨ: Cập nhật lại các thông tin của phiếu đó
+    for (var k = 0; k < dsNhap.length; k++) {
+      if (String(dsNhap[k].id || dsNhap[k].slipId) === String(maPhieuDangSua)) {
+        dsNhap[k].productId = maSpChon;
+        dsNhap[k].productName = tenSanPham;
+        dsNhap[k].supplier = nhaCungCap;
+        dsNhap[k].date = ngayNhap;
+        dsNhap[k].totalQuantity = soLuongNhap;
+        dsNhap[k].unitPrice = donGiaNhap;
+        dsNhap[k].totalCost = tongTien;
+        dsNhap[k].note = ghiChu;
+        dsNhap[k].status = trangThai;
+        break;
+      }
+    }
+    if (typeof showToast === "function") {
+      showToast("Đã cập nhật phiếu nhập #" + maPhieuDangSua, "success");
+    } else {
+      alert("Đã cập nhật phiếu nhập #" + maPhieuDangSua);
+    }
+  } else {
+    // TẠO PHIẾU MỚI
+    var maMoi = "PN-00" + (dsNhap.length + 1);
+    dsNhap.push({
+      id: maMoi,
+      slipId: maMoi,
+      productId: maSpChon,
+      productName: tenSanPham,
+      supplier: nhaCungCap || "Tổng Kho Thể Thao",
+      date: ngayNhap || new Date().toISOString().split("T")[0],
+      totalQuantity: soLuongNhap,
+      unitPrice: donGiaNhap,
+      totalCost: tongTien,
+      note: ghiChu,
+      creator: "Admin",
+      status: trangThai
+    });
+    if (typeof showToast === "function") {
+      showToast("Đã tạo phiếu nhập kho: " + maMoi, "success");
+    } else {
+      alert("Đã tạo phiếu nhập kho: " + maMoi);
+    }
+  }
+
   luuDuLieuAdmin("sport_imports", dsNhap);
   dongModalAdmin("modal-import");
   hienThiBangNhapHang();
@@ -1479,22 +1581,8 @@ function luuPhieuNhapHang() {
     hienThiBangTonKhoAdmin();
   }
   capNhatSoDemMenuAdmin();
-
-  // Thông báo theo từng trạng thái
-  if (trangThai === "Hoàn thành") {
-    if (typeof showToast === "function") {
-      showToast("Đã nhập thêm " + soLuongNhap + " cái cho " + tenSanPham + " (Hoàn thành)!", "success");
-    } else {
-      alert("Đã nhập thêm " + soLuongNhap + " cái cho " + tenSanPham + " (Hoàn thành)!");
-    }
-  } else {
-    if (typeof showToast === "function") {
-      showToast("Đã lưu tạm phiếu nhập #" + maMoi + " (chưa cộng vào kho)!", "warning");
-    } else {
-      alert("Đã lưu tạm phiếu nhập #" + maMoi + " (chưa cộng vào kho)!");
-    }
-  }
 }
+
 
 function xacNhanPhieuNhap(maPhieu) {
   // 1. Hỏi người dùng xác nhận
