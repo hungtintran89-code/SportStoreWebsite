@@ -143,12 +143,32 @@ function hienThiSanPhamFlashSale() {
   if (!Array.isArray(tatCaSanPham) || tatCaSanPham.length === 0) {
     tatCaSanPham = typeof products !== "undefined" ? products : [];
   }
+  var dsLoai = readJson("sport_categories", []);
 
   // Lọc ra tối đa 4 sản phẩm đang có giảm giá (originalPrice > price)
   var dsSale = [];
-  for (var i = tatCaSanPham.length; i >= 0; i--) {
+  for (var i = tatCaSanPham.length - 1; i >= 0; i--) {
     var sp = tatCaSanPham[i];
-    if (!sp || sp.status === "hidden") continue;
+    if (!sp || sp.status === "hidden" || sp.status === "inactive") continue;
+
+    // Bỏ qua nếu danh mục của sản phẩm này đang bị ẩn
+    var loaiBiAn = false;
+    for (var k = 0; k < dsLoai.length; k++) {
+      if ((dsLoai[k].id === sp.categoryId || dsLoai[k].name === sp.category) && (dsLoai[k].status === "hidden" || dsLoai[k].status === "inactive")) {
+        loaiBiAn = true;
+        break;
+      }
+    }
+    if (loaiBiAn) continue;
+    // Bỏ qua nếu danh mục của sản phẩm này đang bị ẩn
+    var loaiBiAn = false;
+    for (var k = 0; k < dsLoai.length; k++) {
+      if ((dsLoai[k].id === sp.categoryId || dsLoai[k].name === sp.category) && (dsLoai[k].status === "hidden" || dsLoai[k].status === "inactive")) {
+        loaiBiAn = true;
+        break;
+      }
+    }
+    if (loaiBiAn) continue;
 
     var giaBan = Number(sp.price || 0);
     var giaGoc = Number(sp.originalPrice || 0);
@@ -206,21 +226,23 @@ function hienThiSanPhamFlashSale() {
 // 4. KHỐI DANH MỤC TIÊU BIỂU (4 Ô BỘ MÔN)
 // ==============================================================================
 function hienThiDanhMucTieuBieu() {
-  var dsDanhMuc = [];
-  if (typeof categories !== "undefined") {
-    dsDanhMuc = categories;
+  var dsDanhMuc = readJson("sport_categories", []);
+  if (!Array.isArray(dsDanhMuc) || dsDanhMuc.length === 0) {
+    dsDanhMuc = typeof categories !== "undefined" ? categories : [];
   }
 
   var khungDanhMuc = document.getElementById("dev1-cat-grid");
   if (!khungDanhMuc) return;
 
   var html = "";
-  // Lấy 4 danh mục đầu tiên
-  for (var i = 0; i < dsDanhMuc.length && i < 4; i++) {
+  // Lấy tối đa 4 danh mục đang hoạt động
+  var dem = 0;
+  for (var i = 0; i < dsDanhMuc.length; i++) {
     var c = dsDanhMuc[i];
+    if (!c || c.status === "hidden" || c.status === "inactive") continue;
 
     html += `
-      <a href="pages/dev2_products.html?cat=${c.id}" class="dev1-cat-card">
+      <a href="pages/dev2_products.html?cat=${c.id || c.code}" class="dev1-cat-card">
         <div class="dev1-cat-icon">${c.icon || "🏅"}</div>
         <div>
           <div class="dev1-cat-title">${c.name}</div>
@@ -228,6 +250,8 @@ function hienThiDanhMucTieuBieu() {
         </div>
       </a>
     `;
+    dem++;
+    if (dem === 4) break;
   }
 
   khungDanhMuc.innerHTML = html;
