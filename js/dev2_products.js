@@ -142,7 +142,7 @@ function renderProducts() {
         let originalPrice = getProductOriginalPrice(product);
         let hasDiscount = originalPrice > displayPrice;
         let originalPriceHtml = hasDiscount
-            ? `<span class="original-price" style="text-decoration: line-through; color: #94a3b8; font-size: 13px; margin-left: 6px;">${formatMoney(originalPrice)} ₫</span>`
+            ? `<span class="original-price" style="text-decoration: line-through; color: #94a3b8; font-size: 13px; margin-left: 6px;">${formatMoney(originalPrice)}</span>`
             : "";
 
         let productCard = `

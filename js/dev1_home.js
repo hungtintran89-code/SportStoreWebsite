@@ -266,6 +266,7 @@ function chonTabXuHuong(loaiTab) {
   var dsHienThi = [];
   for (var i = 0; i < tatCa.length; i++) {
     var p = tatCa[i];
+    if (!p || p.status === "hidden" || p.status === "inactive") continue;
     if (loaiTab === "bestseller" && p.isHot === true) {
       dsHienThi.push(p);
     } else if (loaiTab === "new" && p.isNew === true) {

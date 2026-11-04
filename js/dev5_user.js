@@ -1156,17 +1156,28 @@ function moModalSuaSanPham(maSp) {
   }
   if (!p) return;
 
+  // 1. NẠP TIÊU ĐỀ VÀ CÁC THÔNG TIN CƠ BẢN
   if (document.getElementById("modal-product-title")) document.getElementById("modal-product-title").textContent = "Chỉnh Sửa Sản Phẩm #" + maSp;
-  if (document.getElementById("prod-name")) document.getElementById("prod-name").value = p.name;
+  if (document.getElementById("prod-name")) document.getElementById("prod-name").value = p.name || "";
   if (document.getElementById("prod-code")) document.getElementById("prod-code").value = p.code || ("SP-" + p.id);
   if (document.getElementById("prod-brand")) document.getElementById("prod-brand").value = p.brand || "";
   if (document.getElementById("prod-category")) document.getElementById("prod-category").value = p.categoryId || "";
-  if (document.getElementById("prod-cost")) document.getElementById("prod-cost").value = p.cost || "";
+
+  // 2. NẠP GIÁ VỐN VÀ GIÁ BÁN
+  var giaVon = Number(p.costPrice || p.cost || (p.price ? Math.round(p.price * 0.7) : 0));
+  if (document.getElementById("prod-cost")) document.getElementById("prod-cost").value = giaVon > 0 ? giaVon : "";
   if (document.getElementById("prod-price")) document.getElementById("prod-price").value = p.price || "";
+
+  // 3. NẠP TỒN KHO, ẢNH, MÔ TẢ VÀ TRẠNG THÁI
   if (document.getElementById("prod-stock")) document.getElementById("prod-stock").value = p.stock || 0;
   if (document.getElementById("prod-image")) document.getElementById("prod-image").value = p.image || "";
   if (document.getElementById("prod-desc")) document.getElementById("prod-desc").value = p.desc || p.description || "";
   if (document.getElementById("prod-status")) document.getElementById("prod-status").value = p.status || "active";
+
+  // 4. NẠP 2 CHECKBOX BÁN CHẠY & MỚI VỀ
+  if (document.getElementById("prod-is-hot")) document.getElementById("prod-is-hot").checked = (p.isHot === true);
+  if (document.getElementById("prod-is-new")) document.getElementById("prod-is-new").checked = (p.isNew === true);
+
   moModalAdmin("modal-product");
 }
 
@@ -1180,14 +1191,34 @@ function napLuaChonDanhMucVaoSelect() {
   }
   selectEl.innerHTML = html;
 }
-
 function luuSanPhamAdmin() {
   var ten = document.getElementById("prod-name").value.trim();
   if (!ten) {
     alert("Vui lòng nhập tên sản phẩm!");
+    document.getElementById("prod-name").focus();
     return;
   }
+
   var gia = Number(document.getElementById("prod-price").value) || 0;
+  var giaVon = Number(document.getElementById("prod-cost") ? document.getElementById("prod-cost").value : 0) || 0;
+
+  if (giaVon <= 0) {
+    alert("Vui lòng nhập giá vốn (giá đầu vào) lớn hơn 0!");
+    if (document.getElementById("prod-cost")) document.getElementById("prod-cost").focus();
+    return;
+  }
+
+  if (gia <= 0) {
+    alert("Vui lòng nhập giá bán niêm yết lớn hơn 0!");
+    if (document.getElementById("prod-price")) document.getElementById("prod-price").focus();
+    return;
+  }
+
+  if (gia < giaVon) {
+    alert("Giá bán niêm yết không được nhỏ hơn giá vốn đầu vào!");
+    if (document.getElementById("prod-price")) document.getElementById("prod-price").focus();
+    return;
+  }
   var ton = Number(document.getElementById("prod-stock").value) || 0;
   var hang = document.getElementById("prod-brand").value.trim() || "Sport";
   var catId = document.getElementById("prod-category").value;
@@ -1201,19 +1232,36 @@ function luuSanPhamAdmin() {
 
   if (maSpDangSua === -1) {
     var idMoi = dsSp.length > 0 ? (dsSp[dsSp.length - 1].id + 1) : 1;
-    dsSp.push({ id: idMoi, name: ten, price: gia, stock: ton, brand: hang, categoryId: catId, image: anh, desc: desc, status: "active" });
+    var phanTramTaoMoi = (giaVon > 0 && gia > 0) ? Math.round(((gia - giaVon) / giaVon) * 100) : 25;
+    dsSp.push({
+      id: idMoi,
+      name: ten,
+      costPrice: giaVon,
+      price: gia,
+      profitPercent: phanTramTaoMoi,
+      stock: ton,
+      brand: hang,
+      categoryId: catId,
+      image: anh,
+      desc: desc,
+      status: "active"
+    });
     if (typeof showToast === "function") showToast("Đã thêm sản phẩm mới: " + ten, "success");
   } else {
     for (var i = 0; i < dsSp.length; i++) {
       if (dsSp[i].id === maSpDangSua) {
         dsSp[i].name = ten;
+        dsSp[i].costPrice = giaVon;
         dsSp[i].price = gia;
+        dsSp[i].profitPercent = Math.round(((gia - giaVon) / giaVon) * 100);
         dsSp[i].stock = ton;
         dsSp[i].brand = hang;
         dsSp[i].categoryId = catId;
         dsSp[i].image = anh;
         dsSp[i].desc = desc;
-        dsSp[i].status = trangThai
+        dsSp[i].status = trangThai;
+        dsSp[i].isHot = document.getElementById("prod-is-hot") ? document.getElementById("prod-is-hot").checked : false;
+        dsSp[i].isNew = document.getElementById("prod-is-new") ? document.getElementById("prod-is-new").checked : false;
         break;
       }
     }
@@ -1652,6 +1700,10 @@ function xacNhanPhieuNhap(maPhieu) {
       if (donGia > 0) {
         dsSp[j].costPrice = donGia;
         dsSp[j].cost = donGia;
+        var giaBanHienTai = Number(dsSp[j].price || 0);
+        if (giaBanHienTai > 0) {
+          dsSp[j].profitPercent = Math.round(((giaBanHienTai - donGia) / donGia) * 100);
+        }
       }
 
       // Mở bán lại nếu sản phẩm từng bị ẩn vì hết hàng
@@ -1698,8 +1750,8 @@ function hienThiBangGiaBanAdmin() {
     var p = dsSp[i];
     // Lấy đúng giá vốn gốc từ costPrice (không bị phụ thuộc vào price)
     var giaVon = Number(p.costPrice || p.cost || (p.price ? Math.round(p.price * 0.7) : 0));
-    var phanTram = Number(p.profitPercent !== undefined ? p.profitPercent : 25);
-
+    var giaBan = Number(p.price || 0);
+    var phanTram = (giaVon > 0 && giaBan > 0) ? Math.round(((giaBan - giaVon) / giaVon) * 100) : Number(p.profitPercent || 0);
     html += `
       <tr>
         <td><img src="${p.image || ''}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
@@ -1740,36 +1792,46 @@ function moModalSuaGiaBan(maSp) {
   var phanTram = Number(p.profitPercent !== undefined ? p.profitPercent : 25);
 
   document.getElementById("pricing-prod-name").value = p.name;
-  document.getElementById("pricing-cost-price").value = giaVonHienTai.toLocaleString("vi-VN") + " ₫";
+  document.getElementById("pricing-cost-price").value = giaVonHienTai.toLocaleString("vi-VN") + " đ";
   document.getElementById("pricing-profit-percent").value = phanTram;
-  document.getElementById("pricing-sale-price").value = Number(p.price).toLocaleString("vi-VN") + " ₫";
+  // Điền số nguyên vào ô nhập giá bán (ví dụ 5000000)
+  document.getElementById("pricing-sale-price").value = Number(p.price || 0);
 
   moModalAdmin("modal-pricing");
 }
 
-// 2. Tự động nhảy lại giá bán khi người dùng thay đổi % lợi nhuận
-function tinhGiaBanTuDong() {
-  var percent = Number(document.getElementById("pricing-profit-percent").value) || 0;
-  // Công thức: Giá niêm yết = Giá vốn * (1 + % / 100)
-  var giaMoi = Math.round(giaVonHienTai * (1 + percent / 100));
-  // Làm tròn đến hàng nghìn (ví dụ 4.550.000)
-  giaMoi = Math.round(giaMoi / 1000) * 1000;
-  document.getElementById("pricing-sale-price").value = giaMoi.toLocaleString("vi-VN") + " ₫";
+// 2. Tự động tính % lợi nhuận khi người dùng nhập/đổi giá bán niêm yết
+function tinhPhanTramTuDong() {
+  var giaBan = Number(document.getElementById("pricing-sale-price").value) || 0;
+  if (giaVonHienTai > 0 && giaBan > 0) {
+    // Công thức: % Lợi nhuận = ((Giá bán - Giá vốn) / Giá vốn) * 100
+    var percent = Math.round(((giaBan - giaVonHienTai) / giaVonHienTai) * 100);
+    document.getElementById("pricing-profit-percent").value = percent;
+  } else {
+    document.getElementById("pricing-profit-percent").value = 0;
+  }
 }
 
 // 3. Lưu giá bán mới vào danh sách sản phẩm
 function luuGiaBanMoi() {
-  var percentMoi = Number(document.getElementById("pricing-profit-percent").value) || 0;
-  // Tính lại giá mới chính xác
-  var giaMoi = Math.round(giaVonHienTai * (1 + percentMoi / 100));
-  giaMoi = Math.round(giaMoi / 1000) * 1000;
+  var giaBanMoi = Number(document.getElementById("pricing-sale-price").value) || 0;
+  if (giaBanMoi <= 0) {
+    showToast("Vui lòng nhập giá bán lớn hơn 0!", "danger");
+    return;
+  }
+
+  // Tính lại % lợi nhuận theo giá bán mới
+  var percentMoi = 0;
+  if (giaVonHienTai > 0) {
+    percentMoi = Math.round(((giaBanMoi - giaVonHienTai) / giaVonHienTai) * 100);
+  }
 
   var dsSp = layDuLieuAdmin("sport_products");
   for (var i = 0; i < dsSp.length; i++) {
     if (dsSp[i].id === maSpDangSuaGia) {
-      dsSp[i].price = giaMoi;
+      dsSp[i].price = giaBanMoi;
       dsSp[i].profitPercent = percentMoi;
-      dsSp[i].costPrice = giaVonHienTai; // Cố định vĩnh viễn giá vốn, không bao giờ bị đổi theo giá bán
+      dsSp[i].costPrice = giaVonHienTai; // Cố định vĩnh viễn giá vốn, không bao giờ bị đổi
       break;
     }
   }
@@ -1778,7 +1840,7 @@ function luuGiaBanMoi() {
   dongModalAdmin("modal-pricing");
   hienThiBangGiaBanAdmin();
   if (typeof showToast === "function") {
-    showToast("Đã cập nhật giá bán thành công: " + giaMoi.toLocaleString("vi-VN") + " ₫", "success");
+    showToast("Đã cập nhật giá bán thành công: " + giaBanMoi.toLocaleString("vi-VN") + " đ", "success");
   }
 }
 
