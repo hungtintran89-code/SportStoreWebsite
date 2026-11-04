@@ -1957,3 +1957,96 @@ body.admin-body {
         overflow-y: auto;
     }
 }
+/* ==========================================================================
+   TỐI ƯU TRANG SẢN PHẨM DEV2 TRÊN MÁY TÍNH BẢNG & MOBILE (<= 992px)
+   ========================================================================== */
+@media (max-width: 992px) {
+    /* Thu gọn danh mục sản phẩm thành khung cuộn nhẹ, không kéo dài quá sâu */
+    #category-filter {
+        max-height: 180px;
+        overflow-y: auto;
+        padding-right: 6px;
+        border: 1px solid #f1f5f9;
+        border-radius: 8px;
+        padding: 8px;
+        background: #f8fafc;
+    }
+
+    /* Khung tìm khoảng giá thành 2 ô ngang bằng nhau */
+    .price-range-inputs {
+        display: flex;
+        gap: 8px;
+    }
+    .price-range-inputs input {
+        width: 50% !important;
+    }
+
+    /* 2 nút Áp dụng và Đặt lại bộ lọc nằm ngang cùng dòng */
+    .sidebar-btn-group {
+        display: flex;
+        gap: 8px;
+    }
+    .sidebar-btn-group button {
+        flex: 1;
+        padding: 10px 4px !important;
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Thanh Toolbar: dòng chữ tóm tắt ở trên, 2 ô chọn xếp song song ở dưới */
+    .toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 10px 12px !important;
+    }
+
+    .toolbar-controls {
+        display: flex !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .toolbar-controls select {
+        flex: 1 !important;
+        min-width: 0 !important;
+        font-size: 12.5px !important;
+        padding: 6px 8px !important;
+    }
+}/* ==========================================================================
+   TỐI ƯU POPUP QUICK-VIEW TRÊN MOBILE (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .qv-container {
+        padding: 16px !important;
+        width: 94vw !important;
+        max-height: 88vh !important;
+    }
+
+    /* Chiều cao khung ảnh trên mobile giảm bớt để chừa chỗ cho nội dung */
+    .qv-main-image-wrap {
+        height: 200px !important;
+    }
+
+    .qv-title {
+        font-size: 16px !important;
+        margin: 8px 0 !important;
+    }
+
+    .qv-price-main {
+        font-size: 18px !important;
+    }
+
+    /* 2 nút Thêm giỏ và Mua ngay xếp ngang cân đối */
+    .qv-actions-row {
+        display: flex !important;
+        gap: 8px !important;
+        margin-top: 14px !important;
+    }
+    .qv-actions-row button {
+        flex: 1 !important;
+        padding: 10px 4px !important;
+        font-size: 13px !important;
+    }
+}

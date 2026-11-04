@@ -1475,3 +1475,64 @@ a {
   font-weight: 800;
   cursor: pointer;
 }
+/* ==========================================================================
+   TỐI ƯU HIỂN THỊ SẢN PHẨM 2 CỘT CHUẨN MOBILE (<= 600px)
+   ========================================================================== */
+@media (max-width: 600px) {
+  /* 1. Lưới sản phẩm luôn chia đúng 2 cột đều nhau */
+  .product-grid,
+  .dev1-flash-grid,
+  .dev1-trending-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* 2. Giảm padding của từng thẻ để không bị thô */
+  .product-card,
+  .dev1-product-card {
+    padding: 10px !important;
+    border-radius: 10px !important;
+  }
+
+  /* 3. Chiều cao ảnh sản phẩm gọn gàng */
+  .product-card img,
+  .product-card-thumb,
+  .dev1-card-img-wrap {
+    height: 140px !important;
+    object-fit: contain !important;
+  }
+
+  /* 4. Tên sản phẩm hiển thị tối đa 2 dòng kèm dấu ... */
+  .product-title,
+  .product-card h3,
+  .dev1-card-title {
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+    height: 34px !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+  }
+
+  /* 5. Giá tiền nổi bật, kích thước vừa phải */
+  .product-price,
+  .dev1-card-price-current {
+    font-size: 14px !important;
+  }
+  .original-price,
+  .dev1-card-price-old {
+    font-size: 11px !important;
+  }
+
+  /* 6. Nút thao tác trên thẻ sản phẩm tinh gọn */
+  .product-card-actions {
+    gap: 6px !important;
+    margin-top: 8px !important;
+  }
+  .product-card-actions .btn-sport,
+  .product-card-actions .btn-detail {
+    font-size: 11.5px !important;
+    padding: 6px 8px !important;
+  }
+}

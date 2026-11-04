@@ -522,6 +522,10 @@ function moChiTietSanPham( productId ){
             colorsBox.querySelectorAll(".qv-choice-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
             mauDuocChon = m;
+            var modalImg = document.getElementById("qv-main-img");
+            if (modalImg && sanPhamDangXem.gallery && sanPhamDangXem.gallery[index]) {
+                modalImg.src = sanPhamDangXem.gallery[index];
+            }
         };
         colorsBox.appendChild(btn);
     });
