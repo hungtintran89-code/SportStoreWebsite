@@ -201,10 +201,6 @@ function doiTrangThaiSanPhamAdmin(maSp) {
   }
 }
 
-
-// ==============================================================================
-// 1. HÀM CHUYỂN QUA LẠI GIỮA 2 TAB (BẤM NÚT TRÊN ĐẦU TRANG)
-// ==============================================================================
 function chuyenTabTonKho(tenTab) {
   var khungTab1 = document.getElementById("viewSnapshotSection");
   var khungTab2 = document.getElementById("viewMovementSection");
@@ -273,9 +269,6 @@ function dongPopupChiTiet() {
   if (modal) modal.style.display = "none";
 }
 
-// ==============================================================================
-// 4. HÀM HIỂN THỊ TAB 2: NHẬP – XUẤT – TỒN (ẢNH 2)
-// ==============================================================================
 function napDanhSachSanPhamVaoSelect() {
   var selectSP = document.getElementById("movementProductSelect");
   if (!selectSP) return;
@@ -283,7 +276,7 @@ function napDanhSachSanPhamVaoSelect() {
   if (selectSP.options.length <= 1) {
     var dsSp = layDuLieuAdmin("sport_products");
     var html = '<option value="">Tất cả sản phẩm</option>';
-    for (var i = 0; i < dsSp.length; i++) {
+    for (var i = 0 ; i < dsSp.length ; i++) {
       var sp = dsSp[i];
       var ma = sp.code || ("SP-" + sp.id);
       html += '<option value="' + sp.id + '">' + ma + ' - ' + sp.name + '</option>';
