@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b46e98f-8efa-45c3-b0de-26a1c71848aa" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/data/store/support.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/user.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/user.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/admin/admin-products.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/admin/admin-products.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/products.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/products.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/user.html" afterDir="false" />
     </list>
@@ -61,7 +58,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main-main",
+    "git-widget-placeholder": "Merging test-tv4",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/TaiLieuHoc/Project/SportStoreWebsite",

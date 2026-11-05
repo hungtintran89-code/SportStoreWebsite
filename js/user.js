@@ -457,47 +457,265 @@ function xoaYeuThich(idCanXoa) {
   }
   hienThiYeuThich();
 }
+// ============================================================
+// DEV 5 - DỮ LIỆU FAQ & CHÍNH SÁCH HỖ TRỢ
+// ============================================================
 
 function hienThiFaq() {
   var khung = document.querySelector("[data-faq]");
+
   if (!khung) return;
 
-  var dsFaq = [];
-  if (typeof faqs !== "undefined" && Array.isArray(faqs)) {
-    dsFaq = faqs;
-  } else {
-    var raw = localStorage.getItem("sport_faqs");
-    if (raw) dsFaq = JSON.parse(raw);
+  var html = `
+    <div class="dev5-support-layout">
+
+      <!-- MENU CHÍNH SÁCH BÊN TRÁI -->
+      <aside class="dev5-support-menu">
+
+        <h3 class="dev5-support-menu-title">
+          Hỗ Trợ &amp; Chính Sách
+        </h3>
+
+        <nav class="dev5-support-nav" aria-label="Danh mục hỗ trợ">
+  `;
+
+  // Tạo các nút danh mục
+  for (var i = 0; i < DEV5_SUPPORT_DATA.length; i++) {
+    var muc = DEV5_SUPPORT_DATA[i];
+
+    html += `
+      <button
+        type="button"
+        class="dev5-support-nav-btn"
+        data-support-id="${muc.id}"
+        onclick="chonMucHoTro('${muc.id}')"
+      >
+        <span class="dev5-support-nav-icon">${muc.icon}</span>
+        <span>${muc.label}</span>
+      </button>
+    `;
   }
 
-  // Nếu không có câu hỏi nào (hiển thị đúng như Ảnh 5 của bạn)
-  if (!dsFaq || dsFaq.length === 0) {
-    khung.innerHTML = '<p class="dev5-muted">Chưa có câu hỏi hỗ trợ nào.</p>';
-    return;
-  }
+  html += `
+        </nav>
+      </aside>
 
-  var html = "";
-  for (var i = 0; i < dsFaq.length; i++) {
-    var cauHoi = dsFaq[i].question || dsFaq[i].q || "";
-    var cauTraLoi = dsFaq[i].answer || dsFaq[i].a || "";
-    var classMo = (i === 0) ? "is-open" : ""; // Mặc định mở câu đầu tiên
+      <!-- NỘI DUNG CHÍNH BÊN PHẢI -->
+      <div
+        class="dev5-support-content"
+        id="dev5-support-content"
+      ></div>
 
-    html += '<article class="dev5-faq-item ' + classMo + '">';
-    html += '  <button class="dev5-faq-question" type="button" onclick="dongMoFaq(this)">';
-    html += '    <span>' + cauHoi + '</span>';
-    html += '    <span>＋</span>';
-    html += '  </button>';
-    html += '  <div class="dev5-faq-answer">' + cauTraLoi + '</div>';
-    html += '</article>';
-  }
+    </div>
+  `;
 
   khung.innerHTML = html;
+
+  // Mặc định mở chính sách bảo hành
+  // Lấy mục cần mở từ URL (nếu có tham số sub, section hoặc hash)
+  var params = new URLSearchParams(window.location.search);
+  var subParam = params.get("sub") || params.get("section");
+  var tabParam = params.get("tab");
+  var hashParam = window.location.hash ? window.location.hash.replace("#", "") : "";
+  var dsHoTro = ["warranty", "returns", "size", "tracking"];
+
+  var mucMo = "warranty";
+  if (subParam && dsHoTro.includes(subParam)) {
+    mucMo = subParam;
+  } else if (tabParam && dsHoTro.includes(tabParam)) {
+    mucMo = tabParam;
+  } else if (hashParam && dsHoTro.includes(hashParam)) {
+    mucMo = hashParam;
+  }
+
+  chonMucHoTro(mucMo);
 }
+// ============================================================
+// CHUYỂN ĐỔI NỘI DUNG KHI CHỌN DANH MỤC
+// ============================================================
+
+function chonMucHoTro(idMuc) {
+  var khung = document.querySelector("[data-faq]");
+
+  if (!khung) return;
+
+  var mucDuocChon = null;
+
+  // Tìm danh mục theo ID
+  for (var i = 0; i < DEV5_SUPPORT_DATA.length; i++) {
+    if (DEV5_SUPPORT_DATA[i].id === idMuc) {
+      mucDuocChon = DEV5_SUPPORT_DATA[i];
+      break;
+    }
+  }
+
+  if (!mucDuocChon) return;
+
+  // Cập nhật trạng thái active của menu
+  var cacNut = khung.querySelectorAll("[data-support-id]");
+
+  for (var j = 0; j < cacNut.length; j++) {
+    var dangChon =
+      cacNut[j].getAttribute("data-support-id") === idMuc;
+
+    if (dangChon) {
+      cacNut[j].classList.add("is-active");
+      cacNut[j].setAttribute("aria-current", "page");
+    } else {
+      cacNut[j].classList.remove("is-active");
+      cacNut[j].removeAttribute("aria-current");
+    }
+  }
+
+  // Tạo phần tiêu đề nội dung
+  var html = `
+    <div class="dev5-support-article">
+
+      <div class="dev5-support-article-header">
+
+        <div class="dev5-support-article-icon">
+          ${mucDuocChon.icon}
+        </div>
+
+        <div>
+          <span class="dev5-support-kicker">
+            SPORTSTORE SUPPORT CENTER
+          </span>
+
+          <h3>${mucDuocChon.title}</h3>
+
+          <p>${mucDuocChon.intro}</p>
+        </div>
+
+      </div>
+
+      <div class="dev5-support-cards">
+  `;
+
+  // Hiển thị từng nội dung chính sách
+  for (var k = 0; k < mucDuocChon.blocks.length; k++) {
+    var block = mucDuocChon.blocks[k];
+
+    html += `
+      <article class="dev5-support-card">
+
+        <h4>
+          <span>${block.icon || "•"}</span>
+          ${block.title}
+        </h4>
+    `;
+
+    // Đoạn mô tả
+    if (block.text) {
+      html += `
+        <p>${block.text}</p>
+      `;
+    }
+
+    // Danh sách nội dung
+    if (block.items && block.items.length > 0) {
+      html += `<ul>`;
+
+      for (var m = 0; m < block.items.length; m++) {
+        html += `<li>${block.items[m]}</li>`;
+      }
+
+      html += `</ul>`;
+    }
+
+    // Danh sách các bước thực hiện
+    if (block.steps && block.steps.length > 0) {
+      html += `<ol>`;
+
+      for (var n = 0; n < block.steps.length; n++) {
+        html += `<li>${block.steps[n]}</li>`;
+      }
+
+      html += `</ol>`;
+    }
+
+    html += `
+      </article>
+    `;
+  }
+
+  html += `
+      </div>
+
+      <!-- CÂU HỎI THƯỜNG GẶP -->
+      <section class="dev5-support-faq">
+
+        <div class="dev5-support-faq-heading">
+          <div>
+            <span class="dev5-support-kicker">FREQUENTLY ASKED QUESTIONS</span>
+            <h3>Câu hỏi thường gặp</h3>
+            <p>Giải đáp những thắc mắc phổ biến khi mua sắm tại SportStore.</p>
+          </div>
+        </div>
+
+  `;
+
+  // Tạo danh sách câu hỏi
+  for (var p = 0; p < DEV5_SUPPORT_FAQS.length; p++) {
+    var faq = DEV5_SUPPORT_FAQS[p];
+    var moSan = p === 0;
+
+    html += `
+      <article class="dev5-faq-item ${moSan ? "is-open" : ""}">
+
+        <button
+          type="button"
+          class="dev5-faq-question"
+          aria-expanded="${moSan}"
+          onclick="dongMoFaq(this)"
+        >
+          <strong>${faq.question}</strong>
+
+          <span class="dev5-faq-toggle-icon">
+            ${moSan ? "−" : "＋"}
+          </span>
+        </button>
+
+        <div class="dev5-faq-answer">
+          ${faq.answer}
+        </div>
+
+      </article>
+    `;
+  }
+
+  html += `
+      </section>
+
+    </div>
+  `;
+
+  // Cập nhật nội dung bên phải
+  var khungNoiDung = khung.querySelector("#dev5-support-content");
+
+  if (khungNoiDung) {
+    khungNoiDung.innerHTML = html;
+  }
+}
+// ============================================================
+// ĐÓNG / MỞ CÂU HỎI FAQ
+// ============================================================
 
 function dongMoFaq(nutBam) {
   var theCha = nutBam.parentElement;
-  if (theCha) {
-    theCha.classList.toggle("is-open");
+
+  if (!theCha) return;
+
+  var dangMo = theCha.classList.toggle("is-open");
+
+  // Cập nhật trạng thái hỗ trợ truy cập
+  nutBam.setAttribute("aria-expanded", dangMo);
+
+  // Thay đổi biểu tượng
+  var icon = nutBam.querySelector(".dev5-faq-toggle-icon");
+
+  if (icon) {
+    icon.textContent = dangMo ? "−" : "＋";
   }
 }
 
@@ -515,9 +733,23 @@ function renderUserProfile() {
   chuyenTab("overview");
   let params = new URLSearchParams(window.location.search);
   let tab = params.get("tab");
+  let sub = params.get("sub") || params.get("section");
+  var dsHoTro = ["warranty", "returns", "size", "tracking"];
+  if (dsHoTro.includes(tab)) {
+    sub = tab;
+    tab = "faq";
+  }
+  var hash = window.location.hash ? window.location.hash.replace("#", "") : "";
+  if (dsHoTro.includes(hash)) {
+    sub = hash;
+    tab = "faq";
+  }
   if (tab) {
     if (tab === "cart") tab = "checkout";
     chuyenTab(tab);
+    if (tab === "faq" && sub) {
+      chonMucHoTro(sub);
+    }
   }
 }
 
@@ -533,7 +765,13 @@ function dieuPhoiGiaoDienTheoRole() {
   var root = document.documentElement;
 
   // 1. Chưa đăng nhập -> Hiện hộp khóa
-  if (!session) {
+  // 1. Chưa đăng nhập -> Hiện hộp khóa (trừ khi xem Hỗ trợ & Chính sách FAQ)
+  var paramsRole = new URLSearchParams(window.location.search);
+  var tabParamRole = paramsRole.get("tab");
+  var dsHoTroRole = ["warranty", "returns", "size", "tracking", "faq"];
+  var isFaqRequest = dsHoTroRole.includes(tabParamRole);
+
+  if (!session && !isFaqRequest) {
     if (viewGuest) viewGuest.classList.remove("dev5-hidden");
     if (viewUser) viewUser.classList.add("dev5-hidden");
     return;
@@ -546,6 +784,34 @@ function dieuPhoiGiaoDienTheoRole() {
   renderUserProfile();
   if (typeof khoiTaoTrang === "function") khoiTaoTrang();
 }
+
+function chuyenMucHoTroTuLink(idMuc) {
+  chuyenTab("faq");
+  chonMucHoTro(idMuc);
+  var newUrl = window.location.pathname + "?tab=faq&sub=" + idMuc;
+  try {
+    window.history.pushState({ tab: "faq", sub: idMuc }, "", newUrl);
+  } catch (e) {}
+  var contentEl = document.getElementById("dev5-support-content") || document.querySelector("[data-faq]");
+  if (contentEl) {
+    contentEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+window.addEventListener("popstate", function () {
+  var params = new URLSearchParams(window.location.search);
+  var tab = params.get("tab") || "overview";
+  var sub = params.get("sub") || params.get("section");
+  var dsHoTro = ["warranty", "returns", "size", "tracking"];
+  if (dsHoTro.includes(tab)) {
+    sub = tab;
+    tab = "faq";
+  }
+  chuyenTab(tab);
+  if (tab === "faq" && sub) {
+    chonMucHoTro(sub);
+  }
+});
 
 document.addEventListener('DOMContentLoaded', function () {
   dieuPhoiGiaoDienTheoRole();
