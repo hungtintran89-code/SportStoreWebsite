@@ -367,7 +367,10 @@ function veLuoiSanPhamXuHuong(danhSach) {
 // ==============================================================================
 function themVaoGioNhanh(idSanPham) {
   // Tìm sản phẩm trong kho bằng vòng lặp for
-  var tatCa = typeof products !== "undefined" ? products : [];
+  var tatCa = readJson("sport_products", []);
+  if (!tatCa || tatCa.length === 0) {
+    tatCa = typeof products !== "undefined" ? products : [];
+  }
   var spChon = null;
 
   for (var i = 0; i < tatCa.length; i++) {

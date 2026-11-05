@@ -321,10 +321,10 @@ function hienThiNhapXuatTon() {
   for (var j = 0; j < dsNhap.length; j++) {
     var phieu = dsNhap[j];
     var ngayPhieu = phieu.date || "2026-10-15";
-    var maPhieu = phieu.id || phieu.slipId || ("PN-" + (j + 1));
-    var soLuongNhap = Number(phieu.totalQuantity || phieu.quantity || 15);
+    var maPhieu = phieu.importId || phieu.id || phieu.slipId || ("PN-" + (j + 1));
 
-    if (maSPChon === "" || String(phieu.productId) === String(maSPChon)) {
+    if (maSPChon === "") {
+      var soLuongNhap = Number(phieu.totalQuantity || phieu.quantity || 1);
       danhSachGD.push({
         ngay: ngayPhieu,
         ma: maPhieu,
@@ -332,6 +332,26 @@ function hienThiNhapXuatTon() {
         slNhap: soLuongNhap,
         slXuat: 0
       });
+    } else {
+      var slNhapKhop = 0;
+      if (String(phieu.productId) === String(maSPChon)) {
+        slNhapKhop += Number(phieu.totalQuantity || phieu.quantity || 1);
+      } else if (phieu.items && phieu.items.length) {
+        for (var mi = 0; mi < phieu.items.length; mi++) {
+          if (String(phieu.items[mi].productId || phieu.items[mi].id) === String(maSPChon)) {
+            slNhapKhop += Number(phieu.items[mi].quantity || 1);
+          }
+        }
+      }
+      if (slNhapKhop > 0) {
+        danhSachGD.push({
+          ngay: ngayPhieu,
+          ma: maPhieu,
+          loai: "Nhập kho",
+          slNhap: slNhapKhop,
+          slXuat: 0
+        });
+      }
     }
   }
 
@@ -341,19 +361,41 @@ function hienThiNhapXuatTon() {
     if (don.status !== "Đã hủy") {
       var ngayDon = (don.createdAt ? don.createdAt.split("T")[0] : don.date) || "2026-10-20";
       var maDon = don.orderId || don.id || ("DH-" + (k + 1));
-      var slXuat = 1;
+      var dsMon = don.items || don.orderItems || [];
 
       if (maSPChon === "") {
-        slXuat = 1;
+        var tongSlXuat = 0;
+        if (dsMon.length > 0) {
+          for (var xi = 0; xi < dsMon.length; xi++) {
+            tongSlXuat += Number(dsMon[xi].quantity || 1);
+          }
+        } else {
+          tongSlXuat = Number(don.totalQuantity || 1);
+        }
+        danhSachGD.push({
+          ngay: ngayDon,
+          ma: maDon,
+          loai: "Xuất bán",
+          slNhap: 0,
+          slXuat: tongSlXuat
+        });
+      } else {
+        var slXuatKhop = 0;
+        for (var xi = 0; xi < dsMon.length; xi++) {
+          if (String(dsMon[xi].productId || dsMon[xi].id) === String(maSPChon)) {
+            slXuatKhop += Number(dsMon[xi].quantity || 1);
+          }
+        }
+        if (slXuatKhop > 0) {
+          danhSachGD.push({
+            ngay: ngayDon,
+            ma: maDon,
+            loai: "Xuất bán",
+            slNhap: 0,
+            slXuat: slXuatKhop
+          });
+        }
       }
-
-      danhSachGD.push({
-        ngay: ngayDon,
-        ma: maDon,
-        loai: "Xuất bán",
-        slNhap: 0,
-        slXuat: slXuat
-      });
     }
   }
 

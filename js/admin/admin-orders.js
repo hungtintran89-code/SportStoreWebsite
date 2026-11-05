@@ -64,18 +64,104 @@ function hienThiBangDonHangAdmin() {
   tbody.innerHTML = html;
 }
 
+// CODE MỚI: TỰ ĐỘNG HOÀN TRẢ SỐ LƯỢNG VÀO KHO KHI HỦY ĐƠN
 function doiTrangThaiDonHang(maDon, trangThaiMoi) {
   var dsDon = layDuLieuAdmin("sport_orders");
+  var don = null;
+
   for (var i = 0; i < dsDon.length; i++) {
     if (dsDon[i].orderId === maDon || dsDon[i].id === maDon) {
-      dsDon[i].status = trangThaiMoi;
+      don = dsDon[i];
       break;
     }
   }
+
+  if (!don) {
+    alert("Không tìm thấy đơn hàng #" + maDon);
+    return;
+  }
+
+  var trangThaiCu = don.status;
+  if (trangThaiCu === trangThaiMoi) return;
+
+  // 1. Khi chọn "Đã hủy" -> Hỏi xác nhận trước để tránh bấm nhầm
+  if (trangThaiMoi === "Đã hủy") {
+    var xacNhan = confirm("Bạn có chắc chắn muốn HỦY đơn hàng #" + maDon + " và HOÀN TRẢ lại toàn bộ sản phẩm vào kho không?");
+    if (!xacNhan) {
+      hienThiBangDonHangAdmin(); // Đặt lại dropdown về giá trị cũ
+      return;
+    }
+  }
+
+  var dsSp = layDuLieuAdmin("sport_products");
+  var danhSachMon = don.items || don.orderItems || [];
+  var tongMonHoanTra = 0;
+
+  // 2. TRƯỜNG HỢP Chuyển sang "Đã hủy" -> CỘNG LẠI TỒN KHO
+  if (trangThaiCu !== "Đã hủy" && trangThaiMoi === "Đã hủy") {
+    for (var j = 0; j < danhSachMon.length; j++) {
+      var item = danhSachMon[j];
+      var maSanPham = item.productId || item.id;
+      var soLuong = Number(item.quantity || 1);
+
+      for (var k = 0; k < dsSp.length; k++) {
+        if (String(dsSp[k].id) === String(maSanPham) || dsSp[k].name === item.name) {
+          var tonCu = Number(dsSp[k].stock !== undefined ? dsSp[k].stock : (dsSp[k].quantity || 0));
+          dsSp[k].stock = tonCu + soLuong;
+          tongMonHoanTra += soLuong;
+
+          // Nếu trước đó sản phẩm từng bị ẩn do hết hàng thì mở bán lại
+          if (dsSp[k].status === "hidden" && dsSp[k].stock > 0) {
+            dsSp[k].status = "active";
+          }
+          break;
+        }
+      }
+    }
+    luuDuLieuAdmin("sport_products", dsSp);
+  }
+
+  // 3. TRƯỜNG HỢP Nếu đổi ngược từ "Đã hủy" về trạng thái bình thường -> TRỪ LẠI KHO
+  if (trangThaiCu === "Đã hủy" && trangThaiMoi !== "Đã hủy") {
+    for (var j2 = 0; j2 < danhSachMon.length; j2++) {
+      var item2 = danhSachMon[j2];
+      var maSanPham2 = item2.productId || item2.id;
+      var soLuong2 = Number(item2.quantity || 1);
+
+      for (var k2 = 0; k2 < dsSp.length; k2++) {
+        if (String(dsSp[k2].id) === String(maSanPham2) || dsSp[k2].name === item2.name) {
+          var tonHienTai = Number(dsSp[k2].stock !== undefined ? dsSp[k2].stock : (dsSp[k2].quantity || 0));
+          dsSp[k2].stock = Math.max(0, tonHienTai - soLuong2);
+          if (dsSp[k2].stock === 0) {
+            dsSp[k2].status = "hidden";
+          }
+          break;
+        }
+      }
+    }
+    luuDuLieuAdmin("sport_products", dsSp);
+  }
+
+  // 4. Lưu trạng thái mới cho đơn hàng
+  don.status = trangThaiMoi;
   luuDuLieuAdmin("sport_orders", dsDon);
-  if (typeof showToast === "function") showToast("Đã cập nhật trạng thái đơn [#" + maDon + "] thành: " + trangThaiMoi, "success");
+
+  // 5. Thông báo Toast chuyên nghiệp
+  if (trangThaiMoi === "Đã hủy") {
+    if (typeof showToast === "function") {
+      showToast("Đã hủy đơn [#" + maDon + "] và hoàn trả " + tongMonHoanTra + " món vào kho thành công!", "warning");
+    }
+  } else {
+    if (typeof showToast === "function") {
+      showToast("Đã cập nhật trạng thái đơn [#" + maDon + "] thành: " + trangThaiMoi, "success");
+    }
+  }
+
+  // 6. Cập nhật lại ngay lập tức các bảng giao diện Admin liên quan
   hienThiBangDonHangAdmin();
   capNhatSoDemMenuAdmin();
+  if (typeof hienThiBangTonKhoAdmin === "function") hienThiBangTonKhoAdmin();
+  if (typeof hienThiBangSanPhamAdmin === "function") hienThiBangSanPhamAdmin();
 }
 
 function locDonHangAdmin() {
@@ -99,7 +185,7 @@ function hienThiBangNhapHang() {
   var html = "";
   for (var i = dsNhap.length - 1; i >= 0; i--) {
     var p = dsNhap[i];
-    var maPhieu = p.id || p.slipId || ("PN-" + (i + 1));
+    var maPhieu = p.importId || p.id || p.slipId || ("PN-" + (i + 1));
     var nhaCc = p.supplier || "Nhà Phân Phối Thể Thao";
     var ngayNhap = p.date || "Hôm nay";
     var trangThai = p.status || "Hoàn thành";
@@ -159,7 +245,7 @@ function xemChiTietPhieuNhap(maPhieu) {
   var dsNhap = layDuLieuAdmin("sport_imports");
   var phieu = null;
   for (var i = 0; i < dsNhap.length; i++) {
-    if (String(dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
+    if (String(dsNhap[i].importId || dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
       phieu = dsNhap[i];
       break;
     }
@@ -173,9 +259,12 @@ function xemChiTietPhieuNhap(maPhieu) {
   // 2. Tìm thông tin chi tiết của sản phẩm đó trong sport_products
   var dsSp = layDuLieuAdmin("sport_products");
   var sp = null;
-  if (phieu.productId) {
+  var firstItem = (phieu.items && phieu.items.length > 0) ? phieu.items[0] : null;
+  var pId = phieu.productId || (firstItem ? (firstItem.productId || firstItem.id) : null);
+
+  if (pId) {
     for (var j = 0; j < dsSp.length; j++) {
-      if (String(dsSp[j].id) === String(phieu.productId)) {
+      if (String(dsSp[j].id) === String(pId)) {
         sp = dsSp[j];
         break;
       }
@@ -183,13 +272,13 @@ function xemChiTietPhieuNhap(maPhieu) {
   }
 
   // Lấy các dữ liệu chi tiết
-  var tenSp = sp ? sp.name : (phieu.productName || "Lô dụng cụ thể thao");
-  var maSp = sp ? (sp.code || ("SP-" + sp.id)) : (phieu.productId ? ("SP-" + phieu.productId) : "SP-CHUNG");
-  var anhSp = sp ? (sp.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200") : "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200";
+  var tenSp = sp ? sp.name : (firstItem ? firstItem.name : (phieu.productName || "Lô dụng cụ thể thao"));
+  var maSp = sp ? (sp.code || ("SP-" + sp.id)) : (firstItem ? (firstItem.code || "SP-" + (firstItem.productId || firstItem.id)) : (pId ? ("SP-" + pId) : "SP-CHUNG"));
+  var anhSp = sp ? (sp.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200") : (firstItem && firstItem.image ? firstItem.image : "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200");
   var hangSp = sp ? (sp.brand || "Chính hãng") : "Chính hãng";
   var tonKho = sp ? Number(sp.stock !== undefined ? sp.stock : (sp.quantity || 0)) : "—";
-  var soLuongNhap = Number(phieu.totalQuantity || 1);
-  var donGiaNhap = Number(phieu.unitPrice || (phieu.totalCost ? phieu.totalCost / soLuongNhap : 0));
+  var soLuongNhap = Number(phieu.totalQuantity || (firstItem ? firstItem.quantity : 1));
+  var donGiaNhap = Number(phieu.unitPrice || (firstItem ? (firstItem.importPrice || firstItem.unitPrice || firstItem.price) : (phieu.totalCost ? phieu.totalCost / soLuongNhap : 0)));
   var tongTien = Number(phieu.totalCost || (soLuongNhap * donGiaNhap));
   var trangThai = phieu.status || "Hoàn thành";
 
@@ -200,7 +289,7 @@ function xemChiTietPhieuNhap(maPhieu) {
   // 3. Đổ dữ liệu vào Modal chi tiết
   var modalTitle = document.getElementById("import-detail-title");
   if (modalTitle) {
-    modalTitle.textContent = "Chi Tiết Phiếu Nhập #" + (phieu.id || phieu.slipId);
+    modalTitle.textContent = "Chi Tiết Phiếu Nhập #" + (phieu.importId || phieu.id || phieu.slipId);
   }
 
   var modalBody = document.getElementById("import-detail-body");
@@ -215,7 +304,7 @@ function xemChiTietPhieuNhap(maPhieu) {
         </div>
       </div>
       <table class="import-modal-table">
-        <tr class="import-table-row"><td class="import-col-label">Mã phiếu:</td><td class="import-val-bold">#${phieu.id || phieu.slipId}</td></tr>
+        <tr class="import-table-row"><td class="import-col-label">Mã phiếu:</td><td class="import-val-bold">#${phieu.importId || phieu.id || phieu.slipId}</td></tr>
         <tr class="import-table-row"><td class="import-col-label">Nhà cung cấp:</td><td class="import-val-semi">${phieu.supplier || "Tổng Kho Thể Thao"}</td></tr>
         <tr class="import-table-row"><td class="import-col-label">Ngày nhập:</td><td class="import-val-right">${phieu.date || "Hôm nay"}</td></tr>
         <tr class="import-table-row"><td class="import-col-label">Số lượng nhập:</td><td class="import-val-accent">+${soLuongNhap} món</td></tr>
@@ -240,7 +329,7 @@ function moModalSuaPhieuNhap(maPhieu) {
   var dsNhap = layDuLieuAdmin("sport_imports");
   var phieu = null;
   for (var i = 0; i < dsNhap.length; i++) {
-    if (String(dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
+    if (String(dsNhap[i].importId || dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
       phieu = dsNhap[i];
       break;
     }
@@ -281,7 +370,7 @@ function moModalSuaPhieuNhap(maPhieu) {
 
   // Điền dữ liệu cũ vào các ô input
   if (document.getElementById("import-id")) {
-    document.getElementById("import-id").value = phieu.id || phieu.slipId || maPhieu;
+    document.getElementById("import-id").value = phieu.importId || phieu.id || phieu.slipId || maPhieu;
     document.getElementById("import-id").disabled = true;
   }
   if (document.getElementById("import-date")) {
@@ -340,7 +429,7 @@ function luuPhieuNhapHang() {
   if (maPhieuDangSua) {
     // ĐANG SỬA PHIẾU CŨ: Cập nhật lại các thông tin của phiếu đó
     for (var k = 0; k < dsNhap.length; k++) {
-      if (String(dsNhap[k].id || dsNhap[k].slipId) === String(maPhieuDangSua)) {
+      if (String(dsNhap[k].importId || dsNhap[k].id || dsNhap[k].slipId) === String(maPhieuDangSua)) {
         dsNhap[k].productId = maSpChon;
         dsNhap[k].productName = tenSanPham;
         dsNhap[k].supplier = nhaCungCap;
@@ -363,6 +452,7 @@ function luuPhieuNhapHang() {
     dsNhap.push({
       id: maMoi,
       slipId: maMoi,
+      importId: maMoi,
       productId: maSpChon,
       productName: tenSanPham,
       supplier: nhaCungCap || "Tổng Kho Thể Thao",
@@ -404,7 +494,7 @@ function xacNhanPhieuNhap(maPhieu) {
   var phieu = null;
 
   for (var i = 0; i < dsNhap.length; i++) {
-    if (String(dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
+    if (String(dsNhap[i].importId || dsNhap[i].id || dsNhap[i].slipId) === String(maPhieu)) {
       phieu = dsNhap[i];
       break;
     }

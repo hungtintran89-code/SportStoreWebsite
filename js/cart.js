@@ -259,7 +259,8 @@ function datHang(e) {
   let sdt = document.getElementById("phone").value.trim();
   let email = document.getElementById("email").value.trim();
   let diaChi = document.getElementById("address").value.trim();
-  let tinhThanh = document.getElementById("province").selectedOptions[0].text;
+  let provEl = document.getElementById("province");
+  let tinhThanh = (provEl && provEl.selectedOptions && provEl.selectedOptions[0]) ? provEl.selectedOptions[0].text : (provEl ? (provEl.value || "TP. Hồ Chí Minh") : "TP. Hồ Chí Minh");
   let ghiChu = document.getElementById("note").value.trim();
 
   // Xóa sạch thông báo lỗi cũ
@@ -283,7 +284,7 @@ function datHang(e) {
   }
 
   // Kiểm tra Email
-  if (email.length < 5 || email.indexOf("@gmail.com") === -1) {
+  if (email.length < 5 || email.indexOf("@") === -1 || email.indexOf(".") === -1) {
     document.getElementById("err-email").textContent = "Email chưa đúng định dạng!";
     coLoi = true;
   }
@@ -339,7 +340,7 @@ function datHang(e) {
 
     for( let j = 0 ; j < tatCaSanPhamTrongKho.length ;j++){
       let spKho = tatCaSanPhamTrongKho[j];
-      if( spKho.id === mon.id  ){
+      if (String(spKho.id) === String(mon.productId || mon.id)) {
         tonKhoHienTai = spKho.stock || 0 ;
         break;
       }
@@ -389,6 +390,9 @@ function datHang(e) {
     orderId: maDonMoi,
     id: maDonMoi,
     customerId: nguoiDung.id,
+    phone: sdt,
+    email: email,
+    fullName: hoTen,
     customer: {
       id: nguoiDung.id,
       name: hoTen,
@@ -418,7 +422,7 @@ function datHang(e) {
     for (let i = 0; i < danhSachGioHang.length; i++) {
       let monVuaMua = danhSachGioHang[i];
       for (let j = 0; j < tatCaSanPham.length; j++) {
-        if (String(tatCaSanPham[j].id) === String(monVuaMua.id)) {
+        if (String(tatCaSanPham[j].id) === String(monVuaMua.productId || monVuaMua.id)) {
           tatCaSanPham[j].stock = Math.max(0, Number(tatCaSanPham[j].stock) - Number(monVuaMua.quantity));
           break;
         }

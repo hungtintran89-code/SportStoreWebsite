@@ -460,10 +460,11 @@ var sizeDuocChon = "Tiêu chuẩn" ;
 var mauDuocChon = "Mặc định" ;
 
 function moChiTietSanPham( productId ){
-
+    sanPhamDangXem = null;
     for( let i = 0 ; i < allProducts.length ;i++){
-        if( String(allProducts[i].id) === productId ){
+        if( String(allProducts[i].id) === String(productId) ){
             sanPhamDangXem = allProducts[i];
+            break;
         }
     }
 

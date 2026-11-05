@@ -940,7 +940,7 @@
           </div>
           <div class="form-group">
             <label>% Lợi nhuận định mức:</label>
-            <input type="number" id="pricing-profit-percent" readonly class="form-input-readonly" />
+            <input type="number" id="pricing-profit-percent" min="0" step="1" placeholder="Nhập % lợi nhuận..." oninput="tinhGiaBanTuDong()" class="pricing-profit-input" />
           </div>
         </div>
         <div class="form-group">
@@ -986,6 +986,9 @@
   <script src="data/store/banners.js"></script>
   <script src="data/store/categories.js"></script>
   <script src="data/store/products.js"></script>
+  <script src="data/store/customers.js"></script>
+  <script src="data/store/orders.js"></script>
+  <script src="data/store/imports.js"></script>
   <script src="js/common.js"></script>
   <script src="js/init-storage.js"></script>
 
