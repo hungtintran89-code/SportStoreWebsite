@@ -55,10 +55,10 @@ function getProductDisplayPrice(product) {
 }
 
 function getProductOriginalPrice(product) {
-    if (product.originalPrice) return Number(product.originalPrice);
-    // Nếu giá nhập > giá bán thì lấy giá nhập làm giá gạch ngang
-    if (product.costPrice && product.price && Number(product.costPrice) > Number(product.price)) {
-        return Number(product.costPrice);
+    let giaBan = Number(product.price) || 0;
+    let giaNhap = Number(product.costPrice || product.cost) || 0;
+    if (giaNhap > giaBan && giaBan > 0) {
+        return giaNhap;
     }
     return 0;
 }
@@ -489,11 +489,13 @@ function moChiTietSanPham( productId ){
     document.getElementById("qv-code").textContent = sanPhamDangXem.code || ("SP-" + sanPhamDangXem.id);
 
     //Điền giá bán
+    //Điền giá bán
     var giaHienThi = getProductDisplayPrice(sanPhamDangXem);
-    document.getElementById("qv-price").textContent = formatMoney(giaHienThi)
+    document.getElementById("qv-price").textContent = formatMoney(giaHienThi);
     var oldPriceEl = document.getElementById("qv-old-price");
-    if (sanPhamDangXem.originalPrice && Number(sanPhamDangXem.originalPrice) > giaHienThi) {
-        oldPriceEl.textContent = formatMoney(Number(sanPhamDangXem.originalPrice)) ;
+    var oldPrice = getProductOriginalPrice(sanPhamDangXem);
+    if (oldPrice > giaHienThi) {
+        oldPriceEl.textContent = formatMoney(oldPrice);
         oldPriceEl.style.display = "inline";
     } else {
         oldPriceEl.style.display = "none";

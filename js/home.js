@@ -161,7 +161,7 @@ function hienThiSanPhamFlashSale() {
     if (loaiBiAn) continue;
 
     var giaBan = Number(sp.price || 0);
-    var giaNhap = Number(sp.costPrice || sp.originalPrice || sp.cost || 0);
+    var giaNhap = Number(sp.costPrice || sp.cost || 0);
 
     if (giaNhap > giaBan && giaBan > 0) {
       dsSale.push(sp);
