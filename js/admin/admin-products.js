@@ -58,9 +58,11 @@ function doiTrangThaiDanhMucAdmin(maLoai) {
   var dsLoai = layDuLieuAdmin("sport_categories");
   var tenLoai = "";
   var trangThaiMoi = "active";
+  var catItem = null;
 
   for (var i = 0; i < dsLoai.length; i++) {
     if (dsLoai[i].id === maLoai || dsLoai[i].code === maLoai) {
+      catItem = dsLoai[i];
       tenLoai = dsLoai[i].name || maLoai;
       dsLoai[i].status = (dsLoai[i].status === "hidden") ? "active" : "hidden";
       trangThaiMoi = dsLoai[i].status;
@@ -69,7 +71,20 @@ function doiTrangThaiDanhMucAdmin(maLoai) {
   }
 
   luuDuLieuAdmin("sport_categories", dsLoai);
+
+  // ĐỒNG BỘ: Ẩn/Hiện toàn bộ sản phẩm thuộc loại này
+  if (catItem) {
+    var dsSp = layDuLieuAdmin("sport_products");
+    for (var j = 0; j < dsSp.length; j++) {
+      if (dsSp[j].categoryId === catItem.id || dsSp[j].category === catItem.name) {
+        dsSp[j].status = trangThaiMoi;
+      }
+    }
+    luuDuLieuAdmin("sport_products", dsSp);
+  }
+
   hienThiBangDanhMucAdmin();
+  if (typeof hienThiBangSanPhamAdmin === "function") hienThiBangSanPhamAdmin();
   capNhatSoDemMenuAdmin();
 
   if (typeof showToast === "function") {
@@ -80,6 +95,7 @@ function doiTrangThaiDanhMucAdmin(maLoai) {
     }
   }
 }
+
 function moModalThemDanhMuc() {
   maLoaiDangSua = "";
   var dsLoai = layDuLieuAdmin("sport_categories");
@@ -151,19 +167,40 @@ function luuDanhMucAdmin() {
 }
 
 function xoaDanhMucAdmin(maLoai) {
-  if (!confirm("Bạn có chắc chắn muốn xóa danh mục [" + maLoai + "] không?")) return;
+  if (!confirm("Bạn có chắc chắn muốn xóa danh mục [" + maLoai + "] không? Tất cả các sản phẩm thuộc danh mục này cũng sẽ bị xóa khỏi hệ thống!")) return;
+
+  // 1. Tìm thông tin danh mục cần xóa
   var dsLoai = layDuLieuAdmin("sport_categories");
+  var danhMucCanXoa = null;
   for (var i = 0; i < dsLoai.length; i++) {
     if (dsLoai[i].id === maLoai || dsLoai[i].code === maLoai) {
-      dsLoai.splice(i, 1);
+      danhMucCanXoa = dsLoai[i];
+      dsLoai.splice(i, 1); // Xóa khỏi danh sách loại
       break;
     }
   }
   luuDuLieuAdmin("sport_categories", dsLoai);
-  hienThiBangDanhMucAdmin();
-  capNhatSoDemMenuAdmin();
-}
 
+  if (danhMucCanXoa) {
+    var dsSp = layDuLieuAdmin("sport_products");
+    var idXoa = danhMucCanXoa.id || maLoai;
+    var tenXoa = danhMucCanXoa.name || "";
+
+    var dsSpConLai = dsSp.filter(function (sp) {
+      var laTrungId = sp.categoryId && (sp.categoryId === idXoa || sp.categoryId === maLoai);
+      var laTrungTen = sp.category && sp.category === tenXoa;
+      return !laTrungId && !laTrungTen;
+    });
+
+    luuDuLieuAdmin("sport_products", dsSpConLai);
+  }
+
+  // 3. Vẽ lại bảng và cập nhật số đếm menu (Badge sản phẩm sẽ giảm ngay)
+  hienThiBangDanhMucAdmin();
+  if (typeof hienThiBangSanPhamAdmin === "function") hienThiBangSanPhamAdmin();
+  capNhatSoDemMenuAdmin();
+  if (typeof showToast === "function") showToast("Đã xóa danh mục và toàn bộ sản phẩm liên kết!", "success");
+}
 function locDanhMucAdmin() {
   hienThiBangDanhMucAdmin();
 }

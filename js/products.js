@@ -26,13 +26,17 @@ function isItemActive(item) {
     if (item.status === "hidden" || item.status === "inactive") return false;
 
     if (item.categoryId || item.category) {
+        let catFound = null;
         for (let i = 0; i < allCategories.length; i++) {
             let cat = allCategories[i];
             let catId = cat.id || cat.code;
             if (catId === item.categoryId || cat.name === item.category) {
-                if (cat.status === "hidden" || cat.status === "inactive") return false;
+                catFound = cat;
                 break;
             }
+        }
+        if (!catFound || catFound.status === "hidden" || catFound.status === "inactive") {
+            return false;
         }
     }
     return true;
