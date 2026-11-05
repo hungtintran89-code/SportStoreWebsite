@@ -21,7 +21,7 @@ function layDanhSachTatCaUser() {
     id: "ADMIN-001",
     customerId: "ADMIN-001",
     name: "Quản Trị Viên SportStore",
-    email: "admin@sportstore.vn",
+    email: "admin@gmail.com",
     phone: "0909876543",
     password: "admin",
     role: "admin",
@@ -58,16 +58,10 @@ function layDanhSachTatCaUser() {
 
 // Hàm chuyển hướng trang tương đối chính xác (dù đang ở trang chủ hay trong pages)
 function layDuongDanTrang(tenTrang) {
-  var duongDan = window.location.pathname;
-  var dangODanhMucPages = duongDan.indexOf("/pages/") !== -1;
-  if (tenTrang === "index.html") {
-    return dangODanhMucPages ? "../index.html" : "index.html";
-  }
-  if (dangODanhMucPages) {
-    return tenTrang;
-  } else {
-    return "pages/" + tenTrang;
-  }
+  // Tat ca trang HTML gio day cung cap tai thu muc goc
+  if (tenTrang === "dev5_user.html") return "user.html";
+  if (tenTrang === "dev2_products.html") return "products.html";
+  return tenTrang;
 }
 
 // Hàm mở Modal Đăng nhập / Đăng ký
@@ -90,7 +84,7 @@ function dongModalAuth() {
 
 function capNhatHeaderAuth() {
   var user = laySessionUser();
-  var laAdmin = user && (user.role === "admin");
+  var laAdmin = (localStorage.getItem(KHOA_CO_ADMIN) === "true") || (user && user.role === "admin");
   // 1. Lấy tất cả các phần tử bằng getElementById cực kỳ rõ ràng
   var nutDangNhap = document.getElementById("sport-btn-open-login");
   var nutDangKy = document.getElementById("sport-btn-open-register");
@@ -119,33 +113,30 @@ function capNhatHeaderAuth() {
     if (theTenUser) theTenUser.textContent = user.name || "Tài khoản";
     if (theAvatarUser) theAvatarUser.src = user.avatar || "https://i.pravatar.cc/80?img=47";
 
-    if (laAdmin) {
-      // 1. Hiện nút Admin và trỏ vào trang dev5_user.html
-      if (nutAdmin) {
+    // ĐỒNG NHẤT 100% THANH TIỆN ÍCH DROPDOWN CHO TẤT CẢ NGƯỜI DÙNG (CẢ USER VÀ ADMIN)
+    if (linkTrangCaNhan) {
+      linkTrangCaNhan.textContent = "Tài Khoản Của Tôi";
+      linkTrangCaNhan.href = layDuongDanTrang("user.html");
+    }
+
+    if (linkDonMua) {
+      linkDonMua.classList.remove("dev5-hidden");
+      linkDonMua.href = layDuongDanTrang("user.html?tab=orders");
+    }
+
+    var linkWishlist = document.getElementById("header-link-wishlist");
+    if (linkWishlist) {
+      linkWishlist.classList.remove("dev5-hidden");
+      linkWishlist.href = layDuongDanTrang("user.html?tab=wishlist");
+    }
+
+    // NÚT TRUY CẬP ADMIN TRÊN NAVBAR (NẰM RIÊNG CẠNH GIỎ HÀNG): CHỈ HIỂN THỊ KHI LÀ ADMIN
+    if (nutAdmin) {
+      if (laAdmin) {
         nutAdmin.classList.remove("dev5-hidden");
-        nutAdmin.href = layDuongDanTrang("dev5_user.html");
-      }
-
-      if (linkTrangCaNhan) {
-        linkTrangCaNhan.textContent = "⚙️ Trang Quản Trị";
-        linkTrangCaNhan.href = layDuongDanTrang("dev5_user.html");
-      }
-
-      if (linkDonMua) {
-        linkDonMua.classList.add("dev5-hidden");
-      }
-    } else {
-
-      // Là Khách hàng bình thường:
-      if (nutAdmin) nutAdmin.classList.add("dev5-hidden");
-
-      if (linkTrangCaNhan) {
-        linkTrangCaNhan.textContent = "Tài Khoản Của Tôi";
-        linkTrangCaNhan.href = layDuongDanTrang("dev5_user.html");
-      }
-      if (linkDonMua) {
-        linkDonMua.classList.remove("dev5-hidden");
-        linkDonMua.href = layDuongDanTrang("dev5_user.html?tab=orders");
+        nutAdmin.href = layDuongDanTrang("admin.html");
+      } else {
+        nutAdmin.classList.add("dev5-hidden");
       }
     }
   }
@@ -215,7 +206,8 @@ function xuLyDangNhap(event) {
     var sdtUser = (u.phone || "").trim();
 
     // Khớp tài khoản (Email HOẶC SĐT) VÀ khớp mật khẩu
-    if ((taiKhoanNhap === emailUser || taiKhoanNhap === sdtUser) && matKhauNhap === u.password) {
+    var laAdminEmail = (taiKhoanNhap === "admin@gmail.com" || taiKhoanNhap === "admin@sportstore.vn") && u.role === "admin";
+    if ((taiKhoanNhap === emailUser || taiKhoanNhap === sdtUser || laAdminEmail) && matKhauNhap === u.password) {
       userHopLe = u;
       break;
     }
@@ -233,10 +225,11 @@ function xuLyDangNhap(event) {
     return; // Dừng lại ngay, không cho đăng nhập
   }
 
-  // 4. Đăng nhập thành công -> Lưu vào LocalStorage
-  var laAdmin = (userHopLe.role === "admin");
+  // Popup người dùng chỉ lưu phiên đăng nhập của người dùng
   localStorage.setItem(KHOA_PHIEN_DANG_NHAP, JSON.stringify(userHopLe));
-  localStorage.setItem(KHOA_CO_ADMIN, laAdmin ? "true" : "false");
+  if (userHopLe.role === "admin") {
+    localStorage.setItem(KHOA_CO_ADMIN, "true");
+  }
 
   dongThongBao.style.color = "#16a34a";
   dongThongBao.textContent = "Đăng nhập thành công! Đang chuyển hướng...";
@@ -253,7 +246,7 @@ function xuLyDangNhap(event) {
   //   //   window.location.href = layDuongDanTrang("admin.html");
   //   // } else {
   //   //   // Nếu đang ở trang cá nhân thì tải lại trang, trang khác thì giữ nguyên
-  //   //   if (window.location.pathname.indexOf("dev5_user.html") !== -1) {
+  //   //   if (window.location.pathname.indexOf("user.html") !== -1) {
   //   //     window.location.reload();
   //   //   }
   //   // }
@@ -357,13 +350,11 @@ function xuLyDangKy(event) {
 // ==============================================================================
 function dangXuat() {
   localStorage.removeItem(KHOA_PHIEN_DANG_NHAP);
-  localStorage.removeItem(KHOA_CO_ADMIN);
-
   capNhatHeaderAuth();
 
   // Nếu đang đứng ở trang cá nhân hoặc admin thì quay về trang chủ
   var duongDan = window.location.pathname;
-  if (duongDan.indexOf("dev5_user.html") !== -1 || duongDan.indexOf("admin.html") !== -1) {
+  if (duongDan.indexOf("user.html") !== -1 || duongDan.indexOf("admin.html") !== -1) {
     var dangODanhMucPages = duongDan.indexOf("/pages/") !== -1;
     window.location.href = dangODanhMucPages ? "../index.html" : "index.html";
   } else {
@@ -380,7 +371,7 @@ function khoiTaoKhungModalNeuChuaCo() {
       <!-- Nút Đóng X -->
       <button class="dev5-auth-close" type="button" onclick="dongModalAuth()">×</button>
       
-      <span class="dev5-eyebrow" style="display:block; text-align:center; font-size:11px; letter-spacing:1px; color:#64748b; font-weight:700; margin-bottom:8px;">SPORTSTORE ACCOUNT</span>
+      <span class="dev5-eyebrow auth-eyebrow">SPORTSTORE ACCOUNT</span>
 
       <!-- 2 Nút Tab Đăng Nhập / Đăng Ký -->
       <div class="dev5-auth-tabs">
@@ -393,7 +384,7 @@ function khoiTaoKhungModalNeuChuaCo() {
       </div>
 
       <!-- Dòng thông báo lỗi hoặc thành công -->
-      <p id="auth-form-msg" style="min-height: 20px; font-size: 13px; font-weight: 600; text-align: center; margin: 8px 0;"></p>
+      <p id="auth-form-msg" class="auth-form-msg"></p>
 
       <!-- FORM 1: ĐĂNG NHẬP -->
       <form id="auth-form-login" onsubmit="xuLyDangNhap(event)">
@@ -405,21 +396,21 @@ function khoiTaoKhungModalNeuChuaCo() {
           Mật khẩu
           <input type="password" id="auth-login-password"  placeholder="••••••••">
         </label>
-        <div style="margin-top: 16px;">
-          <button class="dev5-primary-button" type="submit" style="width:100%; padding:11px; font-weight:700; cursor:pointer;">
+        <div class="auth-submit-wrap">
+          <button class="dev5-primary-button auth-btn-full" type="submit">
             Đăng Nhập
           </button>
         </div>
-        <p style="text-align: center; font-size: 13px; margin-top: 14px; color: #64748b;">
+        <p class="auth-switch-text">
           Chưa có tài khoản? 
-          <button type="button" onclick="chuyenTabAuth('register')" style="background:none; border:none; color:#0284c7; font-weight:700; cursor:pointer;">
+          <button type="button" onclick="chuyenTabAuth('register')" class="auth-link-btn">
             Đăng ký ngay
           </button>
         </p>
       </form>
 
       <!-- FORM 2: ĐĂNG KÝ THÀNH VIÊN -->
-      <form id="auth-form-register" onsubmit="xuLyDangKy(event)" style="display: none;">
+      <form id="auth-form-register" onsubmit="xuLyDangKy(event)">
         <label>
           Họ và tên
           <input type="text" id="auth-reg-name" placeholder="Ví dụ: Trần Hùng Tín">
@@ -440,14 +431,14 @@ function khoiTaoKhungModalNeuChuaCo() {
           Nhập lại mật khẩu
           <input type="password" id="auth-reg-confirm" placeholder="••••••••">
         </label>
-        <div style="margin-top: 16px;">
-          <button class="dev5-primary-button" type="submit" style="width:100%; padding:11px; font-weight:700; cursor:pointer;">
+        <div class="auth-submit-wrap">
+          <button class="dev5-primary-button auth-btn-full" type="submit">
             Đăng Ký
           </button>
         </div>
-        <p style="text-align: center; font-size: 13px; margin-top: 14px; color: #64748b;">
+        <p class="auth-switch-text">
           Đã có tài khoản? 
-          <button type="button" onclick="chuyenTabAuth('login')" style="background:none; border:none; color:#0284c7; font-weight:700; cursor:pointer;">
+          <button type="button" onclick="chuyenTabAuth('login')" class="auth-link-btn">
             Đăng nhập
           </button>
         </p>

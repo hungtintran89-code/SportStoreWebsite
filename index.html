@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SportStore | Đỉnh Cao Trang Bị Thể Thao Chính Hãng 2026</title>
+  <title>SportStore | Trang Bị Thể Thao Chính Hãng </title>
   <meta name="description"
     content="Hệ thống bán lẻ trang bị thể thao hàng đầu Việt Nam: Giày chạy bộ marathon, bóng đá, cầu lông, tennis và gym fitness chính hãng Nike, Adidas, Yonex.">
   <link rel="stylesheet" href="css/common.css">
-  <link rel="stylesheet" href="css/dev1_home.css">
+  <link rel="stylesheet" href="css/home.css">
 </head>
 
 <body>
@@ -21,36 +21,38 @@
       </a>
       <ul class="sport-nav-menu">
         <li><a href="index.html" class="active">Trang Chủ</a></li>
-        <li><a href="pages/dev2_products.html">Sản Phẩm</a></li>
-        <li><a href="pages/dev4_checkout.html">Giỏ Hàng</a></li>
+        <li><a href="products.html">Sản Phẩm</a></li>
       </ul>
       <div class="sport-nav-actions header-actions">
 
-        <a href="dev5_user.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden"
+        <a href="admin.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden"
            data-admin-link title="Truy cập Bảng Quản Trị Admin">
           ⚙️ Admin
         </a>
 
         <!-- Nút Giỏ Hàng -->
-        <a href="pages/dev4_checkout.html" class="nav-badge-btn" title="Xem giỏ hàng">
+        <a href="user.html?tab=checkout" class="nav-badge-btn" title="Xem giỏ hàng">
           🛒
           <span class="badge-pill" id="header-cart-badge-count">0</span>
         </a>
         <!-- CỤM TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP -->
         <div class="dev5-header-user-wrapper dev5-hidden" id="header-user-wrap">
           <div class="sport-user-logged-pill dev5-user-pill-btn">
-            <img id="header-user-avatar" alt="Avatar" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;" />
+            <img id="header-user-avatar" class="dev5-user-avatar" alt="Avatar" />
             <span id="header-user-name">Tài khoản</span>
             <span class="dev5-caret-down">▾</span>
           </div>
           <!-- Menu thả xuống Shopee -->
           <div class="dev5-shopee-dropdown">
             <div class="dev5-shopee-arrow"></div>
-            <a href="pages/dev5_user.html" class="dev5-shopee-item" id="header-link-profile">
+            <a href="user.html" class="dev5-shopee-item" id="header-link-profile">
               Tài Khoản Của Tôi
             </a>
-            <a href="dev5_user.html?tab=orders" class="dev5-shopee-item" id="header-link-orders">
+            <a href="user.html?tab=orders" class="dev5-shopee-item" id="header-link-orders">
               Đơn Mua
+            </a>
+            <a href="user.html?tab=wishlist" class="dev5-shopee-item" id="header-link-wishlist">
+              Sản Phẩm Yêu Thích
             </a>
             <button type="button" class="dev5-shopee-item dev5-shopee-logout" id="header-btn-logout" onclick="dangXuat()">
               Đăng Xuất
@@ -146,21 +148,6 @@
         </div>
       </section>
 
-      <!-- NEWSLETTER SUBSCRIPTION -->
-      <section class="dev1-newsletter-card">
-        <div class="dev1-nl-content">
-          <span class="sport-badge badge-emerald">SPORT CLUB MEMBER</span>
-          <h2>Đăng Ký Nhận Bản Tin & Mã Ưu Đãi 20%</h2>
-          <p>Nhận thông báo sớm nhất về các đợt phát hành phiên bản giới hạn và quà tặng sinh nhật dành riêng cho vận
-            động viên.</p>
-          <form class="dev1-nl-form" id="dev1-nl-form" onsubmit="dangKyNhanTin(event)">
-            <input type="email" id="dev1-email-input" placeholder="Nhập địa chỉ email của bạn..." required>
-            <button type="submit" class="btn-sport btn-accent">ĐĂNG KÝ NGAY</button>
-          </form>
-          <p class="dev1-nl-note">Cam kết bảo mật thông tin &bull; Hủy đăng ký bất kỳ lúc nào.</p>
-        </div>
-      </section>
-
     </div>
   </div>
 
@@ -185,26 +172,33 @@
           <h4>Điều Hướng Nhanh</h4>
           <ul>
             <li><a href="index.html">Trang Chủ</a></li>
-            <li><a href="pages/dev2_products.html">Xem Danh Mục Sản Phẩm</a></li>
-            <li><a href="pages/dev3_details.html">Chi Tiết & Bảng So Sánh</a></li>
-            <li><a href="pages/dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
-            <li><a href="pages/dev5_user.html">Tài Khoản & Trợ Giúp</a></li>
+            <li><a href="products.html">Sản Phẩm Tuyển Chọn</a></li>
+            <li><a href="user.html?tab=checkout">Giỏ Hàng &amp; Thanh Toán</a></li>
+            <li><a href="user.html?tab=orders">Lịch Sử Đơn Hàng</a></li>
+            <li><a href="user.html">Tài Khoản Hội Viên</a></li>
           </ul>
         </div>
         <div class="sport-footer-col">
-          <h4>Phân Hệ Module</h4>
-          <p>Phụ trách: <strong> Nhóm 8 LTW&UD</strong></p>
+          <h4>Hỗ Trợ &amp; Chính Sách</h4>
+          <ul class="footer-links">
+            <li><a href="user.html?tab=faq&sub=warranty">Chính Sách Bảo Hành</a></li>
+            <li><a href="user.html?tab=faq&sub=returns">Quy Định Đổi Trả 30 Ngày</a></li>
+            <li><a href="user.html?tab=faq&sub=size">Hướng Dẫn Chọn Size Chuẩn</a></li>
+            <li><a href="user.html?tab=faq&sub=tracking">Theo Dõi Vận Đơn</a></li>
+          </ul>
 
         </div>
         <div class="sport-footer-col">
           <h4>Hotline & Hỗ Trợ</h4>
           <p>📞 1900 8888 (8h00 - 22h00)</p>
-          <p>📍 273 An Dương Vương Q5 TPHCM</p>
-          <p>✉️ support@sportstore.vn</p>
+          <p>📍 273 An Dương Vương</p>
+          <p>📍 105 Bà Huyện Thanh Quan</p>
+          <p>📍 04 Tôn Đức Thắng</p>
+          <p>✉️ nhom8@sportstore.vn</p>
         </div>
       </div>
       <div class="sport-footer-bottom">
-        <div>© 2026 SportStore. Thiết kế kiến trúc Decoupled Vanilla Frontend.</div>
+        <div>Nhóm 8 LTW&UD • © 2026 SportStore. Thiết kế kiến trúc Decoupled Vanilla Frontend.</div>
         <div>Chạy mượt mà 100% Client-side & Không phụ thuộc backend</div>
       </div>
     </div>
@@ -214,15 +208,19 @@
   <!-- 4. SCRIPTS: NẠP DỮ LIỆU STORE, LOCALSTORAGE & LOGIC TRANG CHỦ -->
   <!-- ============================================================================== -->
   <script src="data/store/banners.js"></script>
-  <script src="data/store/products.js"></script>
   <script src="data/store/categories.js"></script>
+  <script src="data/store/products.js"></script>
+  <script src="data/store/customers.js"></script>
+  <script src="data/store/orders.js"></script>
+  <script src="data/store/imports.js"></script>
+  <script src="data/store/support.js"></script>
+
 
   <!-- Khởi tạo LocalStorage hệ thống -->
   <script src="js/init-storage.js"></script>
   <script src="js/common.js"></script>
-  <script src="js/auth_modal.js"></script>
-  <script src="js/dev1_home.js"></script>
-  <script src="js/dev2_products.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/home.js"></script>
 
 </body>
 

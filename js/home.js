@@ -38,7 +38,7 @@ function khoiTaoBanner() {
           <h1 class="dev1-slide-title">${b.title}</h1>
           <p class="dev1-slide-sub">${b.subtitle}</p>
           <div class="dev1-slide-tag-row">
-            <a href="pages/dev2_products.html" class="btn-sport btn-primary">${b.btnText || "Khám Phá"}</a>
+            <a href="products.html" class="btn-sport btn-primary">${b.btnText || "Khám Phá"}</a>
             <span class="sport-badge badge-orange dev1-slide-tag-pill">${b.tag || "HOT"}</span>
           </div>
         </div>
@@ -138,24 +138,33 @@ function hienThiSanPhamFlashSale() {
   if (!khungFlashSale) return;
   khungFlashSale.innerHTML = "";
 
-  // Tận dụng hàm readJson() có sẵn trong common.js để đọc dữ liệu
   var tatCaSanPham = readJson("sport_products", []);
   if (!Array.isArray(tatCaSanPham) || tatCaSanPham.length === 0) {
     tatCaSanPham = typeof products !== "undefined" ? products : [];
   }
+  var dsLoai = readJson("sport_categories", []);
 
   // Lọc ra tối đa 4 sản phẩm đang có giảm giá (originalPrice > price)
   var dsSale = [];
-  for (var i = tatCaSanPham.length; i >= 0; i--) {
+  for (var i = tatCaSanPham.length - 1; i >= 0; i--) {
     var sp = tatCaSanPham[i];
-    if (!sp || sp.status === "hidden") continue;
+    if (!sp || sp.status === "hidden" || sp.status === "inactive") continue;
+
+    // Bỏ qua nếu danh mục của sản phẩm này đang bị ẩn
+    var loaiBiAn = false;
+    for (var k = 0; k < dsLoai.length; k++) {
+      if ((dsLoai[k].id === sp.categoryId || dsLoai[k].name === sp.category) && (dsLoai[k].status === "hidden" || dsLoai[k].status === "inactive")) {
+        loaiBiAn = true;
+        break;
+      }
+    }
+    if (loaiBiAn) continue;
 
     var giaBan = Number(sp.price || 0);
-    var giaGoc = Number(sp.originalPrice || 0);
+    var giaNhap = Number(sp.costPrice || sp.originalPrice || sp.cost || 0);
 
-    if (giaGoc > giaBan) {
+    if (giaNhap > giaBan && giaBan > 0) {
       dsSale.push(sp);
-      if (dsSale.length === 4) break;
     }
   }
 
@@ -163,16 +172,21 @@ function hienThiSanPhamFlashSale() {
   for (var j = 0; j < dsSale.length; j++) {
     var item = dsSale[j];
     var giaHienThi = Number(item.price || 0);
-    var giaCu = Number(item.originalPrice || 0);
+    var giaCu = Number(item.costPrice || item.originalPrice || item.cost || 0);
     var phanTramGiam =
       "-" + Math.round(((giaCu - giaHienThi) / giaCu) * 100) + "%";
 
     var daBan = Number(item.sold || 50);
     var tonKho = Number(item.stock || 0);
     var phanTramDaBan = Math.min(
+
       95,
       Math.round((daBan / (daBan + tonKho)) * 100),
     );
+
+    var daThichFlash = typeof isYeuThich === "function" ? isYeuThich(item.id) : false;
+    var heartIconFlash = daThichFlash ? "❤️" : "🤍";
+    var activeClassFlash = daThichFlash ? " active" : "";
 
     var cardDiv = document.createElement("div");
     cardDiv.className = "dev1-flash-card";
@@ -180,6 +194,9 @@ function hienThiSanPhamFlashSale() {
       <div class="dev1-card-media">
         <img src="${item.image}" alt="${item.name}" loading="lazy">
         <span class="dev1-card-discount-badge">${phanTramGiam}</span>
+        <button type="button" class="btn-card-wishlist${activeClassFlash}" data-wishlist-btn="${item.id}" onclick="event.stopPropagation(); toggleYeuThich('${item.id}', this)" title="${daThichFlash ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}">
+          <span>${heartIconFlash}</span>
+        </button>
       </div>
       <div class="dev1-card-body">
         <div class="dev1-card-cat">${item.category}</div>
@@ -195,7 +212,7 @@ function hienThiSanPhamFlashSale() {
           <span>Đã bán: ${daBan}</span>
           <span>⭐ 5.0</span>
         </div>
-        <a href="pages/dev2_products.html?id=${item.id}" class="btn-sport btn-accent dev1-btn-flash-buy">Săn sale ngay</a>
+        <a href="products.html?id=${item.id}" class="btn-sport btn-accent dev1-btn-flash-buy">Săn sale ngay</a>
       </div>
     `;
     khungFlashSale.appendChild(cardDiv);
@@ -206,21 +223,23 @@ function hienThiSanPhamFlashSale() {
 // 4. KHỐI DANH MỤC TIÊU BIỂU (4 Ô BỘ MÔN)
 // ==============================================================================
 function hienThiDanhMucTieuBieu() {
-  var dsDanhMuc = [];
-  if (typeof categories !== "undefined") {
-    dsDanhMuc = categories;
+  var dsDanhMuc = readJson("sport_categories", []);
+  if (!Array.isArray(dsDanhMuc) || dsDanhMuc.length === 0) {
+    dsDanhMuc = typeof categories !== "undefined" ? categories : [];
   }
 
   var khungDanhMuc = document.getElementById("dev1-cat-grid");
   if (!khungDanhMuc) return;
 
   var html = "";
-  // Lấy 4 danh mục đầu tiên
-  for (var i = 0; i < dsDanhMuc.length && i < 4; i++) {
+  // Lấy tối đa 4 danh mục đang hoạt động
+  var dem = 0;
+  for (var i = 0; i < dsDanhMuc.length; i++) {
     var c = dsDanhMuc[i];
+    if (!c || c.status === "hidden" || c.status === "inactive") continue;
 
     html += `
-      <a href="pages/dev2_products.html?cat=${c.id}" class="dev1-cat-card">
+      <a href="products.html?cat=${c.id || c.code}" class="dev1-cat-card">
         <div class="dev1-cat-icon">${c.icon || "🏅"}</div>
         <div>
           <div class="dev1-cat-title">${c.name}</div>
@@ -228,6 +247,8 @@ function hienThiDanhMucTieuBieu() {
         </div>
       </a>
     `;
+    dem++;
+    if (dem === 4) break;
   }
 
   khungDanhMuc.innerHTML = html;
@@ -297,21 +318,28 @@ function veLuoiSanPhamXuHuong(danhSach) {
 
   if (danhSach.length === 0) {
     khung.innerHTML =
-      '<p style="grid-column:1/-1; text-align:center; padding:30px; color:#64748b;">Chưa có sản phẩm nào.</p>';
+      '<p class="empty-gear-text">Chưa có sản phẩm nào.</p>';
     return;
   }
 
   var html = "";
   // Hiển thị tối đa 6 sản phẩm
-  for (var i = 0; i < danhSach.length && i < 6; i++) {
+  for (var i = 0; i < danhSach.length ; i++) {
     var sp = danhSach[i];
     var giaHienThi = sp.salePrice || sp.price || 0;
+
+    var daThichGear = typeof isYeuThich === "function" ? isYeuThich(sp.id) : false;
+    var heartIconGear = daThichGear ? "❤️" : "🤍";
+    var activeClassGear = daThichGear ? " active" : "";
 
     html += `
       <div class="dev1-gear-card">
         <div class="dev1-card-media">
           <img src="${sp.image}" alt="${sp.name}">
           <span class="sport-badge badge-cyan dev1-card-badge">${sp.badge || "HOT"}</span>
+          <button type="button" class="btn-card-wishlist${activeClassGear}" data-wishlist-btn="${sp.id}" onclick="event.stopPropagation(); toggleYeuThich('${sp.id}', this)" title="${daThichGear ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}">
+            <span>${heartIconGear}</span>
+          </button>
         </div>
         <div class="dev1-card-body">
           <div class="dev1-card-cat">${sp.category || "Thể Thao"}</div>
@@ -321,7 +349,7 @@ function veLuoiSanPhamXuHuong(danhSach) {
             <span class="dev1-rating-star">⭐ ${sp.rating || 5.0}</span>
           </div>
           <div class="dev1-card-btn-row">
-            <a href="pages/dev2_products.html?id=${sp.id}" class="btn-sport btn-outline dev1-card-btn-detail" style="text-decoration:none;">Chi Tiết</a>
+            <a href="products.html?id=${sp.id}" class="btn-sport btn-outline dev1-card-btn-detail">Chi Tiết</a>
             <button type="button" class="btn-sport btn-primary dev1-card-btn-cart" onclick="themVaoGioNhanh(${sp.id})">+ Giỏ</button>
           </div>
         </div>
@@ -337,7 +365,10 @@ function veLuoiSanPhamXuHuong(danhSach) {
 // ==============================================================================
 function themVaoGioNhanh(idSanPham) {
   // Tìm sản phẩm trong kho bằng vòng lặp for
-  var tatCa = typeof products !== "undefined" ? products : [];
+  var tatCa = readJson("sport_products", []);
+  if (!tatCa || tatCa.length === 0) {
+    tatCa = typeof products !== "undefined" ? products : [];
+  }
   var spChon = null;
 
   for (var i = 0; i < tatCa.length; i++) {
@@ -358,8 +389,8 @@ function themVaoGioNhanh(idSanPham) {
     name: spChon.name,
     price: spChon.salePrice || spChon.price || 0,
     image: spChon.image,
-    size: "Tiêu chuẩn",
-    color: "Mặc định",
+    size: (spChon.sizes && spChon.sizes.length > 0) ? spChon.sizes[0] : "Tiêu chuẩn",
+    color: (spChon.colors && spChon.colors.length > 0) ? spChon.colors[0] : "Mặc định",
     stock: spChon.stock || 50,
   };
 

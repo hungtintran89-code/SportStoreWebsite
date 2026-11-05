@@ -1,4 +1,3 @@
-
 var STORAGE_KEYS = {
   PRODUCTS: "sport_products",
   CATEGORIES: "sport_categories",
@@ -20,19 +19,24 @@ function setStorage(key, data) {
 
 // 4. Hàm nạp dữ liệu ban đầu
 function initSportStorage() {
-  if (!localStorage.getItem(STORAGE_KEYS.PRODUCTS) && typeof products !== "undefined") {
+  var p = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+  if ((!p || p === "[]") && typeof products !== "undefined") {
     setStorage(STORAGE_KEYS.PRODUCTS, products);
   }
-  if (!localStorage.getItem(STORAGE_KEYS.CATEGORIES) && typeof categories !== "undefined") {
+  var c = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
+  if ((!c || c === "[]") && typeof categories !== "undefined") {
     setStorage(STORAGE_KEYS.CATEGORIES, categories);
   }
-  if (!localStorage.getItem(STORAGE_KEYS.ORDERS) && typeof orders !== "undefined") {
+  var o = localStorage.getItem(STORAGE_KEYS.ORDERS);
+  if ((!o || o === "[]") && typeof orders !== "undefined") {
     setStorage(STORAGE_KEYS.ORDERS, orders);
   }
-  if (!localStorage.getItem(STORAGE_KEYS.CUSTOMERS) && typeof customers !== "undefined") {
+  var cu = localStorage.getItem(STORAGE_KEYS.CUSTOMERS);
+  if ((!cu || cu === "[]") && typeof customers !== "undefined") {
     setStorage(STORAGE_KEYS.CUSTOMERS, customers);
   }
-  if (!localStorage.getItem(STORAGE_KEYS.IMPORTS) && typeof imports !== "undefined") {
+  var im = localStorage.getItem(STORAGE_KEYS.IMPORTS);
+  if ((!im || im === "[]") && typeof imports !== "undefined") {
     setStorage(STORAGE_KEYS.IMPORTS, imports);
   }
 }

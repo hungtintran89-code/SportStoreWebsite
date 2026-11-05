@@ -1,7 +1,7 @@
 // --- 1. CÁC BIẾN DÙNG CHUNG ---
-let danhSachGioHang = [];
-let phuongThucThanhToan = "COD"; // Mặc định là thanh toán khi nhận hàng (COD)
-let diaChiMacDinh = null; // Chứa địa chỉ lấy từ tài khoản đã đăng nhập
+var danhSachGioHang = [];
+var phuongThucThanhToan = "COD"; // Mặc định là thanh toán khi nhận hàng (COD)
+var diaChiMacDinh = null; // Chứa địa chỉ lấy từ tài khoản đã đăng nhập
 
 // --- 2. HÀM TÍNH TỔNG TIỀN GIỎ HÀNG (DÙNG VÒNG LẶP FOR CƠ BẢN) ---
 function tinhTongTien() {
@@ -167,8 +167,9 @@ function napDiaChiTaiKhoan() {
   let nguoiDung = getCurrentUser();
   if (!nguoiDung) return;
 
-  let danhSachDiaChi = readJson(STORAGE_ADDR_KEY, []);
   let maNguoiDung = nguoiDung.customerId || nguoiDung.id;
+  let danhSachDiaChi = (typeof STORAGE_ADDR_KEY !== "undefined" ? readJson(STORAGE_ADDR_KEY, []) : []) || [];
+  if (danhSachDiaChi.length === 0) danhSachDiaChi = readJson("sport_addresses_" + maNguoiDung, []);
 
   let diaChiTimDuoc = null;
   if (Array.isArray(danhSachDiaChi)) {
@@ -258,7 +259,8 @@ function datHang(e) {
   let sdt = document.getElementById("phone").value.trim();
   let email = document.getElementById("email").value.trim();
   let diaChi = document.getElementById("address").value.trim();
-  let tinhThanh = document.getElementById("province").selectedOptions[0].text;
+  let provEl = document.getElementById("province");
+  let tinhThanh = (provEl && provEl.selectedOptions && provEl.selectedOptions[0]) ? provEl.selectedOptions[0].text : (provEl ? (provEl.value || "TP. Hồ Chí Minh") : "TP. Hồ Chí Minh");
   let ghiChu = document.getElementById("note").value.trim();
 
   // Xóa sạch thông báo lỗi cũ
@@ -282,7 +284,7 @@ function datHang(e) {
   }
 
   // Kiểm tra Email
-  if (email.length < 5 || email.indexOf("@gmail.com") === -1) {
+  if (email.length < 5 || email.indexOf("@") === -1 || email.indexOf(".") === -1) {
     document.getElementById("err-email").textContent = "Email chưa đúng định dạng!";
     coLoi = true;
   }
@@ -338,7 +340,7 @@ function datHang(e) {
 
     for( let j = 0 ; j < tatCaSanPhamTrongKho.length ;j++){
       let spKho = tatCaSanPhamTrongKho[j];
-      if( spKho.id === mon.id  ){
+      if (String(spKho.id) === String(mon.productId || mon.id)) {
         tonKhoHienTai = spKho.stock || 0 ;
         break;
       }
@@ -384,10 +386,20 @@ function datHang(e) {
     })
   }
 
+  var d = new Date();
+  var nam = d.getFullYear();
+  var thang = (d.getMonth() + 1 < 10 ? "0" : "") + (d.getMonth() + 1);
+  var ngay = (d.getDate() < 10 ? "0" : "") + d.getDate();
+  var gio = (d.getHours() < 10 ? "0" : "") + d.getHours();
+  var phut = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+  var ngayDatLocal = nam + "-" + thang + "-" + ngay;
   let donHangMoi = {
     orderId: maDonMoi,
     id: maDonMoi,
     customerId: nguoiDung.id,
+    phone: sdt,
+    email: email,
+    fullName: hoTen,
     customer: {
       id: nguoiDung.id,
       name: hoTen,
@@ -397,7 +409,7 @@ function datHang(e) {
       address: diaChi,
       province: tinhThanh
     },
-    createdAt: new Date().toISOString(),
+    createdAt: ngayDatLocal,
     paymentMethod: phuongThucThanhToan,
     status: "Mới đặt",
     subtotal: tongTien,
@@ -417,7 +429,7 @@ function datHang(e) {
     for (let i = 0; i < danhSachGioHang.length; i++) {
       let monVuaMua = danhSachGioHang[i];
       for (let j = 0; j < tatCaSanPham.length; j++) {
-        if (String(tatCaSanPham[j].id) === String(monVuaMua.id)) {
+        if (String(tatCaSanPham[j].id) === String(monVuaMua.productId || monVuaMua.id)) {
           tatCaSanPham[j].stock = Math.max(0, Number(tatCaSanPham[j].stock) - Number(monVuaMua.quantity));
           break;
         }
@@ -547,9 +559,9 @@ function moPopupChonDiaChi() {
   // Nếu người dùng chưa có địa chỉ nào trong sổ
   if (danhSachDiaChiPopup.length === 0) {
     khungChua.innerHTML = `
-      <div style="text-align: center; padding: 24px; color: #64748b;">
+      <div class="addr-popup-empty">
         <p>Bạn chưa lưu địa chỉ nhận hàng nào trong sổ địa chỉ.</p>
-        <a href="dev5_user.html#addresses" style="color: #0284c7; font-weight: 600; text-decoration: none;">
+        <a href="user.html#addresses" class="addr-popup-link">
           👉 Đến trang Quản lý tài khoản để thêm địa chỉ
         </a>
       </div>
@@ -564,15 +576,15 @@ function moPopupChonDiaChi() {
       if (dc.city) diaChiDayDu += ", " + dc.city;
 
       html += `
-        <div style="border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #f8fafc;">
-          <div style="line-height: 1.6;">
-            <div style="font-size: 12px; font-weight: 700; color: #0284c7; text-transform: uppercase;">Địa chỉ ${i + 1}</div>
+        <div class="addr-card-item">
+          <div class="addr-card-left">
+            <div class="addr-card-badge">Địa chỉ ${i + 1}</div>
             <div><strong>Người nhận:</strong> ${dc.recipient || "Chưa đặt tên"} • <strong>SĐT:</strong> ${dc.phone || "Chưa có SĐT"}</div>
-            <div style="color: #475569;"><strong>Địa chỉ:</strong> ${diaChiDayDu}</div>
+            <div class="addr-card-text"><strong>Địa chỉ:</strong> ${diaChiDayDu}</div>
           </div>
           <button type="button" 
                   onclick="chonDiaChiNay(${i})" 
-                  style="flex-shrink: 0; background: #0284c7; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">
+                  class="btn-use-address">
             ✓ Dùng địa chỉ này
           </button>
         </div>
@@ -583,12 +595,18 @@ function moPopupChonDiaChi() {
 
   // Hiển thị Popup lên màn hình
   var modal = document.getElementById("modal-chon-dia-chi");
-  if (modal) modal.style.display = "flex";
+  if (modal) {
+    modal.classList.add("show");
+    modal.style.display = "flex";
+  }
 }
 
 function dongPopupChonDiaChi() {
   var modal = document.getElementById("modal-chon-dia-chi");
-  if (modal) modal.style.display = "none";
+  if (modal) {
+    modal.classList.remove("show");
+    modal.style.display = "none";
+  }
 }
 
 function chonDiaChiNay(viTri) {

@@ -4,324 +4,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tài khoản | SportStore</title>
-  <link rel="stylesheet" href="../css/common.css" />
-  <link rel="stylesheet" href="../css/dev5_user.css" />
-  <link rel="stylesheet" href="../css/admin/admin-common.css" />
-  <link rel="stylesheet" href="../css/admin/tab-dashboard.css" />
-  <link rel="stylesheet" href="../css/admin/modal.css" />
+  <title>Bảng Quản Trị Hệ Thống | SportStore Admin</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <link rel="stylesheet" href="css/admin.css" />
 </head>
 
-<body>
+<body class="admin-body">
   <!-- ============================================================================== -->
-  <!-- 1. HEADER DÙNG CHUNG SPORTSTORE -->
+  <!-- 1. MÀN HÌNH ĐĂNG NHẬP RIÊNG BIỆT DÀNH CHO ADMIN (KHÔNG DÙNG POPUP USER) -->
   <!-- ============================================================================== -->
+  <div id="admin-login-screen" class="admin-login-screen">
+    <div class="admin-login-card" id="admin-login-card">
+      <div class="admin-login-brand">
+        <div class="admin-login-icon-wrap">🛡️</div>
+        <h1 class="admin-login-title">Đăng Nhập Quản Trị</h1>
+      </div>
+
+      <div id="admin-login-msg" class="admin-login-msg"></div>
+
+      <form id="admin-login-form" onsubmit="xuLyDangNhapAdmin(event)">
+        <div class="admin-input-group">
+          <label for="admin-login-email">Tài khoản</label>
+          <div class="admin-input-wrapper">
+            <span class="admin-input-icon">👤</span>
+            <input type="text" id="admin-login-email" placeholder="admin@gmail.com" autocomplete="username" required />
+          </div>
+        </div>
+
+        <div class="admin-input-group">
+          <label for="admin-login-password">Mật khẩu</label>
+          <div class="admin-input-wrapper">
+            <span class="admin-input-icon">🔒</span>
+            <input type="password" id="admin-login-password" placeholder="Nhập mật khẩu..." autocomplete="current-password" required />
+            <button type="button" class="admin-toggle-pwd" onclick="toggleAdminPassword()" title="Ẩn/Hiện mật khẩu">
+              <span id="admin-toggle-pwd-icon">👁️</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="admin-submit-btn">
+          Đăng Nhập
+        </button>
+      </form>
+      <a href="index.html" class="admin-back-store-link">
+        ← Về trang chủ
+      </a>
+    </div>
+  </div>
+
+  <!-- 2. KHỐI GIAO DIỆN BẢNG QUẢN TRỊ ADMIN SPA -->
+
+  <!-- ============================================================================== -->
+  <!-- 1. HEADER DÀNH RIÊNG CHO QUẢN TRỊ VIÊN -->
+  <!-- ============================================================================== -->
+  <div id="admin-portal-app">
   <header class="sport-navbar site-header">
     <div class="sport-container sport-navbar-inner header-inner">
       <!-- Logo Cửa Hàng -->
-      <a href="../index.html" class="sport-brand-logo site-logo">
+      <a href="index.html" class="sport-brand-logo site-logo">
         <div class="logo-icon">⚡</div>
         <div>SPORT<span class="accent">STORE</span></div>
       </a>
 
-      <!-- Menu Điều Hướng -->
-      <ul class="sport-nav-menu nav-menu">
-        <li><a href="../index.html">Trang Chủ</a></li>
-        <li><a href="dev2_products.html">Sản Phẩm</a></li>
-        <li><a href="dev4_checkout.html">Giỏ Hàng</a></li>
-      </ul>
-
       <!-- Cụm Hành Động Góc Phải -->
-      <div class="sport-nav-actions header-actions">
-
-        <a href="dev5_user.html" id="header-nav-admin-btn" class="btn-sport btn-outline nav-admin-btn dev5-hidden"
-           data-admin-link title="Truy cập Bảng Quản Trị Admin">
-          ⚙️ Admin
-        </a>
-
-        <!-- Nút Giỏ Hàng -->
-        <a href="dev4_checkout.html" class="nav-badge-btn" title="Xem giỏ hàng">
-          🛒
-          <span class="badge-pill" id="header-cart-badge-count">0</span>
-        </a>
-        <!-- CỤM TÀI KHOẢN KHI ĐÃ ĐĂNG NHẬP -->
-        <div class="dev5-header-user-wrapper dev5-hidden" id="header-user-wrap">
-          <div class="sport-user-logged-pill dev5-user-pill-btn">
-            <img id="header-user-avatar" alt="Avatar" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;" />
-            <span id="header-user-name">Tài khoản</span>
-            <span class="dev5-caret-down">▾</span>
-          </div>
-          <!-- Menu thả xuống Shopee -->
-          <div class="dev5-shopee-dropdown">
-            <div class="dev5-shopee-arrow"></div>
-            <a href="dev5_user.html" class="dev5-shopee-item" id="header-link-profile">
-              Tài Khoản Của Tôi
-            </a>
-            <a href="dev5_user.html?tab=orders" class="dev5-shopee-item" id="header-link-orders">
-              Đơn Mua
-            </a>
-            <button type="button" class="dev5-shopee-item dev5-shopee-logout" id="header-btn-logout" onclick="dangXuat()">
-              Đăng Xuất
-            </button>
-          </div>
-        </div>
-
-        <!-- KHỐI KHI CHƯA ĐĂNG NHẬP -->
-        <button type="button" class="btn-sport btn-outline btn-sm dev5-hidden" id="sport-btn-open-login" title="Đăng nhập tài khoản" onclick="moModalAuth('login')">
-          Đăng Nhập
+      <div class="sport-nav-actions header-actions admin-header-actions">
+        <button type="button" class="btn-sport btn-sm btn-admin-logout" onclick="dangXuatAdmin()">
+          <svg class="admin-logout-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path class="icon-door" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline class="icon-arrow" points="16 17 21 12 16 7"></polyline>
+            <line class="icon-arrow" x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Đăng Xuất</span>
         </button>
-        <button type="button" class="btn-sport btn-primary btn-sm dev5-hidden" id="sport-btn-open-register" title="Đăng ký thành viên" onclick="moModalAuth('register')">
-          Đăng Ký
-        </button>
-
       </div>
     </div>
   </header>
 
-  <section id="view-auth-guard" class="dev5-auth-guard" style="display: none">
-    <div class="dev5-guard-card">
-      <div class="dev5-guard-icon-wrap">
-        <span class="dev5-guard-icon">🔒</span>
-      </div>
-      <span class="dev5-guard-badge">Yêu cầu đăng nhập</span>
-      <h3 class="dev5-guard-title">Vui Lòng Đăng Nhập</h3>
-      <p class="dev5-guard-message">
-        Bạn cần đăng nhập tài khoản để xem thông tin trang cá nhân hoặc bảng
-        quản trị.
-      </p>
-      <div class="dev5-guard-btn-group">
-        <button type="button" class="dev5-guard-btn-main" data-auth-action="login" onclick="moModalAuth('login')">
-          Đăng Nhập
-        </button>
-        <a href="../index.html" class="dev5-guard-btn-sub">← Về Trang Chủ</a>
-      </div>
-    </div>
-  </section>
-
-  <main id="view-user" class="dev5-user-wrapper" style="display: none">
-    <div class="sport-container">
-      <div class="dev5-authorized-content" data-authorized-content>
-        <!-- HERO CHÀO MỪNG -->
-        <section class="dev5-hero">
-          <div class="dev5-hero-text">
-            <span class="dev5-eyebrow">MEMBER CENTER</span>
-            <h1>Xin chào, <span data-user-name>Hội viên</span> 👋</h1>
-            <p>
-              Quản lý hồ sơ, địa chỉ giao hàng và theo dõi hành trình đơn
-              hàng.
-            </p>
-          </div>
-          <div class="dev5-role-badge" data-user-role>Thành viên</div>
-        </section>
-
-        <!-- BỐ CỤC 2 CỘT CHUẨN (CHỈ 1 THẺ DEV5-LAYOUT DUY NHẤT) -->
-        <div class="dev5-layout">
-          <!-- 1. CỘT MENU BÊN TRÁI (SIDEBAR) -->
-          <aside class="dev5-sidebar" aria-label="Menu tài khoản">
-            <div class="dev5-sidebar-title">TÀI KHOẢN CỦA TÔI</div>
-
-            <!-- Tab 1: Tổng quan -->
-            <button class="dev5-tab is-active" type="button" data-tab="overview" onclick="chuyenTab('overview')">
-              <span class="dev5-tab-icon">📊</span><span>Tổng quan</span>
-            </button>
-
-            <!-- Tab 2: Đơn mua -->
-            <button class="dev5-tab" type="button" data-tab="orders" onclick="chuyenTab('orders')">
-              <span class="dev5-tab-icon">📦</span><span>Đơn mua</span>
-            </button>
-
-            <!-- Tab 3: Sổ địa chỉ -->
-            <button class="dev5-tab" type="button" data-tab="addresses" onclick="chuyenTab('addresses')">
-              <span class="dev5-tab-icon">📍</span><span>Sổ địa chỉ</span>
-            </button>
-
-            <!-- Tab 4: Yêu thích -->
-            <button class="dev5-tab" type="button" data-tab="wishlist" onclick="chuyenTab('wishlist')">
-              <span class="dev5-tab-icon">❤️</span><span>Sản phẩm yêu thích</span>
-            </button>
-
-            <!-- Tab 5: FAQ & Bảo hành -->
-            <button class="dev5-tab" type="button" data-tab="faq" onclick="chuyenTab('faq')">
-              <span class="dev5-tab-icon">🛡️</span><span>FAQ &amp; Bảo hành</span>
-            </button>
-          </aside>
-
-
-          <!-- 2. KHU VỰC NỘI DUNG CÁC TAB BÊN PHẢI -->
-          <div class="dev5-content">
-            <!-- TAB 1: TỔNG QUAN & HỒ SƠ -->
-            <section class="dev5-panel is-active" data-panel="overview">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">PROFILE</span>
-                  <h2>Thông tin hội viên</h2>
-                </div>
-                <div class="dev5-heading-actions">
-                  <button class="dev5-secondary-button" type="button" data-edit-profile-btn onclick="moFormSuaHoSo()">
-                    ✏️ Chỉnh sửa hồ sơ
-                  </button>
-                  <button class="dev5-link-button" type="button" onclick="dangXuat()">
-                    Đổi tài khoản
-                  </button>
-                </div>
-              </div> <!-- Đóng dev5-panel-heading tại đây -->
-
-              <!-- Thẻ hiển thị thông tin cá nhân -->
-              <div class="dev5-profile-card">
-                <div class="dev5-profile-info">
-                  <div class="dev5-profile-name-row">
-                    <h3 data-user-name>Hội viên</h3>
-                    <span class="dev5-tier" data-user-tier>Standard</span>
-                  </div>
-                  <p class="dev5-profile-line dev5-line-email" data-user-email></p>
-                  <p class="dev5-profile-line dev5-line-phone" data-user-phone></p>
-                </div>
-              </div>
-
-              <!-- Form sửa hồ sơ -->
-              <form class="dev5-address-form dev5-hidden" data-profile-form onsubmit="luuHoSo(event)">
-                <h3 class="dev5-form-title">✏️ Cập nhật thông tin cá nhân</h3>
-                <div class="dev5-form-grid">
-                  <label>Họ và tên <input name="profileName" required minlength="2" /></label>
-                  <label>Số điện thoại <input name="profilePhone" required pattern="0[0-9]{9}" /></label>
-                  <label class="dev5-form-wide">Email <input name="profileEmail" type="email" required /></label>
-                  <label class="dev5-form-wide">
-                    Đổi mật khẩu mới (bỏ trống nếu không đổi)
-                    <input name="profilePassword" type="password" placeholder="Nhập mật khẩu mới..." />
-                  </label>
-                </div>
-                <div class="dev5-form-actions">
-                  <button class="dev5-secondary-button" type="button" onclick="dongFormSuaHoSo()">Hủy</button>
-                  <button class="dev5-primary-button" type="submit">Lưu thông tin</button>
-                </div>
-              </form>
-
-              <!-- 3 Khung thống kê nhanh -->
-              <div class="dev5-stat-grid">
-                <div class="dev5-stat-card">
-                  <span class="dev5-stat-icon">📦</span>
-                  <div class="dev5-stat-text">
-                    <strong data-order-count>0</strong>
-                    <span>Đơn hàng</span>
-                  </div>
-                </div>
-                <div class="dev5-stat-card">
-                  <span class="dev5-stat-icon">📍</span>
-                  <div class="dev5-stat-text">
-                    <strong data-address-count>0</strong>
-                    <span>Địa chỉ</span>
-                  </div>
-                </div>
-                <div class="dev5-stat-card">
-                  <span class="dev5-stat-icon">❤️</span>
-                  <div class="dev5-stat-text">
-                    <strong data-wishlist-count>0</strong>
-                    <span>Yêu thích</span>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-
-            <!-- TAB 2: LỊCH SỬ ĐƠN HÀNG -->
-            <section class="dev5-panel" data-panel="orders">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">ORDER HISTORY</span>
-                  <h2>Lịch sử &amp; theo dõi đơn hàng</h2>
-                </div>
-              </div>
-              <div data-orders></div>
-            </section>
-
-            <!-- TAB 3: SỔ ĐỊA CHỈ NHẬN HÀNG -->
-            <section class="dev5-panel" data-panel="addresses">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">DELIVERY BOOK</span>
-                  <h2>Sổ địa chỉ giao hàng</h2>
-                </div>
-                <!-- Dòng 287: Thêm onclick -->
-                <div class="dev5-heading-actions">
-                  <button class="dev5-primary-button" type="button" data-add-address onclick="moFormThemDiaChi()">
-                    + Thêm địa chỉ
-                  </button>
-                </div>
-              </div>
-
-              <div data-addresses></div>
-
-              <!-- Form thêm / sửa địa chỉ -->
-              <form class="dev5-address-form dev5-hidden" data-address-form onsubmit="luuDiaChi(event)">
-                <h3 class="dev5-form-title">📍 Địa chỉ nhận hàng</h3>
-                <div class="dev5-form-grid">
-                  <label>
-                    Người nhận
-                    <input name="recipient" required placeholder="Nguyễn Văn A" />
-                  </label>
-                  <label>
-                    Số điện thoại
-                    <input name="phone" required placeholder="09xx xxx xxx" />
-                  </label>
-                  <label class="dev5-form-wide">
-                    Địa chỉ chi tiết
-                    <input name="line" required placeholder="Số nhà, tên đường, phường/xã..." />
-                  </label>
-                  <label>
-                    Quận/Huyện
-                    <input name="district" required />
-                  </label>
-                  <label>
-                    Tỉnh/Thành phố
-                    <input name="city" required />
-                  </label>
-                </div>
-
-                <div class="dev5-form-actions">
-                  <!-- Dòng 341: Thêm onclick -->
-                  <button class="dev5-secondary-button" type="button" onclick="dongFormDiaChi()">Hủy</button>
-                  <button class="dev5-primary-button" type="submit">Lưu địa chỉ</button>
-                </div>
-              </form>
-            </section>
-
-            <!-- TAB 4: SẢN PHẨM YÊU THÍCH -->
-            <section class="dev5-panel" data-panel="wishlist">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">YOUR PICKS</span>
-                  <h2>Sản phẩm yêu thích</h2>
-                </div>
-              </div>
-              <div class="dev5-wishlist-grid" data-wishlist></div>
-            </section>
-
-            <!-- TAB 5: FAQ & BẢO HÀNH -->
-            <section class="dev5-panel" data-panel="faq">
-              <div class="dev5-panel-heading">
-                <div>
-                  <span class="dev5-eyebrow">SUPPORT</span>
-                  <h2>FAQ &amp; chính sách bảo hành</h2>
-                </div>
-              </div>
-              <div data-faq></div>
-            </section>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+  <!-- ============================================================================== -->
+  <!-- 2. HỘP KHÓA BẢO VỆ (HIỂN THỊ KHI CHƯA ĐĂNG NHẬP ADMIN) -->
+  <!-- ============================================================================== -->
+  
 
   <!-- ============================================================================== -->
-  <!-- KHỐI 3: DÀNH CHO QUẢN TRỊ VIÊN (ADMIN ROLE - CHUẨN TV3 HOVER MƯỢT MÀ) -->
+  <!-- 3. KHỐI GIAO DIỆN QUẢN TRỊ ADMIN (SPA TABS) -->
   <!-- ============================================================================== -->
-  <div id="view-admin" class="admin-wrapper" style="display: none; min-height: 85vh">
+  <div id="view-admin" class="admin-wrapper">
     <aside class="admin-sidebar">
       <nav aria-label="Điều hướng chính" class="admin-sidebar-menu">
         <!-- Nhóm 1: Tổng quan -->
-        <div class="admin-menu-group" style="margin-top: 0">
+        <div class="admin-menu-group admin-menu-first">
           <div class="admin-menu-title" id="admin-group-overview">Tổng quan</div>
-          <ul aria-labelledby="admin-group-overview" style="list-style: none; padding: 0; margin: 0">
+          <ul aria-labelledby="admin-group-overview" class="admin-nav-list">
             <li>
               <button type="button" class="admin-nav-item active" id="nav-dashboard"
                 onclick="chuyenTabAdmin('dashboard', this)" aria-current="page" title="Bảng điều khiển">
@@ -337,7 +110,7 @@
         <!-- Nhóm 2: Kho và sản phẩm -->
         <div class="admin-menu-group">
           <div class="admin-menu-title" id="admin-group-inventory">Kho và sản phẩm</div>
-          <ul aria-labelledby="admin-group-inventory" style="list-style: none; padding: 0; margin: 0">
+          <ul aria-labelledby="admin-group-inventory" class="admin-nav-list">
             <li>
               <button type="button" class="admin-nav-item" id="nav-category" onclick="chuyenTabAdmin('category', this)"
                 title="Loại sản phẩm">
@@ -367,7 +140,7 @@
                   <span class="nav-icon">📥</span>
                   <span>Nhập hàng</span>
                 </div>
-                <span class="nav-badge badge-gray" id="badge-count-imports" style="display: none">0</span>
+                <span class="nav-badge badge-gray" id="badge-count-imports">0</span>
               </button>
             </li>
 
@@ -386,7 +159,7 @@
         <!-- Nhóm 3: Bán hàng và khách hàng -->
         <div class="admin-menu-group">
           <div class="admin-menu-title" id="admin-group-sales">Bán hàng và khách hàng</div>
-          <ul aria-labelledby="admin-group-sales" style="list-style: none; padding: 0; margin: 0">
+          <ul aria-labelledby="admin-group-sales" class="admin-nav-list">
             <li>
               <button type="button" class="admin-nav-item" id="nav-order" onclick="chuyenTabAdmin('order', this)"
                 title="Đơn hàng">
@@ -414,7 +187,7 @@
         <!-- Nhóm 4: Báo cáo và thống kê -->
         <div class="admin-menu-group">
           <div class="admin-menu-title" id="admin-group-reports">Báo cáo và thống kê</div>
-          <ul aria-labelledby="admin-group-reports" style="list-style: none; padding: 0; margin: 0">
+          <ul aria-labelledby="admin-group-reports" class="admin-nav-list">
             <li>
               <button type="button" class="admin-nav-item" id="nav-inventory" onclick="chuyenTabAdmin('inventory', this)"
                 title="Báo cáo tồn kho">
@@ -545,8 +318,8 @@
               <th>EMAIL</th>
               <th>HẠNG HỘI VIÊN</th>
               <th>TRẠNG THÁI</th>
-              <th>CHI TIẾT</th>
-              <th>THAO TÁC</th>
+              <th class="table-align-center col-cust-detail">CHI TIẾT</th>
+              <th class="table-align-center col-cust-actions">THAO TÁC</th>
             </tr>
             </thead>
             <tbody id="customer-tbody"></tbody>
@@ -745,8 +518,8 @@
       <!-- TAB: BÁO CÁO TỒN KHO CHUẨN ĐỀ XUẤT -->
       <div id="tab-inventory" class="admin-tab-content">
         <!-- Header tiêu đề và 2 nút switch tab -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin: 0;">Báo Cáo Tồn Kho</h2>
+        <div class="admin-section-header">
+          <h2 class="admin-section-title">Báo Cáo Tồn Kho</h2>
           <div class="inventory-tab-switch">
             <button type="button" class="inventory-tab-btn active" id="tabBtnSnapshot" onclick="chuyenTabTonKho('snapshot')">Tồn Kho Theo Loại</button>
             <button type="button" class="inventory-tab-btn" id="tabBtnMovement" onclick="chuyenTabTonKho('movement')">Nhập – Xuất – Tồn</button>
@@ -766,19 +539,19 @@
             <div class="admin-summary-card">
               <div class="summary-card-left">
                 <span class="summary-card-title">Còn Hàng</span>
-                <span class="summary-card-value val-success" id="summaryInStock" style="color: #16a34a;">0</span>
+                <span class="summary-card-value val-success summary-val-success" id="summaryInStock">0</span>
               </div>
             </div>
             <div class="admin-summary-card">
               <div class="summary-card-left">
                 <span class="summary-card-title">Cảnh Báo (Tồn ≤ 5)</span>
-                <span class="summary-card-value val-orange" id="summaryLowStock" style="color: #ea580c;">0</span>
+                <span class="summary-card-value val-orange summary-val-orange" id="summaryLowStock">0</span>
               </div>
             </div>
             <div class="admin-summary-card">
               <div class="summary-card-left">
                 <span class="summary-card-title">Đã Hết Hàng</span>
-                <span class="summary-card-value val-danger" id="summaryOutOfStock" style="color: #dc2626;">0</span>
+                <span class="summary-card-value val-danger summary-val-danger" id="summaryOutOfStock">0</span>
               </div>
             </div>
           </div>
@@ -788,6 +561,16 @@
             <div class="admin-filter-item">
               <span>Ngày:</span>
               <input type="date" id="snapshotDateInput" value="2026-10-31">
+            </div>
+            <!-- Thêm bộ lọc Trạng thái vào đây -->
+            <div class="admin-filter-item">
+              <span>Trạng thái:</span>
+              <select id="snapshotStatusSelect" onchange="hienThiBangTonKhoAdmin()">
+                <option value="">Tất cả trạng thái</option>
+                <option value="normal">Bình thường (Còn hàng)</option>
+                <option value="warning">Cảnh báo (Tồn ≤ 5)</option>
+                <option value="danger">Hết hàng (Tồn = 0)</option>
+              </select>
             </div>
             <div class="admin-filter-item">
               <span>Loại SP:</span>
@@ -800,12 +583,12 @@
               </select>
             </div>
             <input type="text" id="snapshotSearchInput" oninput="hienThiBangTonKhoAdmin()"
-                   placeholder="Tìm theo tên sản phẩm, mã SP..." style="flex: 1; min-width: 200px;">
+                   placeholder="Tìm theo tên sản phẩm, mã SP..." class="admin-filter-search-input">
           </div>
 
           <!-- Bảng Dữ Liệu Div Table -->
           <!-- Đổi overflow:hidden thành overflow-x: auto -->
-          <div class="admin-table-wrap" style="background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow-x: auto;">
+          <div class="admin-table-wrap">
             <div class="div-table div-table-inventory">
               <div class="div-header-inventory">
                 <div>MÃ SP</div>
@@ -814,7 +597,7 @@
                 <div>GIÁ VỐN</div>
                 <div>TỒN KHO</div>
                 <div>TRẠNG THÁI</div>
-                <div style="text-align: right;">THAO TÁC</div>
+                <div class="table-align-right">THAO TÁC</div>
               </div>
               <div class="div-table-body" id="admin-inventory-tbody"></div>
             </div>
@@ -823,12 +606,12 @@
 
         <!-- VIEW 2: NHẬP XUẤT TỒN -->
         <!-- VIEW 2: NHẬP XUẤT TỒN (ĐÃ BỔ SUNG GIAO DIỆN) -->
-        <div id="viewMovementSection" style="display: none;">
+        <div id="viewMovementSection">
           <!-- Thanh bộ lọc của Tab 2 -->
           <div class="admin-filter-bar">
             <div class="admin-filter-item">
               <span>Sản phẩm:</span>
-              <select id="movementProductSelect" onchange="hienThiNhapXuatTon()" style="min-width: 220px; padding: 7px 10px; border-radius: 8px; border: 1px solid #cbd5e1;">
+              <select id="movementProductSelect" onchange="hienThiNhapXuatTon()" class="select-movement-product">
                 <option value="">Tất cả sản phẩm</option>
               </select>
             </div>
@@ -851,47 +634,49 @@
             <div class="admin-summary-card">
               <div class="summary-card-left">
                 <span class="summary-card-title">Tổng Nhập</span>
-                <span class="summary-card-value" id="movementTotalImport" style="color: #16a34a;">+0</span>
+                <span class="summary-card-value summary-val-success" id="movementTotalImport">+0</span>
               </div>
             </div>
             <div class="admin-summary-card">
               <div class="summary-card-left">
                 <span class="summary-card-title">Tổng Xuất</span>
-                <span class="summary-card-value" id="movementTotalExport" style="color: #ea580c;">-0</span>
+                <span class="summary-card-value summary-val-orange" id="movementTotalExport">-0</span>
               </div>
             </div>
             <div class="admin-summary-card">
               <div class="summary-card-left">
                 <span class="summary-card-title">Tồn Cuối Kỳ</span>
-                <span class="summary-card-value" id="movementEndingStock" style="color: #0f172a;">0</span>
+                <span class="summary-card-value summary-val-dark" id="movementEndingStock">0</span>
               </div>
             </div>
           </div>
 
           <!-- Bảng chi tiết Nhập - Xuất - Tồn -->
-          <div class="admin-table-wrap" style="background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow-x: auto;">
+          <div class="admin-table-wrap">
             <div class="div-table div-table-movement">
-              <div class="div-header-movement" style="display: grid; grid-template-columns: 120px 140px 1.5fr 120px 120px 140px; padding: 12px 16px; background: #f8fafc; font-size: 11.5px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0;">
+              <div class="div-header-movement">
                 <div>NGÀY</div>
                 <div>CHỨNG TỪ</div>
                 <div>LOẠI GIAO DỊCH</div>
-                <div style="text-align: center;">SL NHẬP</div>
-                <div style="text-align: center;">SL XUẤT</div>
-                <div style="text-align: center;">TỒN KHO</div>
+                <div class="table-align-center">SL NHẬP</div>
+                <div class="table-align-center">SL XUẤT</div>
+                <div class="table-align-center">TỒN KHO</div>
               </div>
               <div class="div-table-body" id="movementTableBody"></div>
             </div>
           </div>
         </div>
 
-
       </div>
     </main>
   </div>
 
+  <!-- ============================================================================== -->
+  <!-- 4. TẤT CẢ CÁC MODAL THAO TÁC QUẢN TRỊ ADMIN -->
+  <!-- ============================================================================== -->
   <!-- POPUP XEM CHI TIẾT TỒN KHO KHI BẤM NÚT XEM -->
   <div id="modal-inventory-detail" class="modal-overlay">
-    <div class="modal-box" style="max-width: 460px;">
+    <div class="modal-box modal-box-sm">
       <div class="modal-header">
         <h3 class="modal-title">Thông Tin Tồn Kho</h3>
         <button type="button" class="modal-close-btn" onclick="dongPopupChiTiet()">&times;</button>
@@ -917,7 +702,7 @@
           <div class="form-group">
             <label>Mã loại:</label>
             <input type="text" id="cat-id" placeholder="Tự động tạo mã" disabled
-              style="background-color: #f1f5f9; cursor: not-allowed;" />
+              class="form-input-readonly" />
           </div>
           <div class="form-group">
             <label>Icon cảm xúc:</label>
@@ -1011,7 +796,7 @@
         </div>
         <div class="form-group">
           <label>Trạng thái sản phẩm:</label>
-          <select id="prod-status" class="filter-select" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          <select id="prod-status" class="filter-select filter-select-full">
             <option value="active">Đang bán (Hiển thị ngoài cửa hàng)</option>
             <option value="hidden">Đang ẩn (Tạm ẩn khỏi khách mua)</option>
           </select>
@@ -1070,13 +855,13 @@
 
   <!-- MODAL 4: CHI TIẾT ĐƠN HÀNG -->
   <div id="modal-order-detail" class="modal-overlay">
-    <div class="modal-box" style="max-width: 600px;">
+    <div class="modal-box modal-box-lg">
       <div class="modal-header">
         <h3 class="modal-title" id="modal-order-title">Chi Tiết Đơn Hàng</h3>
         <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-order-detail')">&times;</button>
       </div>
       <div class="modal-body">
-        <div class="order-info-card" style="background:#f8fafc; padding:12px 16px; border-radius:8px; margin-bottom:14px; font-size:13px; line-height:1.6;">
+        <div class="order-info-card">
           <div><strong>Khách hàng:</strong> <span id="order-detail-customer">Khách hàng</span></div>
           <div><strong>Email:</strong> <span id="order-detail-email">Chưa cập nhật</span></div>
           <div><strong>Địa chỉ giao:</strong> <span id="order-detail-address">Nhận tại cửa hàng</span></div>
@@ -1085,11 +870,11 @@
           <div><strong>Tình trạng:</strong> <span id="order-detail-status" class="nav-badge badge-blue">Mới đặt</span></div>
           <div><strong>Ghi chú:</strong> <span id="order-detail-note">Không có</span></div>
         </div>
-        <h4 style="margin: 0 0 10px 0; font-size: 14px;">Danh Sách Mặt Hàng Trong Đơn:</h4>
-        <div id="order-detail-items-list" style="max-height: 240px; overflow-y: auto;"></div>
-        <div style="display:flex; justify-content:space-between; align-items:center; padding-top:14px; margin-top:10px; border-top:2px solid #e2e8f0; font-size:15px;">
+        <h4 class="order-detail-subtitle">Danh Sách Mặt Hàng Trong Đơn:</h4>
+        <div id="order-detail-items-list" class="order-detail-items-list"></div>
+        <div class="order-detail-summary">
           <strong>TỔNG TIỀN ĐƠN HÀNG:</strong>
-          <strong id="order-detail-total" style="color:#0284c7; font-size:18px;">0 đ</strong>
+          <strong id="order-detail-total" class="order-detail-total-price">0 đ</strong>
         </div>
       </div>
       <div class="modal-footer">
@@ -1100,7 +885,7 @@
 
   <!-- POPUP XEM CHI TIẾT SẢN PHẨM PHIẾU NHẬP -->
   <div id="modal-import-detail" class="modal-overlay">
-    <div class="modal-box" style="max-width: 480px;">
+    <div class="modal-box modal-box-md">
       <div class="modal-header">
         <h3 class="modal-title" id="import-detail-title">Chi Tiết Phiếu Nhập Hàng</h3>
         <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-import-detail')">&times;</button>
@@ -1131,7 +916,7 @@
   </div>
   <!-- MODAL SỬA GIÁ BÁN & % LỢI NHUẬN RIÊNG BIỆT -->
   <div id="modal-pricing" class="modal-overlay">
-    <div class="modal-box" style="max-width: 480px;">
+    <div class="modal-box modal-box-md">
       <div class="modal-header">
         <h3 class="modal-title">Điều Chỉnh Giá Bán & Lợi Nhuận</h3>
         <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-pricing')">&times;</button>
@@ -1139,22 +924,23 @@
       <div class="modal-body">
         <div class="form-group">
           <label>Tên sản phẩm:</label>
-          <input type="text" id="pricing-prod-name" readonly style="background:#f1f5f9; font-weight:700; cursor:not-allowed;" />
+          <input type="text" id="pricing-prod-name" readonly class="pricing-prod-name-input" />
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Giá vốn (nhập kho):</label>
-            <input type="text" id="pricing-cost-price" readonly style="background:#f1f5f9; cursor:not-allowed;" />
+            <input type="text" id="pricing-cost-price" readonly class="form-input-readonly" />
           </div>
           <div class="form-group">
             <label>% Lợi nhuận định mức:</label>
-            <input type="number" id="pricing-profit-percent" readonly style="background:#f1f5f9; cursor:not-allowed;" />
+            <input type="number" id="pricing-profit-percent" min="0" step="1" placeholder="Nhập % lợi nhuận..." oninput="tinhGiaBanTuDong()" class="pricing-profit-input" />
           </div>
         </div>
         <div class="form-group">
           <label>Giá bán niêm yết (VNĐ):</label>
-          <input type="number" id="pricing-sale-price" min="0" step="1000" placeholder="Nhập giá bán..." oninput="tinhPhanTramTuDong()" style="font-size:16px; font-weight:800; color:#0284c7;" />
+          <input type="number" id="pricing-sale-price" min="0" step="1000" placeholder="Nhập giá bán..." oninput="tinhPhanTramTuDong()" class="pricing-sale-input" />
         </div>
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-pricing')">Hủy Bỏ</button>
         <button type="button" class="btn-sport btn-primary" onclick="luuGiaBanMoi()">Lưu Giá Bán</button>
@@ -1163,7 +949,7 @@
   </div>
   <!-- POPUP XEM CHI TIẾT KHÁCH HÀNG -->
   <div id="modal-customer-detail" class="modal-overlay">
-    <div class="modal-box" style="max-width: 480px;">
+    <div class="modal-box modal-box-md">
       <div class="modal-header">
         <h3 class="modal-title">Chi Tiết Khách Hàng</h3>
         <button type="button" class="modal-close-btn" onclick="dongModalAdmin('modal-customer-detail')">&times;</button>
@@ -1178,153 +964,37 @@
   </div>
 
   <!-- ============================================================================== -->
-  <!-- FOOTER CHUẨN SPORTSTORE -->
+  <!-- 4. FOOTER SPORTSTORE -->
   <!-- ============================================================================== -->
-  <footer class="sport-footer site-footer">
+  <footer class="sport-footer site-footer admin-footer-wrap">
     <div class="sport-container container">
-      <div class="sport-footer-grid footer-grid">
-        <div class="sport-footer-col footer-col">
-          <div class="sport-brand-logo" style="margin-bottom: 14px">
-            <div class="logo-icon">⚡</div>
-            <div style="color: #ffffff">SPORT<span class="accent">STORE</span></div>
-          </div>
-          <p>Hệ thống bán lẻ trang bị và trang phục thể thao chính hãng hàng đầu Việt Nam. Đồng hành cùng mọi vận động
-            viên bứt phá giới hạn.</p>
-        </div>
-        <div class="sport-footer-col footer-col">
-          <h4>Điều Hướng Nhanh</h4>
-          <ul class="footer-links">
-            <li><a href="../index.html">Trang Chủ</a></li>
-            <li><a href="dev2_products.html">Sản Phẩm Tuyển Chọn</a></li>
-            <li><a href="dev4_checkout.html">Giỏ Hàng & Thanh Toán</a></li>
-            <li><a href="dev5_user.html">Tài Khoản Hội Viên</a></li>
-          </ul>
-        </div>
-        <div class="sport-footer-col footer-col">
-          <h4>Hỗ Trợ & Chính Sách</h4>
-          <ul class="footer-links">
-            <li><a href="dev5_user.html">Chính Sách Bảo Hành</a></li>
-            <li><a href="dev5_user.html">Quy Định Đổi Trả 30 Ngày</a></li>
-            <li><a href="dev5_user.html">Hướng Dẫn Chọn Size Chuẩn</a></li>
-            <li><a href="dev5_user.html">Theo Dõi Vận Đơn</a></li>
-          </ul>
-        </div>
-        <div class="sport-footer-col footer-col">
-          <h4>Hotline & Liên Hệ</h4>
-          <p>📞 Hotline: 1800 6868 (Miễn phí)</p>
-          <p>✉️ Email: support@sportstore.vn</p>
-          <p>📍 Trụ sở: 123 Đường Cầu Giấy, Hà Nội</p>
-        </div>
-      </div>
       <div class="sport-footer-bottom footer-bottom">
-        <div>© 2026 SportStore. Thiết kế kiến trúc Decoupled Vanilla Frontend.</div>
-        <div>Chạy mượt mà 100% Client-side & Không phụ thuộc Backend</div>
+        <div>© 2026 SportStore. Hệ Thống Quản Trị Nội Bộ & Bán Lẻ Thể Thao.</div>
+        <div>Kiến trúc Decoupled Vanilla Frontend - Hoạt động độc lập 100% Client-side</div>
       </div>
     </div>
   </footer>
+</div> <!-- Kết thúc #admin-portal-app -->
 
-  <!-- ============================================================================== -->
-  <!-- NẠP CÁC FILE DỮ LIỆU CHUẨN (DATA STORE ĐẦY ĐỦ CẢ ORDERITEM.JS) -->
-  <!-- ============================================================================== -->
-  <script src="../data/store/banners.js"></script>
-  <script src="../data/store/categories.js"></script>
-  <script src="../data/store/products.js"></script>ipt>
+  <!-- NẠP CÁC FILE DỮ LIỆU & LOGIC CHUẨN ĐÃ ĐƯỢC TỔ CHỨC LẠI -->
+  <script src="data/store/banners.js"></script>
+  <script src="data/store/categories.js"></script>
+  <script src="data/store/products.js"></script>
+  <script src="data/store/customers.js"></script>
+  <script src="data/store/orders.js"></script>
+  <script src="data/store/imports.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/init-storage.js"></script>
+  <script src="data/store/support.js"></script>
 
-  <script src="../js/common.js"></script>
-  <script src="../js/auth_modal.js"></script>
-  <script src="../js/init-storage.js"></script>
-
-  <!-- LOGIC USER & ĐIỀU PHỐI THEO ROLE -->
-  <script src="../js/dev5_user.js"></script>
-  <script>
-    function dieuPhoiGiaoDienTheoRole() {
-      var session = null;
-      try {
-        session = JSON.parse(localStorage.getItem("sport_user"));
-      } catch (e) {
-        session = null;
-      }
-      var viewGuest = document.getElementById("view-auth-guard");
-      var viewUser = document.getElementById("view-user");
-      var viewAdmin = document.getElementById("view-admin");
-      var siteFooter = document.querySelector(".sport-footer");
-      var root = document.documentElement;
-
-      // 1. Chưa đăng nhập -> Hiện hộp khóa
-      if (!session) {
-        if (viewGuest) viewGuest.style.display = "flex";
-        if (viewUser) viewUser.style.display = "none";
-        if (viewAdmin) viewAdmin.style.display = "none";
-        if (siteFooter) siteFooter.style.display = "block";
-        return;
-      }
-      // 2. Tài khoản Quản Trị Viên (role === 'admin')
-      if (session.role === "admin") {
-        if (viewGuest) viewGuest.style.display = "none";
-        if (viewUser) viewUser.style.display = "none";
-        if (viewAdmin) viewAdmin.style.display = "flex";
-        if (siteFooter) siteFooter.style.display = "none";
-        if (typeof updateSidebarBadges === "function") updateSidebarBadges();
-        if (typeof chuyenTabAdmin === "function") chuyenTabAdmin("dashboard");
-        return;
-      }
-      // 3. Khách hàng bình thường (role === 'user')
-      root.classList.add("dev5-scroll-page");
-      if (viewGuest) viewGuest.style.display = "none";
-      if (viewAdmin) viewAdmin.style.display = "none";
-      if (viewUser) viewUser.style.display = "block";
-      if (siteFooter) siteFooter.style.display = "block";
-      if (typeof renderUserProfile === "function") renderUserProfile();
-    }
-    document.addEventListener("DOMContentLoaded", dieuPhoiGiaoDienTheoRole);
-  </script>
-</body>
-
-</html>
-<!-- LOGIC USER & ĐIỀU PHỐI THEO ROLE -->
-<script src="../js/dev5_user.js"></script>
-<script>
-  function dieuPhoiGiaoDienTheoRole() {
-    var session = null;
-    try {
-      session = JSON.parse(localStorage.getItem("sport_user"));
-    } catch (e) {
-      session = null;
-    }
-    var viewGuest = document.getElementById("view-auth-guard");
-    var viewUser = document.getElementById("view-user");
-    var viewAdmin = document.getElementById("view-admin");
-    var siteFooter = document.querySelector(".sport-footer");
-    var root = document.documentElement;
-
-    // 1. Chưa đăng nhập -> Hiện hộp khóa
-    if (!session) {
-      if (viewGuest) viewGuest.style.display = "flex";
-      if (viewUser) viewUser.style.display = "none";
-      if (viewAdmin) viewAdmin.style.display = "none";
-      if (siteFooter) siteFooter.style.display = "block";
-      return;
-    }
-    // 2. Tài khoản Quản Trị Viên (role === 'admin')
-    if (session.role === "admin") {
-      if (viewGuest) viewGuest.style.display = "none";
-      if (viewUser) viewUser.style.display = "none";
-      if (viewAdmin) viewAdmin.style.display = "flex";
-      if (siteFooter) siteFooter.style.display = "none";
-      if (typeof updateSidebarBadges === "function") updateSidebarBadges();
-      if (typeof chuyenTabAdmin === "function") chuyenTabAdmin("dashboard");
-      return;
-    }
-    // 3. Khách hàng bình thường (role === 'user')
-    root.classList.add("dev5-scroll-page");
-    if (viewGuest) viewGuest.style.display = "none";
-    if (viewAdmin) viewAdmin.style.display = "none";
-    if (viewUser) viewUser.style.display = "block";
-    if (siteFooter) siteFooter.style.display = "block";
-    if (typeof renderUserProfile === "function") renderUserProfile();
-  }
-  document.addEventListener("DOMContentLoaded", dieuPhoiGiaoDienTheoRole);
-</script>
+  <!-- CÁC BỘ CHỨC NĂNG QUẢN TRỊ ADMIN ĐÃ ĐƯỢC PHÂN TÁCH GỌN GÀNG -->
+  <script src="js/admin/admin-common.js"></script>
+  <script src="js/admin/admin-dashboard.js"></script>
+  <script src="js/admin/admin-products.js"></script>
+  <script src="js/admin/admin-orders.js"></script>
+  <script src="js/admin/admin-inventory.js"></script>
+  <script src="js/admin/admin-customers.js"></script>
+  <script src="js/admin/admin-auth.js"></script>
 </body>
 
 </html>
