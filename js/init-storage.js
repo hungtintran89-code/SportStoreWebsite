@@ -22,6 +22,15 @@ function initSportStorage() {
   var p = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
   if ((!p || p === "[]") && typeof products !== "undefined") {
     setStorage(STORAGE_KEYS.PRODUCTS, products);
+  } else if (p) {
+    try {
+      var arrP = JSON.parse(p);
+      var hasTrash = arrP.some(item => item && item.originalPrice !== undefined);
+      if (hasTrash) {
+        arrP.forEach(item => { if (item) delete item.originalPrice; });
+        setStorage(STORAGE_KEYS.PRODUCTS, arrP);
+      }
+    } catch (e) {}
   }
   var c = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
   if ((!c || c === "[]") && typeof categories !== "undefined") {
