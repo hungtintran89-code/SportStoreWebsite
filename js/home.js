@@ -138,7 +138,6 @@ function hienThiSanPhamFlashSale() {
   if (!khungFlashSale) return;
   khungFlashSale.innerHTML = "";
 
-  // Tận dụng hàm readJson() có sẵn trong common.js để đọc dữ liệu
   var tatCaSanPham = readJson("sport_products", []);
   if (!Array.isArray(tatCaSanPham) || tatCaSanPham.length === 0) {
     tatCaSanPham = typeof products !== "undefined" ? products : [];
@@ -162,11 +161,10 @@ function hienThiSanPhamFlashSale() {
     if (loaiBiAn) continue;
 
     var giaBan = Number(sp.price || 0);
-    var giaGoc = Number(sp.originalPrice || 0);
+    var giaNhap = Number(sp.costPrice || sp.originalPrice || sp.cost || 0);
 
-    if (giaGoc > giaBan) {
+    if (giaNhap > giaBan && giaBan > 0) {
       dsSale.push(sp);
-      if (dsSale.length === 4) break;
     }
   }
 
@@ -174,7 +172,7 @@ function hienThiSanPhamFlashSale() {
   for (var j = 0; j < dsSale.length; j++) {
     var item = dsSale[j];
     var giaHienThi = Number(item.price || 0);
-    var giaCu = Number(item.originalPrice || 0);
+    var giaCu = Number(item.costPrice || item.originalPrice || item.cost || 0);
     var phanTramGiam =
       "-" + Math.round(((giaCu - giaHienThi) / giaCu) * 100) + "%";
 
@@ -326,7 +324,7 @@ function veLuoiSanPhamXuHuong(danhSach) {
 
   var html = "";
   // Hiển thị tối đa 6 sản phẩm
-  for (var i = 0; i < danhSach.length && i < 6; i++) {
+  for (var i = 0; i < danhSach.length ; i++) {
     var sp = danhSach[i];
     var giaHienThi = sp.salePrice || sp.price || 0;
 
@@ -391,8 +389,8 @@ function themVaoGioNhanh(idSanPham) {
     name: spChon.name,
     price: spChon.salePrice || spChon.price || 0,
     image: spChon.image,
-    size: "Tiêu chuẩn",
-    color: "Mặc định",
+    size: (spChon.sizes && spChon.sizes.length > 0) ? spChon.sizes[0] : "Tiêu chuẩn",
+    color: (spChon.colors && spChon.colors.length > 0) ? spChon.colors[0] : "Mặc định",
     stock: spChon.stock || 50,
   };
 

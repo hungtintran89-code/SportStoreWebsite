@@ -180,7 +180,7 @@ function chuyenTabAuth(cheDo) {
 }
 
 function xuLyDangNhap(event) {
-  // event.preventDefault(); // Ngăn trình duyệt tự tải lại trang
+  event.preventDefault(); // Ngăn trình duyệt tự tải lại trang
 
   var dongThongBao = document.getElementById("auth-form-msg");
   var oTaiKhoan = document.getElementById("auth-login-account");

@@ -52,8 +52,9 @@ function getProductDisplayPrice(product) {
 
 function getProductOriginalPrice(product) {
     if (product.originalPrice) return Number(product.originalPrice);
-    if (product.salePrice && product.price && Number(product.price) > Number(product.salePrice)) {
-        return Number(product.price);
+    // Nếu giá nhập > giá bán thì lấy giá nhập làm giá gạch ngang
+    if (product.costPrice && product.price && Number(product.costPrice) > Number(product.price)) {
+        return Number(product.costPrice);
     }
     return 0;
 }
@@ -212,8 +213,8 @@ function themNhanhVaoGio(productCode) {
         name: product.name,
         price: getProductDisplayPrice(product),
         image: product.image || (Array.isArray(product.gallery) && product.gallery[0]) || "",
-        size: "Tiêu chuẩn",
-        color: "Mặc định",
+        size: (product.sizes && product.sizes.length > 0) ? product.sizes[0] : "Tiêu chuẩn",
+        color: (product.colors && product.colors.length > 0) ? product.colors[0] : "Mặc định",
         stock: product.stock || 50
     };
 

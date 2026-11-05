@@ -386,6 +386,13 @@ function datHang(e) {
     })
   }
 
+  var d = new Date();
+  var nam = d.getFullYear();
+  var thang = (d.getMonth() + 1 < 10 ? "0" : "") + (d.getMonth() + 1);
+  var ngay = (d.getDate() < 10 ? "0" : "") + d.getDate();
+  var gio = (d.getHours() < 10 ? "0" : "") + d.getHours();
+  var phut = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+  var ngayDatLocal = nam + "-" + thang + "-" + ngay;
   let donHangMoi = {
     orderId: maDonMoi,
     id: maDonMoi,
@@ -402,7 +409,7 @@ function datHang(e) {
       address: diaChi,
       province: tinhThanh
     },
-    createdAt: new Date().toISOString(),
+    createdAt: ngayDatLocal,
     paymentMethod: phuongThucThanhToan,
     status: "Mới đặt",
     subtotal: tongTien,

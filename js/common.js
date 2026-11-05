@@ -111,15 +111,15 @@ function addToCart(product, quantityToAdd = 1) {
   }
 
   const cart = getCart();
-  const size = product.size || "Mặc định";
-  const color = product.color || "Tiêu chuẩn";
+  const size = product.size || (Array.isArray(product.sizes) && product.sizes.length > 0 ? product.sizes[0] : "Tiêu chuẩn");
+  const color = product.color || (Array.isArray(product.colors) && product.colors.length > 0 ? product.colors[0] : "Mặc định");
   const addQty = Math.max(1, Number(quantityToAdd) || 1);
 
   const existingItem = cart.find(
     (item) =>
       String(item.id) === String(product.id) &&
-      (item.size || "Mặc định") === size &&
-      (item.color || "Tiêu chuẩn") === color,
+      (item.size || "Tiêu chuẩn") === size &&
+      (item.color || "Mặc định") === color,
   );
   const soLuongDangCo = existingItem ? existingItem.quantity : 0;
   if (soLuongDangCo + addQty > product.stock) {
@@ -322,7 +322,7 @@ function xemChiTietDon(maDon) {
 
   var elDate = document.getElementById("order-detail-date");
   if (elDate) {
-    var ngayHienThi = don.date || (don.createdAt ? don.createdAt.split("T")[0] : "Hôm nay");
+    var ngayHienThi = don.date || (don.createdAt ? don.createdAt.split(" ")[0].split("T")[0] : "Hôm nay");
     elDate.textContent = ngayHienThi;
   }
 
@@ -477,26 +477,23 @@ function toggleYeuThich(idSanPham, btnEl) {
     return false;
   }
 
-  // 2. Nếu chưa có -> Tìm sản phẩm trong kho và thêm vào
-  var tatCa = typeof products !== "undefined" ? products : [];
+  // 2. Nếu chưa có -> Tìm sản phẩm trong kho và thêm vào (ưu tiên dữ liệu mới nhất từ sport_products)
+  var tatCa = [];
+  try {
+    tatCa = JSON.parse(localStorage.getItem("sport_products")) || [];
+  } catch (e) {
+    tatCa = [];
+  }
+  if (!tatCa || tatCa.length === 0) {
+    tatCa = typeof products !== "undefined" ? products : [];
+  }
+
   var sp = null;
   for (var j = 0; j < tatCa.length; j++) {
     if (String(tatCa[j].id) === String(idSanPham)) {
       sp = tatCa[j];
       break;
     }
-  }
-
-  if (!sp) {
-    try {
-      var spStorage = JSON.parse(localStorage.getItem("sport_products") || "[]");
-      for (var k = 0; k < spStorage.length; k++) {
-        if (String(spStorage[k].id) === String(idSanPham)) {
-          sp = spStorage[k];
-          break;
-        }
-      }
-    } catch (e) { }
   }
 
   if (!sp) {
@@ -578,6 +575,20 @@ function themVaoGioTuWishlist(spId) {
     }
   }
 
+  // Ưu tiên tìm lại trong kho sport_products nếu thiếu thông tin
+  if (!sp) {
+    try {
+      var dsKho = JSON.parse(localStorage.getItem("sport_products")) || [];
+      for (var k = 0; k < dsKho.length; k++) {
+        if (String(dsKho[k].id) === String(spId)) {
+          sp = dsKho[k];
+          break;
+        }
+      }
+    } catch (e) { }
+  }
+
+  // Fallback dự phòng cuối cùng
   if (!sp && typeof products !== "undefined") {
     for (var j = 0; j < products.length; j++) {
       if (String(products[j].id) === String(spId)) {

@@ -68,12 +68,6 @@
 
       <!-- Cụm Hành Động Góc Phải -->
       <div class="sport-nav-actions header-actions admin-header-actions">
-        <span class="nav-badge badge-blue admin-header-badge">
-          🛡️ HỆ THỐNG QUẢN TRỊ ADMIN • <span id="admin-header-user-name">Quản Trị Viên</span>
-        </span>
-        <a href="index.html" class="btn-sport btn-outline btn-sm btn-admin-view-store">
-          🏪 Về Cửa Hàng
-        </a>
         <button type="button" class="btn-sport btn-sm btn-admin-logout" onclick="dangXuatAdmin()">
           <svg class="admin-logout-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path class="icon-door" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -673,7 +667,6 @@
           </div>
         </div>
 
-
       </div>
     </main>
   </div>
@@ -947,6 +940,7 @@
           <label>Giá bán niêm yết (VNĐ):</label>
           <input type="number" id="pricing-sale-price" min="0" step="1000" placeholder="Nhập giá bán..." oninput="tinhPhanTramTuDong()" class="pricing-sale-input" />
         </div>
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn-sport btn-outline" onclick="dongModalAdmin('modal-pricing')">Hủy Bỏ</button>
         <button type="button" class="btn-sport btn-primary" onclick="luuGiaBanMoi()">Lưu Giá Bán</button>

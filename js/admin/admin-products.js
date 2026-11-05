@@ -315,11 +315,6 @@ function luuSanPhamAdmin() {
     return;
   }
 
-  if (gia < giaVon) {
-    alert("Giá bán niêm yết không được nhỏ hơn giá vốn đầu vào!");
-    if (document.getElementById("prod-price")) document.getElementById("prod-price").focus();
-    return;
-  }
   var ton = Number(document.getElementById("prod-stock").value) || 0;
   var hang = document.getElementById("prod-brand").value.trim() || "Sport";
   var catId = document.getElementById("prod-category").value;
@@ -339,6 +334,7 @@ function luuSanPhamAdmin() {
       name: ten,
       costPrice: giaVon,
       price: gia,
+      originalPrice : giaVon ,
       profitPercent: phanTramTaoMoi,
       stock: ton,
       brand: hang,
@@ -354,6 +350,7 @@ function luuSanPhamAdmin() {
         dsSp[i].name = ten;
         dsSp[i].costPrice = giaVon;
         dsSp[i].price = gia;
+        dsSp[i].originalPrice = giaVon ,
         dsSp[i].profitPercent = Math.round(((gia - giaVon) / giaVon) * 100);
         dsSp[i].stock = ton;
         dsSp[i].brand = hang;
