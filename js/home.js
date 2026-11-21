@@ -409,7 +409,7 @@ function themVaoGioNhanh(idSanPham) {
 // 7. KHỐI FORM ĐĂNG KÝ BẢN TIN (ONSUBMIT TỪ FORM)
 // ==============================================================================
 function dangKyNhanTin(event) {
-  event.preventDefault(); // Chặn việc trình duyệt load lại trang
+  event.preventDefault();
 
   var oEmail = document.getElementById("dev1-email-input");
   var email = oEmail ? oEmail.value.trim() : "";

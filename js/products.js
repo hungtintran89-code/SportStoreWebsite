@@ -659,11 +659,6 @@ function dongChiTietSanPham() {
     if (modal) modal.style.display = "none";
 }
 
-function dongModalKhiBamRaNgoai(event) {
-    if (event.target.id === "modal-quick-view") {
-        dongChiTietSanPham();
-    }
-}
 
 function thayDoiSoLuong(delta) {
     var input = document.getElementById("qv-quantity-input");
